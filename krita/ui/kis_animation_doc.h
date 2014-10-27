@@ -28,6 +28,7 @@
 #include <QHash>
 
 class KisKranimLoader;
+class KisAnimationLayer;
 
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
 
@@ -74,10 +75,14 @@ public:
     QString getPreviousKeyFrameFile(int frame, int layer);
     QString getNextKeyFrameFile(int frame, int layer);
 
-    QRect currentFramePosition();
-    KisNodeSP currentFrame();
 
     int numberOfLayers();
+
+    /// @return the layer at the given index, or 0 if the index is out of range
+    KisAnimationLayer *layer(int index);
+
+    /// @return the number of frames
+    int numderOfFrames() const;
 
     KisKranimLoader* kranimLoader();
 
@@ -108,6 +113,8 @@ public slots:
     void playbackStateChanged();
 
 private:
+    QRect currentFramePosition();
+
     void preSaveAnimation();
 
     void addFrameToXML();

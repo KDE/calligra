@@ -51,3 +51,31 @@ KisNodeSP KisAnimationLayer::createFrameAtPosition(int position)
 
     return node;
 }
+
+int KisAnimationLayer::maxFramePosition() const
+{
+    int frameNumber = 0;
+    foreach(int i, m_frames.keys()) {
+        frameNumber = qMax(frameNumber, i);
+    }
+    return frameNumber;
+}
+
+QString KisAnimationLayer::name() const
+{
+    return m_template->name();
+}
+
+KisAnimationFrame *KisAnimationLayer::frameAt(int position) const
+{
+    KisAnimationFrame *frame = 0;
+    foreach(int pos, m_frames.keys()) {
+        if (pos < position) {
+            frame = m_frames[pos];
+        }
+        else {
+            break;
+        }
+    }
+    return frame;
+}

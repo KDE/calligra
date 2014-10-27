@@ -279,6 +279,7 @@ set(kritaui_LIB_SRCS
 
     kis_animation_frame.cpp
     kis_animation_layer.cpp
+    kis_animation_model.cpp
 
 # build these last for now
     kis_image_view.cpp

@@ -37,6 +37,14 @@ public:
 
     KisNodeSP createFrameAtPosition(int position);
 
+    /// @return the highest frame number this layer contains
+    int maxFramePosition() const;
+
+    QString name() const;
+
+    /// #return the nearest from for the given position
+    KisAnimationFrame *frameAt(int position) const;
+
 signals:
 
 public slots:
@@ -49,3 +57,4 @@ private:
 };
 
 #endif // KIS_ANIMATION_LAYER_H
+

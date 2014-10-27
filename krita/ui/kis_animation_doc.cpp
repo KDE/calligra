@@ -27,6 +27,7 @@
 #include "kranim/kis_kranim_saver.h"
 #include "kranim/kis_kranim_loader.h"
 #include "kranimstore/kis_animation_store.h"
+#include "kis_animation_layer.h"
 
 #include <KoFilterManager.h>
 
@@ -56,6 +57,8 @@ public:
     QDomDocument doc;
     QDomElement root;
     QDomElement frameElement;
+
+    QVector<KisAnimationLayer *> layers;
 
     KisAnimation *animation;
 
@@ -926,14 +929,27 @@ QRect KisAnimationDoc::currentFramePosition()
     return d->currentFramePosition;
 }
 
-KisNodeSP KisAnimationDoc::currentFrame()
-{
-    return d->currentFrame;
-}
-
 int KisAnimationDoc::numberOfLayers()
 {
     return d->noLayers;
+}
+
+KisAnimationLayer *KisAnimationDoc::layer(int index)
+{
+    if (d->layers.size() < index) {
+        return d->layers.at(index);
+    }
+
+    return 0;
+}
+
+int KisAnimationDoc::numderOfFrames() const
+{
+    int frame = 0;
+    foreach(const KisAnimationLayer *layer, d->layers) {
+        frame = qMax(frame, layer->maxFramePosition());
+    }
+    return frame;
 }
 
 KisKranimLoader* KisAnimationDoc::kranimLoader()
