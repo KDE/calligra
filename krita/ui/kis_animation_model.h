@@ -22,11 +22,12 @@
 
 class KisAnimationDoc;
 
+#include <krita_export.h>
 /**
  * @brief The KisAnimationModel class provides a view over the layers
  * and frames of an animation sequence.
  */
-class KisAnimationModel : public QAbstractTableModel
+class KRITAUI_EXPORT KisAnimationModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

@@ -25,11 +25,12 @@
 
 class KisAnimationFrame;
 
+#include <krita_export.h>
 /**
  * @brief The KisAnimationLayer class represents a layer in an animation. It contains
  * zero or more key frames. Each frame has an instance of a KisNode of the right type.
  */
-class KisAnimationLayer : public QObject
+class KRITAUI_EXPORT KisAnimationLayer : public QObject
 {
     Q_OBJECT
 public:

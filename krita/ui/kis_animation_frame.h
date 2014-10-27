@@ -21,11 +21,12 @@
 #include <QObject>
 
 #include <kis_node.h>
+#include <krita_export.h>
 
 /**
  * A frame contains an instance of a Krita layer or mask.
  */
-class KisAnimationFrame : public QObject
+class KRITAUI_EXPORT KisAnimationFrame : public QObject
 {
     Q_OBJECT
 public:
