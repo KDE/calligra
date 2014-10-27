@@ -277,6 +277,9 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
     kis_mirror_axis.cpp
 
+    kis_animation_frame.cpp
+    kis_animation_layer.cpp
+
 # build these last for now
     kis_image_view.cpp
     kis_main_window.cpp
