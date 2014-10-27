@@ -18,7 +18,6 @@ target_link_libraries(calligrageminigitplugin
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
-    kfile
     ${LIBGIT2_LIBRARIES}
     ${LIBQGIT2_LIBRARIES}
     komain

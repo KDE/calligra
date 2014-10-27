@@ -21,10 +21,10 @@
 
 #include "checkoutcreator.h"
 
-#include <kdirselectdialog.h>
 #include <kfiledialog.h>
 
 #include <QDir>
+#include <QFileDialog>
 #include <QDebug>
 
 class CheckoutCreator::Private
@@ -53,8 +53,8 @@ QString CheckoutCreator::getFile(QString caption, QString filter) const
 
 QString CheckoutCreator::getDir() const
 {
-    KUrl url = KDirSelectDialog::selectDirectory();
-    return url.toLocalFile();
+    QString url = QFileDialog::getExistingDirectory();
+    return url;
 }
 
 bool CheckoutCreator::isGitDir(QString directory) const
