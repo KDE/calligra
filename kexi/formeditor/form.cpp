@@ -634,7 +634,6 @@ void Form::emitWidgetSelected(bool multiple)
 
     // If the widgets selected is a container, we enable layout actions
     if (!multiple) {
-        KFormDesigner::ObjectTreeItem *item = 0;
         if (!wlist->isEmpty()) {
             objectTree()->lookup(wlist->first()->objectName());
         }
