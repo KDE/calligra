@@ -49,6 +49,8 @@
 #include <QScrollBar>
 #include <KoIcon.h>
 
+#include "TimelineView.h"
+
 KisTimelineWidget::KisTimelineWidget(QWidget *parent) : QWidget(parent)
 {
     m_initialized = false;
@@ -57,7 +59,7 @@ KisTimelineWidget::KisTimelineWidget(QWidget *parent) : QWidget(parent)
 
 void KisTimelineWidget::init()
 {
-    m_list = new KisAnimationLayerBox(this);
+    m_animationLayerBox = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
     m_settingsDialog = new AnimatorSettingsDialog();
     m_playbackDialog = new AnimatorPlaybackDialog();
@@ -123,9 +125,9 @@ void KisTimelineWidget::init()
 
     QScrollArea* leftScrollArea = new QScrollArea(this);
     leftScrollArea->setBackgroundRole(QPalette::Dark);
-    leftScrollArea->setWidget(m_list);
-    m_list->setFixedHeight(45);
-    m_list->setFixedWidth(200);
+    leftScrollArea->setWidget(m_animationLayerBox);
+    m_animationLayerBox->setFixedHeight(45);
+    m_animationLayerBox->setFixedWidth(200);
     leftScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     leftScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -304,7 +306,7 @@ KisCanvas2* KisTimelineWidget::getCanvas()
 
 KisAnimationLayerBox* KisTimelineWidget::getLayerBox()
 {
-    return m_list;
+    return m_animationLayerBox;
 }
 
 KisFrameBox* KisTimelineWidget::getFrameBox()
@@ -314,25 +316,25 @@ KisFrameBox* KisTimelineWidget::getFrameBox()
 
 void KisTimelineWidget::addLayerUiUpdate()
 {
-    m_list->addLayerUiUpdate();
+    m_animationLayerBox->addLayerUiUpdate();
     m_cells->addLayerUiUpdate();
 }
 
 void KisTimelineWidget::removeLayerUiUpdate(int layer)
 {
-    m_list->removeLayerUiUpdate(layer);
+    m_animationLayerBox->removeLayerUiUpdate(layer);
     m_cells->removeLayerUiUpdate(layer);
 }
 
 void KisTimelineWidget::moveLayerDownUiUpdate(int layer)
 {
-    m_list->moveLayerDownUiUpdate(layer);
+    m_animationLayerBox->moveLayerDownUiUpdate(layer);
     m_cells->moveLayerDownUiUpdate(layer);
 }
 
 void KisTimelineWidget::moveLayerUpUiUpdate(int layer)
 {
-    m_list->moveLayerUpUiUpdate(layer);
+    m_animationLayerBox->moveLayerUpUiUpdate(layer);
     m_cells->moveLayerUpUiUpdate(layer);
 }
 
@@ -350,7 +352,7 @@ void KisTimelineWidget::vectorLayerPressed()
 
 void KisTimelineWidget::removeLayerPressed()
 {
-    if(m_list->numberOfLayers() == 1) {
+    if(m_animationLayerBox->numberOfLayers() == 1) {
         return;
     }
 
@@ -575,5 +577,5 @@ void KisTimelineWidget::importUI(QHash<int, QList<QRect> > timelineMap)
 
 int KisTimelineWidget::numberOfLayers()
 {
-    return m_list->numberOfLayers();
+    return m_animationLayerBox->numberOfLayers();
 }

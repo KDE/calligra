@@ -35,6 +35,18 @@
 #include <QHash>
 #include <QThread>
 
+QList<KisNodeSP> flattenLayerTree(QList<KisNodeSP> &nodes, KisNodeSP node)
+{
+    KisNodeSP child = node->firstChild();
+    while (child) {
+        nodes << child;
+        if (child->childCount() > 0) {
+            nodes << flattenLayerTree(nodes, child);
+        }
+        child = child->nextSibling();
+    }
+    return nodes;
+}
 
 #define APP_MIMETYPE "application/x-krita-animation"
 
@@ -98,6 +110,7 @@ KisAnimationDoc::KisAnimationDoc(const KisPart2 *part)
     d->noLayers = 1;
 
     d->animation = new KisAnimation(this);
+
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -931,25 +944,37 @@ QRect KisAnimationDoc::currentFramePosition()
 
 int KisAnimationDoc::numberOfLayers()
 {
-    return d->noLayers;
+    return d->layers.size();
 }
 
 KisAnimationLayer *KisAnimationDoc::layer(int index)
 {
-    if (d->layers.size() < index) {
+    if (d->layers.size() > index) {
         return d->layers.at(index);
     }
 
     return 0;
 }
 
-int KisAnimationDoc::numderOfFrames() const
+int KisAnimationDoc::numberOfFrames() const
 {
     int frame = 0;
     foreach(const KisAnimationLayer *layer, d->layers) {
         frame = qMax(frame, layer->maxFramePosition());
     }
     return frame;
+}
+
+void KisAnimationDoc::resetAnimationLayers()
+{
+    // Create the initial animation layer structure. Later, when the user
+    // uses the layerbox or the menus to create layers, we'll have to update
+    // this structure.
+    QList<KisNodeSP> nodes;
+    nodes = flattenLayerTree(nodes, image()->rootLayer());
+    foreach(KisNodeSP node, nodes) {
+        d->layers << new KisAnimationLayer(node);
+    }
 }
 
 KisKranimLoader* KisAnimationDoc::kranimLoader()
@@ -1011,7 +1036,6 @@ void KisAnimationDoc::pause()
 void KisAnimationDoc::stop()
 {
     if(isPlaying()) {
-        qDebug() << "Stop";
         d->playing = false;
         d->timer->stop();
         d->cache.clear();

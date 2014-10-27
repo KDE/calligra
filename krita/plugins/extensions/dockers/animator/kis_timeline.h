@@ -70,7 +70,7 @@ public slots:
 private:
     KisFrameBox* m_cells;
     KisCanvas2* m_canvas;
-    KisAnimationLayerBox *m_list;
+    KisAnimationLayerBox *m_animationLayerBox;
     KisAnimation* m_animation;
     QRect m_lastBrokenFrame;
     bool m_frameBreakState;

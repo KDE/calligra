@@ -198,7 +198,7 @@ void KisAnimationSelector::openAnimation()
     }
 
     dynamic_cast<KisAnimationDoc*>(document)->loadAnimationFile(animation, store, doc);
-
+    document->resetAnimationLayers();
     emit documentSelected(document);
 
 }
@@ -256,6 +256,8 @@ void KisAnimationSelector::createAnimation()
 
         layer->setDirty(QRect(0, 0, width, height));
     }
+
+    document->resetAnimationLayers();
 
     emit documentSelected(document);
 }

@@ -20,17 +20,24 @@
 
 #include <klocale.h>
 
-#include "kis_view2.h"
-#include "kis_animation.h"
-#include "kis_canvas2.h"
-#include "kis_animation_doc.h"
-#include "kis_part2.h"
-#include "kis_timeline.h"
+#include <kis_view2.h>
+#include <kis_animation.h>
+#include <kis_canvas2.h>
+#include <kis_animation_doc.h>
+#include <kis_part2.h>
+#include <kis_animation_model.h>
 
-AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
+#include "kis_timeline.h"
+#include "TimelineView.h"
+
+
+AnimatorDock::AnimatorDock()
+    : QDockWidget(i18n("Animator"))
+    , m_canvas(0)
+    , m_animationModel(0)
 {
     this->setMinimumHeight(120);
-    m_timelineWidget = new KisTimelineWidget(this);
+    m_timelineWidget = new TimelineView(this);
     this->setWidget(m_timelineWidget);
 }
 
@@ -40,11 +47,8 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas)
     if(m_canvas && m_canvas->view() && m_canvas->view()->document()) {
         KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(m_canvas->view()->document());
         if (doc) {
-            m_animation = doc->getAnimation();
-            if(m_animation) {
-                m_timelineWidget->setCanvas(m_canvas);
-                m_timelineWidget->setAnimation(m_animation);
-            }
+            m_animationModel = new KisAnimationModel(doc, this);
+            m_timelineWidget->setModel(m_animationModel);
         }
     }
 }

@@ -61,8 +61,9 @@ public:
     KisAnimationLayer *layer(int index);
 
     /// @return the number of frames
-    int numderOfFrames() const;
+    int numberOfFrames() const;
 
+    void resetAnimationLayers();
 
 public:
 
@@ -156,6 +157,7 @@ private slots:
     void updateFrame();
     void playbackStateChanged();
     void setImageModified();
+
 private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const d;

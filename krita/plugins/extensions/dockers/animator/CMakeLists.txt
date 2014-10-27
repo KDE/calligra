@@ -13,7 +13,9 @@ set(KRITA_ANIMATOR_PART_SRCS animator.cpp
     onionskin_dock.cpp
     kis_opacity_selector.cpp
     kis_opacity_selector_view.cpp
-    )
+
+    TimelineView.cpp
+)
 
 kde4_add_plugin(kritaanimator ${KRITA_ANIMATOR_PART_SRCS})
 

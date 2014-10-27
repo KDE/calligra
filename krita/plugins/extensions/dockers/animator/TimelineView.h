@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
+ *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,34 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef TIMELINEVIEW_H
+#define TIMELINEVIEW_H
 
-#ifndef _ANIMATOR_DOCK_H_
-#define _ANIMATOR_DOCK_H_
-
-#include <QDockWidget>
-
-#include <KoCanvasObserverBase.h>
-
-class QLabel;
-class KisCanvas2;
-class KisAnimationModel;
-class TimelineView;
+#include <QTableView>
 
 /**
- * The animator docker class
+ * @brief The TimelineView class shows an animation timeline in tabular form.
  */
-class AnimatorDock : public QDockWidget, public KoCanvasObserverBase {
+class TimelineView : public QTableView
+{
     Q_OBJECT
 public:
-    AnimatorDock();
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas(){ m_canvas = 0;}
+    explicit TimelineView(QWidget *parent = 0);
 
-private:
-    KisCanvas2 *m_canvas;
-    KisAnimationModel *m_animationModel;
-    TimelineView* m_timelineWidget;
+signals:
+
+public slots:
+
 };
 
-
-#endif
+#endif // TIMELINEVIEW_H
