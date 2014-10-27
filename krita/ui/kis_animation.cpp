@@ -28,7 +28,8 @@
 #include <QByteArray>
 #include <QString>
 
-KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
+KisAnimation::KisAnimation(QObject *parent)
+    : QObject(parent)
 {
     KisConfig cfg;
     m_frameBreakingEnabled = cfg.defAutoFrameBreakEnabled();
