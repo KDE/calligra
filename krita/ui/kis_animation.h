@@ -111,10 +111,6 @@ public:
 
     QColor nextOnionSkinColor();
 
-    void load(const QString &url);
-
-    void save(const QString &url);
-
 private:
     QString m_name;
     QString m_author;
