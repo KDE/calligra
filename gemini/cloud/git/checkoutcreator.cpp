@@ -21,8 +21,9 @@
 
 #include "checkoutcreator.h"
 
-#include <kstandarddirs.h>
 #include <kdirselectdialog.h>
+#include <kfiledialog.h>
+
 #include <QDir>
 #include <QDebug>
 
@@ -31,18 +32,23 @@ class CheckoutCreator::Private
 public:
     Private()
     {}
-    QString gitExecutable;
 };
 
 CheckoutCreator::CheckoutCreator(QObject* parent)
     : QObject(parent)
     , d(new Private)
 {
-    d->gitExecutable = KStandardDirs::findExe("git");
 }
 
 CheckoutCreator::~CheckoutCreator()
 {
+    delete d;
+}
+
+QString CheckoutCreator::getFile(QString caption, QString filter) const
+{
+    QString url = KFileDialog::getOpenFileName(KUrl(QDir::homePath()), filter, 0, caption);
+    return url;
 }
 
 QString CheckoutCreator::getDir() const
@@ -57,11 +63,6 @@ bool CheckoutCreator::isGitDir(QString directory) const
     if(dir.exists(".git/config"))
         return true;
     return false;
-}
-
-QString CheckoutCreator::gitExecutable() const
-{
-    return d->gitExecutable;
 }
 
 #include "checkoutcreator.moc"
