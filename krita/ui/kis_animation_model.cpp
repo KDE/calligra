@@ -36,7 +36,7 @@ int KisAnimationModel::rowCount(const QModelIndex &parent) const
 
 int KisAnimationModel::columnCount(const QModelIndex &parent) const
 {
-    return m_document->numderOfFrames();
+    return m_document->numderOfFrames() + 100; // XXX: make configurable?
 }
 
 QVariant KisAnimationModel::data(const QModelIndex &index, int role) const

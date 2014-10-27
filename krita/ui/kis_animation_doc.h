@@ -62,19 +62,14 @@ public:
     void addPaintLayer();
     void addVectorLayer();
 
-    KisAnimationStore* getStore();
     KisAnimation* getAnimation();
 
     void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store, QDomDocument doc);
 
-    QRect getParentFramePosition(int frame, int layer);
     QRect getPreviousKeyFramePosition(int frame, int layer);
     QRect getNextKeyFramePosition(int frame, int layer);
 
     QString getFrameFile(int frame, int layer);
-    QString getPreviousKeyFrameFile(int frame, int layer);
-    QString getNextKeyFrameFile(int frame, int layer);
-
 
     int numberOfLayers();
 
@@ -83,8 +78,6 @@ public:
 
     /// @return the number of frames
     int numderOfFrames() const;
-
-    KisKranimLoader* kranimLoader();
 
     void play();
     void pause();
@@ -107,12 +100,18 @@ public:
     void visibilityStateToggled(QHash<int, bool> states);
     void lockStateToggled(QHash<int, bool> states);
 
-public slots:
-    void setImageModified();
-
-    void playbackStateChanged();
-
 private:
+    KisKranimLoader* kranimLoader();
+
+
+    QString getNextKeyFrameFile(int frame, int layer);
+
+    QString getPreviousKeyFrameFile(int frame, int layer);
+
+    QRect getParentFramePosition(int frame, int layer);
+
+    KisAnimationStore* getStore();
+
     QRect currentFramePosition();
 
     void preSaveAnimation();
@@ -144,7 +143,8 @@ private:
 
 private slots:
     void updateFrame();
-
+    void playbackStateChanged();
+    void setImageModified();
 private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const d;
