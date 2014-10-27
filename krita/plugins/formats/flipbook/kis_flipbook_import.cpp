@@ -80,7 +80,7 @@ KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, co
         return KoFilter::NoDocumentCreated;
     }
 
-    part->setFlipbook(flipbook);
+    //part->setFlipbook(flipbook);
 
     KisFlipbookItem *item = static_cast<KisFlipbookItem*>(flipbook->item(0));
     if (!QFile::exists(item->filename()))
