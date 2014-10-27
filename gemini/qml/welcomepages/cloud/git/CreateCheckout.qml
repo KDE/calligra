@@ -123,6 +123,18 @@ Item {
                 font: Settings.theme.font("application");
             }
             CohereButton {
+                anchors {
+                    verticalCenter: existingCheckoutAdd.verticalCenter;
+                    right: existingCheckoutAdd.left;
+                    rightMargin: Settings.theme.adjustedPixel(8);
+                }
+                onClicked: dlgStack.push(userCredentials);
+                text: "Set User Credentials";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                color: "#D2D4D5";
+            }
+            CohereButton {
                 id: existingCheckoutAdd;
                 anchors {
                     top: existingCheckoutDir.bottom;
@@ -133,10 +145,18 @@ Item {
                 textColor: "#5b6573";
                 textSize: Settings.theme.adjustedPixel(18);
                 color: "#D2D4D5";
+                property string userForRemote;
+                property string privateKeyFile;
+                property string publicKeyFile;
+                property bool needsPrivateKeyPassphrase;
                 Component {
                     id: accountComp;
                     QtObject {
                         property string localrepo: existingCheckoutDir.text;
+                        property string userForRemote: existingCheckoutAdd.userForRemote;
+                        property string privateKeyFile: existingCheckoutAdd.privateKeyFile;
+                        property string publicKeyFile: existingCheckoutAdd.publicKeyFile;
+                        property bool needsPrivateKeyPassphrase: existingCheckoutAdd.needsPrivateKeyPassphrase;
                     }
                 }
                 onClicked: {
@@ -220,6 +240,21 @@ Item {
             height: 1;
             color: "black";
             opacity: 0.1;
+        }
+    }
+    Component {
+        id: userCredentials;
+        GetUserCredentials {
+            onAccepted: {
+                existingCheckoutAdd.userForRemote = userForRemote;
+                existingCheckoutAdd.privateKeyFile = privateKeyFile;
+                existingCheckoutAdd.publicKeyFile = publicKeyFile;
+                existingCheckoutAdd.needsPrivateKeyPassphrase = needsPrivateKeyPassphrase;
+                dlgStack.pop();
+            }
+            onCancelled: {
+                dlgStack.pop();
+            }
         }
     }
 }
