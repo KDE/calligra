@@ -60,6 +60,8 @@ public:
     Q_INVOKABLE void removeAccountByName(QString text);
     Q_INVOKABLE void removeAccount(int index);
 
+    Q_INVOKABLE QObject* accountDetails(int index);
+    Q_INVOKABLE void setAccountDetails(int index, QObject* newDetails);
 private:
     class Private;
     Private* d;

@@ -252,4 +252,30 @@ void CloudAccountsModel::removeAccount(int index)
     }
 }
 
+QObject* CloudAccountsModel::accountDetails(int index)
+{
+    if(index > -1 && index < d->entries.count() - 1)
+    {
+        return d->entries.at(index)->accountDetails;
+    }
+    return 0;
+}
+
+void CloudAccountsModel::setAccountDetails(int index, QObject* newDetails)
+{
+    if(index > -1 && index < d->entries.count() - 1)
+    {
+        AccountEntry* entry = d->entries.at(index);
+        if(newDetails) {
+            Q_FOREACH(QByteArray name, newDetails->dynamicPropertyNames()) {
+                entry->accountDetails->setProperty(name, newDetails->property(name));
+            }
+            for(int i = newDetails->metaObject()->propertyOffset(); i < newDetails->metaObject()->propertyCount(); ++i) {
+                entry->accountDetails->setProperty(newDetails->metaObject()->property(i).name(), newDetails->metaObject()->property(i).read(newDetails));
+            }
+        }
+        d->saveList();
+    }
+}
+
 #include "CloudAccountsModel.moc"
