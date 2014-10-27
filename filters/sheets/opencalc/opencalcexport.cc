@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <opencalcexport.h>
+
 #include <float.h>
 #include <math.h>
-
-#include <opencalcexport.h>
 
 #include <QDateTime>
 #include <QDomDocument>

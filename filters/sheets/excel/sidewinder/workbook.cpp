@@ -78,7 +78,7 @@ Workbook::Workbook(KoStore* store)
 Workbook::~Workbook()
 {
     clear();
-    for (unsigned i = 0; i < d->formats.size(); i++)
+    for (unsigned i = 0; i < d->formats.size(); ++i)
         delete d->formats[i];
     delete d;
 }
@@ -91,7 +91,7 @@ KoStore* Workbook::store() const
 void Workbook::clear()
 {
     // FIXME use iterator
-    for (unsigned i = 0; i < sheetCount(); i++) {
+    for (unsigned i = 0; i < sheetCount(); ++i) {
         Sheet* s = sheet(i);
         delete s;
     }
@@ -155,7 +155,7 @@ QList<QRect> Workbook::filterRanges(unsigned sheet) const
 
 QList<QRect> Workbook::filterRanges(const Sheet* sheet) const
 {
-    for (unsigned i = 0; i < d->sheets.size(); i++) {
+    for (unsigned i = 0; i < d->sheets.size(); ++i) {
         if(d->sheets[i] == sheet) return filterRanges(i);
     }
     return QList<QRect>();
@@ -339,7 +339,7 @@ void Workbook::setBaseDate(const QDateTime& baseDate)
 #ifdef SWINDER_XLS2RAW
 void Workbook::dumpStats()
 {
-    for (unsigned i = 0; i < d->sheets.size(); i++) {
+    for (unsigned i = 0; i < d->sheets.size(); ++i) {
         printf("Sheet %u\n", i+1);
         d->sheets[i]->dumpStats();
     }

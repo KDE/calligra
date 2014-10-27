@@ -1885,10 +1885,8 @@ ResourceGroup *Project::group( const QString& id )
 
 ResourceGroup *Project::groupByName( const QString& name ) const
 {
-    foreach ( const QString &k, resourceGroupIdDict.keys() ) {
-        ResourceGroup *g = resourceGroupIdDict[ k ];
+    foreach ( ResourceGroup *g, resourceGroupIdDict ) {
         if ( g->name() == name ) {
-            Q_ASSERT( k == g->id() );
             return g;
         }
     }

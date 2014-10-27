@@ -554,13 +554,13 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
 
     // count the number of rows in total to provide a good progress value
     rowsCountTotal = rowsCountDone = 0;
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         rowsCountTotal += qMin(maximalRowCount, sheet->maxRow()) * 2; // double cause we will count them 2 times, once for styles and once for content
     }
 
     // now start the whole work
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForBody(sheet, xmlWriter, spreadsheet);
     }
@@ -579,7 +579,7 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
 
     table_database_ranges ranges(spreadsheet.add_table_database_ranges());
     int rangeId = 1;
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         QList<QRect> filters = workbook->filterRanges(i);
         QString sheetName = workbook->sheet(i)->name();
         if (filters.size()) {
@@ -636,7 +636,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     pageLayoutStyle.addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
     pageLayoutStyleName = mainStyles->insert(pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForStyle(sheet, xmlWriter);
 

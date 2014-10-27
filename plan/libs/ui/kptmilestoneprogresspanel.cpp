@@ -64,7 +64,10 @@ MacroCommand *MilestoneProgressPanel::buildCommand() {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
         cmd->addCommand( new ModifyCompletionPercentFinishedCmd( m_completion, finishTime->dateTime().date(), 100 ) );
     } else {
-        foreach( const QDate &date, m_completion.entries().keys() ) {
+        Completion::EntryList::ConstIterator entriesIt = m_completion.entries().constBegin();
+        const Completion::EntryList::ConstIterator entriesEnd = m_completion.entries().constEnd();
+        for (; entriesIt != entriesEnd; ++entriesIt) {
+            const QDate &date = entriesIt.key();
             if ( cmd == 0 ) cmd = new MacroCommand( c );
             cmd->addCommand( new RemoveCompletionEntryCmd( m_completion, date ) );
         }

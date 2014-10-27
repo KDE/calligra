@@ -248,7 +248,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     // count the number of rows in total to provide a good progress value
     d->rowsCountTotal = d->rowsCountDone = 0;
-    for (unsigned i = 0; i < d->workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < d->workbook->sheetCount(); ++i) {
         Sheet* sheet = d->workbook->sheet(i);
         d->rowsCountTotal += qMin(maximalRowCount, sheet->maxRow());
     }
@@ -264,7 +264,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->shapesXml = d->beginMemoryXmlWriter("table:shapes");
 
     Calligra::Sheets::Map* map = d->outputDoc->map();
-    for (unsigned i = 0; i < d->workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < d->workbook->sheetCount(); ++i) {
         d->shapesXml->startElement("table:table");
         d->shapesXml->addAttribute("table:id", i);
         Sheet* sheet = d->workbook->sheet(i);
@@ -334,7 +334,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->processEmbeddedObjects(xmlDoc.documentElement(), store);
 
     // sheet background images
-    for (unsigned i = 0; i < d->workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < d->workbook->sheetCount(); ++i) {
         Sheet* sheet = d->workbook->sheet(i);
         Calligra::Sheets::Sheet* ksheet = map->sheet(i);
         kDebug() << i << sheet->backgroundImage();
