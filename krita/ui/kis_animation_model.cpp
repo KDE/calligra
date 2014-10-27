@@ -45,7 +45,9 @@ QVariant KisAnimationModel::data(const QModelIndex &index, int role) const
     if (!index.isValid()) return result;
     if (role == Qt::DisplayRole) {
         KisAnimationLayer *layer = m_document->layer(index.row());
-        result.setValue<QObject*>(layer->frameAt(index.column()));
+        if (layer) {
+            result.setValue<QObject*>(layer->frameAt(index.column()));
+        }
     }
     return result;
 }
@@ -59,7 +61,10 @@ QVariant KisAnimationModel::headerData(int section, Qt::Orientation orientation,
             result = QString("%1").arg(section); // Frame number
             break;
         case Qt::Horizontal:
-            result = m_document->layer(section)->name();
+            KisAnimationLayer *layer = m_document->layer(section);
+            if (layer) {
+                result = layer->name();
+            }
             break;
         default:
             break;
