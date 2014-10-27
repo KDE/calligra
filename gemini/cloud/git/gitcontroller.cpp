@@ -44,7 +44,8 @@
 class GitController::Private {
 public:
     Private(GitController* q)
-        : documents(new DocumentListModel(q))
+        : needsPrivateKeyPassphrase(false)
+        , documents(new DocumentListModel(q))
         , commitAndPushAction(0)
         , signature(0)
     {
@@ -59,7 +60,7 @@ public:
     QString privateKey;
     QString publicKey;
     QString userForRemote;
-    QString privKeyPassPhrase;
+    bool needsPrivateKeyPassphrase;
 
     QString cloneDir;
     DocumentListModel* documents;
@@ -68,6 +69,17 @@ public:
     QString userName;
     QString userEmail;
     git_signature* signature;
+
+    QString getPassword()
+    {
+        if(!needsPrivateKeyPassphrase)
+            return QString();
+        KPasswordDialog dlg;
+        dlg.setCaption("Private Key Passphrase");
+        dlg.setPrompt("Your private key file requires a password. Please enter it here. You will be asked again each time it is accessed, and the password is not stored.");
+        dlg.exec();
+        return dlg.password();
+    }
 
     bool checkUserDetails()
     {
@@ -172,6 +184,50 @@ QAbstractListModel* GitController::documents() const
     return d->documents;
 }
 
+QString GitController::privateKeyFile() const
+{
+    return d->privateKey;
+}
+
+void GitController::setPrivateKeyFile(QString newFile)
+{
+    d->privateKey = newFile;
+    emit privateKeyFileChanged();
+}
+
+QString GitController::publicKeyFile() const
+{
+    return d->publicKey;
+}
+
+void GitController::setPublicKeyFile(QString newFile)
+{
+    d->publicKey = newFile;
+    emit publicKeyFileChanged();
+}
+
+bool GitController::needsPrivateKeyPassphrase() const
+{
+    return d->needsPrivateKeyPassphrase;
+}
+
+void GitController::setNeedsPrivateKeyPassphrase(bool needsPassphrase)
+{
+    d->needsPrivateKeyPassphrase = needsPassphrase;
+    emit needsPrivateKeyPassphrase();
+}
+
+QString GitController::userForRemote() const
+{
+    return d->userForRemote;
+}
+
+void GitController::setUserForRemote(QString newUser)
+{
+    d->userForRemote = newUser;
+    emit userForRemoteChanged();
+}
+
 QAction* GitController::commitAndPushCurrentFileAction()
 {
     if(!d->commitAndPushAction)
@@ -249,7 +305,7 @@ void GitController::commitAndPushCurrentFile()
                 git_branch_name(&branch_name, currentBranch.data());
                 QString branchName = QString::fromUtf8(branch_name);
 
-                repo.setRemoteCredentials(remoteName, LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->privKeyPassPhrase.toUtf8()));
+                repo.setRemoteCredentials(remoteName, LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->getPassword().toUtf8()));
                 connect(repo.remote(remoteName), SIGNAL(transferProgress(int)), SLOT(transferProgress(int)));
                 LibQGit2::Push push = repo.push(remoteName);
                 push.addRefSpec(QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName));
@@ -298,7 +354,7 @@ void GitController::pull() const
         git_buf_free(&remote_name);
 
         // Finally set the credentials on it that we're given, and fetch it
-        qrepo.setRemoteCredentials(remoteName, LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->privKeyPassPhrase.toUtf8()));
+        qrepo.setRemoteCredentials(remoteName, LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->getPassword().toUtf8()));
         connect(qrepo.remote(remoteName), SIGNAL(transferProgress(int)), SLOT(transferProgress(int)));
         qrepo.fetch(remoteName);
 
