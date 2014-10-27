@@ -22,7 +22,6 @@
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "kis_animation_player.h"
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kranim/kis_kranim_saver.h"
@@ -67,14 +66,20 @@ public:
 
     KisAnimationStore* store;
 
-    KisAnimationPlayer* player;
-
     int noLayers;
     bool saved;
 
     QHash<int, bool> onionSkinStates;
     QHash<int, bool> lockStates;
     QHash<int, bool> visibilityStates;
+
+    bool playing;
+    QList<QHash<int, KisLayerSP> > cache;
+    int currentFrameNumber;
+    QTimer* timer;
+    bool loop;
+    int fps;
+    int localPlaybackRange;
 };
 
 KisAnimationDoc::KisAnimationDoc(const KisPart2 *part)
@@ -87,7 +92,6 @@ KisAnimationDoc::KisAnimationDoc(const KisPart2 *part)
     d->saved = false;
     d->noLayers = 1;
 
-    d->player = new KisAnimationPlayer(this);
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -97,6 +101,9 @@ KisAnimationDoc::~KisAnimationDoc()
 
 void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationStore *store, QDomDocument doc)
 {
+    d->playing = false;
+    d->currentFrameNumber = 0;
+
     d->currentLoadedLayers.append(image()->root()->firstChild());
     removePreviousLayers();
 
@@ -952,22 +959,45 @@ KisAnimation* KisAnimationDoc::getAnimation()
 
 void KisAnimationDoc::play()
 {
-    if(!d->player->isPlaying() && d->saved) {
-        d->player->play();
+    if (!isPlaying() && d->saved) {
+        d->playing = true;
+
+        d->loop = getAnimation()->loopingEnabled();
+        d->fps = getAnimation()->fps();
+        d->localPlaybackRange = getAnimation()->localPlaybackRange();
+
+        cache();
+
+        d->currentFrameNumber = 0;
+
+        d->timer = new QTimer(this);
+        connect(d->timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+
+        int frameInterval = 1000 / d->fps;
+        d->timer->start(frameInterval);
+
     }
 }
 
 void KisAnimationDoc::pause()
 {
-    if(d->player->isPlaying()) {
-        d->player->pause();
+    if (isPlaying()) {
+        d->playing = false;
+        d->timer->stop();
+        d->cache.clear();
+
     }
 }
 
 void KisAnimationDoc::stop()
 {
-    if(d->player->isPlaying()) {
-        d->player->stop();
+    if(isPlaying()) {
+        qDebug() << "Stop";
+        d->playing = false;
+        d->timer->stop();
+        d->cache.clear();
+        frameSelectionChanged(currentFramePosition());
+
     }
 }
 
@@ -997,7 +1027,7 @@ void KisAnimationDoc::loadOnionSkins(QHash<int, bool> states)
     int currentFrame;
     int numberOfOnionSkins;
 
-    for(int i = 1 ; i < numberOfLayers() ; i++) {
+    for(int i = 1 ; i < d->noLayers ; i++) {
 
         // Check if onion skin has to be loaded or not
         bool state = false;
@@ -1079,8 +1109,8 @@ void KisAnimationDoc::loadOnionSkins(QHash<int, bool> states)
 
 void KisAnimationDoc::playbackStateChanged()
 {
-    if(d->player->isPlaying()) {
-        d->player->refresh();
+    if(isPlaying()) {
+        refresh();
     }
 }
 
@@ -1189,5 +1219,74 @@ void KisAnimationDoc::refreshOnionSkins()
     frameSelectionChanged(currentFramePosition());
 }
 
+void KisAnimationDoc::updateFrame()
+{
+    if(d->currentFrameNumber > d->localPlaybackRange - 1) {
+        if(d->loop) {
+            d->currentFrameNumber = 0;
+        } else {
+            this->stop();
+            return;
+        }
+    }
+
+    removePreviousLayers();
+
+    for (int layer = 0 ; layer < d->noLayers ; layer++) {
+        KisLayerSP newLayer = d->cache.at(d->currentFrameNumber).value(layer);
+        image()->addNode(newLayer, image()->rootLayer().data());
+        addCurrentLoadedLayer(newLayer);
+    }
+
+    image()->refreshGraph();
+    d->currentFrameNumber++;
+}
+
+bool KisAnimationDoc::isPlaying()
+{
+    return d->playing;
+}
+
+void KisAnimationDoc::refresh()
+{
+    // Cannot refresh range of loopback as it violates cache
+    d->loop = getAnimation()->loopingEnabled();
+    d->fps = getAnimation()->fps();
+    d->timer->setInterval(1000 / d->fps);
+}
+
+void KisAnimationDoc::cache()
+{
+    QString location = "";
+    bool hasFile = false;
+
+    KisAnimation* animation = getAnimation();
+    int currentFrame = 0;
+
+    QHash<int, KisLayerSP> layersMap;
+
+    while(true) {
+
+        if(currentFrame == d->localPlaybackRange) {
+            break;
+        }
+
+        layersMap.clear();
+
+        for(int layer = 0 ; layer < d->noLayers ; layer++) {
+            location = getFrameFile(currentFrame * 10, layer * 20);
+            hasFile = getStore()->hasFile(location);
+
+            if(hasFile) {
+                KisLayerSP newLayer = new KisPaintLayer(image(), image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+                kranimLoader()->loadFrame(newLayer, getStore(), location);
+                layersMap[layer] = newLayer;
+            }
+        }
+
+        d->cache.append(layersMap);
+        currentFrame++;
+    }
+}
 
 #include "kis_animation_doc.moc"

@@ -131,6 +131,13 @@ private:
     QBitArray prevFramesChannelFlags();
     QBitArray nextFramesChannelFlags();
 
+    bool isPlaying();
+    void cache();
+    void refresh();
+
+private slots:
+    void updateFrame();
+
 private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const d;
@@ -138,6 +145,8 @@ private:
 signals:
     void sigFrameModified();
     void sigImportFinished(QHash<int, QList<QRect> >);
+
+
 };
 
 #endif // KIS_ANIMATION_DOC_H
