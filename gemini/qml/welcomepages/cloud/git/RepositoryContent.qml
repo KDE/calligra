@@ -23,6 +23,10 @@ import "../../../components"
 
 Item {
     property alias localrepo: gitController.cloneDir;
+    property alias privateKeyFile: gitController.privateKeyFile;
+    property alias needsPrivateKeyPassphrase: gitController.needsPrivateKeyPassphrase;
+    property alias publicKeyFile: gitController.publicKeyFile;
+    property alias userForRemote: gitController.userForRemote;
     GitController {
         id: gitController;
         currentFile: Settings.currentFile;
