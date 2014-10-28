@@ -105,7 +105,7 @@ Item {
                     textSize: Settings.theme.adjustedPixel(18);
                     color: "#D2D4D5";
                     onClicked: {
-                        var newFile = GitCheckoutCreator.getFile("Private Key File", "");
+                        var newFile = GitCheckoutCreator.getFile("Private Key File", "*", ".ssh");
                         if(newFile !== "") {
                             privateKey.text = newFile;
                         }
@@ -132,7 +132,7 @@ Item {
                     textSize: Settings.theme.adjustedPixel(18);
                     color: "#D2D4D5";
                     onClicked: {
-                        var newFile = GitCheckoutCreator.getFile("Public Key File", ".pub");
+                        var newFile = GitCheckoutCreator.getFile("Public Key File", "*.pub", ".ssh");
                         if(newFile !== "") {
                             publicKey.text = newFile;
                         }
