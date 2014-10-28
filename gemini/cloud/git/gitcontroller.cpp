@@ -244,8 +244,7 @@ void GitController::commitAndPushCurrentFile()
 
     // Don't allow committing unless the user details are sensible
     if(!d->checkUserDetails()) {
-        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set.");
-        git_threads_shutdown();
+        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set. Please try again, and enter your name and email next time.");
         return;
     }
 
@@ -329,7 +328,7 @@ void GitController::pull() const
 {
     // Don't allow committing unless the user details are sensible
     if(!d->checkUserDetails()) {
-        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set, and we might need to do a merge later, so .");
+        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a name and email set, and we might need to do a merge later, so we are aborting this pull. Please try again, and enter your name and email next time.");
         return;
     }
 
