@@ -22,6 +22,22 @@ import Calligra.Gemini.Git 1.0
 import "../../../components"
 
 Item {
+    id: base;
+    property string userForRemote;
+    property string privateKeyFile;
+    property string publicKeyFile;
+    property bool needsPrivateKeyPassphrase;
+    Component {
+        id: accountComp;
+        QtObject {
+            property string localrepo: checkoutDir.text;
+            property string userForRemote: base.userForRemote;
+            property string privateKeyFile: base.privateKeyFile;
+            property string publicKeyFile: base.publicKeyFile;
+            property bool needsPrivateKeyPassphrase: base.needsPrivateKeyPassphrase;
+        }
+    }
+
     Text {
         id: pageTitle;
         anchors {
@@ -53,7 +69,7 @@ Item {
             right: parent.right;
             bottom: parent.bottom;
         }
-        Item {
+        Column {
             anchors {
                 top: parent.top;
                 left: parent.left;
@@ -61,174 +77,156 @@ Item {
                 bottom: parent.verticalCenter;
             }
             Text {
-                id: existingDir
-                anchors {
-                    left: parent.left;
-                    right: parent.right
-                    bottom: existingCheckoutName.top;
-                    bottomMargin: Settings.theme.adjustedPixel(8);
+                id: typeChooser;
+                anchors.right: parent.right;
+                width: parent.width - (height / 2);
+                height: existingCheckoutSelector.height + Settings.theme.adjustedPixel(16);
+                verticalAlignment: Text.AlignVCenter
+                font: Settings.theme.font("application");
+                text: "Type of repository:";
+                CohereButton {
+                    id: existingCheckoutSelector;
+                    anchors {
+                        right: newCheckoutSelector.left;
+                        verticalCenter: parent.verticalCenter;
+                    }
+                    text: "Existing Clone";
+                    textColor: "#5b6573";
+                    textSize: Settings.theme.adjustedPixel(18);
+                    checkedColor: "#D2D4D5";
+                    checked: true;
+                    onClicked: {
+                        if(!checked) {
+                            checked = true;
+                            newCheckoutSelector.checked = false;
+                        }
+                    }
                 }
-                height: font.pixelHeight + Settings.theme.adjustedPixel(16);
-                font: Settings.theme.font("pageHeader");
-                verticalAlignment: Text.AlignVCenter;
-                horizontalAlignment: Text.AlignHCenter;
-                text: "Add existing checkout";
-            }
-            TextField {
-                id: existingCheckoutName;
-                anchors {
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: parent.verticalCenter;
-                }
-                placeholder: "Short name for this account";
-            }
-            TextField {
-                id: existingCheckoutDir;
-                anchors {
-                    top: existingCheckoutName.bottom
-                    topMargin: Settings.theme.adjustedPixel(8);
-                    left: parent.left;
-                    right: existingCheckoutBrowse.left;
-                }
-                placeholder: "Location of existing checkout";
-            }
-            CohereButton {
-                id: existingCheckoutBrowse;
-                anchors {
-                    verticalCenter: existingCheckoutDir.verticalCenter;
-                    right: parent.right;
-                }
-                text: "Browse...";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
-                onClicked: {
-                    var newDir = GitCheckoutCreator.getDir();
-                    if(newDir !== "") {
-                        existingCheckoutDir.text = newDir;
+                CohereButton {
+                    id: newCheckoutSelector;
+                    anchors{
+                        right: parent.right;
+                        verticalCenter: parent.verticalCenter;
+                    }
+                    text: "New Clone";
+                    textColor: "#5b6573";
+                    textSize: Settings.theme.adjustedPixel(18);
+                    checkedColor: "#D2D4D5";
+                    onClicked: {
+                        if(!checked) {
+                            checked = true;
+                            existingCheckoutSelector.checked = false;
+                        }
                     }
                 }
             }
-            Text {
-                id: errorLabel;
-                anchors {
-                    verticalCenter: existingCheckoutAdd.verticalCenter;
-                    left: parent.left;
-                    right: parent.right;
-                    leftMargin: existingCheckoutDir.height / 2;
+            TextField {
+                id: checkoutName;
+                width: parent.width;
+                placeholder: "Short name for this account";
+            }
+            Item {
+                width: parent.width;
+                height: checkoutDir.height;
+                TextField {
+                    id: checkoutDir;
+                    anchors {
+                        left: parent.left;
+                        right: checkoutBrowse.left;
+                    }
+                    placeholder: "Local clone location";
                 }
-                height: existingCheckoutAdd.height;
-                color: "red";
-                font: Settings.theme.font("application");
+                CohereButton {
+                    id: checkoutBrowse;
+                    anchors {
+                        verticalCenter: checkoutDir.verticalCenter;
+                        right: parent.right;
+                    }
+                    text: "Browse...";
+                    textColor: "#5b6573";
+                    textSize: Settings.theme.adjustedPixel(18);
+                    color: "#D2D4D5";
+                    onClicked: {
+                        var newDir = GitCheckoutCreator.getDir();
+                        if(newDir !== "") {
+                            checkoutDir.text = newDir;
+                        }
+                    }
+                }
+            }
+            TextField {
+                id: newCheckoutServer;
+                width: parent.width;
+                height: newCheckoutSelector.checked ? Constants.GridHeight : 0;
+                Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                opacity: height === 0 ? 0 : 1;
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                placeholder: "Clone URL (https or git)";
             }
             CohereButton {
-                anchors {
-                    verticalCenter: existingCheckoutAdd.verticalCenter;
-                    right: existingCheckoutAdd.left;
-                    rightMargin: Settings.theme.adjustedPixel(8);
-                }
+                anchors.right: parent.right;
                 onClicked: dlgStack.push(userCredentials);
                 text: "Set User Credentials";
                 textColor: "#5b6573";
                 textSize: Settings.theme.adjustedPixel(18);
                 color: "#D2D4D5";
             }
-            CohereButton {
-                id: existingCheckoutAdd;
-                anchors {
-                    top: existingCheckoutDir.bottom;
-                    topMargin: Settings.theme.adjustedPixel(8);
-                    right: parent.right;
-                }
-                text: "Add Now";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
-                property string userForRemote;
-                property string privateKeyFile;
-                property string publicKeyFile;
-                property bool needsPrivateKeyPassphrase;
-                Component {
-                    id: accountComp;
-                    QtObject {
-                        property string localrepo: existingCheckoutDir.text;
-                        property string userForRemote: existingCheckoutAdd.userForRemote;
-                        property string privateKeyFile: existingCheckoutAdd.privateKeyFile;
-                        property string publicKeyFile: existingCheckoutAdd.publicKeyFile;
-                        property bool needsPrivateKeyPassphrase: existingCheckoutAdd.needsPrivateKeyPassphrase;
-                    }
-                }
-                onClicked: {
-                    if(existingCheckoutName.text.length < 1) {
-                        errorLabel.text = "You need to enter a name for the account."
-                        return;
-                    }
-                    if(existingCheckoutDir.text.length < 1) {
-                        errorLabel.text = "You must select a location."
-                        return;
-                    }
-                    if(!GitCheckoutCreator.isGitDir(existingCheckoutDir.text)) {
-                        errorLabel.text = "You must select a location which is actually a git repository."
-                        return;
-                    }
-                    cloudAccounts.addAccount(existingCheckoutName.text, "Git", "accountsPageGit", accountComp.createObject(cloudAccounts));
-                    dlgStack.replace(addEmpty);
-                }
-            }
-        }
-        Item {
-            anchors {
-                top: parent.verticalCenter;
-                left: parent.left;
-                right: parent.right;
-                bottom: parent.bottom;
-            }
             Text {
-                id: newCheckout
-                anchors {
-                    left: parent.left;
-                    right: parent.right
-                    bottom: newCheckoutName.top;
-                    bottomMargin: Settings.theme.adjustedPixel(8);
+                id: errorLabel;
+                width: parent.width;
+                height: cloneAdd.height + Settings.theme.adjustedPixel(16);
+                verticalAlignment: Text.AlignVCenter
+                color: "red";
+                font: Settings.theme.font("application");
+                CohereButton {
+                    id: cloneAdd;
+                    anchors {
+                        verticalCenter: parent.verticalCenter;
+                        right: parent.right;
+                    }
+                    text: "Add Now";
+                    textColor: "#5b6573";
+                    textSize: Settings.theme.adjustedPixel(18);
+                    color: "#D2D4D5";
+                    onClicked: {
+                        if(checkoutName.text.length < 1) {
+                            errorLabel.text = "You need to enter a name for the account."
+                            return;
+                        }
+                        if(checkoutDir.text.length < 1) {
+                            errorLabel.text = "You must select a location."
+                            return;
+                        }
+                        if(base.userForRemote.length < 1 || base.privateKeyFile.length < 1 || base.publicKeyFile.length < 1) {
+                            errorLabel.text = "You need to enter your credentials.";
+                            return;
+                        }
+                        var createAccount = true;
+                        if(newCheckoutSelector.checked) {
+                            if(newCheckoutServer.text.length < 1) {
+                                errorLabel.text = "You have to enter a remote server location for the clone.";
+                                return;
+                            }
+                            var repoDir = GitCheckoutCreator.createClone(checkoutName.text, newCheckoutServer.text, checkoutDir.text, accountComp.createObject(cloudAccounts));
+                            if(repoDir.length > 0) {
+                                checkoutDir.text = repoDir;
+                            }
+                            else {
+                                createAccount = false;
+                            }
+                        }
+                        else {
+                            if(!GitCheckoutCreator.isGitDir(checkoutDir.text)) {
+                                errorLabel.text = "You must select a location which is actually a git repository."
+                                return;
+                            }
+                        }
+                        if(createAccount) {
+                            cloudAccounts.addAccount(checkoutName.text, "Git", "accountsPageGit", accountComp.createObject(cloudAccounts));
+                            dlgStack.replace(addEmpty);
+                        }
+                    }
                 }
-                height: font.pixelHeight + Settings.theme.adjustedPixel(16);
-                font: Settings.theme.font("pageHeader");
-                verticalAlignment: Text.AlignVCenter;
-                horizontalAlignment: Text.AlignHCenter;
-                text: "Create a new clone";
-            }
-            TextField {
-                id: newCheckoutName;
-                anchors {
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: parent.verticalCenter;
-                }
-                placeholder: "Short name for this account";
-            }
-            TextField {
-                id: newCheckoutServer;
-                anchors {
-                    top: newCheckoutName.bottom;
-                    topMargin: Settings.theme.adjustedPixel(8);
-                    left: parent.left;
-                    right: parent.right;
-                }
-                placeholder: "Clone URL (https or git)";
-            }
-            CohereButton {
-                id: newCloneAdd;
-                anchors {
-                    top: newCheckoutServer.bottom;
-                    topMargin: Settings.theme.adjustedPixel(8);
-                    right: parent.right;
-                }
-                text: "Clone and Add Now";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
-                onClicked: console.debug(GitCheckoutCreator);
             }
         }
         Rectangle {
@@ -246,10 +244,10 @@ Item {
         id: userCredentials;
         GetUserCredentials {
             onAccepted: {
-                existingCheckoutAdd.userForRemote = userForRemote;
-                existingCheckoutAdd.privateKeyFile = privateKeyFile;
-                existingCheckoutAdd.publicKeyFile = publicKeyFile;
-                existingCheckoutAdd.needsPrivateKeyPassphrase = needsPrivateKeyPassphrase;
+                base.userForRemote = userForRemote;
+                base.privateKeyFile = privateKeyFile;
+                base.publicKeyFile = publicKeyFile;
+                base.needsPrivateKeyPassphrase = needsPrivateKeyPassphrase;
                 dlgStack.pop();
             }
             onCancelled: {
