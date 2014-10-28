@@ -61,7 +61,7 @@ public:
     virtual QDockWidget* createDockWidget()
     {
         AnimatorDock * dockWidget = new AnimatorDock();
-        
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -74,7 +74,7 @@ public:
 
 };
 
-class OnionSkinDockFactory : public KoDockFactoryBase{
+class OnionSkinDockFactory : public KoDockFactoryBase {
 public:
     OnionSkinDockFactory()
     {

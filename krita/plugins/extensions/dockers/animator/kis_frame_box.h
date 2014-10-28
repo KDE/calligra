@@ -39,7 +39,7 @@ class KisFrameBox : public QListWidget
 public:
     KisFrameBox(KisTimelineWidget* parent = 0);
 
-    void setSelectedFrame(int x=-1, KisLayerContentsWidget* parent=0, int width=10);
+    void setSelectedFrame(int x = -1, KisLayerContentsWidget* parent = 0, int width = 10);
 
     KisAnimationFrameWidget* getSelectedFrame();
     KisLayerContentsWidget* getFirstLayer();

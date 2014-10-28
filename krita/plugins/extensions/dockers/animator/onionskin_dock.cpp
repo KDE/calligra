@@ -41,11 +41,11 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
 {
     m_initialized = false;
 
-    this->setMinimumSize(300,160);
+    this->setMinimumSize(300, 160);
 
     QLabel* activeLabel = new QLabel(this);
     activeLabel->setText(i18n("Active: "));
-    activeLabel->setGeometry(100,20,50,20);
+    activeLabel->setGeometry(100, 20, 50, 20);
 
     KisConfig cfg;
 
@@ -62,7 +62,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     QSpinBox* previousFramesInput = new QSpinBox(this);
     previousFramesInput->setRange(0, 10);
     previousFramesInput->setValue(3);
-    previousFramesInput->setGeometry(60,40,50,20);
+    previousFramesInput->setGeometry(60, 40, 50, 20);
 
     QSpinBox* nextFramesInput = new QSpinBox(this);
     nextFramesInput->setRange(0, 10);
@@ -75,7 +75,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
 
     KColorButton* previousFramesColor = new KColorButton(this);
     previousFramesColor->setColor(QColor(Qt::red));
-    previousFramesColor->setGeometry(60, 60,50, 20);
+    previousFramesColor->setGeometry(60, 60, 50, 20);
     connect(previousFramesColor, SIGNAL(changed(QColor)), this, SLOT(setPrevFramesColor(QColor)));
 
     KColorButton* nextFramesColor = new KColorButton(this);
@@ -105,7 +105,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
 void OnionSkinDock::setCanvas(KoCanvasBase *canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(m_canvas && m_canvas->view() && m_canvas->view()->document()) {
+    if (m_canvas && m_canvas->view() && m_canvas->view()->document()) {
         KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(m_canvas->view()->document());
         if (doc) {
             m_animation = doc->getAnimation();
@@ -118,7 +118,7 @@ void OnionSkinDock::setCanvas(KoCanvasBase *canvas)
 
 void OnionSkinDock::onCavasSet()
 {
-    if(!m_initialized) {
+    if (!m_initialized) {
         // Set initial set of opacity values
         m_animation->setPrevOnionSkinOpacityValues(m_previousOpacitySelectorView->opacitySelector()->opacityValues());
         m_animation->setNextOnionSkinOpacityValues(m_nextOpacitySelectorView->opacitySelector()->opacityValues());

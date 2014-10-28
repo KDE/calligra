@@ -30,11 +30,11 @@ class KisView2;
 class AnimatorPlugin : public QObject
 {
     Q_OBJECT
-    public:
-        AnimatorPlugin(QObject *parent, const QVariantList &);
-        virtual ~AnimatorPlugin();
-    private:
-        KisView2* m_view;
+public:
+    AnimatorPlugin(QObject *parent, const QVariantList &);
+    virtual ~AnimatorPlugin();
+private:
+    KisView2* m_view;
 };
 
 #endif

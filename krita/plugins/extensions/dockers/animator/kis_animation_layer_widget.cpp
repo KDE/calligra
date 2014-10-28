@@ -71,7 +71,7 @@ void KisAnimationLayerWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setPen(Qt::darkGray);
     painter.setBrush(Qt::lightGray);
-    painter.drawRect(QRect(0,0, 200, height()));
+    painter.drawRect(QRect(0, 0, 200, height()));
 }
 
 void KisAnimationLayerWidget::mouseDoubleClickEvent(QMouseEvent *event)
@@ -98,7 +98,7 @@ void KisAnimationLayerWidget::onionSkinToggleClicked()
     onionSkinState = !onionSkinState;
     m_layerBox->setOnionSkinState(layer, onionSkinState);
 
-    if(onionSkinState) {
+    if (onionSkinState) {
         m_onionSkinToggle->setIcon(koIcon("onionB"));
     } else {
         m_onionSkinToggle->setIcon(koIcon("onionA"));
@@ -116,7 +116,7 @@ void KisAnimationLayerWidget::lockToggleClicked()
     lockState = !lockState;
     m_layerBox->setLockState(layer, lockState);
 
-    if(lockState) {
+    if (lockState) {
         m_lockToggle->setIcon(koIcon("locked"));
     } else {
         m_lockToggle->setIcon(koIcon("unlocked"));
@@ -134,7 +134,7 @@ void KisAnimationLayerWidget::visibilityToggleClicked()
     visibilityState = !visibilityState;
     m_layerBox->setVisibilityState(layer, visibilityState);
 
-    if(visibilityState) {
+    if (visibilityState) {
         m_visibilityToggle->setIcon(koIcon("novisible"));
     } else {
         m_visibilityToggle->setIcon(koIcon("visible"));
