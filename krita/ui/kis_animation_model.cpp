@@ -58,7 +58,10 @@ QVariant KisAnimationModel::headerData(int section, Qt::Orientation orientation,
     if (role == Qt::DisplayRole) {
         switch (orientation) {
         case Qt::Horizontal:
-            result = QString("%1").arg(section); // Frame number
+            // Only show every tenth frame number
+            if (section % 10 == 0) {
+                result = QString("%1").arg(section); // Frame number
+            }
             break;
         case Qt::Vertical:
         {

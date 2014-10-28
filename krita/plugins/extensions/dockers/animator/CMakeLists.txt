@@ -15,6 +15,7 @@ set(KRITA_ANIMATOR_PART_SRCS animator.cpp
     kis_opacity_selector_view.cpp
 
     TimelineView.cpp
+    TimelineItemDelegate.cpp
 )
 
 kde4_add_plugin(kritaanimator ${KRITA_ANIMATOR_PART_SRCS})

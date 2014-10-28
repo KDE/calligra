@@ -15,21 +15,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "TimelineView.h"
+#ifndef TIMELINEITEMDELEGATE_H
+#define TIMELINEITEMDELEGATE_H
 
-#include <QHeaderView>
+#include <QStyledItemDelegate>
 
-#include <kis_config.h>
-
-#include "TimelineItemDelegate.h"
-
-TimelineView::TimelineView(QWidget *parent)
-    : QTableView(parent)
+class TimelineItemDelegate : public QStyledItemDelegate
 {
-    TimelineItemDelegate *delegate = new TimelineItemDelegate(this);
-    setItemDelegate(delegate);
-    KisConfig cfg;
-    horizontalHeader()->setDefaultSectionSize(cfg.readEntry("TimelineFrameWidth", 20));
-    horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-    verticalHeader()->setResizeMode(QHeaderView::Fixed);
-}
+    Q_OBJECT
+public:
+    explicit TimelineItemDelegate(QObject *parent = 0);
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &optionViewItem, const QModelIndex & index) const;
+
+};
+
+#endif // TIMELINEITEMDELEGATE_H
