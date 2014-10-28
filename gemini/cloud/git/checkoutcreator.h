@@ -31,7 +31,7 @@ public:
     explicit CheckoutCreator(QObject* parent = 0);
     virtual ~CheckoutCreator();
 
-    Q_INVOKABLE QString getFile(QString caption, QString filter) const;
+    Q_INVOKABLE QString getFile(QString caption, QString filter, QString extraSubDir = QString()) const;
     Q_INVOKABLE QString getDir() const;
     Q_INVOKABLE bool isGitDir(QString directory) const;
     /**

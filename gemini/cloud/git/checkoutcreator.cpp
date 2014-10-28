@@ -130,9 +130,12 @@ CheckoutCreator::~CheckoutCreator()
     delete d;
 }
 
-QString CheckoutCreator::getFile(QString caption, QString filter) const
+QString CheckoutCreator::getFile(QString caption, QString filter, QString extraSubDir) const
 {
-    QString url = KFileDialog::getOpenFileName(KUrl(QDir::homePath()), filter, 0, caption);
+    KUrl searchDir;
+    if(QDir::home().exists(extraSubDir))
+        searchDir = KUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
+    QString url = KFileDialog::getOpenFileName(searchDir, filter, 0, caption);
     return url;
 }
 
