@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoPointerEvent.h>
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvasBase * canvas)

@@ -22,7 +22,6 @@
 #ifndef KARBONSMALLSTYLEPREVIEW_H
 #define KARBONSMALLSTYLEPREVIEW_H
 
-#include <KoCheckerBoardPainter.h>
 #include <QWidget>
 
 class QPaintEvent;

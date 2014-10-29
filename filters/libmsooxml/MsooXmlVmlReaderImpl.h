@@ -342,7 +342,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
         }
     }
-#ifdef DOCXXMLDOCREADER_H
+#ifdef DOCXXMLDOCUMENTREADER_H
     if (!ver_pos_rel.isEmpty()) {
         if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
             if (m_headerActive || m_footerActive) {

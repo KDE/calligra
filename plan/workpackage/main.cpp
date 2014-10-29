@@ -26,7 +26,6 @@
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 
-#include <QtDBus>
 #include <QFile>
 
 

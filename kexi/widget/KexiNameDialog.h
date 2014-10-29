@@ -39,6 +39,8 @@ public:
     virtual bool validate(KexiNameDialog *dialog) const = 0;
 };
 
+//! A dialog displaying object's name and caption and allowing editing.
+//! @see KexiNameWidget
 class KEXIEXTWIDGETS_EXPORT KexiNameDialog : public KDialog
 {
     Q_OBJECT

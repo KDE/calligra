@@ -68,7 +68,6 @@
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
-#include <KoProgressUpdater.h>
 #include <KoPart.h>
 
 #include "kptviewbase.h"

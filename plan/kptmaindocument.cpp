@@ -800,8 +800,11 @@ void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *
     if ( package->settings.usedEffort ) {
         Completion::UsedEffort *ue = new Completion::UsedEffort();
         Completion::Entry prev;
-        foreach ( const QDate &d, curr.entries().keys() ) {
-            Completion::Entry e = *( curr.entry( d ) );
+        Completion::EntryList::ConstIterator entriesIt = curr.entries().constBegin();
+        const Completion::EntryList::ConstIterator entriesEnd = curr.entries().constEnd();
+        for (; entriesIt != entriesEnd; ++entriesIt) {
+            const QDate &d = entriesIt.key();
+            const Completion::Entry &e = *entriesIt.value();
             // set used effort from date entry and remove used effort from date entry
             Completion::UsedEffort::ActualEffort effort( e.totalPerformed - prev.totalPerformed );
             ue->setEffort( d, effort );

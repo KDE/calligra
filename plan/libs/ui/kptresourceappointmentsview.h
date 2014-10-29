@@ -175,4 +175,3 @@ private:
 }  //KPlato namespace
 
 #endif // KPTRESOURCEAPPOINTMENTSVIEW_H
-class KoPageLayoutWidget;

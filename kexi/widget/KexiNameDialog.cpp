@@ -151,14 +151,14 @@ bool KexiNameDialog::canOverwrite()
     }
     if (!d->allowOverwriting) {
         KMessageBox::information(this,
-                                 "<p>" + d->part->i18nMessage("Object \"%1\" already exists.", 0)
+                                 "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                                              .subs(widget()->nameText()).toString()
                                  + "</p><p>" + i18n("Please choose other name.") + "</p>");
         return false;
     }
 
     QString msg =
-        "<p>" + d->part->i18nMessage("Object \"%1\" already exists.", 0)
+        "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                     .subs(widget()->nameText()).toString()
         + "</p><p>" + i18n("Do you want to replace it?") + "</p>";
     KGuiItem yesItem(KStandardGuiItem::yes());

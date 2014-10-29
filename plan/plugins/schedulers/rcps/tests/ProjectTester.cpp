@@ -32,7 +32,6 @@
 #include <kconfiggroup.h>
 
 #include <QDir>
-#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>

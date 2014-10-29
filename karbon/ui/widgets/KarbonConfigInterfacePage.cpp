@@ -25,7 +25,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KarbonDocument.h"
 #include "KarbonFactory.h"
 
-#include <KoUnitDoubleSpinBox.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>

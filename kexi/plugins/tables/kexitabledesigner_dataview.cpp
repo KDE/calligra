@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,8 +34,9 @@ KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
 
     // setup main menu actions
     QList<QAction*> mainMenuActions;
-    QAction *a = sharedAction("edit_clear_table");
-    mainMenuActions << a;
+    mainMenuActions
+            << sharedAction("project_export_data_table")
+            << sharedAction("edit_clear_table");
 
     setMainMenuActions(mainMenuActions);
 }

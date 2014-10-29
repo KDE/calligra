@@ -19,9 +19,10 @@
 **
 */
 
+#include "map.h"
+
 #include <stdlib.h>  /* for atoi function    */
 #include <kdebug.h>  /* for kDebug() stream */
-#include "map.h"
 #include <QTextStream>
 
 /*******************************************/

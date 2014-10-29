@@ -69,7 +69,6 @@
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoFilterManager.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoPageLayoutDialog.h>
 #include <KoRuler.h>
 #include <KoToolManager.h>

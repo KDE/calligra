@@ -24,7 +24,6 @@
 
 #include "ToolDocker.h"
 
-#include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
 
 #include <KoIcon.h>

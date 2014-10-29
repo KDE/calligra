@@ -22,10 +22,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "document.h"
+
 #include "generated/leinputstream.h"
 #include "drawstyle.h"
 
-#include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
