@@ -275,6 +275,10 @@ void KisTimelineWidget::setCanvas(KisCanvas2 *canvas)
         init();
     }
     KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(canvas->view()->document());
+    // TODO: workaround to not crash when loading normal images
+    if (!doc) {
+        return;
+    }
     Q_ASSERT(doc);
     m_timeline->setModel(new KisAnimationModel(doc));
 
