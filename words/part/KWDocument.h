@@ -269,7 +269,6 @@ private:
     friend class KWDLoader;
     friend class KWOdfLoader;
     friend class KWPagePropertiesCommand;
-    friend class TouchPart;
     QString renameFrameSet(const QString &prefix , const QString &base);
     /**
      * post process loading after either oasis or oldxml loading finished
