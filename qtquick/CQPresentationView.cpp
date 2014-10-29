@@ -26,6 +26,7 @@
 
 #include "CQPresentationView.h"
 #include "CQCanvasController.h"
+
 #include <KoZoomController.h>
 #include <KoPADocument.h>
 #include <KoPACanvasBase.h>
@@ -37,13 +38,14 @@
 #include <KoSelection.h>
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
-#include <QGraphicsItem>
 #include <KoCanvasController.h>
 #include <KoPACanvasItem.h>
 #include <KoZoomHandler.h>
 #include <KoPart.h>
 
 #include <KDebug>
+
+#include <QGraphicsItem>
 
 //TODO: Cleanup code that is not called
 CQPresentationView::CQPresentationView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)

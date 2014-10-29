@@ -67,6 +67,7 @@
 #include <KoAnnotationManager.h>
 #include <KoAnnotation.h>
 #include <KoTextEditor.h>
+#include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
@@ -969,7 +970,7 @@ bool KWView::event(QEvent* event)
 
                 qApp->processEvents();
                 foreach(KoShape* const &shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
-                    if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                    if (qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
                         m_canvas->shapeManager()->selection()->select(shape);
                         break;
                     }

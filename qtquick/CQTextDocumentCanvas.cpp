@@ -29,8 +29,6 @@
 
 #include "gemini/ViewModeSwitchEvent.h"
 
-#include <QStyleOptionGraphicsItem>
-
 #include <KoDocument.h>
 #include <KoPart.h>
 #include <KoFindText.h>
@@ -38,10 +36,6 @@
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
-#include <KWDocument.h>
-#include <KWPage.h>
-#include <KWCanvasItem.h>
-#include <commands/KWShapeCreateCommand.h>
 #include <KoShape.h>
 #include <KoToolManager_p.h>
 #include <KoToolBase.h>
@@ -53,15 +47,23 @@
 #include <KoTextEditor.h>
 #include <KoProperties.h>
 #include <KoColumns.h>
+#include <KWDocument.h>
+#include <KWPage.h>
+#include <KWCanvasItem.h>
+#include <commands/KWShapeCreateCommand.h>
+
 #include <KActionCollection>
+#include <KDebug>
+#include <KMimeType>
+#include <KService>
+
+#include <QStyleOptionGraphicsItem>
 #include <QGraphicsWidget>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
 #include <QGraphicsSceneMouseEvent>
 #include <QTextDocumentFragment>
-#include <KDebug>
-#include <KMimeType>
 #include <QSvgRenderer>
 #include <QApplication>
 
@@ -591,6 +593,7 @@ void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
 
 void CQTextDocumentCanvas::render(QPainter* painter, const QRectF& target)
 {
+    Q_UNUSED(target)
     QStyleOptionGraphicsItem option;
     option.exposedRect = QRect(0, 0, width(), height());
     option.rect = option.exposedRect.toAlignedRect();
@@ -650,6 +653,8 @@ bool CQTextDocumentCanvas::event( QEvent* event )
 
 void CQTextDocumentCanvas::currentToolChanged(KoCanvasController* controller, int uniqueToolId)
 {
+    Q_UNUSED(controller)
+    Q_UNUSED(uniqueToolId)
     d->currentTool = qobject_cast<KoToolBase*>(KoToolManager::instance()->toolById(d->canvas, KoToolManager::instance()->activeToolId()));
 }
 

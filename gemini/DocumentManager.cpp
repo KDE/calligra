@@ -70,6 +70,7 @@ KoDocument* DocumentManager::document() const
 
 KoPart* DocumentManager::part(const QString& type)
 {
+    Q_UNUSED(type)
     if (!d->part)
         d->part = new KWPart(this);
     return d->part;
@@ -110,6 +111,9 @@ bool DocumentManager::isTemporaryFile() const
 
 void DocumentManager::newDocument(int width, int height, float resolution)
 {
+    Q_UNUSED(width)
+    Q_UNUSED(height)
+    Q_UNUSED(resolution)
     closeDocument();
 
     QTimer::singleShot(300, this, SLOT(delayedNewDocument()));

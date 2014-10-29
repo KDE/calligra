@@ -22,10 +22,16 @@
  */
 
 #include "CQPresentationCanvas.h"
+#include "CQPresentationView.h"
+#include "CQCanvasController.h"
+
+#include "gemini/ViewModeSwitchEvent.h"
 
 #include <QStyleOptionGraphicsItem>
 
-#include "CQCanvasController.h"
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextEditor.h>
 #include <KoPart.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
@@ -34,23 +40,18 @@
 #include <KoZoomHandler.h>
 #include <KoPADocument.h>
 #include <KoPACanvasItem.h>
+#include <KoPAPageBase.h>
+#include <stage/part/KPrDocument.h>
+
 #include <KDebug>
 #include <KActionCollection>
 #include <KMimeType>
+#include <KService>
+
 #include <QGraphicsWidget>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
-
-#include <KoPAPageBase.h>
-
-#include <stage/part/KPrDocument.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoTextEditor.h>
-
-#include "CQPresentationView.h"
-#include "gemini/ViewModeSwitchEvent.h"
 
 class CQPresentationCanvas::Private
 {
