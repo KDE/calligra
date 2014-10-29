@@ -147,9 +147,9 @@ void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 
 int KoDocumentResourceManager::grabSensitivity() const
 {
-    //if (hasResource(GrabSensitivity))
-    //    return intResource(GrabSensitivity);
-    return 9; // default value
+    if (hasResource(GrabSensitivity))
+       return intResource(GrabSensitivity);
+    return 3; // default value
 }
 
 void KoDocumentResourceManager::setPasteOffset(qreal pasteOffset)
