@@ -40,6 +40,10 @@
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <ktabwidget.h>
+#include <kstandarddirs.h>
+#include <kglobalsettings.h>
+#include <KAboutData>
+
 #include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
@@ -175,8 +179,8 @@ public:
     void alterBackground()
     {
         QPalette pal(palette());
-        QColor bg(KexiUtils::isLightColorScheme() ? Qt::white : Qt::black);
-        bg.setAlpha(150);
+        QColor bg(pal.color(QPalette::Window));
+        bg.setAlpha(200);
         pal.setColor(QPalette::Window, bg);
         setPalette(pal);
     }
@@ -186,47 +190,6 @@ public:
         }
         QWidget::changeEvent(e);
     }
-};
-
-class TopLineKexiMainMenuWidget : public QWidget
-{
-public:
-    explicit TopLineKexiMainMenuWidget(QWidget* parent)
-     : QWidget(parent) 
-    {
-        setAttribute(Qt::WA_TransparentForMouseEvents, true);
-        setContentsMargins(0, 0, 0, 0);
-    }
-protected:
-    void paintEvent(QPaintEvent*) {
-        if (m_buffer.size() != size()) {
-            QImage img(width(), height(), QImage::Format_ARGB32_Premultiplied);
-            img.fill(QColor(Qt::transparent).rgba());
-            QPainter p(&img);
-            
-            QColor c(palette().color(QPalette::Highlight));
-            QLinearGradient gr(0, 0, 0, height() - 1);
-            gr.setColorAt(0.0, c);
-            gr.setColorAt(2.0 / qreal(height()), c);
-            gr.setColorAt(1.0, Qt::transparent);
-            p.fillRect(rect(), QBrush(gr));
-            
-            if (style()->objectName() == "oxygen") {
-                p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-                QLinearGradient gr2(0, 0, 100, 0);
-                QColor wcol(Qt::white);
-                wcol.setAlpha(0);
-                gr2.setColorAt(0.0, wcol);
-                gr2.setColorAt(1.0, Qt::white);
-                p.fillRect(QRect(0, 0, 100, height() - 1), QBrush(gr2));
-            }
-            m_buffer = QPixmap::fromImage(img);
-        }
-        QPainter p(this);
-        p.drawPixmap(0, 0, m_buffer);
-    }
-private:
-    QPixmap m_buffer;
 };
 
 class KexiFadeWidgetEffect : public KFadeWidgetEffect
@@ -287,12 +250,10 @@ class KexiMainMenu : public QWidget
     Q_OBJECT
 public:
     explicit KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget* parent = 0) : QWidget(parent),
-        m_topLineHeight(5), m_toolBar(toolBar), m_initialized(false)
+        m_toolBar(toolBar), m_initialized(false)
     {
         //setAutoFillBackground(true); // to cover the lower layer
         m_content = 0;
-        m_topLineSpacer = 0;
-        m_topLine = 0;
         m_selectFirstItem = false;
     }
     ~KexiMainMenu() {
@@ -329,8 +290,6 @@ public:
             m_contentWidget->deleteLater();
         m_contentWidget = contentWidget;
         if (m_contentWidget) {
-            m_topLineSpacer->show();
-
             QPalette contentWidgetPalette(m_contentWidget->palette());
             contentWidgetPalette.setBrush(QPalette::Active, QPalette::Window, contentWidgetPalette.brush(QPalette::Active, QPalette::Base));
             contentWidgetPalette.setBrush(QPalette::Inactive, QPalette::Window, contentWidgetPalette.brush(QPalette::Inactive, QPalette::Base));
@@ -349,13 +308,6 @@ public:
             m_contentWidget->installEventFilter(this);
             connect(m_contentWidget, SIGNAL(destroyed()), this, SLOT(contentWidgetDestroyed()));
         }
-        else {
-            if (m_topLineSpacer) {
-                m_topLineSpacer->hide();
-            }
-        }
-        if (m_topLine)
-            m_topLine->raise();
         if (fadeEffect) {
             if (m_contentWidget)
                 m_contentLayout->update();
@@ -366,14 +318,6 @@ public:
 
     const QWidget *contentWidget() const {
         return m_contentWidget;
-    }
-
-    void updateTopLineGeometry()
-    {
-        int tab0width = style()->objectName() == "oxygen"
-            ? m_toolBar->tabRect(0).width() : 0;
-        m_topLine->setGeometry(
-            tab0width, 0, width() - 1 - tab0width, m_topLineHeight);
     }
 
     void setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set)
@@ -411,8 +355,9 @@ protected:
             hlyr->setSpacing(0);
             hlyr->setMargin(0);
             m_menuWidget = new KexiMenuWidget;
+            QString styleName(m_menuWidget->style()->objectName());
             if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
-                && m_menuWidget->style()->objectName() == QLatin1String("oxygen"))
+                && styleName == "oxygen")
             {
                 KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style(), this);
                 m_menuWidget->setStyle(customStyle);
@@ -424,7 +369,6 @@ protected:
             m_menuWidget->setAutoFillBackground(true);
             int leftmargin, topmargin, rightmargin, bottommargin;
             m_menuWidget->getContentsMargins(&leftmargin, &topmargin, &rightmargin, &bottommargin);
-            topmargin += m_topLineHeight;
             m_menuWidget->setContentsMargins(leftmargin, topmargin, rightmargin, bottommargin);
 
             m_menuWidget->addAction(ac->action("project_welcome"));
@@ -450,20 +394,13 @@ protected:
             m_content->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
             m_content->installEventFilter(this);
             m_mainContentLayout = new QVBoxLayout;
+            m_mainContentLayout->addSpacing(styleName == "oxygen" ? 0 : 3);
             hlyr->addLayout(m_mainContentLayout);
-            m_topLineSpacer = new QWidget;
-            m_topLineSpacer->setFixedHeight(m_topLineHeight);
-            m_mainContentLayout->addWidget(m_topLineSpacer); // offset to avoid blinking top line
-            m_topLineSpacer->hide();
             m_contentLayout = new QStackedLayout(m_content);
             m_contentLayout->setStackingMode(QStackedLayout::StackAll);
             m_contentLayout->setContentsMargins(0, 0, 0, 0);
             m_mainContentLayout->addWidget(m_content);
             hlyr->setStretchFactor(m_mainContentLayout, 1);
-            m_topLine = new TopLineKexiMainMenuWidget(this);
-            updateTopLineGeometry();
-            m_topLine->show();
-            m_topLine->raise();
         }
         QWidget::showEvent(event);
         if (m_selectFirstItem && !m_menuWidget->actions().isEmpty()) {
@@ -475,14 +412,11 @@ protected:
 
 private:
     QPointer<KexiMenuWidget> m_menuWidget;
-    const int m_topLineHeight;
     KexiTabbedToolBar* m_toolBar;
     bool m_initialized;
     EmptyMenuContentWidget *m_content;
     QStackedLayout *m_contentLayout;
     QPointer<QWidget> m_contentWidget;
-    TopLineKexiMainMenuWidget *m_topLine;
-    QWidget* m_topLineSpacer;
     QVBoxLayout* m_mainContentLayout;
     QPointer<KexiMenuWidgetAction> m_persistentlySelectedAction;
     bool m_selectFirstItem;
@@ -581,8 +515,6 @@ public:
     virtual QSize tabSizeHint(int index) const;
 
     KexiTabbedToolBarStyle* customStyle;
-protected:
-    virtual void changeEvent(QEvent *e);
 };
 
 //! Style proxy for KexiTabbedToolBar, to get the "Kexi" tab style right.
@@ -592,21 +524,13 @@ public:
     explicit KexiTabbedToolBarStyle(QStyle *style, QObject *parent = 0)
       : KexiUtils::StyleProxy(style, parent)
     {
-        updateLogo();
     }
     virtual ~KexiTabbedToolBarStyle() {
-    }
-    void updateLogo() {
-        const QString kexiBlackFname
-            = KStandardDirs::locate("data",
-                                    KexiUtils::isLightColorScheme()
-                                    ? "kexi/pics/kexi-logo.png"
-                                    : "kexi/pics/kexi-logo-white.png");
-        kexiBlackPixmap = QPixmap(kexiBlackFname);
     }
     virtual void drawControl(ControlElement element, const QStyleOption *option,
                              QPainter *painter, const QWidget *widget = 0) const
     {
+        const QString styleName(parentStyle()->objectName());
         qreal origOpacity = -1.0;
         if (element == CE_TabBarTab) {
             const QStyleOptionTabV2* opt
@@ -622,28 +546,35 @@ public:
                 bool unselectedOrMenuVisible
                     = !(opt->state & State_Selected) || tbar->mainMenuVisible();
                 if (unselectedOrMenuVisible) {
-                    if (parentStyle()->objectName() == "bespin") {
+                    if (styleName == "bespin") {
                         unselectedOrMenuVisible = false;
                     }
                 }
 
+                QStyleOptionTabV2 newOpt(*opt);
+                newOpt.text = ((styleName == "qtcurve" || styleName == "oxygen") ? " " : "")
+                        + tabBar->tabText(index)
+                        + ((styleName == "qtcurve" || styleName == "oxygen") ? " " : "");
                 if (!mouseOver
                     && unselectedOrMenuVisible
                     && index > 0)
                 {
-                    QStyleOptionTabV2 newOpt(*opt);
                     if (tbar->mainMenuVisible())
                         newOpt.state &= ~QStyle::State_HasFocus;
                     KexiUtils::StyleProxy::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
                     return;
                 }
                 else if (index == 0) {
-                    //kDebug() << "RECT:" << opt->rect << tabBar->tabAt(opt->rect.center());
-                    QStyleOptionTabV2 newOpt(*opt);
                     QBrush bg;
                     newOpt.state |= State_Selected;
                     if (tbar->mainMenuVisible()) {
-                        bg = newOpt.palette.brush(QPalette::Highlight);
+                        bg = newOpt.palette.brush(QPalette::Active, QPalette::Highlight);
+                        if (styleName != "oxygen" && styleName != "qtcurve") {
+                            newOpt.palette.setBrush(QPalette::WindowText,
+                                                    newOpt.palette.brush(QPalette::Active, QPalette::HighlightedText));
+                            newOpt.palette.setBrush(QPalette::ButtonText,
+                                                    newOpt.palette.brush(QPalette::Active, QPalette::HighlightedText));
+                        }
                     }
                     else {
                         /*bg = newOpt.palette.brush(QPalette::Dark);
@@ -658,8 +589,10 @@ public:
                             bg = Qt::transparent;
 //                         }
                     }
-                    newOpt.text.clear();
-                    //newOpt.rect.setHeight(newOpt.rect.height() + 15);
+                    QFont origFont(painter->font());
+                    QFont f(origFont);
+                    f.setBold(true);
+                    painter->setFont(f);
                     newOpt.palette.setBrush(QPalette::Window, bg);
                     newOpt.palette.setBrush(QPalette::Button, // needed e.g. for Plastique style
                                             bg);
@@ -669,35 +602,35 @@ public:
                                             newOpt.palette.brush(QPalette::HighlightedText));*/
                     //newOpt.rect.setWidth(newOpt.rect.width() - KEXITABBEDTOOLBAR_FIRSTTAB_SPACING);
                     KexiUtils::StyleProxy::drawControl(element, &newOpt, painter, widget);
-                    painter->drawPixmap(
-                        newOpt.rect.center()
-                        - QPoint(kexiBlackPixmap.width(), kexiBlackPixmap.height()) / 2,
-                        kexiBlackPixmap);
-                    if (!mouseOver)
+                    painter->setFont(origFont);
+                    if (!mouseOver || tbar->mainMenuVisible())
                         return;
                 }
                 if (index > 0 || mouseOver) {
-                    QStyleOptionTabV2 newOpt(*opt);
-                    QColor hc(newOpt.palette.color(QPalette::Highlight));
-                    //hc.setAlpha(150);
-                    newOpt.palette.setBrush(QPalette::Window, hc);
-                    newOpt.palette.setBrush(QPalette::Button, hc); // needed e.g. for Plastique style
+                    const QPalette::ColorGroup hbGroup =  (styleName == "oxygen")
+                            ? QPalette::Active : QPalette::Inactive;
+                    const QBrush hb(newOpt.palette.brush(hbGroup, QPalette::Highlight));
+                    newOpt.palette.setBrush(QPalette::Window, hb);
+                    newOpt.palette.setBrush(QPalette::Button, hb); // needed e.g. for Plastique style
                     if (mouseOver && (index != tbar->currentIndex() || tbar->mainMenuVisible())) {
                         // use lower opacity for diplaying hovered tabs
                         origOpacity = painter->opacity();
-                        painter->setOpacity(0.3);
+                        painter->setOpacity(styleName == "qtcurve" ? 0.2 : 0.3);
                         newOpt.state |= State_Selected;
                     }
                     else {
-                        if (parentStyle()->objectName() != "oxygen") {
+                        if (styleName != "oxygen" && styleName != "qtcurve") {
                             newOpt.palette.setBrush(QPalette::WindowText,
-                                                    newOpt.palette.brush(QPalette::HighlightedText));
+                                                    newOpt.palette.brush(QPalette::Inactive, QPalette::HighlightedText));
                             newOpt.palette.setBrush(QPalette::ButtonText,
-                                                    newOpt.palette.brush(QPalette::HighlightedText));
+                                                    newOpt.palette.brush(QPalette::Inactive, QPalette::HighlightedText));
                         }
                     }
-                    if (index == 0)
-                        newOpt.text.clear();
+                    if (index == tbar->currentIndex() && styleName == "qtcurve") {
+                        origOpacity = painter->opacity();
+                        painter->setOpacity(0.5);
+                    }
+                    (newOpt.state |= State_Active) ^= State_Active;
                     KexiUtils::StyleProxy::drawControl(element, &newOpt, painter, widget);
                     if (origOpacity != -1.0) {
                         // restore opacity and draw labels using full this opacity
@@ -721,8 +654,17 @@ public:
     virtual void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
                           QPainter *painter, const QWidget *widget = 0) const
     {
+        const QString styleName(parentStyle()->objectName());
         if (element == PE_FrameTabWidget) {
             return;
+        }
+        if (element == PE_FrameTabBarBase) {
+            const QTabBar* tabBar = qobject_cast<const QTabBar*>(widget);
+            KexiTabbedToolBar* tbar = tabBar
+                ? qobject_cast<KexiTabbedToolBar*>(tabBar->parentWidget()) : 0;
+            if (tbar && tbar->mainMenuVisible() && styleName != "bespin") {
+                return;
+            }
         }
         if (element == QStyle::PE_PanelToolBar || element == QStyle::PE_FrameMenu) {
             return;
@@ -737,9 +679,6 @@ public:
             return KIconLoader::SizeMedium;
         return KexiUtils::StyleProxy::pixelMetric(metric, option, widget);
     }
-
-    QPixmap kexiBlackPixmap;
-    QPixmap kexiWhitePixmap;
 };
 
 //! Tab bar reimplementation for KexiTabbedToolBar.
@@ -764,22 +703,27 @@ QSize KexiTabbedToolBarTabBar::originalTabSizeHint(int index) const
 
 QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
 {
+    QSize s = KTabBar::tabSizeHint(index);
+    QStyleOptionTab ot;
+    ot.initFrom(this);
+    QFont f(font());
+    f.setBold(true);
+    const QString styleName(style()->objectName());
+    ot.text = ((styleName == "qtcurve" || styleName == "oxygen") ? "  " : "") + tabText(index);
+    ot.fontMetrics = QFontMetrics(f);
+    int w = customStyle->pixelMetric(QStyle::PM_TabBarTabHSpace, &ot, this);
+    if (w <= 0) { // needed e.g. for oxygen
+        w = fontMetrics().width("   ");
+    }
     if (index == 0) {
-        QSize s = KTabBar::tabSizeHint(index);
-        s.setWidth(customStyle->kexiBlackPixmap.width()
-                   + 10/*left*/ + 8/*right*/);
-        s.setHeight(qMax(s.height(), customStyle->kexiBlackPixmap.height() + 3));
+        s.setWidth(QFontMetrics(f).width(ot.text) + w * 2);
         return s;
     }
-    return KTabBar::tabSizeHint(index);
-}
-
-void KexiTabbedToolBarTabBar::changeEvent(QEvent *e)
-{
-    if (e->type() == QEvent::PaletteChange) {
-        customStyle->updateLogo();
+    else if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
+        // fix width of the spacer tab
+        s.setWidth(w);
     }
-    KTabBar::changeEvent(e);
+    return s;
 }
 
 void KexiTabbedToolBar::Private::toggleMainMenu()
@@ -984,7 +928,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
     dummyWidgetForMainMenu->setObjectName("kexi");
-    addTab(dummyWidgetForMainMenu, i18nc("File menu", "&File"));
+    addTab(dummyWidgetForMainMenu, KGlobal::mainComponent().aboutData()->programName());
     d->toolbarsVisibleForIndex.append(true);
     addTab(new QWidget(this), QString()); // dummy for spacer
     d->toolbarsVisibleForIndex.append(true);
@@ -1253,8 +1197,6 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Resize:
         if (watched == KexiMainWindowIface::global()->thisWidget()) {
             d->updateMainMenuGeometry();
-            if (d->mainMenu)
-                d->mainMenu->updateTopLineGeometry();
         }
         break;
     case QEvent::Shortcut: {
