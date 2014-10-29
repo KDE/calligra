@@ -99,10 +99,10 @@ private:
     QAbstractButton* m_button;
 };
 
-inline void KisLayerBox::connectActionToButton(QAbstractButton *button, const QString &id)
+inline void KisLayerBox::connectActionToButton(KisView2* view, QAbstractButton *button, const QString &id)
 {
-    Q_ASSERT(m_canvas);
-    KisAction *action = m_canvas->view()->actionManager()->actionByName(id);
+    Q_ASSERT(view);
+    KisAction *action = view->actionManager()->actionByName(id);
 
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
@@ -297,6 +297,9 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, Ko
 void KisLayerBox::setMainWindow(KisView2* kisview)
 {
     m_nodeManager = kisview->nodeManager();
+
+    connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
+    connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 }
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
@@ -360,9 +363,6 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                           action,
                           actionCollection);
         }
-
-        connectActionToButton(m_wdgLayerBox->bnAdd, "add_new_paint_layer");
-        connectActionToButton(m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");

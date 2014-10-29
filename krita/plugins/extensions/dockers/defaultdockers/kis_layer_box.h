@@ -111,7 +111,7 @@ private slots:
     void selectionChanged(const QModelIndexList selection);
 
 private:
-    inline void connectActionToButton(QAbstractButton *button, const QString &id);
+    inline void connectActionToButton(KisView2* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
