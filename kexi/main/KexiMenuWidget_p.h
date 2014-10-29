@@ -269,6 +269,7 @@ public:
 
     OxygenHelper *oxygenHelper;
     bool bespin;
+    bool qtcurve;
 
     void updateLogo();
     void updateLogoPixmap();
