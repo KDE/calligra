@@ -63,7 +63,6 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointedAt.h>
-#include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
 #include <KoAnnotation.h>

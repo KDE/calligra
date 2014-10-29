@@ -77,7 +77,7 @@ OdtMobiHtmlConverter::~OdtMobiHtmlConverter()
 //                         HTML conversion
 
 
-OdtMobiHtmlConverter::ConversionOptions defaultOptions = {
+const OdtMobiHtmlConverter::ConversionOptions defaultOptions = {
     true,                       // Put styles into styles.css
     true,                        // Do break the output into chapters
     false                       // It doesn't use Mobi convention

@@ -262,7 +262,7 @@ static unsigned convertColumnWidth(qreal width)
         QFont f("Arial", 10);
         KoPostscriptPaintDevice pd;
         QFontMetricsF fm(f, &pd);
-        for (char c = '0'; c <= '9'; c++) {
+        for (char c = '0'; c <= '9'; ++c) {
             factor = qMax(factor, fm.width(c));
         }
     }

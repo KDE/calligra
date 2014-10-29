@@ -26,7 +26,6 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
-#include <KoXmlWriter.h>
 
 #define MSOOXML_CURRENT_NS "w"
 #define BIND_READ_CLASS MSOOXML::MsooXmlStylesReader

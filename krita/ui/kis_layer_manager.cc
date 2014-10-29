@@ -28,11 +28,8 @@
 #include <QDesktopServices>
 
 #include <kactioncollection.h>
-#include <ktoggleaction.h>
 #include <klocale.h>
-#include <kstandardaction.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kfilewidget.h>
 #include <kurl.h>
 #include <kdiroperator.h>
@@ -46,8 +43,6 @@
 #include <KoPointerEvent.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoProgressUpdater.h>
 #include <KoPart.h>
 
 #include <filter/kis_filter_configuration.h>

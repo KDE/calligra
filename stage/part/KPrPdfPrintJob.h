@@ -25,7 +25,6 @@
 #include <QPrinter>
 
 class KPrView;
-class KoPAPageBase;
 
 class KPrPdfPrintJob : public KoPAPrintJob
 {

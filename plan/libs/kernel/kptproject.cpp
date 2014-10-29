@@ -39,11 +39,11 @@
 #include <QBrush>
 #include <QList>
 
+#include <kglobal.h>
 #include <kdatetime.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
-#include <kdeversion.h>
 
 
 namespace KPlato
@@ -544,7 +544,7 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
 }
 
 #ifndef PLAN_NLOGDEBUG
-bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked )
+bool Project::checkParent( Node *n, const QList<Node*> &list, QList<Relation*> &checked )
 {
     if ( n->isStartNode() ) {
         kDebug(planDbg())<<n<<"start node"<<list;
@@ -582,7 +582,7 @@ bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked
     return true;
 }
 
-bool Project::checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked )
+bool Project::checkChildren( Node *n, const QList<Node*> &list, QList<Relation*> &checked )
 {
     if ( n->isEndNode() ) {
         kDebug(planDbg())<<n<<"end node"<<list;
@@ -1885,10 +1885,8 @@ ResourceGroup *Project::group( const QString& id )
 
 ResourceGroup *Project::groupByName( const QString& name ) const
 {
-    foreach ( const QString &k, resourceGroupIdDict.keys() ) {
-        ResourceGroup *g = resourceGroupIdDict[ k ];
+    foreach ( ResourceGroup *g, resourceGroupIdDict ) {
         if ( g->name() == name ) {
-            Q_ASSERT( k == g->id() );
             return g;
         }
     }

@@ -98,7 +98,7 @@ QString WBSDefinition::separator(int level) const {
     return m_defaultDef.separator;
 }
 
-void WBSDefinition::setLevelsDef(QMap<int, CodeDef> def) { 
+void WBSDefinition::setLevelsDef(const QMap<int, CodeDef> &def) {
     m_levelsDef.clear();
     m_levelsDef = def; 
 }
@@ -107,7 +107,7 @@ WBSDefinition::CodeDef WBSDefinition::levelsDef(int level) const {
     return m_levelsDef.contains(level) ? m_levelsDef[level] : CodeDef(); 
 }
     
-void WBSDefinition::setLevelsDef(int level, CodeDef def) {
+void WBSDefinition::setLevelsDef(int level, const CodeDef &def) {
     m_levelsDef.insert(level, def);
 }
 

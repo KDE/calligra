@@ -30,15 +30,11 @@
 #include <QDesktopServices>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 #include <kmimetype.h>
 
 #include <KoFilterManager.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoFileDialog.h>
 

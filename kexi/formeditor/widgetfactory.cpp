@@ -21,18 +21,11 @@
 
 #include "widgetfactory.h"
 
-#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <ktextedit.h>
-
-#include <klineedit.h>
-
 #include <kdialog.h>
 # include <keditlistwidget.h>
-
-#include <kactioncollection.h>
 
 #include "richtextdialog.h"
 #ifndef KEXI_FORMS_NO_LIST_WIDGET

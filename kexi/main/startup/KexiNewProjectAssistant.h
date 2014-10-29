@@ -36,7 +36,6 @@
 
 class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
-class KCategorizedView;
 
 class KexiTemplateSelectionPage : public KexiAssistantPage
 {

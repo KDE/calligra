@@ -28,15 +28,12 @@
 #include <db/utils.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoIcon.h>
 
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QLabel>
 #include <QPainter>
-#include <kurl.h>
-#include <KIO/Job>
 #include <kdebug.h>
 #include <kcombobox.h>
 

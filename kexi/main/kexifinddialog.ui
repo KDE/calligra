@@ -360,19 +360,6 @@
   <tabstop>m_wholeWords</tabstop>
   <tabstop>m_promptOnReplace</tabstop>
  </tabstops>
- <includes>
-  <include location="local">kcombobox.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">klineedit.h</include>
- </includes>
  <resources/>
  <connections>
   <connection>

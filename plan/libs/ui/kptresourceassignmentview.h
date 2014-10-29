@@ -24,37 +24,16 @@
 
 #include "kptviewbase.h"
 
-#include <QList>
-#include <QTreeWidget>
-#include <QVariant>
-#include <QAction>
-#include <QApplication>
-#include <QButtonGroup>
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QListWidget>
-#include <QPushButton>
-#include <QTableWidget>
-#include <QVBoxLayout>
-#include <QSpinBox>
-#include <QLineEdit>
-
 #include <kptitemmodelbase.h>
-
-#include <kactionselector.h>
 
 #include "kpttask.h"
 #include "kpttaskeditor.h"
-
 #include "kptcommand.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
-
 #include <kdebug.h>
+
+#include <QTreeWidget>
 
 #include "ui_kptresourceassignmentview.h"
 
@@ -62,8 +41,6 @@
 class KoDocument;
 
 class QPoint;
-class QLineEdit;
-class QSpinBox;
 class QSplitter;
 
 class QTreeWidgetItem;

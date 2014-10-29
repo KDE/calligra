@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kexipartmanager.h"
+
+#include <QApplication>
+
 #include <kservicetype.h>
 #include <kservice.h>
 #include <kdebug.h>
@@ -26,11 +30,9 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kglobal.h>
-#include <kapplication.h>
 
 #include <KoServiceLocator.h>
 
-#include "kexipartmanager.h"
 #include "kexipart.h"
 #include "kexiinternalpart.h"
 #include "kexipartinfo.h"

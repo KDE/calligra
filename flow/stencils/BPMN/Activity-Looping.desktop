@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Activity-Looping
 Name[bs]=Aktivnost petlje
-Name[ca]=Activitat-enllaçada
+Name[ca]=Activitat-bucle
 Name[ca@valencia]=Activitat-enllaçada
 Name[da]=Aktivitetsløkke
 Name[de]=Aktivitäten-Schleife
@@ -10,6 +10,7 @@ Name[en_GB]=Activity-Looping
 Name[es]=Actividad en bucle
 Name[et]=Tegevuse kordamine
 Name[eu]=Jarduera-errepikapena
+Name[fi]=Toimintasilmukka
 Name[fr]=Bouclage d'activités
 Name[gl]=Actividade nun bucle
 Name[it]=Activity-Looping

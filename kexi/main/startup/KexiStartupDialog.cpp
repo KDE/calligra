@@ -46,15 +46,8 @@
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kpushbutton.h>
-#include <kglobalsettings.h>
-#include <ktextedit.h>
-#include <kmessagebox.h>
-#include <kapplication.h>
 #include <kmimetype.h>
-#include <ktextbrowser.h>
 #include <kconfig.h>
-#include <kurl.h>
 
 //! @internal
 class KexiStartupDialog::Private

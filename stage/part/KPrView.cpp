@@ -25,7 +25,6 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kstatusbar.h>
 
@@ -34,11 +33,8 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
-#include <KoPACanvas.h>
-#include <KoPADocumentStructureDocker.h>
-#include <KoPAPageInsertCommand.h>
+#include <KoPACanvasBase.h>
 #include <KoDocumentInfo.h>
-#include <KoShapeRegistry.h>
 #include <KoShapeLayer.h>
 #include <KoZoomController.h>
 #include <KoToolManager.h>

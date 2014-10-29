@@ -21,10 +21,10 @@
 #include <QQueue>
 #include <QMessageBox>
 
-#include <kaction.h>
 #include <klocalizedstring.h>
-#include <kactioncollection.h>
 #include <QApplication>
+
+#include <KoToolManager.h>
 
 #include "kis_tool_proxy.h"
 

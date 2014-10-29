@@ -23,7 +23,7 @@
 
 #include <QKeyEvent>
 
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 
 #include "KPrPresentationHighlightWidget.h"
 #include "KPrPresentationTool.h"

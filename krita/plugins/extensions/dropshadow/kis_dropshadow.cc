@@ -30,11 +30,8 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -47,7 +44,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

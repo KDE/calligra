@@ -22,6 +22,7 @@
 
 #include "KarbonSmallStylePreview.h"
 #include <KarbonGradientHelper.h>
+#include <KoCheckerBoardPainter.h>
 #include <KoGradientBackground.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>

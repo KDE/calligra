@@ -32,7 +32,6 @@
 
 #include <kaction.h>
 #include <kdebug.h>
-#include <kstandardguiitem.h>
 #include <kpushbutton.h>
 
 #include <QBitmap>

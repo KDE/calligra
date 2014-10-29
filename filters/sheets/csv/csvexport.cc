@@ -26,7 +26,6 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kmessagebox.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>

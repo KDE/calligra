@@ -23,6 +23,8 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
+class KAction;
+
 namespace Calligra
 {
 namespace Sheets

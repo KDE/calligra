@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kurl.h>
 
 #include <QApplication>
 

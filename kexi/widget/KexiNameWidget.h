@@ -23,10 +23,10 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <klineedit.h>
 
 #include <kexi_export.h>
 
+class KLineEdit;
 
 namespace KexiDB
 {
@@ -38,12 +38,14 @@ namespace KexiUtils
 class MultiValidator;
 }
 
+//! A widget displaying object's name and caption and allowing editing.
+//! @see KexiNameDialog
 class KEXIEXTWIDGETS_EXPORT KexiNameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KexiNameWidget(const QString& message, QWidget * parent = 0);
+    explicit KexiNameWidget(const QString& message, QWidget * parent = 0);
 
     KexiNameWidget(const QString& message,
                    const QString& nameLabel, const QString& nameText,
@@ -122,8 +124,8 @@ signals:
     void messageChanged();
 
 protected slots:
-    void slotNameTxtChanged(const QString&);
-    void slotCaptionTxtChanged(const QString&);
+    void slotNameTextChanged(const QString&);
+    void slotCaptionTextChanged(const QString&);
 
 protected:
     void init(

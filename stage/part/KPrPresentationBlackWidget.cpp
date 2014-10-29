@@ -19,6 +19,8 @@
  */
 #include "KPrPresentationBlackWidget.h"
 
+#include <KoPACanvasBase.h>
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QKeyEvent>

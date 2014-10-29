@@ -20,13 +20,13 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpace.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -94,6 +94,20 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
+
+    KisPaintDeviceSP pd = image->projection();
+    QStringList supportedColorModelIds;
+    supportedColorModelIds << RGBAColorModelID.id() << GrayAColorModelID.id() << GrayColorModelID.id();
+    QStringList supportedColorDepthIds;
+    supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
+    if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
+            !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
+        if (!m_chain->manager()->getBatchMode()) {
+            KMessageBox::error(0, i18n("Cannot export images in this colorspace or channel depth to OpenRaster"), i18n("Krita OpenRaster Export"));
+        }
+        return KoFilter::UsageError;
+    }
+
 
     if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
         KMessageBox::information(0,

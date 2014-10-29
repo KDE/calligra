@@ -36,11 +36,9 @@
 
 #include <KoView.h>
 #include <QPointF>
-#include <kxmlguibuilder.h>
 #include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
-#include <KoZoomMode.h>
 #include <karbonui_export.h>
 #include "KarbonBooleanCommand.h"
 
@@ -50,10 +48,7 @@ class QResizeEvent;
 class QRectF;
 class QPrinter;
 
-class KAction;
 class KarbonDocument;
-class KSelectAction;
-class KToggleAction;
 
 class KoCanvasController;
 class KoRuler;

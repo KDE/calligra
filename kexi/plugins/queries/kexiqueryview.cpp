@@ -53,6 +53,12 @@ KexiQueryView::KexiQueryView(QWidget *parent)
         : KexiDataTable(parent)
         , d(new Private())
 {
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+    mainMenuActions
+            << sharedAction("project_export_data_table");
+    setMainMenuActions(mainMenuActions);
+
     tableView()->setInsertingEnabled(false); //default
 }
 

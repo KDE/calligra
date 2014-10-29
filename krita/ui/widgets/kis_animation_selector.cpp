@@ -29,20 +29,14 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <kundo2command.h>
 #include <QFile>
 #include <QFileDialog>
-#include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <kis_debug.h>
 
 #include <KoIcon.h>
 #include <KoCompositeOp.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

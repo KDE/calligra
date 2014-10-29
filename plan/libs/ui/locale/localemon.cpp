@@ -28,7 +28,6 @@
 #include "kptcommand.h"
 #include "kptdebug.h"
 
-#include <kdeversion.h>
 #include <QCheckBox>
 #include <QComboBox>
 

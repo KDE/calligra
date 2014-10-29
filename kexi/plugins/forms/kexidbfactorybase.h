@@ -22,8 +22,6 @@
 
 #include <formeditor/widgetfactory.h>
 
-class KAction;
-
 namespace KFormDesigner
 {
 class Form;

@@ -37,14 +37,9 @@
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
-#include <kmimetype.h>
-#include <kservice.h>
 #include <klocale.h>
-#include <kio/job.h>
-#include <kglobal.h>
 #include <kiconloader.h>
-#include <kmenu.h>
-#include <kstdaccel.h>
+#include <kurl.h>
 
 #include <kexiutils/utils.h>
 #include <widget/utils/kexidropdownbutton.h>

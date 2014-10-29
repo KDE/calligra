@@ -79,12 +79,12 @@ unsigned char RC4Decryption::nextCryptByte()
 
 void RC4Decryption::skipBytes(unsigned count)
 {
-    for (unsigned i = 0; i < count; i++) nextCryptByte();
+    for (unsigned i = 0; i < count; ++i) nextCryptByte();
 }
 
 void RC4Decryption::decryptBytes(unsigned count, unsigned char* data)
 {
-    for (unsigned i = 0; i < count; i++) {
+    for (unsigned i = 0; i < count; ++i) {
         data[i] ^= nextCryptByte();
     }
 }

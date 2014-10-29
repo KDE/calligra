@@ -31,7 +31,6 @@
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
 #include <ktoolbar.h>
-#include <kcolorutils.h>
 #include <khelpmenu.h>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -40,6 +39,8 @@
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <ktabwidget.h>
+#include <kstandarddirs.h>
+#include <kglobalsettings.h>
 
 #include <KoIcon.h>
 
@@ -52,8 +53,6 @@
 #include <core/kexi.h>
 
 class KexiProjectNavigator;
-
-static const int KEXITABBEDTOOLBAR_FIRSTTAB_SPACING = 20;
 
 static const int KEXITABBEDTOOLBAR_SPACER_TAB_INDEX = 1;
 
@@ -736,14 +735,25 @@ QSize KexiTabbedToolBarTabBar::originalTabSizeHint(int index) const
 
 QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
 {
+    QSize s = KTabBar::tabSizeHint(index);
     if (index == 0) {
-        QSize s = KTabBar::tabSizeHint(index);
+        // tune width of the Kexi tab
         s.setWidth(customStyle->kexiBlackPixmap.width()
                    + 10/*left*/ + 8/*right*/);
         s.setHeight(qMax(s.height(), customStyle->kexiBlackPixmap.height() + 3));
         return s;
     }
-    return KTabBar::tabSizeHint(index);
+    else if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
+        // fix width of the spacer tab
+        QStyleOptionTab ot;
+        ot.initFrom(this);
+        int w = customStyle->pixelMetric(QStyle::PM_TabBarTabHSpace, &ot, this);
+        if (w <= 0) { // needed e.g. for oxygen
+            w = fontMetrics().width("   ");
+        }
+        s.setWidth(w);
+    }
+    return s;
 }
 
 void KexiTabbedToolBarTabBar::changeEvent(QEvent *e)
@@ -913,7 +923,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     help_about_kde_action->setWhatsThis(i18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
-    KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
+    KexiSmallToolButton *btn = new KexiSmallToolButton(koIcon("help-contextual"), QString(), helpWidget);
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
     btn->setPopupMode(QToolButton::InstantPopup);
     btn->setToolTip(action_show_help_menu->toolTip());
@@ -954,16 +964,13 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addAction(tbar, "edit_paste");
     if (!userMode)
         addAction(tbar, "edit_paste_special_data_table");
-    tbar->addSeparator();
 //! @todo move undo/redo to quickbar:
-    addAction(tbar, "edit_find");
 
     tbar = d->createToolBar("external", i18n("External Data"));
     if (!userMode) {
         addAction(tbar, "project_import_data_table");
         addAction(tbar, "tools_import_tables");
     }
-    addSeparatorAndAction(tbar, "project_export_data_table");
 
     tbar = d->createToolBar("tools", i18n("Tools"));
     addAction(tbar, "tools_compact_database");
@@ -1699,7 +1706,16 @@ public:
     void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
                           KexiDockWidget *dockWidget, bool visible) 
     {
-        KMultiTabBar *mtbar = multiTabBars.value(position);
+        KMultiTabBar::KMultiTabBarPosition realPosition = position;
+        if (QApplication::isRightToLeft()) {
+            if (position == KMultiTabBar::Left) {
+                realPosition = KMultiTabBar::Right;
+            }
+            else if (position == KMultiTabBar::Right) {
+                realPosition = KMultiTabBar::Left;
+            }
+        }
+        KMultiTabBar *mtbar = multiTabBars.value(realPosition);
         if (!visible) {
             mtbar->removeTab(id);
         }

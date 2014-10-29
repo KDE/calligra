@@ -27,8 +27,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <kglobal.h>
-
 // FIXME: Don't cross include
 //#include "KWStatisticsDocker.h"
 #include "StatisticsPreferencesPopup.h"
@@ -37,7 +35,6 @@
 class QTimer;
 class QTextDocument;
 class QToolButton;
-class KConfigGroup;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;

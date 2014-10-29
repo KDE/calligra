@@ -36,7 +36,6 @@
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 
 #include <QGridLayout>
 #include <QTimer>

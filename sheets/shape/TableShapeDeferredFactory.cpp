@@ -27,7 +27,6 @@
 
 #include <KoDocumentResourceManager.h>
 #include <KoToolRegistry.h>
-#include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 

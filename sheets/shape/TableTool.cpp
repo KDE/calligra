@@ -33,7 +33,6 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kfiledialog.h>
@@ -42,7 +41,6 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
 
 #include "AutoFillStrategy.h"
 #include "Cell.h"

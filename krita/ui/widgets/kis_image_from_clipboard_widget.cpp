@@ -29,22 +29,17 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <kundo2command.h>
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
 
-#include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <kis_debug.h>
 
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>

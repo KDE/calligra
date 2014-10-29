@@ -25,8 +25,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
-#include <kglobal.h>
-
 #include <QMap>
 
 using namespace MSOOXML;

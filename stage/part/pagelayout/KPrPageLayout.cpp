@@ -31,7 +31,6 @@
 #include "KPrPlaceholder.h"
 #include <KoIcon.h>
 
-#include <KoPAView.h>
 #include <QSize>
 #include <QPainter>
 #include <QPixmap>

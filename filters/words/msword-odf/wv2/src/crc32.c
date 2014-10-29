@@ -40,7 +40,7 @@
 /*                                                               */
 /*****************************************************************/
 
-unsigned long  crctable[256] =
+const unsigned long  crctable[256] =
 {
  0x00000000L, 0x77073096L, 0xEE0E612CL, 0x990951BAL,
  0x076DC419L, 0x706AF48FL, 0xE963A535L, 0x9E6495A3L,

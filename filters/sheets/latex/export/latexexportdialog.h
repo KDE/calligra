@@ -24,7 +24,6 @@
 
 // KDE
 #include <kdialog.h>
-#include <kurl.h>
 // Qt
 #include <QStringList>
 

@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
-#include <karchive.h>
 #include <kzip.h>
 
 #include "KPrHtmlExport.h"

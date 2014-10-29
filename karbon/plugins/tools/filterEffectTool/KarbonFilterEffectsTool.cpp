@@ -19,7 +19,6 @@
 
 #include "KarbonFilterEffectsTool.h"
 
-#include "KoGenericRegistryModel.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectFactoryBase.h"

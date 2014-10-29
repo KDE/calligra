@@ -30,10 +30,8 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <kpluginfactory.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_debug.h>

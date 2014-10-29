@@ -25,8 +25,7 @@
 #include <QPainter>
 
 #include <kxmlguifactory.h>
-#include <kaction.h>
-#include <kundo2stack.h>
+#include <kundo2command.h>
 
 #include <KoCanvasController.h>
 #include <KoSelection.h>

@@ -24,7 +24,6 @@
 #include <QQueue>
 #include <KoView.h>
 #include <KoProgressUpdater.h>
-#include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
 #include "kis_floating_message.h"
@@ -225,6 +224,7 @@ private slots:
     void toggleTabletLogger();
     void openResourcesDirectory();
     void updateIcons();
+    void guiUpdateTimeout();
 
 private:
     void createActions();

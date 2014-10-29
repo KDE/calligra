@@ -32,7 +32,6 @@
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
-#include <KoZoomInput.h>
 #include <QStackedWidget>
 #include <QLabel>
 #include <QLineEdit>
@@ -42,7 +41,6 @@
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");

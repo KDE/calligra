@@ -27,7 +27,6 @@
 
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kurl.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -37,7 +36,6 @@
 #include <KoFilterManager.h>
 #include <KoMainWindow.h>
 #include <KoView.h>
-#include <KoToolManager.h>
 #include <KoApplication.h>
 
 #include <kis_image.h>

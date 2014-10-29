@@ -32,8 +32,6 @@
 
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
@@ -51,8 +49,6 @@
 #include <kis_selection.h>
 #include "filter/kis_filter_registry.h"
 #include <kis_painter.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>
 #include <kis_iterator_ng.h>

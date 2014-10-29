@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QString>
 
-#include <kde_file.h>
-
 #include <db/tristate.h>
 
 class KProcess;

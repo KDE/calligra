@@ -34,7 +34,6 @@ namespace KPlato
 
 class Resource;
 class Node;
-class TaskWorkPackageView;
 class ScheduleManager;
 
 class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPackageSendPanel

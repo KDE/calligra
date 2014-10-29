@@ -48,7 +48,6 @@
 #include <KoAnnotation.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
-#include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
 #include <KoShapeController.h>
 #include <KoShapeRegistry.h>
@@ -84,8 +83,6 @@
 
 // KDE + Qt includes
 #include <klocale.h>
-#include <kstandardaction.h>
-#include <kaction.h>
 #include <kdebug.h>
 #include <QIODevice>
 #include <QTimer>

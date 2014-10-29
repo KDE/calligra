@@ -4,7 +4,7 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# Chose a tiles backend 
+# Chose a tiles backend
 # 1 - image/tiles
 # 3 - image/tiles3
 
@@ -66,6 +66,9 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
+   brushengine/kis_locked_properties.cc
+   brushengine/kis_locked_properties_proxy.cpp
+   brushengine/kis_locked_properties_server.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
@@ -203,6 +206,7 @@ set(kritaimage_LIB_SRCS
 #   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
    kis_cage_transform_worker.cpp
+   kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
    kis_algebra_2d.cpp
    kis_transparency_mask.cc
@@ -298,12 +302,12 @@ install( FILES
     metadata/schemas/xmp.schema
     metadata/schemas/xmpmm.schema
     metadata/schemas/xmprights.schema
-    
+
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
     kis_base_node.h
     kis_base_processor.h
     kis_config_widget.h
@@ -334,11 +338,13 @@ install( FILES
     kis_selection.h
     kis_shared.h
     kis_shared_ptr.h
-    kis_shared_ptr_vector.h
     kis_transaction.h
     kis_types.h
     krita_export.h
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h
+    brushengine/kis_locked_properties.h
+    brushengine/kis_locked_properties_proxy.h
+    brushengine/kis_locked_properties_server.h  
     DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

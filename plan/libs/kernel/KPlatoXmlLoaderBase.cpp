@@ -30,13 +30,11 @@
 #include "kptaccount.h"
 #include "kptappointment.h"
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
-#include <kmessagebox.h>
 #include <ktimezone.h>
 #include <ksystemtimezone.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 
 #include <QDateTime>
 
@@ -1222,7 +1220,7 @@ bool KPlatoXmlLoaderBase::load( WorkPackage &wp, const KoXmlElement& element, XM
     return true;
 }
 
-bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XMLLoaderObject status )
+bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XMLLoaderObject& status )
 {
     kDebug(kplatoXmlDebugArea())<<"wplog";
     wp->setOwnerName( element.attribute( "owner" ) );

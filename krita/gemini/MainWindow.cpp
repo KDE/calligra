@@ -39,12 +39,9 @@
 #include <QGLWidget>
 #include <QDesktopServices>
 
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kaboutdata.h>
-#include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
@@ -58,6 +55,7 @@
 #include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
 #include <KoFilterManager.h>
+#include <KoToolManager.h>
 #include <KoIcon.h>
 
 #include "filter/kis_filter.h"
@@ -554,11 +552,13 @@ QString MainWindow::openImage()
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->sketchKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
     }
@@ -566,11 +566,13 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 
 void MainWindow::resourceChangedSketch(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->desktopKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
     }

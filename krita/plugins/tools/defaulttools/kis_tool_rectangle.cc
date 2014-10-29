@@ -51,6 +51,7 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
+
 void KisToolRectangle::finishRect(const QRectF &rect)
 {
     if (rect.isNull())

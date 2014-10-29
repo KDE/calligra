@@ -23,8 +23,8 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kapplication.h>
 
+#include <QApplication>
 #include <QMetaObject>
 #include <QPainter>
 #include <QStyle>

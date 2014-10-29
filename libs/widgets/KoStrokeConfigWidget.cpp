@@ -47,12 +47,10 @@
 
 // KDE
 #include <klocale.h>
-#include <kaction.h>
 
 // Calligra
 #include <KoIcon.h>
 #include <KoUnit.h>
-#include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoMarkerSelector.h>

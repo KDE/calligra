@@ -24,15 +24,12 @@
 
 #include "ToolDocker.h"
 
-#include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
 
 #include <KoIcon.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
 
 #include <QPointer>
 #include <QGridLayout>

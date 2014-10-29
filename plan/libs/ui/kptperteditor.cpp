@@ -28,7 +28,6 @@
 #include <KoPart.h>
 #include <KoIcon.h>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 #include <QModelIndex>

@@ -25,7 +25,7 @@
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
 #include "KoShapeLoadingContext.h"
-#include "KoShapeSavingContext.h"
+#include <KoPASavingContext.h>
 
 #include "KoTextBlockData.h"
 #include "KPrTextBlockPaintStrategy.h"

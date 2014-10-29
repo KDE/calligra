@@ -27,21 +27,10 @@
 #include <KoDocument.h>
 
 #include <QDate>
-#include <QLabel>
 
 #include "kptaccount.h"
 #include "kpteffortcostmap.h"
 
-class QPushButton;
-class QTreeWidgetItem;
-class QLabel;
-class QPushButton;
-
-class QTreeWidget;
-class QTreeWidgetItem;
-class QPrinter;
-
-class KAction;
 
 namespace KPlato
 {

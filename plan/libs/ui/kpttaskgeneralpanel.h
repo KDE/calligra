@@ -33,9 +33,6 @@ namespace KPlato
 
 class TaskGeneralPanel;
 class Task;
-class StandardWorktime;
-class DurationWidget;
-class DateTime;
 class MacroCommand;
 class Calendar;
 class Project;

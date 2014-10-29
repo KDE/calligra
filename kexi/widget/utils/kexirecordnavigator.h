@@ -31,7 +31,6 @@ class QScrollBar;
 class QLabel;
 class QEvent;
 class QPaintEvent;
-class KLineEdit;
 class KGuiItem;
 
 #include <core/KexiRecordNavigatorIface.h>

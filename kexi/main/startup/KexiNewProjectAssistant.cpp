@@ -44,19 +44,9 @@
 
 #include <KoIcon.h>
 
-#include <kapplication.h>
 #include <kiconloader.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
-#include <kurlcombobox.h>
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <ktitlewidget.h>
-#include <kcategorydrawer.h>
-#include <kpushbutton.h>
-#include <kacceleratormanager.h>
 #include <kfiledialog.h>
 
 #include <QLayout>

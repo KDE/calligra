@@ -21,7 +21,9 @@
 #include <kis_view2.h>
 #include <kis_canvas2.h>
 #include <kis_tool.h>
-#include <KoToolRegistry.h>
+
+#include <KoToolManager.h>
+
 #include <QToolButton>
 
 class ToolManager::Private

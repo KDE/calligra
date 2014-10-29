@@ -36,7 +36,6 @@
 class QColor;
 class QMetaProperty;
 class QLayout;
-class KAction;
 
 //! @short General Utils
 namespace KexiUtils

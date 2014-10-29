@@ -30,7 +30,6 @@
 #include <QHeaderView>
 
 #include <ktabwidget.h>
-#include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
 #include <kdebug.h>

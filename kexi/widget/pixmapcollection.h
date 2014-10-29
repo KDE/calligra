@@ -30,12 +30,12 @@
 #include <kicontheme.h>
 #include <kdialog.h>
 #include <k3iconview.h>
-#include <kurl.h>
 
 class QPixmap;
 class K3IconView;
 class KIconButton;
 class KLineEdit;
+class KUrl;
 class QDomNode;
 
 typedef QMap<QString, QPair<QString, int> > PixmapMap;
