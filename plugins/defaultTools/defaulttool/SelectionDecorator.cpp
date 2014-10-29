@@ -37,7 +37,8 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 : m_rotationHandles(rotationHandles)
 , m_shearHandles(shearHandles)
 , m_arrows(arrows)
-, m_handleRadius( 6 )
+, m_handleRadius( 3 )
+, m_lineWidth( 1 )
 {
     if(s_rotateCursor == 0) {
         s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
@@ -50,6 +51,7 @@ void SelectionDecorator::setSelection(KoSelection *selection) {
 
 void SelectionDecorator::setHandleRadius( int radius ) {
     m_handleRadius = radius;
+    m_lineWidth = qMax(1, (int)(radius / 2));
 }
 
 void SelectionDecorator::setHotPosition( KoFlake::Position hotPosition )
@@ -72,7 +74,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     QPen pen;
     pen.setColor(QColor("#00adf5"));
-    pen.setWidth(3);
+    pen.setWidth(m_lineWidth);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen( pen );
     bool editable=false;
