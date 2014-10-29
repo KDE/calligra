@@ -148,7 +148,7 @@ void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 int KoDocumentResourceManager::grabSensitivity() const
 {
     if (hasResource(GrabSensitivity))
-       return intResource(GrabSensitivity);
+        return intResource(GrabSensitivity);
     return 3; // default value
 }
 
