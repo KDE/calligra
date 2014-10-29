@@ -29,6 +29,7 @@
 
 #include <QStyleOptionGraphicsItem>
 
+#include <KoDocumentResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoTextEditor.h>
@@ -258,6 +259,9 @@ void CQPresentationCanvas::openFile(const QString& uri)
 
     d->view = new CQPresentationView(canvasController(), static_cast<KoPACanvasBase*>(d->canvasBase), dynamic_cast<KPrDocument*>(d->document));
     paCanvasItem->setView(d->view);
+
+    d->canvasBase->resourceManager()->setResource(KoDocumentResourceManager::HandleRadius, 9);
+    d->canvasBase->resourceManager()->setResource(KoDocumentResourceManager::GrabSensitivity, 9);
 
     createAndSetZoomController(d->canvasBase);
     d->view->setZoomController(zoomController());

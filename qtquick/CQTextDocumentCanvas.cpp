@@ -30,6 +30,7 @@
 #include "gemini/ViewModeSwitchEvent.h"
 
 #include <KoDocument.h>
+#include <KoDocumentResourceManager.h>
 #include <KoPart.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
@@ -306,6 +307,9 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     createAndSetCanvasControllerOn(d->canvas);
     createAndSetZoomController(d->canvas);
     updateZoomControllerAccordingToDocument(document);
+
+    d->canvas->resourceManager()->setResource(KoDocumentResourceManager::HandleRadius, 9);
+    d->canvas->resourceManager()->setResource(KoDocumentResourceManager::GrabSensitivity, 9);
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvas);
     graphicsWidget->setParentItem(this);
