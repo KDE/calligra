@@ -64,8 +64,8 @@ set( calligrastageprivate_LIB_SRCS
      KPrPageSelectStrategyFixed.cpp
      KPrPageSelectStrategyActive.cpp
      KPrDurationParser.cpp
-     #KPrHtmlExport.cpp
-     #KPrHtmlExportUiDelegate.cpp
+     KPrHtmlExport.cpp
+     KPrHtmlExportUiDelegate.cpp
      KPrPicturesImport.cpp
      KPrPdfPrintJob.cpp
      KPrSlidesSorterDocumentModel.cpp
@@ -131,7 +131,7 @@ set( calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShowDialog.cpp
      ui/KPrConfigurePresenterViewDialog.cpp
      ui/KPrPresentationToolWidget.cpp
-     #ui/KPrHtmlExportDialog.cpp
+     ui/KPrHtmlExportDialog.cpp
 
      tools/KPrPlaceholderTool.cpp
      tools/KPrPlaceholderToolFactory.cpp
@@ -149,7 +149,7 @@ kde4_add_ui_files(calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
      ui/KPrPresentationTool.ui
-     #ui/KPrHtmlExport.ui
+     ui/KPrHtmlExport.ui
    )
 
 kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})

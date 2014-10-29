@@ -59,11 +59,11 @@
 #include "KPrFactory.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "KPrPageLayoutWidget.h"
-//#include "KPrHtmlExport.h"
+#include "KPrHtmlExport.h"
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrConfigureSlideShowDialog.h"
 #include "ui/KPrConfigurePresenterViewDialog.h"
-//#include "ui/KPrHtmlExportDialog.h"
+#include "ui/KPrHtmlExportDialog.h"
 #include <QDesktopWidget>
 
 #include "KPrPdfPrintJob.h"
@@ -231,10 +231,10 @@ void KPrView::initActions()
     else
        setXMLFile( "stage.rc" );
 
-//    // do special stage stuff here
-//    m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
-//    actionCollection()->addAction("file_export_html", m_actionExportHtml);
-//    connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
+    // do special stage stuff here
+    m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
+    actionCollection()->addAction("file_export_html", m_actionExportHtml);
+    connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
 
     m_actionViewModeNormal = new KAction(m_normalMode->name(), this);
     m_actionViewModeNormal->setCheckable(true);
@@ -485,19 +485,19 @@ void KPrView::configurePresenterView()
 
 void KPrView::exportToHtml()
 {
-    //    KPrHtmlExportDialog *dialog = new KPrHtmlExportDialog(kopaDocument()->pages(),koDocument()->documentInfo()->aboutInfo("title"),
-    //                                                          koDocument()->documentInfo()->authorInfo("creator"), this);
-    //    if (dialog->exec() == QDialog::Accepted && !dialog->checkedSlides().isEmpty()) {
-    //        // Get the export directory
-    //        KUrl directoryUrl = KFileDialog::getExistingDirectoryUrl();
-    //        if (directoryUrl.isValid()) {
-    //            directoryUrl.adjustPath(KUrl::AddTrailingSlash);
-    //            KPrHtmlExport exportHtml;
-    //            exportHtml.exportHtml(KPrHtmlExport::Parameter(dialog->templateUrl(), this, dialog->checkedSlides(),
-    //                                                           directoryUrl, dialog->author(),
-    //                                                           dialog->title(), dialog->slidesNames(), dialog->openBrowser()));
-    //        }
-    //   }
+    KPrHtmlExportDialog *dialog = new KPrHtmlExportDialog(kopaDocument()->pages(),koDocument()->documentInfo()->aboutInfo("title"),
+                                                          koDocument()->documentInfo()->authorInfo("creator"), this);
+    if (dialog->exec() == QDialog::Accepted && !dialog->checkedSlides().isEmpty()) {
+        // Get the export directory
+        KUrl directoryUrl = KFileDialog::getExistingDirectoryUrl();
+        if (directoryUrl.isValid()) {
+            directoryUrl.adjustPath(KUrl::AddTrailingSlash);
+            KPrHtmlExport exportHtml;
+            exportHtml.exportHtml(KPrHtmlExport::Parameter(dialog->templateUrl(), this, dialog->checkedSlides(),
+                                                           directoryUrl, dialog->author(),
+                                                           dialog->title(), dialog->slidesNames(), dialog->openBrowser()));
+        }
+   }
 }
 
 KoPrintJob *KPrView::createPdfPrintJob()
