@@ -24,13 +24,13 @@
 #ifndef CQIMAGEPROVIDER_H
 #define CQIMAGEPROVIDER_H
 
-#include <QtDeclarative/QDeclarativeImageProvider>
-#include <QtCore/QHash>
+#include <QDeclarativeImageProvider>
+#include <QHash>
 
 class CQImageProvider : public QDeclarativeImageProvider
 {
 public:
-    static const char *identificationString;
+    static const char identificationString[];
     static CQImageProvider *s_imageProvider;
 
     CQImageProvider();

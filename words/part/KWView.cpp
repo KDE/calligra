@@ -40,7 +40,7 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
-#include "../gemini/ViewModeSwitchEvent.h"
+#include "gemini/ViewModeSwitchEvent.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
@@ -694,7 +694,7 @@ void KWView::setDistractionFreeMode(bool status)
     m_dfmExitButton->setVisible(status);
 
     //Hide cursor.
-    if(status) {
+    if (status) {
         m_hideCursorTimer->start(4000);
     }
     else {
@@ -709,7 +709,7 @@ void KWView::setDistractionFreeMode(bool status)
     // out, not layouting)
     const QList<KoShape*> selection = m_canvas->shapeManager()->selection()->selectedShapes();
     m_canvas->shapeManager()->selection()->deselectAll();
-    if(selection.count() > 0)
+    if (selection.count() > 0)
         m_canvas->shapeManager()->selection()->select(selection.at(0));
     KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }

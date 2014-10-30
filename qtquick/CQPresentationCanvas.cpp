@@ -73,10 +73,10 @@ public:
         qDeleteAll(linkTargets);
         linkTargets.clear();
 
-        if(!view)
+        if (!view)
             return;
         foreach(const KoShape* shape, view->activePage()->shapes()) {
-            if(!shape->hyperLink().isEmpty()) {
+            if (!shape->hyperLink().isEmpty()) {
                 QObject * obj = new QObject(view);
                 obj->setProperty("linkRect", shape->boundingRect());
                 obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
@@ -95,7 +95,7 @@ public:
                     QTextFragment fragment = it.fragment();
                     if (fragment.isValid()) {
                         QTextCharFormat format = fragment.charFormat();
-                        if(format.isAnchor()) {
+                        if (format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QObject * obj = new QObject(view);
                             QRectF rect = getFragmentPosition(block, fragment);
@@ -109,14 +109,14 @@ public:
         }
     }
 
-    QRectF getFragmentPosition(QTextBlock block, QTextFragment fragment)
+    QRectF getFragmentPosition(const QTextBlock& block, const QTextFragment& fragment)
     {
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
         QTextLayout* layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if(!line.isValid())
+        if (!line.isValid())
         {
             // fragment has no valid position and consequently no line...
             return QRectF();
@@ -181,7 +181,7 @@ QSizeF CQPresentationCanvas::pageSize() const
 void CQPresentationCanvas::setCurrentSlide(int slide)
 {
     slide = qBound(0, slide, d->document->pageCount() - 1);
-    if(slide != d->currentSlide) {
+    if (slide != d->currentSlide) {
         d->currentSlide = slide;
         d->view->doUpdateActivePage(d->document->pageByIndex(slide, false));
         d->pageSize = d->view->activePage()->size();
@@ -201,7 +201,7 @@ void CQPresentationCanvas::render(QPainter* painter, const QRectF& target)
 
 QObject* CQPresentationCanvas::textEditor() const
 {
-    if(d->canvasBase) {
+    if (d->canvasBase) {
         return KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
     }
     return 0;
@@ -210,7 +210,7 @@ QObject* CQPresentationCanvas::textEditor() const
 void CQPresentationCanvas::deselectEverything()
 {
     KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
-    if(editor)
+    if (editor)
         editor->clearSelection();
     d->canvasBase->shapeManager()->selection()->deselectAll();
 }
@@ -219,7 +219,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
     KService::Ptr service = KService::serviceByDesktopName("stagepart");
-    if(service.isNull()) {
+    if (service.isNull()) {
         qWarning("Unable to load Stage plugin, aborting!");
         return;
     }
@@ -228,7 +228,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
-    if(uri.toLower().endsWith("otp")) {
+    if (uri.toLower().endsWith("otp")) {
         KUrl url(uri);
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
@@ -273,7 +273,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    if(d->document->pageCount() > 0) {
+    if (d->document->pageCount() > 0) {
         d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
         d->pageSize = d->view->activePage()->size();
         emit currentSlideChanged();
@@ -355,7 +355,7 @@ bool CQPresentationCanvas::event(QEvent* event)
 //         case KisTabletEvent::TabletMoveEx:
 //             d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
 // #ifdef Q_OS_X11
-//             if(d->tabletEventCount % 2 == 0)
+//             if (d->tabletEventCount % 2 == 0)
 // #endif
 //                 d->canvas->inputManager()->eventFilter(this, event);
 //             return true;

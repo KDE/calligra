@@ -57,8 +57,8 @@ class CQTextDocumentCanvas : public CQCanvasBase
 
     Q_PROPERTY(QSizeF thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
-    CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
-    ~CQTextDocumentCanvas();
+    explicit CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
+    virtual ~CQTextDocumentCanvas();
 
     int currentPageNumber() const;
     void setCurrentPageNumber(const int &currentPageNumber);
@@ -92,10 +92,10 @@ public:
     // A list model of notes as created using addSticker(QString) and addNote(QString, QColor)
     QObject* notes() const;
     // Adds a sticker (simply an SVG) to the position indicated by the center of the viewport.
-    Q_INVOKABLE void addSticker(QString imageUrl);
+    Q_INVOKABLE void addSticker(const QString& imageUrl);
     // Adds a note to the position indicated by the center of the viewport. Color is the color
     // the text and the background sticker should have.
-    Q_INVOKABLE void addNote(QString text, QString color, QString imageUrl);
+    Q_INVOKABLE void addNote(const QString& text, const QString& color, const QString& imageUrl);
 
     bool hasSelection() const;
     QRectF selectionStartPos() const;

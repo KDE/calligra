@@ -106,11 +106,11 @@ public:
         qDeleteAll(linkTargets);
         linkTargets.clear();
 
-        if(!canvas)
+        if (!canvas)
             return;
 
         foreach(const KoShape* shape, canvas->shapeManager()->shapes()) {
-            if(!shape->hyperLink().isEmpty()) {
+            if (!shape->hyperLink().isEmpty()) {
                 QObject * obj = new QObject(documentModel);
                 obj->setProperty("linkRect", shape->boundingRect());
                 obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
@@ -127,7 +127,7 @@ public:
                     QTextFragment fragment = it.fragment();
                     if (fragment.isValid()) {
                         QTextCharFormat format = fragment.charFormat();
-                        if(format.isAnchor()) {
+                        if (format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QObject * obj = new QObject(documentModel);
                             QRectF rect = getFragmentPosition(block, fragment);
@@ -152,7 +152,7 @@ public:
         // For now leave it like this, more important things are needed.
         QTextLayout* layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if(!line.isValid())
+        if (!line.isValid())
         {
             // fragment has no valid position and consequently no line...
             return QRectF();
@@ -171,7 +171,7 @@ public:
         foreach(KoShape* shape, shapes) {
             allShapes.append(shape);
             KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-            if(container) {
+            if (container) {
                 allShapes.append(deepShapeFind(container->shapes()));
             }
         }
@@ -183,7 +183,7 @@ public:
         QTextBlock block = textEditor->document()->findBlock(position);
         QTextLayout* layout = block.layout();
         QTextLine line = layout->lineForTextPosition(position - block.position());
-        if(!line.isValid())
+        if (!line.isValid())
         {
             // fragment has no valid position and consequently no line...
             return QRectF();
@@ -201,7 +201,7 @@ public:
         KWPage page = document->pageManager()->page(point.y());
 //         point += QPointF(page.rightMargin(), page.pageNumber() * page.topMargin()
 //                                            + (page.pageNumber() - 1) * page.bottomMargin());
-//         if(page.pageNumber() > 1)
+//         if (page.pageNumber() > 1)
 //             point += QPointF(0, 20);
         point += QPointF(0, (page.pageNumber() - 1) * (page.topMargin() + 20));
 //        point = canvas->viewConverter()->documentToView(point);
@@ -233,7 +233,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
     KService::Ptr service = KService::serviceByDesktopName("wordspart");
-    if(service.isNull()) {
+    if (service.isNull()) {
         qWarning("Unable to load Words plugin, aborting!");
         return;
     }
@@ -244,7 +244,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     document->setCheckAutoSaveFile(false);
 
     KUrl url(uri);
-    if(url.protocol() == "newfile") {
+    if (url.protocol() == "newfile") {
         KWDocument* doc = qobject_cast<KWDocument*>(document);
         doc->initEmpty();
         KWPageStyle style = doc->pageManager()->defaultPageStyle();
@@ -260,7 +260,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
         layout.orientation = (KoPageFormat::Orientation)url.queryItemValue("pageorientation").toInt();
         layout.height = MM_TO_POINT(url.queryItemValue("height").toDouble());
         layout.width = MM_TO_POINT(url.queryItemValue("width").toDouble());
-        if(url.queryItemValue("facingpages").toInt() == 1) {
+        if (url.queryItemValue("facingpages").toInt() == 1) {
             layout.bindingSide = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
             layout.pageEdge = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
             layout.leftMargin = layout.rightMargin = -1;
@@ -277,7 +277,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
         doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
         doc->relayout();
     }
-    else if(url.protocol() == "template") {
+    else if (url.protocol() == "template") {
         qApp->setOverrideCursor(Qt::BusyCursor);
         // Nip away the manually added template:// bit of the uri passed from the caller
         bool ok = document->loadNativeFormat(uri.mid(11));
@@ -317,7 +317,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    if(d->pageNumber >= 1) {
+    if (d->pageNumber >= 1) {
       gotoPage(d->pageNumber, document);
     }
 
@@ -373,9 +373,9 @@ qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
 
 qreal CQTextDocumentCanvas::shapeTransparency() const
 {
-    if(d->canvas && d->canvas->shapeManager()) {
+    if (d->canvas && d->canvas->shapeManager()) {
         KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
-        if(shape) {
+        if (shape) {
             return shape->transparency();
         }
     }
@@ -384,10 +384,10 @@ qreal CQTextDocumentCanvas::shapeTransparency() const
 
 void CQTextDocumentCanvas::setShapeTransparency(const qreal& newTransparency)
 {
-    if(d->canvas && d->canvas->shapeManager()) {
+    if (d->canvas && d->canvas->shapeManager()) {
         KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
-        if(shape) {
-            if(!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
+        if (shape) {
+            if (!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
                 shape->setTransparency(newTransparency);
                 CQCanvasBase::setShapeTransparency(newTransparency);
             }
@@ -397,11 +397,11 @@ void CQTextDocumentCanvas::setShapeTransparency(const qreal& newTransparency)
 
 QObject* CQTextDocumentCanvas::textEditor()
 {
-    if(d->canvas) {
-        if(d->textEditor)
+    if (d->canvas) {
+        if (d->textEditor)
             disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
         d->textEditor = KoTextEditor::getTextEditorFromCanvas(d->canvas);
-        if(d->textEditor)
+        if (d->textEditor)
             disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
         emit selectionChanged();
         return d->textEditor;
@@ -411,8 +411,7 @@ QObject* CQTextDocumentCanvas::textEditor()
 
 bool CQTextDocumentCanvas::hasSelection() const
 {
-    if(d->textEditor) {
-//         qDebug() << d->textEditor->hasSelection() << selectionStartPos() << selectionEndPos();
+    if (d->textEditor) {
         return d->textEditor->hasSelection();
     }
     return false;
@@ -420,35 +419,35 @@ bool CQTextDocumentCanvas::hasSelection() const
 
 QRectF CQTextDocumentCanvas::selectionStartPos() const
 {
-    if(d->textEditor)
+    if (d->textEditor)
         return d->getCursorPosition(d->textEditor->selectionStart());
     return QRectF(0,0,0,0);
 }
 
 QRectF CQTextDocumentCanvas::selectionEndPos() const
 {
-    if(d->textEditor)
+    if (d->textEditor)
         return d->getCursorPosition(d->textEditor->selectionEnd());
     return QRectF(0,0,0,0);
 }
 
 QObject* CQTextDocumentCanvas::zoomAction() const
 {
-    if(zoomController() && zoomController()->zoomAction())
+    if (zoomController() && zoomController()->zoomAction())
         return zoomController()->zoomAction();
     return 0;
 }
 
 QSizeF CQTextDocumentCanvas::thumbnailSize() const
 {
-    if(d->documentModel)
+    if (d->documentModel)
         return d->documentModel->thumbnailSize();
     return QSizeF();
 }
 
 void CQTextDocumentCanvas::setThumbnailSize(const QSizeF& newSize)
 {
-    if(d->documentModel)
+    if (d->documentModel)
         d->documentModel->setThumbnailSize(newSize.toSize());
     emit thumbnailSizeChanged();
 }
@@ -456,7 +455,7 @@ void CQTextDocumentCanvas::setThumbnailSize(const QSizeF& newSize)
 void CQTextDocumentCanvas::deselectEverything()
 {
     KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvas);
-    if(editor)
+    if (editor)
         editor->clearSelection();
     d->canvas->shapeManager()->selection()->deselectAll();
     updateCanvas();
@@ -482,7 +481,7 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
     KoProperties* params = new KoProperties();
     params->setProperty("qimage", image);
     KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get("PictureShape");
-    if(factory)
+    if (factory)
     {
         KoShape* shape = factory->createShape(params, d->document->resourceManager());
 
@@ -536,7 +535,7 @@ void CQTextDocumentCanvas::addNote(QString text, QString color, QString imageUrl
     KoProperties* params = new KoProperties();
     params->setProperty("qimage", image);
     KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get("PictureShape");
-    if(factory)
+    if (factory)
     {
         KoShape* shape = factory->createShape(params, d->document->resourceManager());
 
@@ -577,7 +576,7 @@ void CQTextDocumentCanvas::alignTopWith(int y)
 
 int CQTextDocumentCanvas::currentPageNumber() const
 {
-    if(d->document && !d->throttleTimer->isActive()) {
+    if (d->document && !d->throttleTimer->isActive()) {
         // Can't use this at the moment, we sort of don't have the right one, because derp :P
         //d->canvas->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt();
         d->throttleTimer->start();
@@ -589,7 +588,7 @@ int CQTextDocumentCanvas::currentPageNumber() const
 
 void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
 {
-    if(d->pageNumber != currentPageNumber)
+    if (d->pageNumber != currentPageNumber)
     {
         gotoPage(currentPageNumber, d->document);
     }
@@ -645,7 +644,7 @@ bool CQTextDocumentCanvas::event( QEvent* event )
 //         case KisTabletEvent::TabletMoveEx:
 //             d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
 // #ifdef Q_OS_X11
-//             if(d->tabletEventCount % 2 == 0)
+//             if (d->tabletEventCount % 2 == 0)
 // #endif
 //                 d->canvas->inputManager()->eventFilter(this, event);
 //             return true;

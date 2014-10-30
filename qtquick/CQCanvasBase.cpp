@@ -23,7 +23,7 @@ class CQCanvasBase::Private
 {
 public:
     Private() : canvasController(0), zoomController(0) { }
-    
+
     QString source;
     CQCanvasController *canvasController;
     KoZoomController* zoomController;
@@ -32,7 +32,6 @@ public:
 CQCanvasBase::CQCanvasBase(QDeclarativeItem* parent)
     : QDeclarativeItem(parent), d(new Private)
 {
-
 }
 
 CQCanvasBase::~CQCanvasBase()
@@ -57,7 +56,7 @@ QString CQCanvasBase::source() const
 
 void CQCanvasBase::setSource(const QString& source)
 {
-    if(source != d->source) {
+    if (source != d->source) {
         d->source = source;
         openFile(d->source);
         emit sourceChanged();
@@ -77,7 +76,7 @@ void CQCanvasBase::setShapeTransparency(const qreal& newTransparency)
 
 void CQCanvasBase::setCanvasController(CQCanvasController* controller)
 {
-    if(d->canvasController != controller)
+    if (d->canvasController != controller)
     {
         d->canvasController = controller;
         emit canvasControllerChanged();

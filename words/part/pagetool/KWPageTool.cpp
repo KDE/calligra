@@ -50,8 +50,10 @@ KWPageTool::~KWPageTool()
 {
 }
 
-void KWPageTool::paint( QPainter&, const KoViewConverter&)
+void KWPageTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter)
+    Q_UNUSED(converter)
 }
 
 void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)

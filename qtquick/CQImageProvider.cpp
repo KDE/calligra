@@ -24,7 +24,6 @@
 #include "CQImageProvider.h"
 
 #include <KGlobal>
-#include <QDebug>
 
 const char *CQImageProvider::identificationString = "cqimage";
 CQImageProvider *CQImageProvider::s_imageProvider = 0;
@@ -41,7 +40,6 @@ CQImageProvider::~CQImageProvider()
 
 QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
-//    qDebug() << "REQUEST";
     if (m_images.contains(id)) {
         QImage image = m_images.value(id);
         *size = image.size();
@@ -53,7 +51,7 @@ QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize
 
 void CQImageProvider::addImage(const QString& id, const QImage& image)
 {
-    m_images[id] = image;
+    m_images.insert(id, image);
 }
 
 bool CQImageProvider::containsId(const QString& id)

@@ -24,7 +24,7 @@
 #ifndef CQTEXTDOCUMENTNOTESMODEL_H
 #define CQTEXTDOCUMENTNOTESMODEL_H
 
-#include <QModelIndex>
+#include <QAbstractListModel>
 #include <KoShape.h>
 
 class CQTextDocumentNotesModel : public QAbstractListModel
@@ -42,7 +42,7 @@ public:
         Position,
         Expanded
     };
-    CQTextDocumentNotesModel(QObject* parent);
+    explicit CQTextDocumentNotesModel(QObject* parent);
     virtual ~CQTextDocumentNotesModel();
 
     virtual QVariant data(const QModelIndex& index, int role) const;
@@ -50,7 +50,7 @@ public:
     int count() const;
 
     Q_INVOKABLE void toggleExpanded(int index);
-    void addEntry(QString text, QString image, QString color, KoShape* shape);
+    void addEntry(const QString& text, const QString& image, const QString& color, KoShape* shape);
     Q_SIGNAL void countChanged();
 private:
     class Private;

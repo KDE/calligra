@@ -42,7 +42,7 @@ public:
 
     QObject* canvas() const;
 
-    QSize thumbnailSize();
+    QSize thumbnailSize() const;
 
 public Q_SLOTS:
     void setCanvas(QObject* canvas);

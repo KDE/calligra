@@ -20,7 +20,6 @@
 #include "CQCanvasControllerItem.h"
 
 #include <QPainter>
-#include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGLWidget>
@@ -87,7 +86,7 @@ CQCanvasControllerItem::~CQCanvasControllerItem()
 
 void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-    if(!d->zooming || d->placeholder.isNull()) {
+    if (!d->zooming || d->placeholder.isNull()) {
         return;
     }
 
@@ -103,8 +102,8 @@ QDeclarativeItem* CQCanvasControllerItem::canvas() const
 
 void CQCanvasControllerItem::setCanvas(QDeclarativeItem* canvas)
 {
-    if(canvas != d->canvas) {
-        if(d->canvas) {
+    if (canvas != d->canvas) {
+        if (d->canvas) {
             disconnect(d->canvas, SIGNAL(canvasControllerChanged()), this, SLOT(canvasControllerChanged()));
             disconnect(d->canvas, SIGNAL(positionShouldChange(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
         }
@@ -115,9 +114,8 @@ void CQCanvasControllerItem::setCanvas(QDeclarativeItem* canvas)
         connect(d->canvas, SIGNAL(positionShouldChange(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
         connect(d->canvas, SIGNAL(canvasControllerChanged()), SLOT(canvasControllerChanged()));
         canvasControllerChanged();
-        
-        
-        if(qobject_cast<CQTextDocumentCanvas*>(d->canvas) != 0) {
+
+        if (qobject_cast<CQTextDocumentCanvas*>(d->canvas) != 0) {
             d->useViewport = true;
         } else {
             d->useViewport = false;
@@ -134,8 +132,8 @@ QDeclarativeItem* CQCanvasControllerItem::flickable() const
 
 void CQCanvasControllerItem::setFlickable(QDeclarativeItem* item)
 {
-    if(item != d->flickable) {
-        if(item->metaObject()->indexOfProperty("contentWidth") == -1) {
+    if (item != d->flickable) {
+        if (item->metaObject()->indexOfProperty("contentWidth") == -1) {
             qWarning() << Q_FUNC_INFO << "item does not look like a flickable, ignoring.";
             return;
         }
@@ -160,17 +158,18 @@ qreal CQCanvasControllerItem::zoom() const
 void CQCanvasControllerItem::setZoom(qreal newZoom)
 {
     qreal tempZoom = qBound(KoZoomMode::minimumZoom(), newZoom, KoZoomMode::maximumZoom());
-    if(!qFuzzyCompare(d->zoom, tempZoom)) {
+    if (!qFuzzyCompare(d->zoom, tempZoom)) {
         d->zoom = tempZoom;
-        if(d->canvas && d->canvas->zoomController())
+        if (d->canvas && d->canvas->zoomController()) {
             d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
+        }
         emit zoomChanged();
     }
 }
 
 void CQCanvasControllerItem::zoomToPage()
 {
-    if(d->canvas && d->canvas->zoomController()) {
+    if (d->canvas && d->canvas->zoomController()) {
         // This may seem odd, but it ensures that we scale up as well as down
         // when zooming to fit page - without this, it will only scale down,
         // not up. To avoid changing the zooming logic in desktop, we just do
@@ -198,9 +197,9 @@ qreal CQCanvasControllerItem::maximumZoom() const
 
 void CQCanvasControllerItem::setMinimumZoom(qreal newZoom)
 {
-    if(newZoom != d->minimumZoom) {
+    if (newZoom != d->minimumZoom) {
         d->minimumZoom = newZoom;
-        if( d->minimumZoom > 0.f )
+        if ( d->minimumZoom > 0.f )
             KoZoomMode::setMinimumZoom( d->minimumZoom );
         emit minimumZoomChanged();
     }
@@ -208,7 +207,7 @@ void CQCanvasControllerItem::setMinimumZoom(qreal newZoom)
 
 void CQCanvasControllerItem::setMaximumZoom(qreal newZoom)
 {
-    if(newZoom != d->maximumZoom) {
+    if (newZoom != d->maximumZoom) {
         d->maximumZoom = newZoom;
         KoZoomMode::setMaximumZoom( d->maximumZoom );
         emit maximumZoomChanged();
@@ -217,7 +216,7 @@ void CQCanvasControllerItem::setMaximumZoom(qreal newZoom)
 
 void CQCanvasControllerItem::beginZoomGesture()
 {
-    if(d->zooming) {
+    if (d->zooming) {
         return;
     }
 
@@ -226,10 +225,11 @@ void CQCanvasControllerItem::beginZoomGesture()
     d->placeholderTarget.setWidth(d->flickable->width());
     d->placeholderTarget.setHeight(d->flickable->height());
 
-    if(d->useViewport) {
+    if (d->useViewport) {
         QGLWidget* gl = qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport());
-        if(!gl)
-        return;
+        if (!gl) {
+            return;
+        }
 
         QRectF scene = d->flickable->mapToScene(QRectF(d->flickable->x(), 0, d->flickable->width(), d->flickable->height())).boundingRect();
         d->placeholder = gl->grabFrameBuffer(true).copy(scene.toRect());
@@ -247,8 +247,9 @@ void CQCanvasControllerItem::beginZoomGesture()
 
 void CQCanvasControllerItem::endZoomGesture()
 {
-    if(!d->zooming)
+    if (!d->zooming) {
         return;
+    }
 
     qreal newZoom = d->zoom + d->zoomChange;
 
@@ -273,7 +274,7 @@ void CQCanvasControllerItem::endZoomGesture()
 void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 {
     qreal newZoom = d->zoom + d->zoomChange + amount;
-    if(d->zooming && newZoom >= KoZoomMode::minimumZoom() && newZoom <= KoZoomMode::maximumZoom() ) {
+    if (d->zooming && newZoom >= KoZoomMode::minimumZoom() && newZoom <= KoZoomMode::maximumZoom() ) {
         qreal oldWidth = d->placeholderTarget.width();
         qreal oldHeight = d->placeholderTarget.height();
         qreal oldZoom = d->zoom + d->zoomChange;
@@ -293,14 +294,17 @@ void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 
 void CQCanvasControllerItem::fitToWidth( qreal width )
 {
-    if( width < 0.01f )
+    if ( width < 0.01f ) {
         return;
+    }
 
-    if( d->zoom < 0.01f )
+    if ( d->zoom < 0.01f ) {
         return;
+    }
 
-    if( d->documentSize.width() > 0.f && d->documentSize.width() < 2e6 )
+    if ( d->documentSize.width() > 0.f && d->documentSize.width() < 2e6 ) {
         setZoom( width / ( d->documentSize.width() / d->zoom ) );
+    }
 }
 
 void CQCanvasControllerItem::returnToBounds()
@@ -324,7 +328,7 @@ void CQCanvasControllerItem::geometryChanged(const QRectF& newGeometry, const QR
 QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     Q_UNUSED(value);
-    if(change == QGraphicsItem::ItemScenePositionHasChanged && d->canvasController) {
+    if (change == QGraphicsItem::ItemScenePositionHasChanged && d->canvasController) {
         QPointF pos(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
         float xDiff = pos.x() - d->lastX;
         float yDiff = pos.y() - d->lastY;
@@ -343,17 +347,17 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
     setSize(size);
     d->documentSize = size;
 
-    if(d->flickable) {
+    if (d->flickable) {
         d->flickable->setProperty("contentWidth", d->documentSize.width());
         d->flickable->setProperty("contentHeight", d->documentSize.height());
 
         //If we have a correct document size, try to set the minimum zoom level, but
         //do not try to set it when we're dealing with a nearly-infinite document. (E.g. Sheets)
-        if( d->minimumZoom < 0 && d->documentSize.width() > 0 && d->documentSize.width() < 2e6 )
+        if ( d->minimumZoom < 0 && d->documentSize.width() > 0 && d->documentSize.width() < 2e6 )
         {
             qreal minZoom = d->flickable->width() / ( d->documentSize.width() / ( d->zoom > 0.f ? d->zoom : 0.5 ) );
 
-            if( KoZoomMode::minimumZoom() != minZoom )
+            if ( KoZoomMode::minimumZoom() != minZoom )
             {
                 KoZoomMode::setMinimumZoom( minZoom );
                 setZoom( d->zoom );
@@ -366,7 +370,7 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
 
 void CQCanvasControllerItem::updateDocumentPosition(const QPoint& pos)
 {
-    if(d->flickable) {
+    if (d->flickable) {
         d->flickable->setProperty("contentX", QVariant::fromValue<qreal>(pos.x()));
         d->flickable->setProperty("contentY", QVariant::fromValue<qreal>(pos.y()));
     }
@@ -374,13 +378,13 @@ void CQCanvasControllerItem::updateDocumentPosition(const QPoint& pos)
 
 void CQCanvasControllerItem::canvasControllerChanged()
 {
-    if(d->canvasController) {
+    if (d->canvasController) {
         disconnect(d->canvasController, SIGNAL(documentSizeChanged(QSize)), this, SLOT(updateDocumentSize(QSize)));
         disconnect(d->canvasController, SIGNAL(documentPositionChanged(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
     }
 
     d->canvasController = d->canvas->canvasController();
-    if(d->canvasController) {
+    if (d->canvasController) {
         connect(d->canvasController, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
         connect(d->canvasController, SIGNAL(documentPositionChanged(QPoint)), SLOT(updateDocumentPosition(QPoint)));
         updateDocumentSize(d->canvasController->documentSize());

@@ -23,7 +23,7 @@
 #ifndef CALLIGRAQTQUICKCOMPONENTSPLUGIN_H
 #define CALLIGRAQTQUICKCOMPONENTSPLUGIN_H
 
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include <QDeclarativeExtensionPlugin>
 
 class CalligraQtQuickComponentsPlugin : public QDeclarativeExtensionPlugin
 {
@@ -31,7 +31,7 @@ class CalligraQtQuickComponentsPlugin : public QDeclarativeExtensionPlugin
 
 public:
     void registerTypes(const char *uri);
-    virtual void initializeEngine(QDeclarativeEngine* engine, const char* uri); 
+    virtual void initializeEngine(QDeclarativeEngine* engine, const char* uri);
 
 private:
 

@@ -1,11 +1,28 @@
 /*
+ * This file is part of the KDE project
+ *
+ * Copyright (C) 2013 Dan Leinir Turthra Jensen <admin@leinir.dk>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  *
  */
 
 #include "CQLinkArea.h"
 
-#include <QDebug>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 
 struct LinkLayerLink
@@ -77,7 +94,7 @@ void CQLinkArea::setLinks(const QVariantList& newLinks)
     foreach(const QVariant& var, newLinks)
     {
         QObject* obj = var.value<QObject*>();
-        if(!obj)
+        if (!obj)
             continue;
         LinkLayerLink link;
         link.linkRect = obj->property("linkRect").toRectF().adjusted(-d->wiggleFactor, -d->wiggleFactor, d->wiggleFactor, d->wiggleFactor);
@@ -94,7 +111,7 @@ QSizeF CQLinkArea::sourceSize() const
 
 void CQLinkArea::setSourceSize(const QSizeF& size)
 {
-    if(size != d->sourceSize) {
+    if (size != d->sourceSize) {
         d->sourceSize = size;
         emit sourceSizeChanged();
         update();
@@ -108,7 +125,7 @@ QColor CQLinkArea::linkColor() const
 
 void CQLinkArea::setLinkColor(const QColor& color)
 {
-    if(color != d->linkColor) {
+    if (color != d->linkColor) {
         d->linkColor = color;
         d->linkColor.setAlphaF( 0.25 );
         emit linkColorChanged();
@@ -127,7 +144,7 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     d->clickInProgress = false;
     // Don't activate anything if the finger has moved too far
     QRect rect((d->clickLocation - QPointF(d->wiggleFactor, d->wiggleFactor)).toPoint(), QSize(d->wiggleFactor * 2, d->wiggleFactor * 2));
-    if(!rect.contains(event->pos().toPoint())) {
+    if (!rect.contains(event->pos().toPoint())) {
         return;
     }
     QUrl url;
@@ -139,15 +156,14 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
             (link.linkRect.width() / d->sourceSize.width()) * width(),
             (link.linkRect.height() / d->sourceSize.height()) * height() );
 
-        if(scaledTarget.contains(inverted)) {
+        if (scaledTarget.contains(inverted)) {
             url = link.linkTarget;
             break;
         }
     }
-    if(url.isEmpty()) {
+    if (url.isEmpty()) {
         emit clicked();
-    }
-    else {
+    } else {
         emit linkClicked(url);
     }
 }

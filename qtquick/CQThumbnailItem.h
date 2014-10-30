@@ -20,7 +20,7 @@
 #ifndef CQTHUMBNAILITEM_H
 #define CQTHUMBNAILITEM_H
 
-#include <qdeclarativeitem.h>
+#include <QDeclarativeItem>
 
 class CQThumbnailItem : public QDeclarativeItem
 {

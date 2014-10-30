@@ -45,7 +45,7 @@ CQThumbnailItem::~CQThumbnailItem()
 
 void CQThumbnailItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* )
 {
-    if(!d->content.isNull()) {
+    if (!d->content.isNull()) {
         QPixmap pixmap = d->content.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         int xpos = (width() - pixmap.width()) / 2;
         int ypos = (height() - pixmap.height()) / 2;

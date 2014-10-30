@@ -59,10 +59,10 @@ public:
         qDeleteAll(linkTargets);
         linkTargets.clear();
 
-        if(!canvas)
+        if (!canvas)
             return;
         foreach(const KoShape* shape, canvas->activeSheet()->shapes()) {
-            if(!shape->hyperLink().isEmpty()) {
+            if (!shape->hyperLink().isEmpty()) {
                 QObject * obj = new QObject(canvas);
                 obj->setProperty("linkRect", shape->boundingRect());
                 obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
@@ -81,7 +81,7 @@ public:
                     QTextFragment fragment = it.fragment();
                     if (fragment.isValid()) {
                         QTextCharFormat format = fragment.charFormat();
-                        if(format.isAnchor()) {
+                        if (format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QObject * obj = new QObject(canvas);
                             QRectF rect = getFragmentPosition(block, fragment);
@@ -95,14 +95,14 @@ public:
         }
     }
 
-    QRectF getFragmentPosition(QTextBlock block, QTextFragment fragment)
+    QRectF getFragmentPosition(cont QTextBlock& block, const QTextFragment& fragment)
     {
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
         QTextLayout* layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if(!line.isValid())
+        if (!line.isValid())
         {
             // fragment has no valid position and consequently no line...
             return QRectF();
@@ -145,7 +145,7 @@ QObjectList CQSpreadsheetCanvas::linkTargets() const
 void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
 {
     sheet = qBound(0, sheet, d->document->map()->count() - 1);
-    if(sheet != d->currentSheet) {
+    if (sheet != d->currentSheet) {
         d->currentSheet = sheet;
         d->canvas->setActiveSheet(d->document->map()->sheet(d->currentSheet));
         emit currentSheetChanged();
@@ -165,7 +165,7 @@ void CQSpreadsheetCanvas::render(QPainter* painter, const QRectF& target)
 void CQSpreadsheetCanvas::openFile(const QString& uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("sheetspart");
-    if(service.isNull()) {
+    if (service.isNull()) {
         qWarning("Unable to load Sheets plugin, aborting!");
         return;
     }
@@ -189,7 +189,7 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     emit linkTargetsChanged();
 
     Calligra::Sheets::Sheet *sheet = d->document->map()->sheet(0);
-    if(sheet) {
+    if (sheet) {
         updateDocumentSize(sheet->documentSize().toSize());
     }
 }

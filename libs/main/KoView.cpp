@@ -363,11 +363,12 @@ KoMainWindow * KoView::mainWindow() const
 {
     KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
     QWidget* parent = this->parentWidget();
-    while(!mw) {
+    while (!mw) {
         mw = dynamic_cast<KoMainWindow*>(parent);
         parent = parent->parentWidget();
-        if(!parent)
+        if (!parent) {
             break;
+        }
     }
     return mw;
 }

@@ -56,14 +56,14 @@ CQSpreadsheetListModel::~CQSpreadsheetListModel()
 
 QVariant CQSpreadsheetListModel::data(const QModelIndex& index, int role) const
 {
-    if(!index.isValid() || !d->map)
+    if (!index.isValid() || !d->map)
         return QVariant();
 
     switch(role) {
         case SheetNameRole:
             return d->map->sheet(index.row())->sheetName();
         case ThumbnailRole: {
-            if(d->thumbnails.contains(index.row())) {
+            if (d->thumbnails.contains(index.row())) {
                 return d->thumbnails.value(index.row());
             }
 
@@ -101,7 +101,7 @@ QVariant CQSpreadsheetListModel::data(const QModelIndex& index, int role) const
 int CQSpreadsheetListModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    if(d->map) {
+    if (d->map) {
         return d->map->count();
     }
 
@@ -113,7 +113,7 @@ QObject* CQSpreadsheetListModel::canvas() const
     return d->canvas;
 }
 
-QSize CQSpreadsheetListModel::thumbnailSize()
+QSize CQSpreadsheetListModel::thumbnailSize() const
 {
     return d->thumbnailSize;
 }
@@ -123,7 +123,7 @@ void CQSpreadsheetListModel::setCanvas(QObject* canvas)
     if (d->canvas != canvas) {
         d->canvas = qobject_cast<CQSpreadsheetCanvas*>(canvas);
         Q_ASSERT(d->canvas);
-        if(d->map) {
+        if (d->map) {
             beginRemoveRows(QModelIndex(), 0, d->map->count());
             endRemoveRows();
         }
@@ -136,7 +136,7 @@ void CQSpreadsheetListModel::setCanvas(QObject* canvas)
 
 void CQSpreadsheetListModel::setThumbnailSize(const QSize& size)
 {
-    if(size != d->thumbnailSize) {
+    if (size != d->thumbnailSize) {
         d->thumbnailSize = size;
         d->thumbnails.clear();
         emit thumbnailSizeChanged();

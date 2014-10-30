@@ -51,15 +51,15 @@ CQPresentationModel::~CQPresentationModel()
 
 QVariant CQPresentationModel::data(const QModelIndex& index, int role) const
 {
-    if(!index.isValid() && d->document)
+    if (!index.isValid() && d->document)
         return QVariant();
 
     switch(role) {
         case ThumbnailRole: {
-            if(d->thumbnails.contains(index.row())) {
+            if (d->thumbnails.contains(index.row())) {
                 QPixmap thumb = d->thumbnails.value(index.row());
 
-                if(!thumb.isNull())
+                if (!thumb.isNull())
                     return thumb;
 
                 d->thumbnails.remove(index.row());
@@ -76,7 +76,7 @@ QVariant CQPresentationModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QPixmap CQPresentationModel::thumbnail(int index)
+QPixmap CQPresentationModel::thumbnail(int index) const
 {
     return data(this->index(index), ThumbnailRole).value<QPixmap>();
 }
@@ -84,7 +84,7 @@ QPixmap CQPresentationModel::thumbnail(int index)
 int CQPresentationModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    if(d->document) {
+    if (d->document) {
         return d->document->pageCount();
     }
 
@@ -114,22 +114,22 @@ void CQPresentationModel::setCanvas(QDeclarativeItem* canvas)
 
 void CQPresentationModel::setThumbnailSize(const QSizeF& size)
 {
-    if(size != d->thumbnailSize) {
+    if (size != d->thumbnailSize) {
         d->thumbnailSize = size;
         d->thumbnails.clear(); //Size changed, so cache is invalid
 
-        if(d->document) {
+        if (d->document) {
             emit dataChanged(index(0, 0), index(d->document->pageCount() - 1));
         }
-        
+
         emit thumbnailSizeChanged();
     }
 }
 
 void CQPresentationModel::canvasSourceChanged()
 {
-    if(d->canvas->document()) {
-        if(d->document) {
+    if (d->canvas->document()) {
+        if (d->document) {
             beginRemoveRows(QModelIndex(), 0, d->document->pageCount());
             endRemoveRows();
         }

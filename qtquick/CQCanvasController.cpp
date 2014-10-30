@@ -24,13 +24,12 @@
 
 #include "CQCanvasController.h"
 
-#include <QtCore/QPoint>
-#include <QtCore/QSize>
+#include <QPoint>
+#include <QSize>
 #include <QGraphicsWidget>
 
-#include <QDebug>
-
 #include <KoCanvasBase.h>
+#include <KoShape.h>
 
 class CQCanvasController::Private
 {
@@ -51,20 +50,24 @@ CQCanvasController::~CQCanvasController()
 
 void CQCanvasController::setVastScrolling(qreal factor)
 {
+    Q_UNUSED(factor)
 }
 
 void CQCanvasController::setZoomWithWheel(bool zoom)
 {
+    Q_UNUSED(zoom)
 }
 
 void CQCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
+    Q_UNUSED(recalculateCenter)
     setDocumentSize(sz);
     emit documentSizeChanged(sz);
 }
 
 void CQCanvasController::setScrollBarValue(const QPoint& value)
 {
+    Q_UNUSED(value)
 }
 
 QPoint CQCanvasController::scrollBarValue() const
@@ -87,6 +90,7 @@ QPointF CQCanvasController::preferredCenter() const
 
 void CQCanvasController::setPreferredCenter(const QPointF& viewPoint)
 {
+    Q_UNUSED(viewPoint)
 }
 
 void CQCanvasController::recenterPreferred()
@@ -95,26 +99,34 @@ void CQCanvasController::recenterPreferred()
 
 void CQCanvasController::zoomTo(const QRect& rect)
 {
+    Q_UNUSED(rect)
 }
 
 void CQCanvasController::zoomBy(const QPoint& center, qreal zoom)
 {
+    Q_UNUSED(center)
+    Q_UNUSED(zoom)
 }
 
 void CQCanvasController::zoomOut(const QPoint& center)
 {
+    Q_UNUSED(center)
 }
 
 void CQCanvasController::zoomIn(const QPoint& center)
 {
+    Q_UNUSED(center)
 }
 
 void CQCanvasController::ensureVisible(KoShape* shape)
 {
+    Q_UNUSED(shape)
 }
 
 void CQCanvasController::ensureVisible(const QRectF& rect, bool smooth)
 {
+    Q_UNUSED(rect)
+    Q_UNUSED(smooth)
 }
 
 int CQCanvasController::canvasOffsetY() const
@@ -151,6 +163,7 @@ void CQCanvasController::setCanvas(KoCanvasBase* canvas)
 
 void CQCanvasController::setDrawShadow(bool drawShadow)
 {
+    Q_UNUSED(drawShadow)
 }
 
 QSize CQCanvasController::viewportSize() const
@@ -161,9 +174,11 @@ QSize CQCanvasController::viewportSize() const
 
 void CQCanvasController::scrollContentsBy(int dx, int dy)
 {
+    Q_UNUSED(dx)
+    Q_UNUSED(dy)
 }
 
-QSize CQCanvasController::documentSize()
+QSize CQCanvasController::documentSize() const
 {
     return KoCanvasController::documentSize();
 }

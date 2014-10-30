@@ -795,7 +795,6 @@ void KoToolManager::addController(KoCanvasController *controller)
 void KoToolManager::removeCanvasController(KoCanvasController *controller)
 {
     Q_ASSERT(controller);
-    qDebug() << Q_FUNC_INFO << d->canvasses.contains(controller);
     d->detachCanvas(controller);
     disconnect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     disconnect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
@@ -804,7 +803,7 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
 void KoToolManager::attemptCanvasControllerRemoval(QObject* controller)
 {
     KoCanvasControllerProxyObject* controllerActual = qobject_cast<KoCanvasControllerProxyObject*>(controller);
-    if(controllerActual)
+    if (controllerActual)
         removeCanvasController(controllerActual->canvasController());
 }
 

@@ -47,7 +47,7 @@ KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
     if (dynamic_cast<KoPACanvasBase *>(canvas)) {
         KoPAViewBase *view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 
-        if(view) {
+        if (view) {
             const QString toolTip =
                 (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
             setToolTip(toolTip);

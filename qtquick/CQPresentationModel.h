@@ -41,7 +41,7 @@ public:
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
 
-    Q_INVOKABLE QPixmap thumbnail(int index);
+    Q_INVOKABLE QPixmap thumbnail(int index) const;
 
     QDeclarativeItem* canvas() const;
 

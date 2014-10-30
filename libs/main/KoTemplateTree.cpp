@@ -257,7 +257,7 @@ void KoTemplateTree::readTemplates()
                 }
                 KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName,
                                                measureSystem, color, swatch, variantName, wide, hidden);
-                if(!thumbnail.isEmpty())
+                if (!thumbnail.isEmpty())
                     t->setThumbnail(*it + thumbnail);
                 group->add(t, false, false); // false -> we aren't a "user", false -> don't
                 // "touch" the group to avoid useless

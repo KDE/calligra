@@ -390,7 +390,7 @@ void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection 
 
 void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
 {
-    if(!canvas)
+    if (!canvas)
         return;
     m_resourceManager = canvas->resourceManager();
     m_selection = canvas->shapeManager()->selection();

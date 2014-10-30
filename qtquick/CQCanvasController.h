@@ -27,9 +27,8 @@
 
 #include <KoCanvasController.h>
 
-#include <QtCore/QSize>
-#include <QtCore/QPoint>
-
+class QSize;
+class QPoint;
 class KoCanvasBase;
 class CQCanvasController : public QObject, public KoCanvasController
 {
@@ -63,7 +62,7 @@ public:
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy(int dx, int dy);
 
-    QSize documentSize();
+    QSize documentSize() const;
 
 signals:
     void documentSizeChanged(const QSize &sz);

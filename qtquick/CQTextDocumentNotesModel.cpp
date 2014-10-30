@@ -69,7 +69,7 @@ CQTextDocumentNotesModel::~CQTextDocumentNotesModel()
 QVariant CQTextDocumentNotesModel::data(const QModelIndex& index, int role) const
 {
     QVariant data;
-    if(index.isValid() && index.row() < d->entries.count()) {
+    if (index.isValid() && index.row() < d->entries.count()) {
         Entry* entry = d->entries.at(index.row());
         switch(role) {
             case Text:
@@ -89,8 +89,9 @@ QVariant CQTextDocumentNotesModel::data(const QModelIndex& index, int role) cons
                 break;
             case FirstOfThisColor:
                 data = true;
-                if(index.row() > 0 && d->entries.at(index.row() - 1)->color == entry->color)
+                if (index.row() > 0 && d->entries.at(index.row() - 1)->color == entry->color) {
                     data = false;
+                }
                 break;
             case Position:
                 data = entry->shape->absolutePosition();
@@ -108,8 +109,9 @@ QVariant CQTextDocumentNotesModel::data(const QModelIndex& index, int role) cons
 
 int CQTextDocumentNotesModel::rowCount(const QModelIndex& parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->entries.count();
 }
 
@@ -120,18 +122,18 @@ int CQTextDocumentNotesModel::count() const
 
 void CQTextDocumentNotesModel::toggleExpanded(int index)
 {
-    if(index > -1 && index < d->entries.count())
-    {
+    if (index > -1 && index < d->entries.count()) {
         QColor color = d->entries.at(index)->color;
         foreach(Entry* entry, d->entries) {
-            if(color == entry->color)
+            if (color == entry->color) {
                 entry->expanded = !entry->expanded;
+            }
         }
     }
     dataChanged(this->index(0), this->index(d->entries.count() - 1));
 }
 
-void CQTextDocumentNotesModel::addEntry(QString text, QString image, QString color, KoShape* shape)
+void CQTextDocumentNotesModel::addEntry(const QString& text, const QString& image, const QString& color, KoShape* shape)
 {
     Entry* entry = new Entry();
     entry->text = text;
@@ -139,18 +141,19 @@ void CQTextDocumentNotesModel::addEntry(QString text, QString image, QString col
     entry->shape = shape;
     entry->color = color;
     entry->categoryName = "Others";
-    if(color == "#fd5134")
+    if (color == "#fd5134") {
         entry->categoryName = "Major Errors";
-    else if(color == "#ffb20c")
+    } else if (color == "#ffb20c") {
         entry->categoryName = "Minor Errors";
-    else if(color == "#29b618")
+    } else if (color == "#29b618") {
         entry->categoryName = "Successes";
+    }
 
     QList<Entry*>::iterator before = d->entries.begin();
     bool reachedColor = false;
     int colorCount = 0, position = 0;
     for(; before != d->entries.end(); ++before) {
-        if((*before)->color == entry->color)
+        if ((*before)->color == entry->color)
         {
             // We are now in the current entry's section as defined by colour
             // and we grab the current colour count for that section from
@@ -162,12 +165,12 @@ void CQTextDocumentNotesModel::addEntry(QString text, QString image, QString col
             entry->colorCount = colorCount;
             entry->expanded = (*before)->expanded;
         }
-        if(reachedColor)
+        if (reachedColor)
         {
             // If we find a new colour, that means we're out of the current
             // section, and we break out. This also conveniently leaves us
             // with the entry we want to insert the item before.
-            if((*before)->color != entry->color) {
+            if ((*before)->color != entry->color) {
                 break;
             }
             (*before)->colorCount = colorCount;
@@ -176,8 +179,9 @@ void CQTextDocumentNotesModel::addEntry(QString text, QString image, QString col
     }
 
     // By default, the Neutral category is supposed to be expanded
-    if(color == "Neutral" && colorCount == 1)
+    if (color == "Neutral" && colorCount == 1) {
         entry->expanded = true;
+    }
 
     beginInsertRows(QModelIndex(), position, position);
     d->entries.insert(before, entry);

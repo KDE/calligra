@@ -30,11 +30,10 @@
 #include <KWDocument.h>
 #include <frames/KWTextFrameSet.h>
 
-#include <qtextobject.h>
-#include <qtextdocument.h>
-#include <qtextcursor.h>
-#include <qtimer.h>
-#include <qdebug.h>
+#include <QTextObject>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTimer>
 
 Q_DECLARE_METATYPE(QTextDocument*)
 
@@ -72,8 +71,9 @@ public:
         if (rootArea) {
             if (rootArea->page()) {
                 return rootArea->page()->visiblePageNumber();
+            } else {
+                // had root but no page;
             }
-            else qDebug()<<"had root but no page";
         }
         return 0;
     }
@@ -106,10 +106,10 @@ CQTextToCModel::~CQTextToCModel()
 QVariant CQTextToCModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
-    if(index.isValid())
+    if (index.isValid())
     {
         int row = index.row();
-        if(row > -1 && row < d->entries.count())
+        if (row > -1 && row < d->entries.count())
         {
             const TextToCModelEntry* entry = d->entries.at(row);
             switch(role)
@@ -132,7 +132,7 @@ QVariant CQTextToCModel::data(const QModelIndex& index, int role) const
 
 int CQTextToCModel::rowCount(const QModelIndex& parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
     return d->entries.count();
 }
@@ -192,13 +192,13 @@ QObject* CQTextToCModel::canvas() const
 void CQTextToCModel::setCanvas(QObject* newCanvas)
 {
     beginResetModel();
-    if(d->documentLayout)
+    if (d->documentLayout)
         d->documentLayout->disconnect(this);
     d->canvas = 0;
     d->document = 0;
     d->documentLayout = 0;
     CQTextDocumentCanvas* canvas = qobject_cast<CQTextDocumentCanvas*>(newCanvas);
-    if(canvas)
+    if (canvas)
     {
         d->canvas = canvas;
         d->document = canvas->document()->mainFrameSet()->document();
