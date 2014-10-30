@@ -802,7 +802,6 @@ bool KoTextDocumentLayout::doLayout()
 
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to separate pages
-        qApp->processEvents();
     }
 
     while (transferedFootNoteCursor || d->layoutPosition->it != document()->rootFrame()->end()) {
