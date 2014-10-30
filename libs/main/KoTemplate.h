@@ -24,7 +24,38 @@
 #include <QStringList>
 #include <QPixmap>
 
-/** @internal */
+/**
+ * @internal
+ * This class represents a template as seen internally by Calligra. It is a collection
+ * of information describing one template (and optionally one variation of the template)
+ *
+ * If there are more templates with the same name, the variant name can be used to distinguish
+ * the different templates from each other. It may also exist as both a wide screen and non-
+ * wide screen version.
+ * As an example, take the Stage template Skyline. This exists in a set of three variations:
+ * - Monotone
+ * - Morning
+ * - Night
+ * Each of these variations further exist in both a wide screen and non-wide screen version.
+ * The description of this, as found in the template's .desktop description file is:
+ * @code
+[Desktop Entry]
+Icon=skyline_night_wide
+Name=Skyline Wide
+Comment=Skyline Night Wide
+Type=Link
+URL=.source/skyline_night_wide.otp
+X-KDE-Hidden=false
+X-KDE-TemplateIsWideFormat=true
+X-KDE-Thumbnail=.thumbnail/skyline_night_wide.png
+X-KDE-VariantName=Night
+X-KDE-Color=purple
+@endcode
+ * Note, the code above doesn't include any translations as found in the actual file, which can
+ * be found in the codebase under stage/templates/odf/skyline_night_wide.desktop
+ * The location of files (the URL and X-KDE-Thumbnail entries specifically) are relative to the
+ * location of the .desktop file.
+ */
 class KoTemplate
 {
 
