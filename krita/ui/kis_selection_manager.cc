@@ -269,6 +269,7 @@ void KisSelectionManager::setView(QPointer<KisImageView>imageView)
             disconnect(SIGNAL(currentSelectionChanged()), decoration);
         }
         m_imageView->image()->undoAdapter()->disconnect(this);
+        m_selectionDecoration = 0;
     }
 
     m_imageView = imageView;
@@ -283,6 +284,7 @@ void KisSelectionManager::setView(QPointer<KisImageView>imageView)
             decoration->setVisible(true);
             m_imageView->canvasBase()->addDecoration(decoration);
         }
+        m_selectionDecoration = decoration;
         connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
         connect(m_imageView->image()->undoAdapter(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
     }
