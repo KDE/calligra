@@ -26,8 +26,9 @@
 
 class KisGridDecoration : public KisCanvasDecoration
 {
+    Q_OBJECT
 public:
-    KisGridDecoration();
+    KisGridDecoration(KisImageView* parent);
     virtual ~KisGridDecoration();
 
 protected:
