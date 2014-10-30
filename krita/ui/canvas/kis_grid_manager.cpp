@@ -116,14 +116,20 @@ void KisGridManager::updateGUI()
 
 void KisGridManager::setView(QPointer< KisImageView > imageView)
 {
-    m_imageView = imageView;
-    m_gridDecoration = qobject_cast<KisGridDecoration*>(imageView->canvasBase()->decoration("grid"));
-    if (!m_gridDecoration) {
-        m_gridDecoration = new KisGridDecoration(imageView);
-        imageView->canvasBase()->addDecoration(m_gridDecoration);
+    if (m_imageView) {
+        m_toggleGrid->disconnect();
+        m_gridDecoration = 0;
     }
-    checkVisibilityAction(m_gridDecoration->visible());
-    connect(m_toggleGrid, SIGNAL(triggered()), m_gridDecoration, SLOT(toggleVisibility()));
+    m_imageView = imageView;
+    if (imageView) {
+        m_gridDecoration = qobject_cast<KisGridDecoration*>(imageView->canvasBase()->decoration("grid"));
+        if (!m_gridDecoration) {
+            m_gridDecoration = new KisGridDecoration(imageView);
+            imageView->canvasBase()->addDecoration(m_gridDecoration);
+        }
+        checkVisibilityAction(m_gridDecoration->visible());
+        connect(m_toggleGrid, SIGNAL(triggered()), m_gridDecoration, SLOT(toggleVisibility()));
+    }
 }
 
 void KisGridManager::checkVisibilityAction(bool check)
