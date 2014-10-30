@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QGraphicsItem>
 
-#include "ViewModeSwitchEvent.h"
+#include <gemini/ViewModeSwitchEvent.h>
 
 TouchDeclarativeView::TouchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)

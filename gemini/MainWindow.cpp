@@ -21,7 +21,6 @@
 
 #include "MainWindow.h"
 #include "desktopviewproxy.h"
-#include "ViewModeSwitchEvent.h"
 
 #include <QApplication>
 #include <QResizeEvent>
@@ -47,6 +46,7 @@
 #include <kmenubar.h>
 #include <KConfigGroup>
 
+#include <gemini/ViewModeSwitchEvent.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
