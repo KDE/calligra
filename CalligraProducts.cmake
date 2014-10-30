@@ -101,7 +101,7 @@ calligra_define_product(APP_KEXI "Kexi app (for Desktop)"  REQUIRES LIB_CALLIGRA
 calligra_define_product(APP_FLOW "Flow app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(GEMINI "The Calligra Gemini application" NEEDS WORDS_PART STAGE_PART PLUGIN_QTQUICK)
+calligra_define_product(APP_GEMINI "The Calligra Gemini application" NEEDS PLUGIN_QTQUICK)
 # TODO: this needs to be split up by app products
 calligra_define_product(DOC "Calligra Documentations")
 
@@ -133,7 +133,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  REQUIRES LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  REQUIRES FEATURE_RDF LIB_CALLIGRA)
-calligra_define_product(PLUGIN_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS WORDS_PART STAGE_PART)# SHEETS_PART)
+calligra_define_product(PLUGIN_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS PART_WORDS PART_STAGE)# SHEETS_PART)
 
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  REQUIRES LIB_CALLIGRA)
@@ -539,6 +539,29 @@ calligra_define_productset(WORDS "Full Words (for Desktop)"
         PLUGIN_SEMANTICITEMS
         # filters
         FILTERS_WORDS
+)
+calligra_define_productset(GEMINI "Calligra for 2:1 devices"
+    REQUIRES
+        PART_WORDS
+        PART_STAGE
+    OPTIONAL
+        # plugins
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_ARTISTICTEXTSHAPE
+        PLUGIN_DOCKERS
+        PLUGIN_TEXTEDITING
+        PLUGIN_PATHSHAPES
+        PLUGIN_VARIABLES
+        PLUGIN_CHARTSHAPE
+        PLUGIN_PICTURESHAPE
+        PLUGIN_TEXTSHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_FORMULASHAPE
+        PLUGIN_VIDEOSHAPE
+        PLUGIN_VECTORSHAPE
+        # filters
+        FILTERS_WORDS
+        FILTERS_STAGE
 )
 
 # okular support
