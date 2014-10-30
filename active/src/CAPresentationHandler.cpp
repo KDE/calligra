@@ -38,7 +38,6 @@
 #include <KoZoomController.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoFindBase.h>
 
 #include <kdebug.h>

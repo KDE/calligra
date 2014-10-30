@@ -33,7 +33,7 @@
 #include <KoPageApp.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 #include <KPrView.h>
 

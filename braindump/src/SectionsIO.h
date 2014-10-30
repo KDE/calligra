@@ -29,7 +29,6 @@ class QTimer;
 class RootSection;
 class Section;
 class SectionGroup;
-class KUndo2Stack;
 
 class SectionsIO : public QObject
 {

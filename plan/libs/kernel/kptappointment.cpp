@@ -32,8 +32,6 @@
 #include <QDateTime>
 #include <QMutableMapIterator>
 
-#include <cassert>
-
 
 namespace KPlato
 {
@@ -104,7 +102,7 @@ Duration AppointmentInterval::effort() const
     return ( d->end - d->start ) * d->load / 100;
 }
 
-Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) const {
+Duration AppointmentInterval::effort(const DateTime &start, const DateTime &end) const {
     if (start >= d->end || end <= d->start) {
         return Duration::zeroDuration;
     }
@@ -152,7 +150,7 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
 
 void AppointmentInterval::saveXML(QDomElement &element) const
 {
-    assert( isValid() );
+    Q_ASSERT( isValid() );
     QDomElement me = element.ownerDocument().createElement("interval");
     element.appendChild(me);
 
@@ -573,7 +571,7 @@ Appointment::Appointment()
     m_repeatCount=0;
 }
 
-Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load)
+Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &start, const DateTime &end, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
     //kDebug(planDbg())<<"("<<this<<")";
@@ -586,7 +584,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
     addInterval(start, end, load);
 }
 
-Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load)
+Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &start, Duration duration, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
     //kDebug(planDbg())<<"("<<this<<")";
@@ -676,12 +674,6 @@ DateTime Appointment::endTime() const {
         return DateTime();
     }
     return m_intervals.map().values().last().endTime();
-}
-
-void Appointment::deleteAppointmentFromRepeatList(DateTime) {
-}
-
-void Appointment::addAppointmentToRepeatList(DateTime) {
 }
 
 bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {

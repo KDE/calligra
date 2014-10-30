@@ -65,12 +65,14 @@
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoZoomHandler.h>
+#include <KoToolManager.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceItemChooserSync.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
@@ -121,6 +123,7 @@
 #include <QPoint>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
+#include <kis_signal_compressor.h>
 #include "kis_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
@@ -173,6 +176,7 @@ public:
         , tooltipManager(0)
         , showFloatingMessage(true)
         , isInCanvasOnlyMode(false)
+        , guiUpdateCompressor(0)
     {
     }
 
@@ -236,6 +240,7 @@ public:
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
     bool isInCanvasOnlyMode;
+    KisSignalCompressor* guiUpdateCompressor;
 };
 
 
@@ -275,6 +280,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     m_d->canvasController->setCanvas(m_d->canvas);
 
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
+
+    m_d->guiUpdateCompressor = new KisSignalCompressor(30, KisSignalCompressor::POSTPONE, this);
+    connect(m_d->guiUpdateCompressor, SIGNAL(timeout()), this, SLOT(guiUpdateTimeout()));
 
     createActions();
     createManagers();
@@ -448,8 +456,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 #endif
 
     QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName(lastPreset);
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
     if (!preset) {
         preset = rserver->resourceByName("Basic_tip_default");
     }
@@ -461,7 +469,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         preset = rserver->resources().first();
     }
     if (preset) {
-        paintOpBox()->resourceSelected(preset);
+        paintOpBox()->resourceSelected(preset.data());
     }
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
@@ -1078,13 +1086,7 @@ void KisView2::createManagers()
 
 void KisView2::updateGUI()
 {
-    m_d->nodeManager->updateGUI();
-    m_d->selectionManager->updateGUI();
-    m_d->filterManager->updateGUI();
-    m_d->zoomManager->updateGUI();
-    m_d->gridManager->updateGUI();
-    m_d->perspectiveGridManager->updateGUI();
-    m_d->actionManager->updateGUI();
+    m_d->guiUpdateCompressor->start();
 }
 
 void KisView2::slotPreferences()
@@ -1624,6 +1626,10 @@ void KisView2::updateIcons()
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
             kDebug() << "name " << dock->objectName();
+            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
+            if (titlebar) {
+                titlebar->updateIcons();
+            }
             if (!whitelist.contains(dock->objectName())) {
                 continue;
             }
@@ -1649,6 +1655,17 @@ void KisView2::updateIcons()
         }
     }
 #endif
+}
+
+void KisView2::guiUpdateTimeout()
+{
+    m_d->nodeManager->updateGUI();
+    m_d->selectionManager->updateGUI();
+    m_d->filterManager->updateGUI();
+    m_d->zoomManager->updateGUI();
+    m_d->gridManager->updateGUI();
+    m_d->perspectiveGridManager->updateGUI();
+    m_d->actionManager->updateGUI();
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)

@@ -61,7 +61,6 @@ class QListWidget;
 class QCheckBox;
 class KColorButton;
 class KComboBox;
-class KoUnitDoubleSpinBox;
 
 namespace Calligra
 {

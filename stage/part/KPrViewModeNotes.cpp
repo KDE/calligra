@@ -34,13 +34,11 @@
 #include <KoText.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoZoomController.h>
 #include <KoInteractionTool.h>
 
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoPAMasterPage.h>
 #include <KoPAView.h>
 
 #include "KPrNotes.h"

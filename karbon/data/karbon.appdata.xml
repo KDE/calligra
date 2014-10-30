@@ -59,13 +59,14 @@
     <p>Features:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
-    <p xml:lang="pl">Cechy:</p>
+    <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Características:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
@@ -110,21 +111,19 @@
       <li xml:lang="uk">Підтримка запису у форматах ODG, SVG, PNG, PDF, WMF.</li>
       <li xml:lang="x-test">xxWriting support for ODG, SVG, PNG, PDF, WMFxx</li>
       <li>
-        Customizable user interface with freely placeable toolbars and dockers2
+        Customizable user interface with freely placeable toolbars and dockers
       </li>
       <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
-      <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers2</li>
-      <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y acoplables que se pueden ubicar en cualquier lugar.</li>
-      <li xml:lang="ia">Personalisa le interfacie de usator con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
+      <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers</li>
       <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
-      <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en dockers2</li>
+      <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en verankeringen</li>
       <li xml:lang="pl">Układ sterowania z dowolnie umieszczanymi paskami narzędzi i dokowaniami</li>
       <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
       <li xml:lang="pt-BR">Interface de usuário configurável com barras e áreas acopláveis livres</li>
       <li xml:lang="sk">Nastaviteľné používateľské rozhranie s voľne umiestniteľnými panelmi nástrojov a dockermi</li>
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
       <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
-      <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockers2xx</li>
+      <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
       <li>
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking
@@ -206,6 +205,7 @@
         Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
       </li>
       <li xml:lang="ca">Inclou moltes formes predefinides bàsiques com estels, cercles/el·lipses, rectangles, imatges</li>
+      <li xml:lang="de">Enthält viele vordefinierte Objekte einschließlich einfacher Objekte wie Sterne, Kreise, Ellipsen, Rechtecke und Bilder</li>
       <li xml:lang="en-GB">Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image</li>
       <li xml:lang="es">Incluye muchas formas predefinidas, entre otras figuras básicas como estrellas, círculos/elipses, rectángulos, imágenes</li>
       <li xml:lang="it">Include molte forme predefinite tra cui forme base come stelle, cerchi/ellissi, rettangoli e immagini</li>

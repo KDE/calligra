@@ -21,7 +21,7 @@
 #ifndef KPTCALENDAR_H
 #define KPTCALENDAR_H
 
-#include <kptdatetime.h>
+#include "kptdatetime.h"
 #include "kptduration.h"
 #include "kplatokernel_export.h"
 
@@ -35,11 +35,6 @@
 #include <kdebug.h>
 
 #include <KoXmlReader.h>
-
-class QDomElement;
-class QTime;
-class QDate;
-class QString;
 
 /// The main namespace.
 namespace KPlato
@@ -183,16 +178,18 @@ public:
 
     QList<TimeInterval*> timeIntervals() const { return m_timeIntervals; }
     void addInterval( const QTime &t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
+    /**
+     * Caller needs to ensure that intervals are not overlapping.
+     */
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
     void clearIntervals() { m_timeIntervals.clear(); }
-    void setIntervals(QList<TimeInterval*> intervals) { 
+    void setIntervals(const QList<TimeInterval*> &intervals) {
         m_timeIntervals.clear();
         m_timeIntervals = intervals;
     }
     void removeInterval( TimeInterval *interval );
-    TimeInterval *intervalAt( int index ) const;
-    int indexOf( const TimeInterval *ti ) const;
+    bool hasInterval( const TimeInterval *interval ) const;
     int numIntervals() const;
 
     DateTime start() const;
@@ -315,7 +312,7 @@ public:
     void setState(int weekday, int state);
     
     QList<TimeInterval*> intervals(int weekday) const;
-    void setIntervals(int weekday, QList<TimeInterval*>intervals);
+    void setIntervals(int weekday, const QList<TimeInterval*> &intervals);
     void clearIntervals(int weekday);
     
     bool operator==(const CalendarWeekdays *weekdays) const;

@@ -83,7 +83,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderCo
     //!       is exactly the same ref as the element of namespaceDeclarations()
 
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
-        raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::wordprocessingml)));
         return KoFilter::WrongFormat;
     }
 

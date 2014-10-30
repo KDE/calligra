@@ -41,9 +41,6 @@
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
-
 #include "gmic.h"
 #include "kis_gmic_parser.h"
 #include "Component.h"
@@ -175,13 +172,13 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 
     QTime myTimer;
     myTimer.start();
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     m_gmicApplicator->setProperties(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand(), m_gmicCustomCommands);
     m_gmicApplicator->start();
     m_gmicApplicator->wait();
     m_view->image()->waitForDone();
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     double seconds = myTimer.elapsed() * 0.001;
     // temporary feedback

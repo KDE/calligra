@@ -112,7 +112,8 @@ struct KisPerspectiveTransformStrategy::Private
 KisPerspectiveTransformStrategy::KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : m_d(new Private(this, converter, currentArgs, transaction))
+    : KisSimplifiedActionPolicyStrategy(converter),
+      m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
 
@@ -203,7 +204,7 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
 {
     gc.save();
 
-    gc.setOpacity(0.9);
+    gc.setOpacity(m_d->transaction.basePreviewOpacity());
     gc.setTransform(m_d->paintingTransform, true);
     gc.drawImage(m_d->paintingOffset, originalImage());
 

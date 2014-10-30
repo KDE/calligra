@@ -59,6 +59,7 @@
 #include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
 #include <KoFilterManager.h>
+#include <KoToolManager.h>
 #include <KoIcon.h>
 
 #include "filter/kis_filter.h"
@@ -621,7 +622,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->sketchKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
     }
@@ -635,7 +636,7 @@ void MainWindow::resourceChangedSketch(int key, const QVariant& v)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->desktopKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
     }

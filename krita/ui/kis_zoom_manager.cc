@@ -36,6 +36,7 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoGlobal.h>
 #include <KoRulerController.h><<
+#include <KoRulerController.h>
 #include <KoUnit.h>
 #include <KoDpi.h>
 
@@ -243,7 +244,8 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
         qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
     }
 
-    qreal effectiveZoom = 0.5 * (scaleX, scaleY);
+    // zoom by average of x and y
+    const qreal effectiveZoom = 0.5 * (scaleX + scaleY);
     m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
 }
 

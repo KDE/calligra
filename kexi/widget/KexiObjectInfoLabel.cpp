@@ -103,7 +103,7 @@ void KexiObjectInfoLabel::updateName()
         txt = d->objectName;
     }
     else if (!d->objectName.isEmpty()) {
-        txt = i18nc("Object class \"objectName\", e.g. Text editor \"text\"", "%1 \"%2\"",
+        txt = i18nc("Object class \"objectName\", e.g. Text editor \"text\"", "%1 <resource>%2</resource>",
             txt, d->objectName);
     }
     d->objectNameLabel->setText(txt);

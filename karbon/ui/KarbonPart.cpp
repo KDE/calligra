@@ -49,10 +49,7 @@
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
 #include <kconfiggroup.h>
 

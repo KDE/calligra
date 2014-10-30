@@ -66,7 +66,7 @@ FormulaToken::FormulaToken(const FormulaToken& token)
     d->id = token.id();
 
     d->data.resize(token.d->data.size());
-    for (unsigned i = 0; i < d->data.size(); i++)
+    for (unsigned i = 0; i < d->data.size(); ++i)
         d->data[i] = token.d->data[i];
 }
 
@@ -76,7 +76,7 @@ FormulaToken& FormulaToken::operator=(const FormulaToken& token)
     d->id = token.id();
 
     d->data.resize(token.d->data.size());
-    for (unsigned i = 0; i < d->data.size(); i++)
+    for (unsigned i = 0; i < d->data.size(); ++i)
         d->data[i] = token.d->data[i];
     return *this;
 }
@@ -405,7 +405,7 @@ unsigned FormulaToken::size() const
 void FormulaToken::setData(unsigned size, const unsigned char* data)
 {
     d->data.resize(size);
-    for (unsigned i = 0; i < size; i++)
+    for (unsigned i = 0; i < size; ++i)
         d->data[i] = data[i];
 }
 
@@ -420,7 +420,7 @@ Value FormulaToken::value() const
 
     unsigned char* buf;
     buf = new unsigned char[d->data.size()];
-    for (unsigned k = 0; k < d->data.size(); k++)
+    for (unsigned k = 0; k < d->data.size(); ++k)
         buf[k] = d->data[k];
 
     // FIXME sanity check: verify size of data
@@ -1543,7 +1543,7 @@ static void dumpStack(std::vector<QString> stack)
     if (stack.empty())
         std::cout << "(empty)" ;
 
-    for (unsigned i = 0; i < stack.size(); i++)
+    for (unsigned i = 0; i < stack.size(); ++i)
         std::cout << "  " << i << ": " << stack[i] << std::endl;
     std::cout << std::endl;
 }
@@ -1553,7 +1553,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 {
     UStringStack stack;
 
-    for (unsigned c = 0; c < tokens.size(); c++) {
+    for (unsigned c = 0; c < tokens.size(); ++c) {
         FormulaToken token = tokens[c];
 
 #ifdef SWINDER_XLS2RAW
@@ -1832,7 +1832,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     }
 
     QString result;
-    for (unsigned i = 0; i < stack.size(); i++)
+    for (unsigned i = 0; i < stack.size(); ++i)
         result.append(stack[i]);
 
 #ifdef SWINDER_XLS2RAW

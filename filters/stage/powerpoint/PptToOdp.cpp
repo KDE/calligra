@@ -2810,7 +2810,7 @@ PptToOdp::processParagraph(Writer& out,
         }
         if (!pf.fBulletHasAutoNumber()) {
             QList<quint16> levels = m_continueListNumbering.keys();
-            for (quint16 i = 0; i < levels.size(); i++) {
+            for (quint16 i = 0; i < levels.size(); ++i) {
                 if (levels[i] >= depth) {
                     m_continueListNumbering.remove(levels[i]);
                     m_lvlXmlIdMap.remove(levels[i]);
@@ -2818,7 +2818,7 @@ PptToOdp::processParagraph(Writer& out,
             }
         } else if (m_previousListLevel > depth) {
             QList<quint16> levels = m_continueListNumbering.keys();
-            for (quint16 i = 0; i < levels.size(); i++) {
+            for (quint16 i = 0; i < levels.size(); ++i) {
                 if (levels[i] > depth) {
                     m_continueListNumbering.remove(levels[i]);
                     m_lvlXmlIdMap.remove(levels[i]);

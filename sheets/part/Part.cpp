@@ -32,8 +32,6 @@
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
 using namespace Calligra::Sheets;
 

@@ -29,10 +29,7 @@
 
 #include <QTableView>
 
-#include "kcalendar/kdatetable.h"
-
 class QPoint;
-class QDragMoveEvent;
 class KUndo2Command;
 
 class KoDocument;

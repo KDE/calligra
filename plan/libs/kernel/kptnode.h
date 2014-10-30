@@ -214,11 +214,11 @@ public:
     Relation *findRelation( const Node *node ) const;
 
     /// Set the scheduled start time
-    void setStartTime(DateTime startTime, long id = CURRENTSCHEDULE );
+    void setStartTime(const DateTime &startTime, long id = CURRENTSCHEDULE );
     /// Return the scheduled start time
     virtual DateTime startTime( long id = CURRENTSCHEDULE ) const;
     /// Set the scheduled end time
-    void setEndTime(DateTime endTime, long id = CURRENTSCHEDULE );
+    void setEndTime(const DateTime &endTime, long id = CURRENTSCHEDULE );
     /// Return the scheduled end time
     virtual DateTime endTime( long id = CURRENTSCHEDULE ) const;
     /// Set the scheduled duration
@@ -254,14 +254,14 @@ public:
     void setDescription(const QString &d);
 
     void setConstraint(Node::ConstraintType type);
-    void setConstraint(QString &type);
+    void setConstraint(const QString &type);
     int constraint() const { return m_constraint; }
     QString constraintToString( bool trans=false ) const;
     static QStringList constraintList( bool trans );
     
-    virtual void setConstraintStartTime(const DateTime time) 
+    virtual void setConstraintStartTime(const DateTime &time)
         { m_constraintStartTime = time; changed( this ); }
-    virtual void setConstraintEndTime(const DateTime time) 
+    virtual void setConstraintEndTime(const DateTime &time)
         { m_constraintEndTime = time; changed( this ); }
 
     virtual DateTime constraintStartTime() const { return m_constraintStartTime; }
@@ -495,9 +495,9 @@ public:
     /// Return the list of schedules for this node
     QHash<long, Schedule*> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
-    Schedule *findSchedule(const QString name, const Schedule::Type type);
+    Schedule *findSchedule(const QString &name, const Schedule::Type type);
     /// Find schedule matching name. Does not return deleted schedule.
-    Schedule *findSchedule(const QString name);
+    Schedule *findSchedule(const QString &name);
     /// Find schedule matching type.  Does not return deleted schedule.
     Schedule *findSchedule(const Schedule::Type type);
     /// Find schedule matching id.  Also returns deleted schedule.
@@ -597,7 +597,7 @@ public:
     void setLateFinish(const DateTime &dt, long id = CURRENTSCHEDULE );
     
     /// Adds appointment to both this node and resource
-    virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
+    virtual void addAppointment(ResourceSchedule *resource, const DateTime &start, const DateTime &end, double load=100);
     
     virtual void clearProxyRelations() {}
     virtual void addParentProxyRelations( const QList<Relation*> & ) {}

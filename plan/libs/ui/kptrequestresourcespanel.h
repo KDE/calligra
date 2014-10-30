@@ -22,8 +22,6 @@
 
 #include "kplatoui_export.h"
 
-#include "kptduration.h"
-
 #include <QWidget>
 
 namespace KPlato
@@ -31,10 +29,7 @@ namespace KPlato
 
 class Task;
 class Project;
-class ResourceGroup;
 class Resource;
-class ResourceGroupRequest;
-class ResourceRequest;
 class MacroCommand;
 class ResourceAllocationTreeView;
 

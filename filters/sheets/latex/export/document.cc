@@ -21,9 +21,9 @@
 **
 */
 
-#include <kdebug.h>
-
 #include "document.h"
+
+#include <kdebug.h>
 
 Document::Document(const KoStore* in, QString fileOut):
         XmlParser(in), _file(fileOut), _in(in)

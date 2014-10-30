@@ -35,20 +35,15 @@
 #include <QTreeView>
 #include <QSplitter>
 #include <QList>
-#include <QPointer>
 #include <QDockWidget>
 
 class KAction;
 
-class QWidget;
 class QMetaEnum;
 class QAbstractItemModel;
-class QDockWidget;
-class QMainWindow;
 
 class KoDocument;
 class KoPrintJob;
-class KoPageLayoutWidget;
 class KoPart;
 
 /// The main namespace
@@ -61,13 +56,10 @@ class Resource;
 class ResourceGroup;
 class Relation;
 class Calendar;
-class Context;
 
 class ViewBase;
 class TreeViewBase;
 class DoubleTreeViewBase;
-
-class DockWidget;
 
 //------------------
 

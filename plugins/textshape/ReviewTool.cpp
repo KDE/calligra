@@ -24,7 +24,6 @@
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoShapeRegistry.h>
 #include <KoAnnotation.h>
 #include <KoShapeController.h>
 #include "KoShapeBasedDocumentBase.h"
@@ -33,7 +32,6 @@
 #include <KoAnnotationManager.h>
 #include <KoShapeUserData.h>
 #include <KoTextShapeData.h>
-#include <KoGlobal.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>

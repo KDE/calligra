@@ -414,7 +414,7 @@ void KexiCSVImportDialog::next()
             if (res == true) {
                 KMessageBox::information(this,
                         "<p>"
-                        + part->i18nMessage("Object \"%1\" already exists.", 0)
+                        + part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                         .subs(m_newTableWidget->nameText()).toString()
                         + "</p><p>" + i18n("Please choose other name.") + "</p>"
                         );

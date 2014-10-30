@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <opencalcexport.h>
+
 #include <float.h>
 #include <math.h>
-
-#include <opencalcexport.h>
 
 #include <QDateTime>
 #include <QDomDocument>
@@ -38,7 +38,6 @@
 
 #include <KoDocumentInfo.h>
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
 
 // Don't show this warning: it occurs because gcc gets confused, but
 // it _is_ used.

@@ -77,7 +77,6 @@
 // Calligra includes
 #include <KoGlobal.h>
 #include <KoColor.h>
-#include <KoDpi.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
@@ -87,7 +86,6 @@
 #include <KoSelection.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
-#include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoXmlNS.h>
 #include <KoZoomAction.h>

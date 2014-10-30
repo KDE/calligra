@@ -23,6 +23,8 @@
 
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
+#include "kis_algebra_2d.h"
+
 
 
 struct KisPaintInformation::Private {
@@ -94,12 +96,12 @@ KisPaintInformation::DistanceInformationRegistrar::
 }
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_,
-                                         qreal pressure_,
-                                         qreal xTilt_, qreal yTilt_,
-                                         qreal rotation_,
-                                         qreal tangentialPressure_,
-                                         qreal perspective_,
-                                         int time)
+        qreal pressure_,
+        qreal xTilt_, qreal yTilt_,
+        qreal rotation_,
+        qreal tangentialPressure_,
+        qreal perspective_,
+        int time)
     : d(new Private)
 {
     d->pos = pos_;
@@ -134,11 +136,11 @@ bool KisPaintInformation::isHoveringMode() const
 
 KisPaintInformation
 KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
-                                            qreal pressure,
-                                            qreal xTilt, qreal yTilt,
-                                            qreal rotation,
-                                            qreal tangentialPressure,
-                                            qreal perspective)
+        qreal pressure,
+        qreal xTilt, qreal yTilt,
+        qreal rotation,
+        qreal tangentialPressure,
+        qreal perspective)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -180,15 +182,6 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt,
                                rotation, tangentialPressure, perspective, time);
-}
-
-void KisPaintInformation::paintAt(KisPaintOp *op, KisDistanceInformation *distanceInfo)
-{
-    d->registerDistanceInfo(distanceInfo);
-    KisSpacingInformation spacingInfo = op->paintAt(*this);
-    d->unregisterDistanceInfo();
-
-    distanceInfo->registerPaintedDab(*this, spacingInfo);
 }
 
 const QPointF& KisPaintInformation::pos() const
@@ -251,6 +244,22 @@ qreal KisPaintInformation::drawingAngle() const
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+QPointF KisPaintInformation::drawingDirectionVector() const
+{
+    if (d->drawingAngleOverride) {
+        qreal angle = *d->drawingAngleOverride;
+        return QPointF(cos(angle), sin(angle));
+    }
+
+    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
+        qWarning() << "KisPaintInformation::drawingDirectionVector()" << "Cannot access Distance Info last dab data";
+        return QPointF(1.0, 0.0);
+    }
+
+    QPointF diff(pos() - d->currentDistanceInfo->lastPosition());
+    return KisAlgebra2D::normalize(diff);
 }
 
 qreal KisPaintInformation::drawingDistance() const
@@ -383,17 +392,17 @@ qreal KisPaintInformation::tiltElevation(const KisPaintInformation& info, qreal 
 {
     qreal xTilt = qBound(qreal(-1.0), info.xTilt() / maxTiltX , qreal(1.0));
     qreal yTilt = qBound(qreal(-1.0), info.yTilt() / maxTiltY , qreal(1.0));
-    
+
     qreal e;
     if (fabs(xTilt) > fabs(yTilt)) {
-        e = sqrt(qreal(1.0) + yTilt*yTilt);
+        e = sqrt(qreal(1.0) + yTilt * yTilt);
     } else {
-        e = sqrt(qreal(1.0) + xTilt*xTilt);
+        e = sqrt(qreal(1.0) + xTilt * xTilt);
     }
-    
-    qreal cosAlpha    = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
+
+    qreal cosAlpha    = sqrt(xTilt * xTilt + yTilt * yTilt) / e;
     qreal tiltElevation = acos(cosAlpha); // in radians in [0, 0.5 * PI]
-    
+
     // mapping to 0.0..1.0 if normalize is true
     return normalize ? (tiltElevation / (M_PI * qreal(0.5))) : tiltElevation;
 }

@@ -20,12 +20,12 @@
 #include "kptdocuments.h"
 #include "kptnode.h"
 #include "kptxmlloaderobject.h"
-#include <kptdebug.h>
+#include "kptdebug.h"
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 #include <KoStore.h>
 
-#include "QDomDocument"
+#include <QDomDocument>
 
 
 namespace KPlato

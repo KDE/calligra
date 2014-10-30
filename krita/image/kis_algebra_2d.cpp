@@ -18,7 +18,9 @@
 
 #include "kis_algebra_2d.h"
 
+#include <QPainterPath>
 #include <kis_debug.h>
+
 
 #define SANITY_CHECKS
 
@@ -46,11 +48,32 @@ void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPoi
             isInRange(pt->y(), p0.y(), p1.y())) {
 
             QPointF salt = 1.0e-3 * inwardUnitNormal(edge, polygonDirection);
-            *pt += salt;
+
+            QPointF adjustedPoint = *pt + salt;
+
+            // in case the polygon is self-intersecting, polygon direction
+            // might not help
+            if (kisDistanceToLine(adjustedPoint, QLineF(p0, p1)) < 1e-4) {
+                adjustedPoint = *pt - salt;
 
 #ifdef SANITY_CHECKS
-            KIS_ASSERT_RECOVER_NOOP(kisDistanceToLine(*pt, QLineF(p0, p1)) > 1e-4);
+                if (kisDistanceToLine(adjustedPoint, QLineF(p0, p1)) < 1e-4) {
+                    qDebug() << ppVar(*pt);
+                    qDebug() << ppVar(adjustedPoint);
+                    qDebug() << ppVar(QLineF(p0, p1));
+                    qDebug() << ppVar(salt);
+
+                    qDebug() << ppVar(poly.containsPoint(*pt, Qt::OddEvenFill));
+
+                    qDebug() << ppVar(kisDistanceToLine(*pt, QLineF(p0, p1)));
+                    qDebug() << ppVar(kisDistanceToLine(adjustedPoint, QLineF(p0, p1)));
+                }
+
+                *pt = adjustedPoint;
+
+                KIS_ASSERT_RECOVER_NOOP(kisDistanceToLine(*pt, QLineF(p0, p1)) > 1e-4);
 #endif /* SANITY_CHECKS */
+            }
         }
     }
 }
@@ -83,6 +106,22 @@ qreal angleBetweenVectors(const QPointF &v1, const QPointF &v2)
     qreal a2 = std::atan2(v2.y(), v2.x());
 
     return a2 - a1;
+}
+
+QPainterPath smallArrow()
+{
+    QPainterPath p;
+
+    p.moveTo(5, 2);
+    p.lineTo(-3, 8);
+    p.lineTo(-5, 5);
+    p.lineTo( 2, 0);
+    p.lineTo(-5,-5);
+    p.lineTo(-3,-8);
+    p.lineTo( 5,-2);
+    p.arcTo(QRectF(3, -2, 4, 4), 90, -180);
+
+    return p;
 }
 
 }
