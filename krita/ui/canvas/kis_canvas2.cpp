@@ -183,6 +183,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
         KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
+        manager->setVisible(true);
         m_d->canvasWidget->addDecoration(manager);
     }
 
