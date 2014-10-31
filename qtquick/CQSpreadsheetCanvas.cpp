@@ -95,7 +95,7 @@ public:
         }
     }
 
-    QRectF getFragmentPosition(cont QTextBlock& block, const QTextFragment& fragment)
+    QRectF getFragmentPosition(const QTextBlock& block, const QTextFragment& fragment)
     {
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
