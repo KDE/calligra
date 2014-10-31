@@ -1,7 +1,5 @@
 project(calligraqtquickcomponents)
 
-include(GNUInstallDirs)
-
 set(calligraqtquickcomponents_SRCS
     CQThumbnailItem.cpp
     CQPresentationModel.cpp
