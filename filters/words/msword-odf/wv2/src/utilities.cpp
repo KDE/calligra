@@ -60,13 +60,13 @@ namespace wvWare
     {
         QString s;
         s.setNum(i);
-        return std::string(s.toLocal8Bit());
+        return std::string(s.toLatin1());
     }
 
     std::string uint2string( unsigned int i )
     {
         QString s;
         s.setNum(i);
-        return std::string(s.toLocal8Bit());
+        return std::string(s.toLatin1());
     }
 } // namespace wvWare
