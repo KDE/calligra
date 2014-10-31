@@ -638,6 +638,12 @@ endif(POPPLER_FOUND)
 
 
 ##
+## Test for libgit2 and Libqgit2
+##
+macro_optional_find_package(Libgit2)
+macro_optional_find_package(Libqgit2)
+
+##
 ## Generate a file for prefix information
 ##
 

@@ -1,5 +1,3 @@
-find_package(Libgit2 REQUIRED)
-find_package(Libqgit2 REQUIRED)
 include_directories(${LIBGIT2_INCLUDE_DIR} ${LIBQGIT2_INCLUDE_DIR})
 
 # LibQGit2 requires exception support to be turned on
