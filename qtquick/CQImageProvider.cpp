@@ -45,7 +45,7 @@ QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize
         *size = image.size();
         return requestedSize.isValid() ? image.scaled(requestedSize, Qt::KeepAspectRatioByExpanding) : image;
     }
-    *size = new QSize();
+    *size = QSize();
     return QImage();
 }
 
