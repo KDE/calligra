@@ -39,13 +39,12 @@
 class KoDocumentSectionDelegate::Private
 {
 public:
-    Private() : view(0), edit(0), isPainting(false) { }
+    Private() : view(0), edit(0) {}
 
     KoDocumentSectionView *view;
     QPointer<QWidget> edit;
     KoDocumentSectionToolTip tip;
     static const int margin = 1;
-    bool isPainting;
 };
 
 KoDocumentSectionDelegate::KoDocumentSectionDelegate(KoDocumentSectionView *view, QObject *parent)
@@ -81,12 +80,8 @@ QSize KoDocumentSectionDelegate::sizeHint(const QStyleOptionViewItem &option, co
 
 void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
 {
-    if (d->isPainting) {
-        return;
-    }
     p->save();
     {
-        d->isPainting = true;
         QStyleOptionViewItemV4 option = getOptions(o, index);
         QStyle *style = option.widget ? option.widget->style() : QApplication::style();
         style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
@@ -98,7 +93,6 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
         drawThumbnail(p, option, index);
         drawDecoration(p, option, index);
         drawProgressBar(p, option, index);
-        d->isPainting = false;
     }
     p->restore();
 }
