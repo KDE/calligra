@@ -1,9 +1,11 @@
 [Desktop Entry]
-Version=1.0
 Type=Application
-GenericName=Word Processing
-Name=Calligra Words Gemini
-Exec=calligrawordsgemini
-Icon=calligrawords
-MimeType=application/x-calligrawords;
+Name=Calligra Gemini
+Version=1.0
+GenericName=Word Processing and Presentation
+Exec=calligragemini %u
+Icon=calligragemini
+MimeType=application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;
+X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
+X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.text-master,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/msword,application/rtf,application/x-mswrite,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-works,application/vnd.wordperfect,application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.presentation-template,application/x-kpresenter,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template
 Categories=Qt;KDE;Office;
