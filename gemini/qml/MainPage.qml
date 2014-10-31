@@ -422,7 +422,7 @@ Page {
                     opacity: parent.checked ? 0.96 : 0;
                     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 }
-                OptionsPanel {}
+                OptionsPanel { onInteractionStarted: closeToolbarMenus(); }
             }
         }
         Row {
@@ -480,7 +480,7 @@ Page {
                 checkedColor: "#00adf5";
                 checkedOpacity: 0.6;
                 onClicked: closeToolbarMenus(optionsButton2);
-                OptionsPanel {}
+                OptionsPanel { onInteractionStarted: closeToolbarMenus(); }
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;

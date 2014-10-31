@@ -20,6 +20,7 @@ import QtQuick 1.1
 import "../components"
 
 Item {
+    signal interactionStarted();
     opacity: parent.checked ? 1 : 0;
     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
     anchors {
@@ -61,7 +62,10 @@ Item {
             font: Settings.theme.font("optionsMenu");
             height: Settings.theme.adjustedPixel(70);
             width: parent.width;
-            onClicked: switchToDesktopAction.trigger();
+            onClicked: {
+                base.interactionStarted();
+                switchToDesktopAction.trigger();
+            }
             highlight: true; highlightOpacity: 0.6;
         }
         Button {
