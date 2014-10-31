@@ -89,5 +89,3 @@ private:
 };
 
 #endif // VIEWMODESWITCHEVENT_H
-
-extern QMap< QString, QString > m;
