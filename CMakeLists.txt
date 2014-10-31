@@ -1015,9 +1015,9 @@ if(SHOULD_BUILD_DOC)
     add_subdirectory(doc)
 endif(SHOULD_BUILD_DOC)
 
-if(SHOULD_BUILD_PLUGIN_QTQUICK)
+if(SHOULD_BUILD_PART_QTQUICK)
     add_subdirectory(qtquick)
-endif(SHOULD_BUILD_PLUGIN_QTQUICK)
+endif(SHOULD_BUILD_PART_QTQUICK)
 
 if(SHOULD_BUILD_GEMINI)
     add_subdirectory(gemini)
