@@ -25,7 +25,7 @@
 
 #include <KGlobal>
 
-const char *CQImageProvider::identificationString = "cqimage";
+const char CQImageProvider::identificationString[] = "cqimage";
 CQImageProvider *CQImageProvider::s_imageProvider = 0;
 
 CQImageProvider::CQImageProvider()
@@ -45,7 +45,7 @@ QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize
         *size = image.size();
         return requestedSize.isValid() ? image.scaled(requestedSize, Qt::KeepAspectRatioByExpanding) : image;
     }
-    size = new QSize();
+    *size = new QSize();
     return QImage();
 }
 
