@@ -396,7 +396,7 @@ void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
     m_selection = canvas->shapeManager()->selection();
     m_document = canvas->document();
     connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
-    m_timer->start();  
+    m_timer->start();
 }
 
 void KWStatisticsWidget::unsetCanvas()

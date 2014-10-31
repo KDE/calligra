@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef LINKLAYER_H
-#define LINKLAYER_H
+#ifndef CQLINKLAYER_H
+#define CQLINKLAYER_H
 
 #include <QDeclarativeItem>
 
@@ -64,4 +64,4 @@ private:
     Private* d;
 };
 
-#endif // LINKLAYER_H
+#endif // CQLINKLAYER_H

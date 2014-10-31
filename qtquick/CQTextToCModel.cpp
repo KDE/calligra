@@ -64,8 +64,7 @@ public:
     QTimer updateTimer;
     QTimer doneTimer;
 
-    int resolvePageNumber(const QTextBlock &headingBlock)
-    {
+    int resolvePageNumber(const QTextBlock &headingBlock) {
         KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
         KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
         if (rootArea) {
@@ -106,14 +105,11 @@ CQTextToCModel::~CQTextToCModel()
 QVariant CQTextToCModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
-    if (index.isValid())
-    {
+    if (index.isValid()) {
         int row = index.row();
-        if (row > -1 && row < d->entries.count())
-        {
+        if (row > -1 && row < d->entries.count()) {
             const TextToCModelEntry* entry = d->entries.at(row);
-            switch(role)
-            {
+            switch(role) {
                 case PageNumber:
                     result.setValue<int>(entry->pageNumber);
                     break;
@@ -132,8 +128,9 @@ QVariant CQTextToCModel::data(const QModelIndex& index, int role) const
 
 int CQTextToCModel::rowCount(const QModelIndex& parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->entries.count();
 }
 
@@ -168,11 +165,9 @@ void CQTextToCModel::updateToC()
     qDeleteAll(d->entries.begin(), d->entries.end());
     d->entries.clear();
 
-    while (block.isValid())
-    {
+    while (block.isValid()) {
         QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(KoParagraphStyle::OutlineLevel))
-        {
+        if (format.hasProperty(KoParagraphStyle::OutlineLevel)) {
             TextToCModelEntry* entry = new TextToCModelEntry();
             entry->title = block.text();
             entry->level = format.intProperty(KoParagraphStyle::OutlineLevel);
@@ -192,14 +187,14 @@ QObject* CQTextToCModel::canvas() const
 void CQTextToCModel::setCanvas(QObject* newCanvas)
 {
     beginResetModel();
-    if (d->documentLayout)
+    if (d->documentLayout) {
         d->documentLayout->disconnect(this);
+    }
     d->canvas = 0;
     d->document = 0;
     d->documentLayout = 0;
     CQTextDocumentCanvas* canvas = qobject_cast<CQTextDocumentCanvas*>(newCanvas);
-    if (canvas)
-    {
+    if (canvas) {
         d->canvas = canvas;
         d->document = canvas->document()->mainFrameSet()->document();
         d->documentLayout = static_cast<KoTextDocumentLayout *>(d->document->documentLayout());

@@ -41,7 +41,7 @@ public:
 
     QSize thumbnailSize() const;
     void setThumbnailSize(const QSize& newSize);
-signals:
+Q_SIGNALS:
     void documentControllerChanged();
     void thumbnailSizeChanged();
 

@@ -105,7 +105,7 @@ public:
 
     QSizeF thumbnailSize() const;
     void setThumbnailSize(const QSizeF& newSize);
-signals:
+Q_SIGNALS:
     void searchTermChanged();
     void documentModelChanged();
     void documentSizeChanged();
@@ -127,7 +127,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e);
 
-private slots:
+private Q_SLOTS:
     void findNoMatchFound();
     void findMatchFound(const KoFindMatch& match);
     void updateCanvas();

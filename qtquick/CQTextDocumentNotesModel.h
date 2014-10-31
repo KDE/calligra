@@ -54,7 +54,7 @@ public:
     Q_SIGNAL void countChanged();
 private:
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 #endif // CQTEXTDOCUMENTNOTESMODEL_H

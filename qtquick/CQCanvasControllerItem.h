@@ -69,7 +69,7 @@ public Q_SLOTS:
     void fitToWidth(qreal width);
 
     void returnToBounds();
-    
+
 Q_SIGNALS:
     void canvasChanged();
     void flickableChanged();

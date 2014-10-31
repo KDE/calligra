@@ -36,7 +36,7 @@ class CQCanvasController : public QObject, public KoCanvasController
 public:
     explicit CQCanvasController(KActionCollection* actionCollection);
     virtual ~CQCanvasController();
- 
+
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
     virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);

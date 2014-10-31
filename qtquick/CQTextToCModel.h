@@ -35,7 +35,7 @@ public:
         Level,
         PageNumber
     };
-    CQTextToCModel(QObject* parent = 0);
+    explicit CQTextToCModel(QObject* parent = 0);
     virtual ~CQTextToCModel();
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
@@ -54,7 +54,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 #endif // CQTEXTTOCMODEL_H
