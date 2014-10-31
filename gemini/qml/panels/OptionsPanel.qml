@@ -20,6 +20,7 @@ import QtQuick 1.1
 import "../components"
 
 Item {
+    id: base;
     signal interactionStarted();
     opacity: parent.checked ? 1 : 0;
     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
