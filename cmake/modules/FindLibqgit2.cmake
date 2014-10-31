@@ -1,3 +1,8 @@
+# Copyright (c) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 # - Try to find the libqgit2 library
 # Once done this will define
 #
