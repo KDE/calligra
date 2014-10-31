@@ -30,12 +30,15 @@
 #include <KDebug>
 
 CQTextDocumentModel::CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager)
-    : kw_document(document), kw_shapemanager(shapemanager), m_thumbnailSize(QSize(512, 512))
+    : QAbstractListModel(parent), kw_document(document), kw_shapemanager(shapemanager), m_thumbnailSize(QSize(512, 512))
 {
 }
 
 int CQTextDocumentModel::rowCount(const QModelIndex& parent) const
 {
+    if(parent.isValid()) {
+        return 0;
+    }
     return kw_document->pageManager()->pageCount();
 }
 

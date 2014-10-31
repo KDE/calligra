@@ -275,8 +275,8 @@ void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 {
     qreal newZoom = d->zoom + d->zoomChange + amount;
     if (d->zooming && newZoom >= KoZoomMode::minimumZoom() && newZoom <= KoZoomMode::maximumZoom() ) {
-        qreal oldWidth = d->placeholderTarget.width();
-        qreal oldHeight = d->placeholderTarget.height();
+//         qreal oldWidth = d->placeholderTarget.width();
+//         qreal oldHeight = d->placeholderTarget.height();
         qreal oldZoom = d->zoom + d->zoomChange;
 
         d->zoomChange += amount;
