@@ -180,7 +180,12 @@ public:
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
 #else
-        touchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+        QStringList dirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
+        if(dirs.length() < 1) {
+            KMessageBox::sorry(q, i18n("The Calligra Qt Quick components were not found. This means your installation is broken."));
+        } else {
+            touchView->engine()->addImportPath(dirs.value(0));
+        }
         QString mainqml = KGlobal::dirs()->findResource("data", "calligragemini/calligragemini.qml");
 #endif
 
