@@ -89,7 +89,7 @@ calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLI
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA PLUGIN_TEXTSHAPE)
 calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(PART_SHEETS "Sheets engine"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS PART_WORDS PART_STAGE)# SHEETS_PART)
+calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
 
 # apps
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
@@ -102,7 +102,7 @@ calligra_define_product(APP_KEXI "Kexi app (for Desktop)"  REQUIRES LIB_CALLIGRA
 calligra_define_product(APP_FLOW "Flow app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(APP_GEMINI "The Calligra Gemini application" NEEDS PART_QTQUICK)
+calligra_define_product(APP_GEMINI "The Calligra Gemini application" REQUIRES PART_QTQUICK)
 # TODO: this needs to be split up by app products
 calligra_define_product(DOC "Calligra Documentations")
 
