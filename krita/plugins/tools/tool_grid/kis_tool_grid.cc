@@ -48,7 +48,8 @@ void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     KisTool::activate(toolActivation, shapes);
     m_canvas->updateCanvas();
 
-    if (!m_canvas->view()->gridManager()->visible()) {
+    KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+    if (decoration && !decoration->visible()) {
         m_canvas->view()->showFloatingMessage( "The grid is not visible. Press Return to show it.",
                                               koIcon("krita_tool_grid"));
     }
@@ -164,7 +165,10 @@ void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolGrid::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Return) {
-        m_canvas->view()->gridManager()->setVisible(true);
+        KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+        if (decoration) {
+            decoration->setVisible(true);
+        }
         m_canvas->view()->gridManager()->checkVisibilityAction(true);
     }
     KoToolBase::keyPressEvent(event);
