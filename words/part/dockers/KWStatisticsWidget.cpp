@@ -395,7 +395,11 @@ void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
     m_resourceManager = canvas->resourceManager();
     m_selection = canvas->shapeManager()->selection();
     m_document = canvas->document();
-    connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
+    // It is apparently possible to have a document which lacks a main frameset...
+    // so let's handle that and avoid crashes.
+    if(m_document->mainFrameSet()) {
+        connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
+    }
     m_timer->start();
 }
 
