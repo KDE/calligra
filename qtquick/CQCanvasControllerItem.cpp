@@ -84,7 +84,7 @@ CQCanvasControllerItem::~CQCanvasControllerItem()
     delete d;
 }
 
-void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
+void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget*)
 {
     if (!d->zooming || d->placeholder.isNull()) {
         return;

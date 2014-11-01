@@ -59,8 +59,9 @@ public:
         qDeleteAll(linkTargets);
         linkTargets.clear();
 
-        if (!canvas)
+        if (!canvas) {
             return;
+        }
         foreach(const KoShape* shape, canvas->activeSheet()->shapes()) {
             if (!shape->hyperLink().isEmpty()) {
                 QObject * obj = new QObject(canvas);
@@ -102,8 +103,7 @@ public:
         // For now leave it like this, more important things are needed.
         QTextLayout* layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if (!line.isValid())
-        {
+        if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
             return QRectF();
         }

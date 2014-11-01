@@ -183,8 +183,7 @@ public:
         QTextBlock block = textEditor->document()->findBlock(position);
         QTextLayout* layout = block.layout();
         QTextLine line = layout->lineForTextPosition(position - block.position());
-        if (!line.isValid())
-        {
+        if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
             return QRectF();
         }

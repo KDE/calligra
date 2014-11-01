@@ -51,16 +51,18 @@ CQPresentationModel::~CQPresentationModel()
 
 QVariant CQPresentationModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() && d->document)
+    if (!index.isValid() && d->document) {
         return QVariant();
+    }
 
     switch(role) {
         case ThumbnailRole: {
             if (d->thumbnails.contains(index.row())) {
                 QPixmap thumb = d->thumbnails.value(index.row());
 
-                if (!thumb.isNull())
+                if (!thumb.isNull()) {
                     return thumb;
+                }
 
                 d->thumbnails.remove(index.row());
             }

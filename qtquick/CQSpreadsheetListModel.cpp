@@ -56,8 +56,9 @@ CQSpreadsheetListModel::~CQSpreadsheetListModel()
 
 QVariant CQSpreadsheetListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || !d->map)
+    if (!index.isValid() || !d->map) {
         return QVariant();
+    }
 
     switch(role) {
         case SheetNameRole:

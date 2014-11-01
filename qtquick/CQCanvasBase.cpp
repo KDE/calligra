@@ -76,8 +76,7 @@ void CQCanvasBase::setShapeTransparency(const qreal& newTransparency)
 
 void CQCanvasBase::setCanvasController(CQCanvasController* controller)
 {
-    if (d->canvasController != controller)
-    {
+    if (d->canvasController != controller) {
         d->canvasController = controller;
         emit canvasControllerChanged();
     }

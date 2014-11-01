@@ -482,8 +482,9 @@ void KoDocumentSectionDelegate::drawThumbnail(QPainter *p, const QStyleOptionVie
         offset.setX(r.width()/2 - img.width()/2);
         offset.setY(r.height()/2 - img.height()/2);
 
-        if (!img.isNull() && img.width() > 0 && img.height() > 0)
+        if (!img.isNull() && img.width() > 0 && img.height() > 0) {
             p->drawImage(r.topLeft() + offset, img);
+        }
     }
     p->restore();
 }

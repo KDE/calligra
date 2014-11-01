@@ -73,8 +73,9 @@ public:
         qDeleteAll(linkTargets);
         linkTargets.clear();
 
-        if (!view)
+        if (!view) {
             return;
+        }
         foreach(const KoShape* shape, view->activePage()->shapes()) {
             if (!shape->hyperLink().isEmpty()) {
                 QObject * obj = new QObject(view);
@@ -210,8 +211,9 @@ QObject* CQPresentationCanvas::textEditor() const
 void CQPresentationCanvas::deselectEverything()
 {
     KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
-    if (editor)
+    if (editor) {
         editor->clearSelection();
+    }
     d->canvasBase->shapeManager()->selection()->deselectAll();
 }
 
@@ -246,9 +248,9 @@ void CQPresentationCanvas::openFile(const QString& uri)
             // why their canvas is so terribly empty.
             d->document->initEmpty();
         }
-    }
-    else
+    } else {
         d->document->openUrl (KUrl (uri));
+    }
 
     d->document->setModified(false);
     qApp->processEvents();

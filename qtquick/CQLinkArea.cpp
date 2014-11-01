@@ -91,11 +91,11 @@ void CQLinkArea::setLinks(const QVariantList& newLinks)
     // run through the new data and cache a data list with the information
     // so we don't have to interpret the QObjects all the time
     d->realLinks.clear();
-    foreach(const QVariant& var, newLinks)
-    {
+    foreach(const QVariant& var, newLinks) {
         QObject* obj = var.value<QObject*>();
-        if (!obj)
+        if (!obj) {
             continue;
+        }
         LinkLayerLink link;
         link.linkRect = obj->property("linkRect").toRectF().adjusted(-d->wiggleFactor, -d->wiggleFactor, d->wiggleFactor, d->wiggleFactor);
         link.linkTarget = obj->property("linkTarget").toUrl();
@@ -170,5 +170,6 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 void CQLinkArea::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
+    Q_UNUSED(event)
     emit doubleClicked();
 }
