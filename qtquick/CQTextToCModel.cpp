@@ -118,6 +118,9 @@ QVariant CQTextToCModel::data(const QModelIndex& index, int role) const
                     break;
                 case Title:
                 default:
+                    // Allowing the fallthrough here (explicitly mentioning our own Title entry)
+                    // means that the predefined Qt Quick roles are also allowed to be filled
+                    // with useful data
                     result.setValue<QString>(entry->title);
                     break;
             }
