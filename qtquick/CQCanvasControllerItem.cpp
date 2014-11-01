@@ -197,17 +197,16 @@ qreal CQCanvasControllerItem::maximumZoom() const
 
 void CQCanvasControllerItem::setMinimumZoom(qreal newZoom)
 {
-    if (newZoom != d->minimumZoom) {
+    if (newZoom != d->minimumZoom && newZoom < KoZoomMode::maximumZoom() && newZoom > 0.f) {
         d->minimumZoom = newZoom;
-        if ( d->minimumZoom > 0.f )
-            KoZoomMode::setMinimumZoom( d->minimumZoom );
+        KoZoomMode::setMinimumZoom( d->minimumZoom );
         emit minimumZoomChanged();
     }
 }
 
 void CQCanvasControllerItem::setMaximumZoom(qreal newZoom)
 {
-    if (newZoom != d->maximumZoom) {
+    if (newZoom != d->maximumZoom && newZoom > KoZoomMode::minimumZoom()) {
         d->maximumZoom = newZoom;
         KoZoomMode::setMaximumZoom( d->maximumZoom );
         emit maximumZoomChanged();
