@@ -94,6 +94,11 @@ KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
     return d->canvasMode;
 }
 
+KoCanvasBase* KoCanvasController::canvas() const
+{
+    return 0;
+}
+
 void KoCanvasController::setDocumentSize(const QSize &sz)
 {
     d->documentSize = sz;
