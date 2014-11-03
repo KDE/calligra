@@ -29,6 +29,7 @@
 #include <kemailsettings.h>
 
 #include <QDebug>
+#include <QDir>
 #include <QTimer>
 #include <QTextCodec>
 
@@ -176,6 +177,12 @@ QString GitController::currentFile() const
 void GitController::setCurrentFile(QString& newFile)
 {
     d->currentFile = newFile;
+    // OK, so some silliness here. This ensures a bit of sanity later, because otherwise we
+    // end up comparing a localised checkout dir to a non-localised current file (since that
+    // is created from a URL, and the checkout dir isn't)
+    if("\\" == QDir::separator() &&  newFile.contains("/")) {
+        d->currentFile = d->currentFile.replace("/", QDir::separator());
+    }
     emit currentFileChanged();
 }
 
