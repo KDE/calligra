@@ -803,8 +803,9 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
 void KoToolManager::attemptCanvasControllerRemoval(QObject* controller)
 {
     KoCanvasControllerProxyObject* controllerActual = qobject_cast<KoCanvasControllerProxyObject*>(controller);
-    if (controllerActual)
+    if (controllerActual) {
         removeCanvasController(controllerActual->canvasController());
+    }
 }
 
 void KoToolManager::updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController)

@@ -39,7 +39,7 @@ public:
     QString source() const;
 
     virtual qreal shapeTransparency() const;
-    virtual void setShapeTransparency(const qreal& newTransparency);
+    virtual void setShapeTransparency(qreal newTransparency);
 public Q_SLOTS:
     virtual void setSource(const QString &source);
     virtual void render(QPainter* painter, const QRectF& target) = 0;

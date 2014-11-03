@@ -51,7 +51,10 @@ public:
 
     Q_INVOKABLE void toggleExpanded(int index);
     void addEntry(const QString& text, const QString& image, const QString& color, KoShape* shape);
-    Q_SIGNAL void countChanged();
+
+Q_SIGNALS:
+    void countChanged();
+
 private:
     class Private;
     Private* const d;

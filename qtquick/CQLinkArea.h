@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef CQLINKLAYER_H
-#define CQLINKLAYER_H
+#ifndef CQLINKAREA_H
+#define CQLINKAREA_H
 
 #include <QDeclarativeItem>
 
@@ -61,7 +61,7 @@ protected:
 
 private:
     class Private;
-    Private* d;
+    Private* const d;
 };
 
-#endif // CQLINKLAYER_H
+#endif // CQLINKAREA_H

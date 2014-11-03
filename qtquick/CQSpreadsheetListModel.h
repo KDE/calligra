@@ -34,8 +34,8 @@ public:
         ThumbnailRole
     };
 
-    CQSpreadsheetListModel(QObject* parent = 0);
-    ~CQSpreadsheetListModel();
+    explicit CQSpreadsheetListModel(QObject* parent = 0);
+    virtual ~CQSpreadsheetListModel();
 
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;

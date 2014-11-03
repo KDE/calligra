@@ -165,7 +165,7 @@ public:
         return fragmentPosition.adjusted(layout->position().x(), layout->position().y(), 0, 0);
     }
 
-    QList<KoShape*> deepShapeFind(QList<KoShape*> shapes)
+    QList<KoShape*> deepShapeFind(const QList<KoShape*>& shapes)
     {
         QList<KoShape*> allShapes;
         foreach(KoShape* shape, shapes) {
@@ -380,7 +380,7 @@ qreal CQTextDocumentCanvas::shapeTransparency() const
     return CQCanvasBase::shapeTransparency();
 }
 
-void CQTextDocumentCanvas::setShapeTransparency(const qreal& newTransparency)
+void CQTextDocumentCanvas::setShapeTransparency(qreal newTransparency)
 {
     if (d->canvas && d->canvas->shapeManager()) {
         KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();

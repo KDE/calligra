@@ -82,7 +82,7 @@ public:
     Q_INVOKABLE qreal pagePosition( int page );
 
     virtual qreal shapeTransparency() const;
-    virtual void setShapeTransparency(const qreal& newTransparency);
+    virtual void setShapeTransparency(qreal newTransparency);
 
     QObject* textEditor();
     // Deselects any text selection present in the document, and deselects all shapes
