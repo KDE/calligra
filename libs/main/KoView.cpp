@@ -365,7 +365,7 @@ KoMainWindow * KoView::mainWindow() const
     // is not the top level window. The code below ensures you can still get access to it, even
     // in that case.
     KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
-    QWidget* parent = this->parentWidget();
+    QWidget* parent = parentWidget();
     while (!mw) {
         mw = dynamic_cast<KoMainWindow*>(parent);
         parent = parent->parentWidget();
