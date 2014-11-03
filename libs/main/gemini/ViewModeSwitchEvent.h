@@ -58,7 +58,7 @@ class ViewModeSwitchEvent : public QEvent
 {
 public:
     enum ViewModeEventType {
-        AboutToSwitchViewModeEvent = QEvent::User + 10,
+        AboutToSwitchViewModeEvent = QEvent::User + 1,
         SwitchedToDesktopModeEvent,
         SwitchedToTouchModeEvent,
     };
