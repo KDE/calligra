@@ -12,6 +12,7 @@
   <name xml:lang="fr">Sheets</name>
   <name xml:lang="ia">Sheets</name>
   <name xml:lang="it">Sheets</name>
+  <name xml:lang="ja">Sheets</name>
   <name xml:lang="nl">Werkbladen</name>
   <name xml:lang="pl">Arkusze</name>
   <name xml:lang="pt">Sheets</name>
@@ -29,6 +30,7 @@
   <summary xml:lang="fr">Tableur</summary>
   <summary xml:lang="ia">Folio de calculo electronic</summary>
   <summary xml:lang="it">Foglio elettronico</summary>
+  <summary xml:lang="ja">スプレッドシート</summary>
   <summary xml:lang="nl">Rekenblad</summary>
   <summary xml:lang="pl">Arkusz kalkulacyjny</summary>
   <summary xml:lang="pt">Folha de Cálculo</summary>
@@ -47,6 +49,7 @@
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
     <p xml:lang="fr">Calligra Sheets est un tableur complet. Utilisez-le pour créer rapidement différents tableaux et calculs, comme les revenus, les dépenses, les heures de travail de vos employés, etc.</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolate e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
+    <p xml:lang="ja">Calligra Sheets は豊富な機能を持った表計算ツールです。収入と支出、従業員の労働時間などビジネスなどに必要なスプレッドシートの作成、計算を短時間で行うことができます。</p>
     <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
     <p xml:lang="pl">Arkusze Calligra jest pełnowartościowym narzędziem arkusza kalkulacyjnego i obliczeń. Użyj go do szybkiego tworzenia i obliczania rozmaitych biznesowych arkuszy kalkulacyjnych, takich jak przychód i rozchód, godziny pracy pracowników, itp.</p>
     <p xml:lang="pt">O Calligra Sheets é uma folha de cálculo poderosa. Use-o para criar e calcular rapidamente várias folhas de cálculo relacionadas com o negócio, como receitas e despesas, horas de trabalho de empregados, etc.</p>
@@ -64,6 +67,7 @@
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
+    <p xml:lang="ja">機能:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Características:</p>
@@ -79,6 +83,7 @@
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
       <li xml:lang="fr">Utilisez des formes pour prendre des notes ou des cartes heuristiques</li>
       <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
+      <li xml:lang="ja">シェイプを使用したメモの貼り付けやマインドマップの作成</li>
       <li xml:lang="nl">Gebruik vormen om notities of bedenksels vast te leggen</li>
       <li xml:lang="pl">Używa kształtów do robienia notatek i map umysłu</li>
       <li xml:lang="pt">Usar formas para tirar notas ou mapas mentais</li>
@@ -94,6 +99,7 @@
       <li xml:lang="es">Dispone de una amplia gama de plantillas predefinidas</li>
       <li xml:lang="fr">Large éventail de modèles prédéfinis</li>
       <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
+      <li xml:lang="ja">幅広い種類のテンプレート</li>
       <li xml:lang="nl">Grote reeks van voorgedefinieerde sjablonen</li>
       <li xml:lang="pl">Szeroki wybór uprzednio stworzonych szablonów</li>
       <li xml:lang="pt">Gama alargada de modelos predefinidos</li>
@@ -109,6 +115,7 @@
       <li xml:lang="es">Dispone de una lista de fórmulas potente y completa</li>
       <li xml:lang="fr">Liste de formules complète et variée</li>
       <li xml:lang="it">Elenco completo e potente di formule</li>
+      <li xml:lang="ja">強力かつ包括的な数式</li>
       <li xml:lang="nl">Krachtige en uitgebreide lijst met formules</li>
       <li xml:lang="pl">Przydatny i wyczerpujący spis równań</li>
       <li xml:lang="pt">Lista de fórmulas poderosa e compreensiva</li>
@@ -123,6 +130,7 @@
       <li xml:lang="es">Funciona en un entorno familiar</li>
       <li xml:lang="fr">Travaillez dans un environnement familier</li>
       <li xml:lang="it">Opera in un ambiente familiare</li>
+      <li xml:lang="ja">使い慣れた環境での操作</li>
       <li xml:lang="nl">Werk in een bekende omgeving</li>
       <li xml:lang="pl">Praca w znajomym środowisku</li>
       <li xml:lang="pt">Funciona num ambiente familiar</li>
