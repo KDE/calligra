@@ -253,8 +253,7 @@ void GitController::commitAndPushCurrentFile()
     connect(&repo, SIGNAL(cloneProgress(int)), SLOT(transferProgress(int)));
     try
     {
-        if(d->currentFile.startsWith(d->cloneDir))
-        {
+        if(d->currentFile.startsWith(d->cloneDir)) {
             repo.open(QString("%1/.git").arg(d->cloneDir));
             // ask commit message and checkbox for push (default on, remember?)
             bool ok = false;
@@ -312,6 +311,8 @@ void GitController::commitAndPushCurrentFile()
                 push.execute();
                 d->commitAndPushAction->setEnabled(false);
             }
+        } else {
+            KMessageBox::sorry(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile).arg(d->cloneDir));
         }
     }
     catch (const LibQGit2::Exception& ex) {
