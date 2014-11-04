@@ -21,6 +21,7 @@
 
 #include "gitplugin.h"
 #include "gitcontroller.h"
+#include "gitlogmodel.h"
 #include "checkoutcreator.h"
 
 #include <qdeclarative.h>
@@ -33,6 +34,7 @@ void GitPlugin::registerTypes(const char* uri)
     Q_UNUSED(uri)
     Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
     qmlRegisterType<GitController>("Calligra.Gemini.Git", 1, 0, "GitController");
+    qmlRegisterType<GitLogModel>("Calligra.Gemini.Git", 1, 0, "GitLogModel");
     qmlRegisterType<QAbstractListModel>();
 }
 

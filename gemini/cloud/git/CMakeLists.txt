@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
 set(git_plugin_SRCS
     gitplugin.cpp
     gitcontroller.cpp
+    gitlogmodel.cpp
     documentlistmodel.cpp
     checkoutcreator.cpp
 )
