@@ -120,7 +120,7 @@ Item {
                     id: timeText;
                     width: parent.width;
                     height: paintedHeight;
-                    font: Settings.theme.font("templateLabel");
+                    font: Settings.theme.font("applicationLight");
                     color: "#5b6573";
                     text: "on " + model.time;
                 }
@@ -128,7 +128,7 @@ Item {
                     id: nameText;
                     width: parent.width;
                     height: paintedHeight;
-                    font: Settings.theme.font("templateLabel");
+                    font: Settings.theme.font("applicationLight");
                     color: "#5b6573";
                     text: "by " + model.authorName;
                 }
