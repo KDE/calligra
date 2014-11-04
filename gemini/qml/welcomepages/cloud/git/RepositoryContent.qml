@@ -30,6 +30,121 @@ Item {
     GitController {
         id: gitController;
         currentFile: Settings.currentFile;
+        onPullCompleted: {
+            logModel.refreshLog();
+            updatedLabel.opacity = 1;
+        }
+    }
+    GitLogModel {
+        id: logModel;
+        repoDir: gitController.cloneDir;
+    }
+    Item {
+        id: logSidebar;
+        anchors {
+            margins: Constants.DefaultMargin;
+            top: parent.top;
+            right: parent.right;
+            bottom: parent.bottom;
+            bottomMargin: 0;
+        }
+        width: (parent.width / 4) - Constants.DefaultMargin;
+        CohereButton {
+            id: pullButton;
+            anchors {
+                top: parent.top;
+                horizontalCenter: parent.horizontalCenter;
+                margins: Settings.theme.adjustedPixel(8);
+            }
+            textColor: "#5b6573";
+            textSize: Settings.theme.adjustedPixel(18);
+            color: "#D2D4D5";
+            text: "Pull from upstream";
+            onClicked: gitController.pull();
+        }
+        Label {
+            id: updatedLabel;
+            opacity: 0;
+            Behavior on opacity {
+                SequentialAnimation {
+                    PropertyAnimation { duration: Constants.AnimationDuration; }
+                    ScriptAction { script: hideUpdate.start(); }
+                }
+            }
+            height: opacity * Constants.GridHeight / 2;
+            anchors {
+                top: pullButton.bottom;
+                left: parent.left;
+                right: parent.right;
+            }
+            text: "Update Completed!";
+            font: Settings.theme.font("templateLabel");
+            color: "#5b6573";
+            verticalAlignment: Text.AlignVCenter;
+            horizontalAlignment: Text.AlignHCenter;
+            Timer { id: hideUpdate; running: false; repeat: false; interval: 1000; onTriggered: updatedLabel.opacity = 0; }
+        }
+        ListView {
+            id: logListView;
+            model: logModel;
+            clip: true;
+            anchors {
+                margins: Constants.DefaultMargin;
+                top: updatedLabel.bottom;
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            header: Label {
+                width: logListView.width;
+                height: Constants.GridHeight / 2;
+                text: "Recent Changes";
+                font: Settings.theme.font("templateLabel");
+                color: "#5b6573";
+                verticalAlignment: Text.AlignVCenter;
+                horizontalAlignment: Text.AlignHCenter;
+            }
+            delegate: Column {
+                width: logListView.width;
+                height: childrenRect.height;
+                Text {
+                    id: messageText;
+                    width: parent.width;
+                    height: paintedHeight;
+                    font: Settings.theme.font("templateLabel");
+                    color: "#5b6573";
+                    text: model.shortMessage;
+                    wrapMode: Text.Wrap;
+                }
+                Text {
+                    id: timeText;
+                    width: parent.width;
+                    height: paintedHeight;
+                    font: Settings.theme.font("templateLabel");
+                    color: "#5b6573";
+                    text: "on " + model.time;
+                }
+                Text {
+                    id: nameText;
+                    width: parent.width;
+                    height: paintedHeight;
+                    font: Settings.theme.font("templateLabel");
+                    color: "#5b6573";
+                    text: "by " + model.authorName;
+                }
+                Item {
+                    width: parent.width;
+                    height: nameText.height;
+                    Rectangle {
+                        width: parent.width - (Constants.DefaultMargin * 2);
+                        height: 1;
+                        anchors.centerIn: parent;
+                        opacity: 0.3;
+                        color: "black";
+                    }
+                }
+            }
+        }
     }
     GridView {
         id: docList;
@@ -37,10 +152,13 @@ Item {
         contentWidth: width;
         anchors {
             margins: Constants.DefaultMargin;
-            fill: parent;
+            top: parent.top;
+            left: parent.left;
+            right: logSidebar.left;
+            bottom: parent.bottom;
             bottomMargin: 0;
         }
-        cellWidth: width / 4 - Constants.DefaultMargin;
+        cellWidth: width / 3 - Constants.DefaultMargin;
         cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
         model: gitController.documents;
         delegate: documentTile;
@@ -54,18 +172,6 @@ Item {
         font: Settings.theme.font("templateLabel");
         color: "#5b6573";
         visible: docList.count === 0;
-    }
-    CohereButton {
-        anchors {
-            top: parent.top;
-            right: parent.right;
-            margins: Settings.theme.adjustedPixel(8);
-        }
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
-        text: "Pull from upstream";
-        onClicked: gitController.pull();
     }
     Component {
         id: documentTile;
