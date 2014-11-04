@@ -65,7 +65,7 @@ public:
     void setUserForRemote(QString newUser);
 
     // Update the local copy of the git repository in cloneDir() from the remote
-    Q_INVOKABLE void pull() const;
+    Q_INVOKABLE void pull();
 
 public Q_SLOTS:
     QAction* commitAndPushCurrentFileAction();
@@ -73,6 +73,9 @@ public Q_SLOTS:
 
     void transferProgress(int progress);
 Q_SIGNALS:
+    void pushCompleted();
+    void pullCompleted();
+
     void cloneDirChanged();
     void currentFileChanged();
     void documentsChanged();

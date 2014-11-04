@@ -237,8 +237,7 @@ void GitController::setUserForRemote(QString newUser)
 
 QAction* GitController::commitAndPushCurrentFileAction()
 {
-    if(!d->commitAndPushAction)
-    {
+    if(!d->commitAndPushAction) {
         d->commitAndPushAction = new QAction(QIcon::fromTheme("folder-remote"), "Update Git Copy", this);
         connect(d->commitAndPushAction, SIGNAL(triggered(bool)), SLOT(commitAndPushCurrentFile()));
     }
@@ -258,8 +257,7 @@ void GitController::commitAndPushCurrentFile()
     // ensure file is in current repository
     LibQGit2::Repository repo;
     connect(&repo, SIGNAL(cloneProgress(int)), SLOT(transferProgress(int)));
-    try
-    {
+    try {
         if(d->currentFile.startsWith(d->cloneDir)) {
             repo.open(QString("%1/.git").arg(d->cloneDir));
             // ask commit message and checkbox for push (default on, remember?)
@@ -314,9 +312,9 @@ void GitController::commitAndPushCurrentFile()
                 connect(repo.remote(remoteName), SIGNAL(transferProgress(int)), SLOT(transferProgress(int)));
                 LibQGit2::Push push = repo.push(remoteName);
                 push.addRefSpec(QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName));
-                qDebug() << QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName);
                 push.execute();
                 d->commitAndPushAction->setEnabled(false);
+                emit pushCompleted();
             }
         } else {
             KMessageBox::sorry(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile).arg(d->cloneDir));
@@ -332,7 +330,7 @@ void GitController::transferProgress(int progress)
     qDebug() << Q_FUNC_INFO << sender() << progress;
 }
 
-void GitController::pull() const
+void GitController::pull()
 {
     // Don't allow committing unless the user details are sensible
     if(!d->checkUserDetails()) {
@@ -375,22 +373,16 @@ void GitController::pull() const
 
         git_merge_head_from_ref(&merge_heads[0], qrepo.data(), upstreamRef.data());
         int error = git_merge_analysis(&analysis, &preference, qrepo.data(), (const git_merge_head **)&merge_heads, 1);
-        if(error == GIT_OK)
-        {
+        if(error == GIT_OK) {
             if(GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
                 // If we're already up to date, yay, no need to do anything!
                 qDebug() << "all up to date, yeah!";
                 git_merge_head_free(merge_heads[0]);
-            }
-            else if(GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
+            } else if(GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
                 // this is silly, don't give me an unborn repository you silly person
                 qDebug() << "huh, we have an unborn repo here...";
                 git_merge_head_free(merge_heads[0]);
-            }
-            // This is terribly silly - fastforward is described as "check out head commit in
-            // remote branch, set local head to that commit, done". Turns out it's not that simple
-            // oh well, more sensible magic can be added later, for now the merge works
-            else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
+            } else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
                 // If the analysis says we can fast forward, then let's fast forward!
                 // ...unless preferences say to never fast forward, of course
                 qDebug() << "fast forwarding all up in that thang";
@@ -407,20 +399,15 @@ void GitController::pull() const
 
                 oid = git_merge_head_id(merge_heads[0]);
                 error = git_commit_lookup(&commit, qrepo.data(), oid);
-                if (error == GIT_OK)
-                {
+                if (error == GIT_OK) {
                     error = git_commit_tree(&tree, commit);
-                    if (error == GIT_OK)
-                    {
+                    if (error == GIT_OK) {
                         opts.checkout_strategy = GIT_CHECKOUT_SAFE;
                         error = git_checkout_tree(qrepo.data(), (git_object*)tree, &opts);
-                        if (error == GIT_OK)
-                        {
+                        if (error == GIT_OK) {
                             error = git_repository_head(&reference, qrepo.data());
-                            if (error == GIT_OK && error != GIT_ENOTFOUND)
-                            {
-                                if (error == GIT_OK)
-                                {
+                            if (error == GIT_OK && error != GIT_ENOTFOUND) {
+                                if (error == GIT_OK) {
                                     if (error == GIT_ENOTFOUND) {
                                         error = git_reference_create(
                                             &reference,
@@ -440,23 +427,24 @@ void GitController::pull() const
                                             d->signature,
                                             log_message.ptr);
 
-                                        if (target_ref)
+                                        if (target_ref) {
                                             git_reference_free(target_ref);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-                if (commit)
+                if (commit) {
                     git_commit_free(commit);
-
-                if (reference)
+                }
+                if (reference) {
                     git_reference_free(reference);
-
-                if (tree)
+                }
+                if (tree) {
                     git_tree_free(tree);
-
+                }
                 // Leaving this code in for now - this /should/ as far as i can tell do the same
                 // as the code above. However, it looks as though it doesn't. If anybody can work
                 // out why, i would appreciate learning what went wrong :P
@@ -475,14 +463,12 @@ void GitController::pull() const
                 if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
                     // but only if we're not told to not try and not do fast forwards!
                     KMessageBox::sorry(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
-                }
-                else {
+                } else {
                     git_merge(qrepo.data(), (const git_merge_head **) merge_heads, 1, NULL, NULL);
                     git_merge_head_free(merge_heads[0]);
                     if (qrepo.index().hasConflicts()) {
                         qDebug() << "There were conflicts merging. Please resolve them and commit";
-                    }
-                    else {
+                    } else {
                         git_oid commit_id;
                         git_buf message = {0,0,0};
                         git_commit *parents[2];
@@ -511,8 +497,7 @@ void GitController::pull() const
                                         tree.data(), 2, (const git_commit **) parents);
                     }
                 }
-            }
-            else {
+            } else {
                 // how did i get here, i am not good with undefined entries in enums
                 qDebug() << "wait, what?";
                 git_merge_head_free(merge_heads[0]);
@@ -521,8 +506,8 @@ void GitController::pull() const
         git_repository_state_cleanup(qrepo.data());
         // this causes a rescan of the documents folder, just to make sure...
         d->documents->setDocumentsFolder(d->documents->documentsFolder());
-    }
-    catch (const LibQGit2::Exception& ex) {
+        emit pullCompleted();
+    } catch (const LibQGit2::Exception& ex) {
         qDebug() << ex.what() << ex.category();
     }
 }
