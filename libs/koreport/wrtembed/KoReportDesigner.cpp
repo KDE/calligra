@@ -1237,9 +1237,7 @@ QList<QAction*> KoReportDesigner::actions(QActionGroup* group)
             actList.insert(i-1, sep);
             sepInserted = true;
         }
-        else {
-            group->addAction(a);
-        }
+        group->addAction(a);
     }
     
     return actList;
@@ -1306,7 +1304,7 @@ qreal KoReportDesigner::countSelectionHeight() const
     if (m_releaseY == -1 || m_pressY == -1) {
         return -1;
     }
-    return m_releaseY - m_pressY;
+    return qAbs(m_releaseY - m_pressY);
 }
 
 qreal KoReportDesigner::countSelectionWidth() const
@@ -1314,7 +1312,7 @@ qreal KoReportDesigner::countSelectionWidth() const
     if (m_releaseX == -1 || m_pressX == -1) {
         return -1;
     }
-    return m_releaseX - m_pressX;
+    return qAbs(m_releaseX - m_pressX);
 }
 
 qreal KoReportDesigner::getSelectionPressX() const
@@ -1330,4 +1328,9 @@ qreal KoReportDesigner::getSelectionPressY() const
 QPointF KoReportDesigner::getPressPoint() const
 {
     return QPointF(m_pressX, m_pressY);
+}
+
+QPointF KoReportDesigner::getReleasePoint() const
+{
+    return QPointF(m_releaseX, m_releaseY);
 }

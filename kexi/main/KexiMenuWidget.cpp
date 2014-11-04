@@ -429,6 +429,7 @@ void KexiMenuWidgetPrivate::init()
 {
     oxygenHelper = q->style()->objectName() == "oxygen" ? new OxygenHelper : 0;
     bespin = oxygenHelper ? false : q->style()->objectName() == "bespin";
+    qtcurve = oxygenHelper ? false : q->style()->objectName() == "qtcurve";
 
 #ifndef QT_NO_WHATSTHIS
     //q->setAttribute(Qt::WA_CustomWhatsThis);
@@ -2212,7 +2213,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect = adjustedActionRect;
         if (d->actionPersistentlySelected(action)) {
             opt.state |= QStyle::State_Selected;
-            if (!d->bespin) {
+            if (!d->bespin && !d->qtcurve) {
                 opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
                 opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
             }
