@@ -40,8 +40,8 @@ class DocumentListModel : public QAbstractListModel, public QDeclarativeParserSt
     Q_INTERFACES(QDeclarativeParserStatus)
 
 public:
-    DocumentListModel(QObject *parent = 0);
-    ~DocumentListModel();
+    explicit DocumentListModel(QObject *parent = 0);
+    virtual ~DocumentListModel();
 
     enum CustomRoles {
         FileNameRole = Qt::UserRole + 1,
