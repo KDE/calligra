@@ -155,19 +155,12 @@ void KoCanvasControllerWidget::Private::activate()
     if (!observerProvider) {
         return;
     }
-    // Only notify the canvasobservers that the canvas has changed if it has,
-    // indeed, been changed. Doesn't excuse the canvasdockers from properly
-    // disconnecting
-
-//         if (q->canvas() != lastActivatedCanvas) {
-        foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
-            KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
-            if (observer) {
-                observer->setObservedCanvas(q->canvas());
-            }
+    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+        if (observer) {
+            observer->setObservedCanvas(q->canvas());
         }
-        lastActivatedCanvas = q->canvas();
-//     }
+    }
 }
 
 void KoCanvasControllerWidget::Private::unsetCanvas()
