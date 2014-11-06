@@ -160,9 +160,6 @@ KisImageView::~KisImageView()
 void KisImageView::setParentView(KisView2 *view)
 {
     d->parentView = view;
-    view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-    connect(view->resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
-
 }
 
 KisView2* KisImageView::parentView() const

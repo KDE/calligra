@@ -439,7 +439,7 @@ KisView2::~KisView2()
 
 void KisView2::setCurrentView(KoView *view)
 {
-    qDebug() << ">>>>>>>>>>>>>setCurrentView" << view;
+    //qDebug() << ">>>>>>>>>>>>>setCurrentView" << view;
     bool first = true;
     if (m_d->currentImageView) {
         first = false;
@@ -455,6 +455,7 @@ void KisView2::setCurrentView(KoView *view)
         m_d->mirrorCanvas->disconnect();
         m_d->wrapAroundAction->disconnect();
         canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
+        resourceProvider()->disconnect(m_d->currentImageView->canvasBase());
     }
 
     QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
@@ -462,6 +463,9 @@ void KisView2::setCurrentView(KoView *view)
     if (imageView) {
 
         imageView->setParentView(this);
+
+        connect(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
+        resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
 
         // Wait for the async image to have loaded
         KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
