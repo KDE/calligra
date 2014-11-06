@@ -169,10 +169,10 @@ KisMainWindow::~KisMainWindow()
 
 void KisMainWindow::showView(KoView *view)
 {
-    //qDebug() << "showView" << view;
+    //qDebug() << "showView" << view << activeView();
 
     QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
-    if (imageView) {
+    if (imageView && activeView() != view) {
         // XXX: find a better way to initialize this!
         imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
         view->guiActivateEvent(true);
@@ -188,7 +188,6 @@ void KisMainWindow::showView(KoView *view)
         }
 
         setActiveView(view);
-        m_guiClient->setCurrentView(view);
         updateWindowMenu();
     }
 }
@@ -308,7 +307,8 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
     if (subwin && subwin != m_activeSubWindow) {
         KoView *view = qobject_cast<KoView *>(subwin->widget());
-        if (view) {
+        //qDebug() << "\t" << view << activeView();
+        if (view && view != activeView()) {
             view->guiActivateEvent(true);
             m_guiClient->setCurrentView(view);
             setActiveView(view);
