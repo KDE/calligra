@@ -404,7 +404,9 @@ KisView2::KisView2(QWidget * parent)
 KisView2::~KisView2()
 {
     KisConfig cfg;
-    cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
+    if (resourceProvider() && resourceProvider()->currentPreset()) {
+        cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
+    }
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     if (m_d->filterManager->isStrokeRunning()) {
