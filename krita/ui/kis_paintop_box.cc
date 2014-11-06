@@ -44,6 +44,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>
 #include <QTemporaryFile>
+#include <KoColorSpaceRegistry.h>
 
 #include <kis_paint_device.h>
 #include <kis_paintop_registry.h>
@@ -62,8 +63,6 @@
 #include "kis_resource_server_provider.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
-
-
 
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
@@ -231,8 +230,6 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     compositeLayout->addWidget(m_reloadButton);
 
-
-
     KAction* action;
 
     action = new KAction(i18n("Brush composite"), this);
@@ -294,9 +291,15 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
     slotNodeChanged(view->activeNode());
-    if (view->image()) {
-        updatePaintops(view->image()->colorSpace());
+    // Get all the paintops
+    QList<QString> keys = KisPaintOpRegistry::instance()->keys();
+    QList<KisPaintOpFactory*> factoryList;
+
+    foreach(const QString & paintopId, keys) {
+        factoryList.append(KisPaintOpRegistry::instance()->get(paintopId));
     }
+    m_presetsPopup->setPaintOpList(factoryList);
+
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
     connect(m_presetsPopup       , SIGNAL(savePresetClicked())                , SLOT(slotSaveActivePreset()));
@@ -349,22 +352,6 @@ KisPaintopBox::~KisPaintopBox()
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
     delete m_favoriteResourceManager;
-}
-
-void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
-{
-    /* get the list of the factories*/
-    QList<QString> keys = KisPaintOpRegistry::instance()->keys();
-    QList<KisPaintOpFactory*> factoryList;
-
-    foreach(const QString & paintopId, keys) {
-        KisPaintOpFactory * factory = KisPaintOpRegistry::instance()->get(paintopId);
-        if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()), colorSpace)) {
-            factoryList.append(factory);
-        }
-    }
-
-    m_presetsPopup->setPaintOpList(factoryList);
 }
 
 void KisPaintopBox::resourceSelected(KoResource* resource)

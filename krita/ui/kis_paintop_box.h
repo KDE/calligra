@@ -52,7 +52,6 @@ class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
-class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
@@ -121,7 +120,6 @@ private:
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
     void updateCompositeOp(QString compositeOpID, bool localUpdate = false);
-    void updatePaintops(const KoColorSpace* colorSpace);
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);

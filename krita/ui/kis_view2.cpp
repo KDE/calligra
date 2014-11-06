@@ -374,24 +374,12 @@ KisView2::KisView2(QWidget * parent)
     }
 #endif
 
-    KisConfig cfg;
-    QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
-    if (!preset) {
-        preset = rserver->resourceByName("Basic_tip_default");
+    if (rserver->resources().isEmpty()) {
+        KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
+        exit(0);
     }
 
-    if (!preset) {
-        if (rserver->resources().isEmpty()) {
-            KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
-            exit(0);
-        }
-        preset = rserver->resources().first();
-    }
-    if (preset) {
-        paintOpBox()->resourceSelected(preset.data());
-    }
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -449,8 +437,9 @@ KisView2::~KisView2()
 
 void KisView2::setCurrentView(KoView *view)
 {
+    bool first = true;
     if (m_d->currentImageView) {
-
+        first = false;
         KisDoc2* doc = qobject_cast<KisDoc2*>(m_d->currentImageView->document());
         if (doc) {
             doc->disconnect(this);
@@ -502,6 +491,25 @@ void KisView2::setCurrentView(KoView *view)
         canvasControllerWidget()->activate();
     }
     actionManager()->updateGUI();
+
+    // Restore the last used brush preset
+    if (first) {
+        KisConfig cfg;
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+        KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
+        if (!preset) {
+            preset = rserver->resourceByName("Basic_tip_default");
+        }
+
+        if (!preset) {
+            preset = rserver->resources().first();
+        }
+        if (preset) {
+            paintOpBox()->resourceSelected(preset.data());
+        }
+
+    }
 }
 
 
