@@ -470,6 +470,7 @@ KoMainWindow::~KoMainWindow()
 
 void KoMainWindow::addView(KoView *view)
 {
+    //qDebug() << "KoMainWindow::addView" << view;
     if (d->activeView == view) return;
 
     if (d->activeView) {
@@ -657,9 +658,6 @@ KoView *KoMainWindow::activeView() const
 {
     if (d->activeView) {
         return d->activeView;
-    }
-    else if (!d->views.isEmpty()) {
-        return d->views.first();
     }
     return 0;
 }

@@ -129,7 +129,7 @@ KComponentData KoPart::componentData() const
 
 void KoPart::addDocument(KoDocument *document)
 {
-    qDebug() << "Adding document to part list" << document;
+    //qDebug() << "Adding document to part list" << document;
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
@@ -161,12 +161,14 @@ KoView *KoPart::createView(KoDocument *document, KoMainWindow *parent)
 
 void KoPart::addView(KoView *view, KoDocument *document)
 {
+    qDebug() << "addView" << view << document;
     if (!view)
         return;
 
     if (!d->views.contains(view)) {
         d->views.append(view);
     }
+
     if (!d->documents.contains(document)) {
         d->documents.append(document);
     }
