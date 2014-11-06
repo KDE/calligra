@@ -51,7 +51,9 @@ void KisPaintingAssistantsManager::setView(QPointer<KisImageView> imageView)
 {
     if (m_imageView) {
         m_toggleAssistant->disconnect();
-        decoration()->disconnect(this);
+        if (decoration()) {
+            decoration()->disconnect(this);
+        }
     }
     m_imageView = imageView;
     if (m_imageView && decoration()) {
