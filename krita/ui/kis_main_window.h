@@ -26,6 +26,7 @@
 class QMdiArea;
 class QSignalMapper;
 class QCloseEvent;
+class QMdiSubWindow;
 
 class KAction;
 
@@ -76,6 +77,7 @@ private:
     KisView2 *m_guiClient;
 
     QMdiArea *m_mdiArea;
+    QMdiSubWindow *m_activeSubWindow;
     QSignalMapper *m_windowMapper;
     QSignalMapper *m_documentMapper;
 

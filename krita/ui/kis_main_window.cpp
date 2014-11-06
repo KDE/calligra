@@ -61,6 +61,7 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
     , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
+    , m_activeSubWindow(0)
 {
     KGlobal::setActiveComponent(part ? part->componentData() : KGlobal::mainComponent());
 
@@ -168,6 +169,8 @@ KisMainWindow::~KisMainWindow()
 
 void KisMainWindow::showView(KoView *view)
 {
+    //qDebug() << "showView" << view;
+
     QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
     if (imageView) {
         // XXX: find a better way to initialize this!
@@ -227,6 +230,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
 void KisMainWindow::updateMenus()
 {
+    //qDebug() << "updateMenus";
     bool enabled = (activeKisView() != 0);
 
     m_mdiCascade->setEnabled(enabled);
@@ -300,14 +304,16 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
     if (!window) return;
     QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
-    if (subwin) {
-        m_mdiArea->setActiveSubWindow(subwin);
+    //qDebug() << "setActiveSubWindow();" << subwin << m_activeSubWindow;
+
+    if (subwin && subwin != m_activeSubWindow) {
         KoView *view = qobject_cast<KoView *>(subwin->widget());
         if (view) {
             view->guiActivateEvent(true);
             m_guiClient->setCurrentView(view);
             setActiveView(view);
         }
+        m_activeSubWindow = subwin;
     }
     updateWindowMenu();
 }
@@ -341,6 +347,7 @@ QPointer<KisImageView>KisMainWindow::activeKisView()
 {
     if (!m_mdiArea) return 0;
     QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow();
+    //qDebug() << "activeKisView" << activeSubWindow;
     if (!activeSubWindow) return 0;
     return qobject_cast<KisImageView*>(activeSubWindow->widget());
-}
+    }
