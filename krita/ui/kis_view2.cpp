@@ -397,7 +397,6 @@ KisView2::KisView2(QWidget * parent)
 
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
-    qDebug() << "KisView2 Constructed";
 }
 
 
