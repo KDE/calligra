@@ -756,6 +756,8 @@ void KisCanvas2::slotConfigChanged()
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
 {
+    if (m_d->displayColorConverter->monitorProfile() == monitorProfile) return;
+
     m_d->displayColorConverter->setMonitorProfile(monitorProfile);
 
     KisImageWSP image = this->image();
