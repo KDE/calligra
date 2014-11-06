@@ -161,6 +161,11 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     createMainwindowGUI();
 }
 
+KisMainWindow::~KisMainWindow()
+{
+    delete m_guiClient;
+}
+
 void KisMainWindow::showView(KoView *view)
 {
     QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
