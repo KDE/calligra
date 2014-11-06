@@ -163,6 +163,10 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     resetCursorStyle();
 
+    if (!canvas()) return;
+    if (!canvas()->resourceManager()) return;
+
+
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KoPattern *>(canvas()->resourceManager()->
@@ -170,10 +174,13 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
-    KisPaintOpPresetSP paintop =canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    if (paintop) paintop->settings()->activate();
+    KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    if (preset && preset->settings()) {
+        preset->settings()->activate();
+    }
 
     d->currentNode = static_cast<KisCanvas2*>(canvas())->imageView()->currentNode();
+
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->

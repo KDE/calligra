@@ -410,7 +410,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         }
 
         m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset();
-        m_tabletToolMap[m_currTabletToolID].preset    = m_resourceProvider->currentPreset();
+        m_tabletToolMap[m_currTabletToolID].preset = m_resourceProvider->currentPreset();
         m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
 
@@ -915,7 +915,7 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
@@ -934,7 +934,7 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
@@ -991,7 +991,7 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
         preset->load();
-        preset->settings()->setNode(m_resourceProvider->currentPreset()->settings()->node());
+        preset->settings()->setNode(m_resourceProvider->currentNode());
         preset->settings()->setOptionsWidget(m_optionWidget);
         m_optionWidget->setConfiguration(preset->settings());
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
