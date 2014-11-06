@@ -66,7 +66,7 @@ void KisImageManager::setup(KActionCollection * actionCollection, KisActionManag
 
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
-    action = new KAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
+    action = new KisAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
     action->setToolTip(i18n("Change the background color of the image"));
     actionCollection->addAction("image_color", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColor()));
