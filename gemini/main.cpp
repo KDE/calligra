@@ -123,6 +123,11 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/bin");
     app.addLibraryPath(appdir.absolutePath() + "/lib");
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
+
+    QStringList iconThemePaths;
+    iconThemePaths << appdir.absolutePath() + "/share/icons";
+    QIcon::setThemeSearchPaths(iconThemePaths);
+    QIcon::setThemeName("oxygen");
 #endif
 
     if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
