@@ -478,24 +478,8 @@ void KoMainWindow::addView(KoView *view)
 
         if (activeDocument) {
             activeDocument->disconnect(this);
-
-            if (dockerManager()) {
-                dockerManager()->resetToolDockerWidgets();
-            }
-
-            // Hide all dockwidgets and remember their old state
-            d->dockWidgetVisibilityMap.clear();
-
-            foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
-                d->dockWidgetVisibilityMap.insert(dockWidget, dockWidget->isVisible());
-                dockWidget->setVisible(false);
-            }
-
-            d->dockWidgetMenu->setVisible(false);
         }
     }
-
-    d->dockWidgetMenu->setVisible(true);
 
     d->views.append(view);
 
@@ -522,12 +506,6 @@ void KoMainWindow::addView(KoView *view)
     updateCaption();
 
     emit restoringDone();
-
-    if (viewHasDocument && !d->dockWidgetVisibilityMap.isEmpty()) {
-        foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
-            dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
-        }
-    }
 
     if (viewHasDocument) {
         connect(d->activeView->document(), SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
