@@ -20,7 +20,7 @@
 */
 
 #include "kexi_version.h"
-
+#include <calligragitversion.h>
 #include <QString>
 
 KEXICORE_EXPORT unsigned int Kexi::version()
