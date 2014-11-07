@@ -20,7 +20,7 @@
 */
 
 #include "kexi_version.h"
-
+#include <calligragitversion.h>
 #include <QString>
 
 static const char FULL_VERSION[]
