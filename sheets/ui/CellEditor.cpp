@@ -27,7 +27,6 @@
 #include "Function.h"
 #include "FunctionRepository.h"
 #include "FunctionCompletion.h"
-#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -46,19 +45,15 @@
 #include <ktextedit.h>
 
 // Qt
-#include <QtGui>
 #include <QFocusEvent>
 #include <QKeyEvent>
-#include <QScrollBar>
-#include <QTimer>
 #include <QCompleter>
 #include <QAbstractItemView>
 #include <QtDebug>
-#include <QApplication>
-#include <QModelIndex>
-#include <QAbstractItemModel>
+#include <QStringListModel>
 #include <QScrollBar>
 #include <QList>
+
 using namespace Calligra::Sheets;
 
 class CellEditor::Private
