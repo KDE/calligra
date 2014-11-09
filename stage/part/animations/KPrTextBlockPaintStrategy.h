@@ -34,9 +34,9 @@ public:
     KPrTextBlockPaintStrategy(QTextBlockUserData *blockUserData, KPrAnimationCache *animationCache);
     virtual ~KPrTextBlockPaintStrategy();
     void setAnimationCache(KPrAnimationCache *animationCache);
-    virtual QBrush background(const QBrush &defaultBackground);
+    virtual QBrush background(const QBrush &defaultBackground) const;
     virtual void applyStrategy(QPainter *painter);
-    virtual bool isVisible();
+    virtual bool isVisible() const;
 
     KPrAnimationCache *m_animationCache;
     QTextBlockUserData *m_textBlockData;
