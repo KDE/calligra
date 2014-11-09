@@ -24,7 +24,7 @@
 #ifndef QT_NO_DBUS
 #include <QStringList>
 
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 #include "calligra_sheets_export.h"
 
 namespace Calligra

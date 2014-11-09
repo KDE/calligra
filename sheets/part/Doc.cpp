@@ -98,7 +98,7 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/MapAdaptor.h"
 #include "interfaces/SheetAdaptor.h"
-#include <QtDBus>
+#include <QDBusConnection>
 #endif
 
 // chart shape
