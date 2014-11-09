@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _STATESHAPECHANGESTATECOMMAND_H_
+#define _STATESHAPECHANGESTATECOMMAND_H_
+
 #include <kundo2command.h>
 
 class StateShape;
@@ -32,3 +35,5 @@ private:
     QString m_newCategoryId, m_newStateId;
     QString m_oldCategoryId, m_oldStateId;
 };
+
+#endif
