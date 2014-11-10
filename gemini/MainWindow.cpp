@@ -225,11 +225,13 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        if(settings->currentFileClass() == WORDS_MIME_TYPE)
+        if(settings->currentFileClass() == WORDS_MIME_TYPE) {
+            qApp->setApplicationName("calligrawords");
             desktopView = new KoMainWindow(WORDS_MIME_TYPE, KWFactory::componentData());
-        else if(settings->currentFileClass() == STAGE_MIME_TYPE)
+        } else if(settings->currentFileClass() == STAGE_MIME_TYPE) {
+            qApp->setApplicationName("calligrastage");
             desktopView = new KoMainWindow(STAGE_MIME_TYPE, KPrFactory::componentData());
-        else {
+        } else {
             desktopView = 0;
             qDebug() << "Big trouble, things gonna break. desktopView is not created." << settings->currentFileClass();
             return;
