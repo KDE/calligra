@@ -271,6 +271,9 @@ public:
     bool bespin;
     bool qtcurve;
 
+    //! @return y coordinate of bottom margin of last menu item
+    int bottomOfLastItem() const;
+    int logoBottomMargin() const;
     void updateLogo();
     void updateLogoPixmap();
     QPixmap calligraLogoPixmap;
