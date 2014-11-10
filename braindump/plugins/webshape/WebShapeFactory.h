@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _WEBSHAPEFACTORY_H_
+#define _WEBSHAPEFACTORY_H_
+
 #include "KoShapeFactoryBase.h"
 
 class WebShapeFactory : public KoShapeFactoryBase
@@ -29,3 +32,5 @@ public:
     bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
+
+#endif

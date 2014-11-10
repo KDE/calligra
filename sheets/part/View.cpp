@@ -50,7 +50,6 @@
 #include <QMenu>
 #include <QPixmap>
 #include <QResizeEvent>
-#include <QTimer>
 #include <QToolButton>
 #ifndef QT_NO_SQL
 #include <QSqlDatabase>
@@ -154,7 +153,6 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
 #include <knotifyconfigwidget.h>
-#include <QtDBus>
 #endif
 
 using namespace Calligra::Sheets;

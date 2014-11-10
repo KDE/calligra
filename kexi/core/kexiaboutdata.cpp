@@ -23,7 +23,6 @@
 #include <kexi_version.h>
 
 #include <calligraversion.h> //only for CALLIGRA_VERSION_STRING
-#include <calligragitversion.h>
 #include <KoIcon.h>
 #include <klocale.h>
 

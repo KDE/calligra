@@ -56,12 +56,11 @@ PivotFilters::PivotFilters(QWidget* parent,Selection* selection):
     
 //     setButtons(Ok|Cancel);
 //     enableButton(Ok,"true");
-      connect(d->mainWidget.Operator,SIGNAL(activated(const QString&)),this,SLOT(activateBoxes()));
-      connect(d->mainWidget.Operator2,SIGNAL(activated(const QString&)),this,SLOT(activateBoxes2()));
-      connect(d->mainWidget.Field,SIGNAL(activated(const QString&)),this,SLOT(fillValue()));
-      connect(d->mainWidget.Field2,SIGNAL(activated(const QString&)),this,SLOT(fillValue2()));
-      connect(d->mainWidget.Field3,SIGNAL(activated(const QString&)),this,SLOT(fillValue3()));
-  
+      connect(d->mainWidget.Operator, SIGNAL(activated(QString)), this, SLOT(activateBoxes()));
+      connect(d->mainWidget.Operator2, SIGNAL(activated(QString)), this, SLOT(activateBoxes2()));
+      connect(d->mainWidget.Field, SIGNAL(activated(QString)), this, SLOT(fillValue()));
+      connect(d->mainWidget.Field2, SIGNAL(activated(QString)), this, SLOT(fillValue2()));
+      connect(d->mainWidget.Field3, SIGNAL(activated(QString)), this, SLOT(fillValue3()));
 }
 
 

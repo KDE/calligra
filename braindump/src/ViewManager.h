@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _VIEWMANAGER_H_
+#define _VIEWMANAGER_H_
+
 #include <KoShapeBasedDocumentBase.h>
 
 #include <QList>
@@ -39,3 +42,5 @@ private:
     QList<View*> m_views;
     RootSection* m_rootSection;
 };
+
+#endif
