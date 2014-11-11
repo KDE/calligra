@@ -22,10 +22,11 @@
 #ifndef GITCONTROLLER_H
 #define GITCONTROLLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QAbstractListModel>
-#include <QtGui/QAction>
+#include <QObject>
+#include <QString>
+#include <QAbstractListModel>
+#include <QAction>
+#include <QRunnable>
 
 Q_DECLARE_METATYPE(QAbstractListModel*);
 
@@ -72,6 +73,8 @@ public Q_SLOTS:
     void commitAndPushCurrentFile();
 
     void transferProgress(int progress);
+    void clearOpThread();
+    void disableCommitAndPushAction();
 Q_SIGNALS:
     void pushCompleted();
     void pullCompleted();
@@ -87,6 +90,34 @@ Q_SIGNALS:
 private:
     class Private;
     Private *d;
+};
+
+class git_signature;
+class GitOpsThread : public QObject, public QRunnable
+{
+    Q_OBJECT
+public:
+    enum GitOperation {
+        PullOperation,
+        PushOperation
+    };
+    GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent = 0);
+    ~GitOpsThread();
+
+    void run();
+
+    void abort();
+
+signals:
+    void pushCompleted();
+    void pullCompleted();
+    void transferProgress(int progress);
+
+private:
+    void performPull();
+    void performPush();
+    class Private;
+    Private * const d;
 };
 
 #endif // GITCONTROLLER_H
