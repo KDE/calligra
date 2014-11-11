@@ -22,7 +22,7 @@
 #ifndef GITPLUGIN_H
 #define GITPLUGIN_H
 
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include <QDeclarativeExtensionPlugin>
 
 class GitPlugin : public QDeclarativeExtensionPlugin
 {
