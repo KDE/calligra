@@ -258,6 +258,11 @@ QString DocumentListModel::documentsFolder() const
 void DocumentListModel::setDocumentsFolder(const QString& newFolder)
 {
     m_documentsFolder = newFolder;
+    rescan();
+}
+
+void DocumentListModel::rescan()
+{
     stopSearch();
     beginResetModel();
     m_allDocumentInfos.clear();

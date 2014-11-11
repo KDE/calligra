@@ -98,6 +98,7 @@ signals:
     void filterChanged();
 
 public slots:
+    void rescan();
     void startSearch();
     void stopSearch();
     void addDocument(const DocumentListModel::DocumentInfo &info);
