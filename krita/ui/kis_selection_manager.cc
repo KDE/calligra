@@ -153,7 +153,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
-    m_clear = new KisAction(koIcon("edit-clear"), i18n("Deselect"), this);
+    m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
     actionManager->addAction("clear", m_clear, collection);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
