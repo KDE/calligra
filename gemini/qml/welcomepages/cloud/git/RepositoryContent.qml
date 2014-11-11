@@ -60,13 +60,32 @@ Item {
             textSize: Settings.theme.adjustedPixel(18);
             color: "#D2D4D5";
             text: "Pull from upstream";
-            onClicked: gitController.pull();
+            onClicked: {
+                enabled = false;
+                pullInProgress.opacity = 1;
+                gitController.pull();
+            }
+            BusyIndicator {
+                id: pullInProgress;
+                opacity: 0;
+                running: true;
+                height: parent.height;
+                width: height;
+                anchors.centerIn: parent;
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                anchors {
+                    top: pullButton.bottom;
+                    left: parent.left;
+                    right: parent.right;
+                }
+            }
         }
         Label {
             id: updatedLabel;
             opacity: 0;
             Behavior on opacity {
                 SequentialAnimation {
+                    ScriptAction { script: pullInProgress.opacity = 0; }
                     PropertyAnimation { duration: Constants.AnimationDuration; }
                     ScriptAction { script: hideUpdate.start(); }
                 }
@@ -82,7 +101,7 @@ Item {
             color: "#5b6573";
             verticalAlignment: Text.AlignVCenter;
             horizontalAlignment: Text.AlignHCenter;
-            Timer { id: hideUpdate; running: false; repeat: false; interval: 1000; onTriggered: updatedLabel.opacity = 0; }
+            Timer { id: hideUpdate; running: false; repeat: false; interval: 1000; onTriggered: { updatedLabel.opacity = 0; pullButton.enabled = true; } }
         }
         ListView {
             id: logListView;
