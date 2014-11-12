@@ -42,6 +42,7 @@
 #include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
+#include <KoToolManager.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -510,6 +511,8 @@ void KoMainWindow::addView(KoView *view)
     if (viewHasDocument) {
         connect(d->activeView->document(), SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
+
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 }
 
 void KoMainWindow::showView(KoView *view)
