@@ -33,6 +33,25 @@ Item {
         onPullCompleted: {
             logModel.refreshLog();
             updatedLabel.opacity = 1;
+            if(DocumentManager.doc()) {
+                DocumentManager.doc().clearStatusBarMessage();
+            }
+        }
+        onTransferProgress: {
+            if(DocumentManager.doc()) {
+                DocumentManager.doc().sigProgress(progress);
+            }
+        }
+        onOperationBegun: {
+            console.log(message);
+            if(DocumentManager.doc()) {
+                DocumentManager.doc().statusBarMessage(message);
+            }
+        }
+        onPushCompleted: {
+            if(DocumentManager.doc()) {
+                DocumentManager.doc().clearStatusBarMessage();
+            }
         }
     }
     GitLogModel {
