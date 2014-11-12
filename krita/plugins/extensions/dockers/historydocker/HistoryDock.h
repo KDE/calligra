@@ -39,7 +39,7 @@ class HistoryDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     HistoryDock();
-
+QString observerName() { return "HistoryDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { historyCanvas = 0; }
 private:

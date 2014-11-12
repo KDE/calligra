@@ -44,6 +44,7 @@ class KisPaletteDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     KisPaletteDocker();
+    QString observerName() { return "KisPaletteDocker"; }
     virtual ~KisPaletteDocker();
 
     QString palette() const;

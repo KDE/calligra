@@ -35,6 +35,7 @@ class AnimatorDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     AnimatorDock();
+    QString observerName() { return "AnimatorDock"; }
     virtual void setCanvas(KoCanvasBase *canvasBase);
     virtual void unsetCanvas();
 

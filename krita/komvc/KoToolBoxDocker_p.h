@@ -35,7 +35,8 @@ class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KoToolBoxDocker(KoToolBox *toolBox);
 
-    /// reimplemented from KoCanvasObserverBase
+    QString observerName() { return "KoToolBoxDocker"; }
+/// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 

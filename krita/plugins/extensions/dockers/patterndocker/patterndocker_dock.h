@@ -30,7 +30,7 @@ public:
     PatternDockerDock( );
 
     virtual void setMainWindow(KisView2* kisview);
-
+QString observerName() { return "PatternDockerDock"; }
 public slots:
     void patternChanged(KoPattern *pattern);
 private slots:

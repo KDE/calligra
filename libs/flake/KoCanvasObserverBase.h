@@ -37,6 +37,8 @@ public:
     KoCanvasObserverBase();
     virtual ~KoCanvasObserverBase();
 
+    virtual QString observerName() = 0;
+
     /**
      * set observed canvas
      * @param canvas canvas to observe

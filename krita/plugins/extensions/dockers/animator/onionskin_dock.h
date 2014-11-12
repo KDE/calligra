@@ -36,6 +36,7 @@ class OnionSkinDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     OnionSkinDock();
+    QString observerName() { return "OnionSkinDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() {
         m_canvas = 0;
