@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QSplashScreen>
+#include <QDebug>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -96,28 +97,41 @@ int main( int argc, char** argv )
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
+    QString envStringSet;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
+    //QMessageBox::information(0, "calligra gemini", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
+        envStringSet.append("KDEHOME ");
     }
     if (!env.contains("KDESYCOCA")) {
         _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
+        envStringSet.append("KDESYCOCA ");
     }
     if (!env.contains("XDG_DATA_DIRS")) {
         _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
+        envStringSet.append("XDG_DATA_DIRS ");
     }
     if (!env.contains("KDEDIR")) {
         _putenv_s("KDEDIR", appdir.absolutePath().toLocal8Bit());
+        envStringSet.append("KDEDIR ");
     }
     if (!env.contains("KDEDIRS")) {
         _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
+        envStringSet.append("KDEDIRS");
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
               + appdir.absolutePath() + "/lib" + ";"
               + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
               + appdir.absolutePath()).toLocal8Bit());
+
+    if(envStringSet.length() > 0) {
+        qDebug() << envStringSet << "were set from main, restarting application in new environment!";
+        // Pass all the arguments along, but don't include the application name...
+        QProcess::startDetached(app.applicationFilePath(), KCmdLineArgs::allArguments().mid(1));
+        exit(0);
+    }
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");
