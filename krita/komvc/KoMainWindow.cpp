@@ -1305,7 +1305,6 @@ void KoMainWindow::slotFileClose()
         }
         activeView->close();
         delete activeView;
-        d->part->showStartUpWidget(this, true /*Always show widget*/);
     }
 }
 
