@@ -125,12 +125,8 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
         d->buttonGroup->addButton(button, buttonGroupId);
 }
 
-void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
+void KoToolBox::setActiveTool(KoCanvasController */*canvas*/, int id)
 {
-    if (canvas->canvas() != d->canvas) {
-        return;
-    }
-
     QAbstractButton *button = d->buttonGroup->button(id);
     if (button) {
         button->setChecked(true);
