@@ -2755,21 +2755,21 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    if (m_textShapeData)
+    if (m_textShapeData && m_textEditingPlugins)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph()
 {
-    if (m_textShapeData)
+    if (m_textShapeData&& m_textEditingPlugins)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::startingSimpleEdit()
 {
-    if (m_textShapeData)
+    if (m_textShapeData && m_textEditingPlugins)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
 }
