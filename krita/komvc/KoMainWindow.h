@@ -262,17 +262,18 @@ private slots:
      */
     void slotDocumentInfo();
 
+protected slots:
     /**
      *  Closes the document.
      */
     void slotFileClose();
-
 
     /**
      * Closes all open documents.
      */
     void slotFileCloseAll();
 
+private slots:
     /**
      *  Closes the mainwindow.
      */

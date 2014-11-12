@@ -118,10 +118,10 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     connect(m_newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     m_close = new KAction(i18n("Close"), this);
-    connect(m_close, SIGNAL(triggered()), SLOT(slotFileClose()));
+    connect(m_close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
 
     m_closeAll = new KAction(i18n("Close All"), this);
-    connect(m_closeAll, SIGNAL(triggered()), SLOT(slotFileCloseAll()));
+    connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllWindows()));
 
     guiFactory()->addClient(m_guiClient);
 
@@ -335,6 +335,18 @@ void KisMainWindow::newView(QObject *document)
 void KisMainWindow::newWindow()
 {
     part()->createMainWindow()->show();
+}
+
+void KisMainWindow::closeCurrentWindow()
+{
+    slotFileClose();
+    m_mdiArea->currentSubWindow()->close();
+}
+
+void KisMainWindow::closeAllWindows()
+{
+    slotFileCloseAll();
+    m_mdiArea->closeAllSubWindows();
 }
 
 void KisMainWindow::showAboutApplication()

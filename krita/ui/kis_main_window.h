@@ -64,6 +64,8 @@ private slots:
     void configChanged();
     void newView(QObject *document);
     void newWindow();
+    void closeCurrentWindow();
+    void closeAllWindows();
 
 protected slots:
 
