@@ -155,6 +155,7 @@ public:
 
         settings = new Settings( q );
         DocumentManager::instance()->setSettingsManager( settings );
+        touchView->engine()->rootContext()->setContextProperty("DocumentManager", DocumentManager::instance());
         touchView->engine()->rootContext()->setContextProperty("Settings", settings);
         touchView->engine()->rootContext()->setContextProperty("Constants", new Constants( q ));
         touchView->engine()->rootContext()->setContextProperty("RecentFileManager", DocumentManager::instance()->recentFileManager());
