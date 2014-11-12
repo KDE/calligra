@@ -33,6 +33,7 @@ class DocumentManager : public QObject
     Q_OBJECT
 public:
     KoDocument* document() const;
+    Q_INVOKABLE  QObject* doc() const;
     KoPart* part(const QString& type = WORDS_MIME_TYPE);
     ProgressProxy* progressProxy() const;
     Settings* settingsManager() const;

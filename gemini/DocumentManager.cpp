@@ -68,6 +68,11 @@ KoDocument* DocumentManager::document() const
     return d->document;
 }
 
+QObject* DocumentManager::doc() const
+{
+    return d->document;
+}
+
 KoPart* DocumentManager::part(const QString& type)
 {
     Q_UNUSED(type)
