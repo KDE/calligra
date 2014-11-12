@@ -40,8 +40,10 @@ public:
     void resetWidgets();
 
 protected:
+
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
-public slots:
+
+public:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
