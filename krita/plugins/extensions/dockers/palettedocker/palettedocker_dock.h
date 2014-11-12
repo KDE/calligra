@@ -42,7 +42,7 @@ class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, publ
 public:
     PaletteDockerDock();
     virtual ~PaletteDockerDock();
-QString observerName() { return "PaletteDockerDock"; }
+    QString observerName() { return "PaletteDockerDock"; }
     virtual void setMainWindow(KisView2* kisview);
 
 public: // KoResourceServerObserver

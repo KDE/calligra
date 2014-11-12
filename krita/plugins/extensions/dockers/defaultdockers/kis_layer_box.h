@@ -64,7 +64,7 @@ public:
 
     KisLayerBox();
     virtual ~KisLayerBox();
-QString observerName() { return "KisLayerBox"; }
+    QString observerName() { return "KisLayerBox"; }
     /// reimplemented from KisMainwindowObserver
     virtual void setMainWindow(KisView2* kisview);
     virtual void setCanvas(KoCanvasBase *canvas);

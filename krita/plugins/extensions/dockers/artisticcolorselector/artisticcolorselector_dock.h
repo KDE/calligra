@@ -35,7 +35,7 @@ class ArtisticColorSelectorDock: public QDockWidget, public KisMainwindowObserve
 public:
      ArtisticColorSelectorDock();
     ~ArtisticColorSelectorDock();
-QString observerName() { return "ArtisticColorSelectorDock"; }
+     QString observerName() { return "ArtisticColorSelectorDock"; }
     virtual void setMainWindow(KisView2* kisview);
     
 private slots:

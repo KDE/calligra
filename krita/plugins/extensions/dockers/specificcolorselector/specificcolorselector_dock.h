@@ -32,7 +32,7 @@ class SpecificColorSelectorDock : public QDockWidget, public KoCanvasObserverBas
     Q_OBJECT
 public:
     SpecificColorSelectorDock();
-QString observerName() { return "SpecificColorSelectorDock"; }
+    QString observerName() { return "SpecificColorSelectorDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();

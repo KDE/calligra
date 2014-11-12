@@ -149,9 +149,6 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
 
 void KoCanvasControllerWidget::Private::activate()
 {
-    QTime t;
-    t.start();
-
     QWidget *parent = q;
     while (parent->parentWidget()) {
         parent = parent->parentWidget();
@@ -163,9 +160,7 @@ void KoCanvasControllerWidget::Private::activate()
     foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
-            qDebug() << "Docker" << docker->observerName();
             observer->setObservedCanvas(q->canvas());
-            qDebug() << "\t" << t.elapsed();
         }
     }
 

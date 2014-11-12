@@ -38,7 +38,7 @@ class FlipbookDockerDock : public QDockWidget, public KoCanvasObserverBase, publ
 public:
     FlipbookDockerDock();
     ~FlipbookDockerDock();
-QString observerName() { return "FlipbookDockerDock"; }
+    QString observerName() { return "FlipbookDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     
