@@ -163,7 +163,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
 
     }
-
+#if 0
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisFlipbookSelector(parent);
@@ -181,6 +181,8 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "tool-animator";
         widgetList << item;
     }
+#endif
+
 
     return widgetList;
 }
