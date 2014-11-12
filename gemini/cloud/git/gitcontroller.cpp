@@ -561,8 +561,6 @@ QAction* GitController::commitAndPushCurrentFileAction()
 
 void GitController::commitAndPushCurrentFile()
 {
-    qDebug() << "commit and push" << d->currentFile;
-
     if(d->opThread) {
         // if so, then we're already performing an operation of some kind, let's not confuse the point
         return;
@@ -585,9 +583,10 @@ void GitController::commitAndPushCurrentFile()
         // we explicitly leave the action enabled here because we want the user to be able to
         // regret their cancellation and commit anyway
         if(ok) {
+            emit operationBegun(QString("Pushing local changes to remote storage"));
             d->opThread = new GitOpsThread(d->privateKey, d->publicKey, d->userForRemote, d->needsPrivateKeyPassphrase, d->signature, d->cloneDir, GitOpsThread::PushOperation, d->currentFile, message, this);
             connect(d->opThread, SIGNAL(destroyed()), this, SLOT(clearOpThread()));
-            connect(d->opThread, SIGNAL(transferProgress(int)), this, SLOT(transferProgress(int)));
+            connect(d->opThread, SIGNAL(transferProgress(int)), this, SIGNAL(transferProgress(int)));
             connect(d->opThread, SIGNAL(pushCompleted()), this, SIGNAL(pushCompleted()));
             connect(d->opThread, SIGNAL(pushCompleted()), this, SLOT(disableCommitAndPushAction()));
             d->opThread->setAutoDelete(true);
@@ -596,11 +595,6 @@ void GitController::commitAndPushCurrentFile()
     } else {
         KMessageBox::sorry(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile).arg(d->cloneDir));
     }
-}
-
-void GitController::transferProgress(int progress)
-{
-    qDebug() << Q_FUNC_INFO << sender() << progress;
 }
 
 void GitController::clearOpThread()
@@ -626,9 +620,10 @@ void GitController::pull()
         return;
     }
 
+    emit operationBegun(QString("Pulling any changes on the remote storage to your local clone"));
     d->opThread = new GitOpsThread(d->privateKey, d->publicKey, d->userForRemote, d->needsPrivateKeyPassphrase, d->signature, d->cloneDir, GitOpsThread::PullOperation, d->currentFile, QString(), this);
     connect(d->opThread, SIGNAL(destroyed()), this, SLOT(clearOpThread()));
-    connect(d->opThread, SIGNAL(transferProgress(int)), this, SLOT(transferProgress(int)));
+    connect(d->opThread, SIGNAL(transferProgress(int)), this, SIGNAL(transferProgress(int)));
     connect(d->opThread, SIGNAL(pullCompleted()), this, SIGNAL(pullCompleted()));
     connect(d->opThread, SIGNAL(pullCompleted()), d->documents, SLOT(rescan()));
     d->opThread->setAutoDelete(true);

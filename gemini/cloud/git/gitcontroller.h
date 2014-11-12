@@ -72,10 +72,11 @@ public Q_SLOTS:
     QAction* commitAndPushCurrentFileAction();
     void commitAndPushCurrentFile();
 
-    void transferProgress(int progress);
     void clearOpThread();
     void disableCommitAndPushAction();
 Q_SIGNALS:
+    void operationBegun(QString message);
+    void transferProgress(int progress);
     void pushCompleted();
     void pullCompleted();
 
