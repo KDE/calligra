@@ -438,7 +438,6 @@ KisView2::~KisView2()
 
 void KisView2::setCurrentView(KoView *view)
 {
-    //qDebug() << ">>>>>>>>>>>>>setCurrentView" << view;
     bool first = true;
     if (m_d->currentImageView) {
         first = false;
@@ -495,6 +494,7 @@ void KisView2::setCurrentView(KoView *view)
 
     if (m_d->currentImageView) {
         canvasControllerWidget()->activate();
+        canvasControllerWidget()->setFocus();
     }
     actionManager()->updateGUI();
 
