@@ -43,7 +43,7 @@ public:
     bool slateMode() const;
 
     QString applicationName() const {
-        return QLatin1String("CALLIGRA WORDS GEMINI");
+        return QLatin1String("CALLIGRA GEMINI");
     }
 
     QString currentTouchPage() const;
