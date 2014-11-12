@@ -903,7 +903,7 @@ void KisPaintopBox::slotPreviousFavoritePreset()
 
     int i = 0;
     foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
+        if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             } else {
