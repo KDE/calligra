@@ -28,16 +28,16 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "testutil.h"
+#include "kis_part2.h"
 
 void KisKraLoaderTest::testLoading()
 {
-    KisDoc2 doc;
-
-    doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
-    KisImageWSP image = doc.image();
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+    KisImageWSP image = doc->image();
     image->lock();
     QCOMPARE(image->nlayers(), 12);
-    QCOMPARE(doc.documentInfo()->aboutInfo("title"), QString("test image for loading"));
+    QCOMPARE(doc->documentInfo()->aboutInfo("title"), QString("test image for loading"));
     QCOMPARE(image->height(), 753);
     QCOMPARE(image->width(), 1000);
     QCOMPARE(image->colorSpace()->id(), KoColorSpaceRegistry::instance()->rgb8()->id());
@@ -53,6 +53,7 @@ void KisKraLoaderTest::testLoading()
     QVERIFY(node->inherits("KisGroupLayer"));
     QCOMPARE((int) node->childCount(), 2);
 
+    delete doc;
 }
 
 
@@ -61,9 +62,9 @@ void KisKraLoaderTest::testObligeSingleChild()
 {
     QString fileName = TestUtil::fetchDataFileLazy("single_layer_no_channel_flags.kra");
 
-    KisDoc2 doc;
-    doc.loadNativeFormat(fileName);
-    KisImageWSP image = doc.image();
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    doc->loadNativeFormat(fileName);
+    KisImageWSP image = doc->image();
 
     QVERIFY(image);
     QCOMPARE(image->nlayers(), 2);
@@ -75,6 +76,8 @@ void KisKraLoaderTest::testObligeSingleChild()
 
     QCOMPARE(root->original(), root->projection());
     QCOMPARE(root->original(), child->projection());
+
+    delete doc;
 }
 
 

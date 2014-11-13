@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QScopedPointer>
 
 #include <kactioncollection.h>
 #include <klocale.h>
@@ -93,6 +94,7 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "kis_part2.h"
 
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
@@ -175,13 +177,13 @@ public:
 
             QRect r = m_image->bounds();
 
-            KisDoc2 d;
+            KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
-            d.prepareForImport();
+            d->prepareForImport();
 
-            KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
+            KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
             dst->setResolution(m_image->xRes(), m_image->yRes());
-            d.setCurrentImage(dst);
+            d->setCurrentImage(dst);
             KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());
             KisPainter gc(paintLayer->paintDevice());
             gc.bitBlt(QPoint(0, 0), layer->projection(), r);
@@ -189,8 +191,8 @@ public:
 
             dst->refreshGraph();
 
-            d.setOutputMimeType(m_mimeFilter.toLatin1());
-            d.setSaveInBatchMode(true);
+            d->setOutputMimeType(m_mimeFilter.toLatin1());
+            d->setSaveInBatchMode(true);
 
 
             KUrl url = m_url;
@@ -198,7 +200,7 @@ public:
 
             url.setFileName(m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
 
-            d.exportDocument(url);
+            d->exportDocument(url);
 
             if (!m_saveTopLevelOnly) {
                 KisGroupLayerSP child = dynamic_cast<KisGroupLayer*>(layer->firstChild().data());
@@ -207,7 +209,9 @@ public:
                     child = dynamic_cast<KisGroupLayer*>(child->nextSibling().data());
                 }
             }
+            delete d;
         }
+
         return true;
     }
 

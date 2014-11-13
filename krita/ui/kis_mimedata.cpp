@@ -28,6 +28,7 @@
 #include "kis_paint_layer.h"
 #include "kis_doc2.h"
 #include "kis_shape_controller.h"
+#include "kis_part2.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -70,7 +71,7 @@ QStringList KisMimeData::formats () const
 
 KisDoc2 *createDocument(QList<KisNodeSP> nodes)
 {
-    KisDoc2 *doc = new KisDoc2();
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
     QRect rc;
     foreach(KisNodeSP node, nodes) {
         rc |= node->exactBounds();
@@ -251,34 +252,36 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     if (data->hasFormat("application/x-krita-node")) {
         QByteArray ba = data->data("application/x-krita-node");
 
-        KisDoc2 tempDoc;
-        bool result = tempDoc.loadNativeFormatFromStore(ba);
+        KisDoc2 *tempDoc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+        bool result = tempDoc->loadNativeFormatFromStore(ba);
 
         if (result) {
-            KisImageWSP tempImage = tempDoc.image();
+            KisImageWSP tempImage = tempDoc->image();
             foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
             }
         }
+        delete tempDoc;
     }
 
     if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-url")) {
         QByteArray ba = data->data("application/x-krita-node-url");
         QString localFile = QUrl::fromEncoded(ba).toLocalFile();
 
-        KisDoc2 tempDoc;
-        bool result = tempDoc.loadNativeFormat(localFile);
+        KisDoc2 *tempDoc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+        bool result = tempDoc->loadNativeFormat(localFile);
 
         if (result) {
-            KisImageWSP tempImage = tempDoc.image();
+            KisImageWSP tempImage = tempDoc->image();
             foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
             }
         }
+        delete tempDoc;
 
         QFile::remove(localFile);
     }

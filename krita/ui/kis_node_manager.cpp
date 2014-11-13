@@ -42,6 +42,7 @@
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
 
+#include "kis_part2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_shape_controller.h"
 #include "kis_canvas_resource_provider.h"
@@ -996,22 +997,22 @@ void KisNodeManager::saveNodeAsImage()
 
     QRect savedRect = image->bounds() | node->exactBounds();
 
-    KisDoc2 d;
+    KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
-    d.prepareForImport();
+    d->prepareForImport();
 
     KisPaintDeviceSP device = node->paintDevice();
     if (!device) {
         device = node->projection();
     }
 
-    KisImageSP dst = new KisImage(d.createUndoStore(),
+    KisImageSP dst = new KisImage(d->createUndoStore(),
                                   savedRect.width(),
                                   savedRect.height(),
                                   device->compositionSourceColorSpace(),
                                   node->name());
     dst->setResolution(image->xRes(), image->yRes());
-    d.setCurrentImage(dst);
+    d->setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", node->opacity());
     KisPainter gc(paintLayer->paintDevice());
     gc.bitBlt(QPoint(0, 0), device, savedRect);
@@ -1019,8 +1020,10 @@ void KisNodeManager::saveNodeAsImage()
 
     dst->initialRefreshGraph();
 
-    d.setOutputMimeType(mimefilter.toLatin1());
-    d.exportDocument(url);
+    d->setOutputMimeType(mimefilter.toLatin1());
+    d->exportDocument(url);
+
+    delete d;
 }
 
 #include "kis_node_manager.moc"

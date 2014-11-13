@@ -56,16 +56,19 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDoc2 doc2;
+    KisDoc2 *doc2 = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
-    doc2.loadNativeFormat("roundtriptest.kra");
+    doc2->loadNativeFormat("roundtriptest.kra");
 
     KisCountVisitor cv2(list, KoProperties());
-    doc2.image()->rootLayer()->accept(cv2);
+    doc2->image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
 
     // check whether the BG color is saved correctly
-    QCOMPARE(doc2.image()->defaultProjectionColor(), bgColor);
+    QCOMPARE(doc2->image()->defaultProjectionColor(), bgColor);
+
+    delete doc2;
+    delete doc;
 }
 
 void KisKraSaverTest::testSaveEmpty()
@@ -76,12 +79,15 @@ void KisKraSaverTest::testSaveEmpty()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDoc2 doc2;
-    doc2.loadNativeFormat("emptytest.kra");
+    KisDoc2 *doc2 = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    doc2->loadNativeFormat("emptytest.kra");
 
     KisCountVisitor cv2(list, KoProperties());
-    doc2.image()->rootLayer()->accept(cv2);
+    doc2->image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
+
+    delete doc2;
+    delete doc;
 }
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

@@ -33,6 +33,7 @@
 #include <KoFileDialog.h>
 #include <KoDocument.h>
 
+#include <kis_part2.h>
 #include <kis_debug.h>
 #include <kis_types.h>
 #include <kis_view2.h>
@@ -64,12 +65,12 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 {
     KisImageWSP image = m_view->image();
 
-    KisDoc2 d;
-    d.prepareForImport();
+    KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    d->prepareForImport();
 
-    KisImageWSP dst = new KisImage(d.createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());
+    KisImageWSP dst = new KisImage(d->createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());
     dst->setResolution(image->xRes(), image->yRes());
-    d.setCurrentImage(dst);
+    d->setCurrentImage(dst);
 
     KisPaintLayer* paintLayer = new KisPaintLayer(dst,dst->nextLayerName(), 255);
     KisPainter gc(paintLayer->paintDevice());
@@ -77,8 +78,10 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 
     dst->addNode(paintLayer, KisNodeSP(0));
     dst->refreshGraph();
-    d.setOutputMimeType(mimeType.toLatin1());
-    d.exportDocument(url);
+    d->setOutputMimeType(mimeType.toLatin1());
+    d->exportDocument(url);
+
+    delete d;
 }
 
 void Imagesplit::slotImagesplit()

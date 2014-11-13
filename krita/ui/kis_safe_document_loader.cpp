@@ -27,19 +27,19 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_signal_compressor.h"
-
+#include "kis_part2.h"
 
 struct KisSafeDocumentLoader::Private
 {
     Private()
-        : doc(new KisDoc2()),
+        : doc(dynamic_cast<KisDoc2*>(KisPart2::instance()->createDocument())),
           fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
           isLoading(false),
           fileChangedFlag(false)
     {
     }
 
-    QScopedPointer<KisDoc2> doc;
+    QScopedPointer<KisDoc2>  doc;
     QFileSystemWatcher fileWatcher;
     KisSignalCompressor fileChangedSignalCompressor;
     QTimer delayedLoadTimer;

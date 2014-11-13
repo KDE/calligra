@@ -35,6 +35,7 @@
 #include <KoCanvasBase.h>
 #include <KoFileDialog.h>
 
+#include <kis_part2.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
 #include <kis_doc2.h>
@@ -202,13 +203,13 @@ void CompositionDockerDock::exportClicked()
 #else
         QRect r = image->bounds();
 
-        KisDoc2 d;
+        KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
-        d.prepareForImport();
+        d->prepareForImport();
 
-        KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
+        KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
         dst->setResolution(image->xRes(), image->yRes());
-        d.setCurrentImage(dst);
+        d->setCurrentImage(dst);
         KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", OPACITY_OPAQUE_U8);
         KisPainter gc(paintLayer->paintDevice());
         gc.bitBlt(QPoint(0, 0), image->rootLayer()->projection(), r);
@@ -216,10 +217,12 @@ void CompositionDockerDock::exportClicked()
 
         dst->refreshGraph();
 
-        d.setOutputMimeType("image/png");
-        d.setSaveInBatchMode(true);
+        d->setOutputMimeType("image/png");
+        d->setSaveInBatchMode(true);
 
-        d.exportDocument(KUrl(path + composition->name() + ".png"));
+        d->exportDocument(KUrl(path + composition->name() + ".png"));
+
+        delete d;
 
 #endif
         image->unlock();

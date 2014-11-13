@@ -38,6 +38,7 @@
 #include "kis_group_layer.h"
 #include "kis_statusbar.h"
 #include "kis_progress_widget.h"
+#include "kis_part2.h"
 
 #include <QMessageBox>
 
@@ -116,7 +117,7 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
         : m_d(new Private)
 {
-    m_d->doc = new KisDoc2();
+    m_d->doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
     KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
     m_d->doc->setProgressProxy(progressProxy);

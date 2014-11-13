@@ -70,8 +70,10 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
 
     Q_OBJECT
 
+protected:
+    friend class KisPart2;
+    explicit KisDoc2(const KisPart2 *part);
 public:
-    explicit KisDoc2(const KisPart2 *part = 0);
     virtual ~KisDoc2();
 
 public:

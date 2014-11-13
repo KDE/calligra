@@ -18,18 +18,20 @@
 
 #include "kis_doc2_test.h"
 
+#include <KoDocumentEntry.h>
+#include <KoMainWindow.h>
+
 #include <qtest_kde.h>
+
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_undo_store.h"
 #include "kis_factory2.h"
-#include <KoDocumentEntry.h>
 #include "kis_part2.h"
-#include <KoMainWindow.h>
 #include <kis_view2.h>
 #include "util.h"
 #include <kis_image_view.h>
-
+#include "kis_part2.h"
 
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
 {
@@ -40,10 +42,12 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
 
-    KisDoc2 doc;
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
-    doc.loadNativeFormat(fname);
-    doc.loadNativeFormat(fname2);
+    doc->loadNativeFormat(fname);
+    doc->loadNativeFormat(fname2);
+
+    delete doc;
 }
 
 void KisDoc2Test::testActiveNodes()

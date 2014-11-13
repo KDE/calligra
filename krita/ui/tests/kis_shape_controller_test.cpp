@@ -20,6 +20,7 @@
 
 #include <qtest_kde.h>
 
+#include "kis_part2.h"
 #include "kis_doc2.h"
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
@@ -32,7 +33,7 @@ KisShapeControllerTest::~KisShapeControllerTest()
 KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {
 
-    m_doc = new KisDoc2();
+    m_doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
     m_nameServer = new KisNameServer();
     return new KisShapeController(m_doc, m_nameServer);
