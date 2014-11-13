@@ -95,7 +95,6 @@ struct KisTool::Private {
     KoAbstractGradient* currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisNodeSP currentNode;
     float currentExposure;
     KisFilterConfiguration* currentGenerator;
     QWidget* optionWidget;
@@ -179,8 +178,6 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
         preset->settings()->activate();
     }
 
-    d->currentNode = static_cast<KisCanvas2*>(canvas())->imageView()->currentNode();
-
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
@@ -246,9 +243,6 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
-        break;
-    case(KisCanvasResourceProvider::CurrentKritaNode):
-        d->currentNode = (v.value<KisNodeSP>());
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
@@ -416,7 +410,9 @@ KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 
 KisNodeSP KisTool::currentNode()
 {
-    return d->currentNode;
+    KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    qDebug() << "KisTool::currentNode()" << node;
+    return node;
 }
 
 KoColor KisTool::currentFgColor()
