@@ -40,7 +40,7 @@ class KisFilterConfiguration;
 class KisAbstractPerspectiveGrid;
 
 /**
- * KisCanvasResourceProvider contains the per-view current settings that
+ * KisCanvasResourceProvider contains the per-window current settings that
  * influence painting, like paintop, color, gradients and so on.
  */
 class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject

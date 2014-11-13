@@ -512,7 +512,6 @@ void KoMainWindow::addView(KoView *view)
         connect(d->activeView->document(), SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 }
 
 void KoMainWindow::showView(KoView *view)

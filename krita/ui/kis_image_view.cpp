@@ -138,7 +138,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, KoMainWindow *parent)
     d->canvasController->setCanvas(d->canvas);
 
     Q_ASSERT(d->canvasController);
-    KoToolManager::instance()->addController(d->canvasController);
 
     d->zoomManager = new KisZoomManager(this, d->viewConverter, d->canvasController);
     d->zoomManager->setup(d->actionCollection);
@@ -160,6 +159,9 @@ KisImageView::~KisImageView()
 void KisImageView::setParentView(KisView2 *view)
 {
     d->parentView = view;
+    KoToolManager::instance()->addController(d->canvasController);
+    dynamic_cast<KisShapeController*>(d->doc->shapeController())->setInitialShapeForCanvas(d->canvas);
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 }
 
 KisView2* KisImageView::parentView() const
