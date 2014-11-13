@@ -187,6 +187,7 @@ void KisNodeManager::setView(QPointer<KisImageView>imageView)
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
 
     }
+    m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
 }
 
 #define NEW_LAYER_ACTION(id, text, layerType, icon)                     \

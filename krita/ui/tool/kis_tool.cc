@@ -224,7 +224,6 @@ void KisTool::requestStrokeEnd()
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
-
     switch (key) {
     case(KoCanvasResourceManager::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
@@ -411,7 +410,6 @@ KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 KisNodeSP KisTool::currentNode()
 {
     KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    qDebug() << "KisTool::currentNode()" << node;
     return node;
 }
 
