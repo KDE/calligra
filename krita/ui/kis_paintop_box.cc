@@ -90,6 +90,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     , m_presetsEnabled(true)
     , m_blockUpdate(false)
     , m_dirtyPresetsEnabled(false)
+    , m_eraserBrushSizeEnabled(false)
 {
     Q_ASSERT(view != 0);
 
@@ -98,6 +99,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     setObjectName(name);
     KisConfig cfg;
     m_dirtyPresetsEnabled = cfg.useDirtyPresets();
+    m_eraserBrushSizeEnabled = cfg.useEraserBrushSize();
 
     KAcceleratorManager::setNoAccel(this);
 
@@ -308,6 +310,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
     connect(m_presetsPopup       , SIGNAL(dirtyPresetToggled(bool))           , SLOT(slotDirtyPresetToggled(bool)));
+    connect(m_presetsPopup       , SIGNAL(eraserBrushSizeToggled(bool))       , SLOT(slotEraserBrushSizeToggled(bool)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
@@ -731,19 +734,34 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
     if (checked)
     {
          updateCompositeOp(COMPOSITE_ERASE);
-
-         // remember brush size. set the eraser size to the normal brush size if not set
-         normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
-         if (!eraserBrushSize)
-             eraserBrushSize = normalBrushSize;
+         //add an option to enable eraser brush size
+         if (m_eraserBrushSizeEnabled==true)
+         {
+           // remember brush size. set the eraser size to the normal brush size if not set
+           normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+           if (!eraserBrushSize)
+               eraserBrushSize = normalBrushSize;
+         }
+         else
+         {
+          normalBrushSize = eraserBrushSize;
+          eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value(); 
+         }
     }
 
     else
     {
          updateCompositeOp(m_prevCompositeOpID);
-
+ 
+         if (m_eraserBrushSizeEnabled==true)
+         {
          // save eraser brush size as eraserBrushSize (they are all the same, so just grab the first one)
          eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+         }
+         else
+         {
+          normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value(); 
+         }
     }
 
 
@@ -1046,4 +1064,10 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
     KisConfig cfg;
     cfg.setUseDirtyPresets(m_dirtyPresetsEnabled);
 
+}
+void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
+{
+  m_eraserBrushSizeEnabled = value;
+  KisConfig cfg;
+  cfg.setUseEraserBrushSize(m_eraserBrushSizeEnabled);
 }
