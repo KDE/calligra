@@ -64,6 +64,8 @@ namespace ActionHelper {
 
     void copyFromDevice(KisView2 *view, KisPaintDeviceSP device) {
         KisImageWSP image = view->image();
+        if (!image) return;
+        
         KisSelectionSP selection = view->selection();
 
         QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
@@ -109,9 +111,11 @@ namespace ActionHelper {
 
 void KisSelectAllActionFactory::run(KisView2 *view)
 {
+    KisImageWSP image = view->image();
+    if (!image) return;
+    
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
-    KisImageWSP image = view->image();
     if (!image->globalSelection()) {
         ap->applyCommand(new KisSetEmptyGlobalSelectionCommand(image),
                          KisStrokeJobData::SEQUENTIAL,
@@ -138,7 +142,10 @@ void KisSelectAllActionFactory::run(KisView2 *view)
 
 void KisDeselectActionFactory::run(KisView2 *view)
 {
-    KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(view->image());
+    KisImageWSP image = view->image();
+    if (!image) return;
+    
+    KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -147,7 +154,10 @@ void KisDeselectActionFactory::run(KisView2 *view)
 
 void KisReselectActionFactory::run(KisView2 *view)
 {
-    KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(view->image());
+    KisImageWSP image = view->image();
+    if (!image) return;
+    
+    KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -224,6 +234,8 @@ void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
 void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
 {
     KisImageSP image = view->image();
+    if (!image) return;
+    
     bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
     if (haveShapesSelected) {
@@ -288,7 +300,8 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
 void KisCopyMergedActionFactory::run(KisView2 *view)
 {
     KisImageWSP image = view->image();
-
+    if (!image) return;
+    
     image->barrierLock();
     KisPaintDeviceSP dev = image->root()->projection();
     ActionHelper::copyFromDevice(view, dev);
@@ -301,6 +314,8 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
 void KisPasteActionFactory::run(KisView2 *view)
 {
     KisImageWSP image = view->image();
+    if (!image) return;
+    
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
 
     if (clip) {
