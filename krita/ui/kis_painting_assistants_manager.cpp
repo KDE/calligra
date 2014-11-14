@@ -42,8 +42,11 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
 {
     m_toggleAssistant = new KToggleAction(i18n("Show Painting Assistants"), this);
     collection->addAction("view_toggle_painting_assistants", m_toggleAssistant);
-
     m_toggleAssistant->setCheckedState(KGuiItem(i18n("Hide Painting Assistants")));
+
+    m_togglePreview = new KToggleAction(i18n("Show Assistant Previews"), this);
+    collection->addAction("view_toggle_assistant_previews", m_togglePreview);
+
     updateAction();
 }
 
@@ -56,8 +59,13 @@ void KisPaintingAssistantsManager::setView(QPointer<KisImageView> imageView)
         }
     }
     m_imageView = imageView;
+    if (m_imageView && !decoration()) {
+        KisPaintingAssistantsDecoration* deco = new KisPaintingAssistantsDecoration(m_imageView);
+        m_imageView->canvasBase()->addDecoration(deco);
+    }
     if (m_imageView && decoration()) {
         connect(m_toggleAssistant, SIGNAL(triggered()), decoration(), SLOT(toggleVisibility()));
+        connect(m_togglePreview, SIGNAL(triggered()), decoration(), SLOT(toggleOutlineVisible()));
         connect(decoration(), SIGNAL(assistantChanged()), SLOT(updateAction()));
     }
     updateAction();
@@ -66,8 +74,11 @@ void KisPaintingAssistantsManager::setView(QPointer<KisImageView> imageView)
 void KisPaintingAssistantsManager::updateAction()
 {
     if (decoration()) {
+        bool enabled = !decoration()->assistants().isEmpty();
         m_toggleAssistant->setChecked(decoration()->visible());
-        m_toggleAssistant->setEnabled(!decoration()->assistants().isEmpty());
+        m_toggleAssistant->setEnabled(enabled);
+        m_togglePreview->setChecked(decoration()->outlineVisibility());
+        m_togglePreview->setEnabled(enabled);
     } else {
         m_toggleAssistant->setEnabled(false);
     }

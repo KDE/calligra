@@ -51,6 +51,7 @@ private:
     
     QPointer<KisImageView> m_imageView;
     KToggleAction* m_toggleAssistant;
+    KToggleAction* m_togglePreview;
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

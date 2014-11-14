@@ -43,7 +43,6 @@ public:
     void removeAll();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
-    void setup(KActionCollection * collection);
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistant*> assistants();
     /*sets whether the main assistant is visible*/
@@ -56,6 +55,8 @@ public:
     bool outlineVisibility();
     /*uncache all assistants*/
     void uncache();
+signals:
+    void assistantChanged();
 public slots:
     void toggleAssistantVisible();
     void toggleOutlineVisible();
@@ -63,7 +64,6 @@ protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
-    void updateAction();
     struct Private;
     Private* const d;
 };
