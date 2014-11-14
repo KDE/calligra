@@ -484,12 +484,6 @@ bool KisImageView::event(QEvent *event)
 
 void KisImageView::closeEvent(QCloseEvent *event)
 {
-    // No modification, don't ask about save before close
-    if (!document()->isModified()) {
-        event->accept();
-        return;
-    }
-
     // Check whether we're the last view
     int viewCount = KisPart2::instance()->viewCount(document());
     if (viewCount > 1) {
@@ -499,6 +493,7 @@ void KisImageView::closeEvent(QCloseEvent *event)
     }
 
     if (queryClose()) {
+        d->parentView->removeStatusBarItem(zoomManager()->zoomActionWidget());
         event->accept();
         return;
     }
