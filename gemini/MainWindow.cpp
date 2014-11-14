@@ -45,6 +45,7 @@
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <KConfigGroup>
+#include <kdialog.h>
 
 #include <gemini/ViewModeSwitchEvent.h>
 #include <KoCanvasBase.h>
@@ -317,7 +318,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Calligra Gemini")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KoDocument* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()
@@ -443,7 +451,13 @@ void MainWindow::switchToDesktop()
 
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
 {
+    if(DocumentManager::instance()->document()) {
+        disconnect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
+    }
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
+    if(DocumentManager::instance()->document()) {
+        connect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
+    }
     if(document && part && !d->settings->currentFile().isEmpty()) {
         QAction* undo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_undo");
         d->touchView->rootContext()->setContextProperty("undoaction", undo);
