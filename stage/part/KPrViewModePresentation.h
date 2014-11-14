@@ -116,7 +116,7 @@ public:
      */
     void navigate( KPrAnimationDirector::Navigation navigation );
 
-    void navigateToPage( int index );
+    Q_INVOKABLE void navigateToPage( int index );
     void blackPresentation();
 
     /**
@@ -163,5 +163,7 @@ protected:
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
     KPrView *m_view;
 };
+
+Q_DECLARE_METATYPE(KPrViewModePresentation *)
 
 #endif /* KPRVIEWMODEPRESENTATION_H */
