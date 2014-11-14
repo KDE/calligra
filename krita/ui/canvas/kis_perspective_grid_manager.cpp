@@ -107,7 +107,7 @@ void KisPerspectiveGridManager::setView(QPointer<KisImageView> imageView)
     m_toggleGrid->disconnect();
 
     m_imageView = imageView;
-    if (!decoration()) {
+    if (m_imageView && !decoration()) {
         KisPerspectiveGridDecoration* newDecoration = new KisPerspectiveGridDecoration(m_imageView);
         newDecoration->setVisible(true);
         m_imageView->canvasBase()->addDecoration(newDecoration);
@@ -118,7 +118,10 @@ void KisPerspectiveGridManager::setView(QPointer<KisImageView> imageView)
 
 KisPerspectiveGridDecoration* KisPerspectiveGridManager::decoration()
 {
-    return qobject_cast<KisPerspectiveGridDecoration*>(m_imageView->canvasBase()->decoration("perspectiveGrid"));
+    if (m_imageView && m_imageView->canvasBase()) {
+        return qobject_cast<KisPerspectiveGridDecoration*>(m_imageView->canvasBase()->decoration("perspectiveGrid"));
+    }
+    return 0;
 }
 
 
