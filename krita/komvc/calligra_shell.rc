@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="Calligra"
-     version="30"
+     version="31"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -31,6 +31,7 @@
   <Action name="file_documentinfo" />
   <DefineGroup name="file_infos" />
   <Separator />
+  <Action name="file_close" />
   <Action name="file_close_all" />
   <Action name="file_quit" />
  </Menu>
