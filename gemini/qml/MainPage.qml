@@ -392,8 +392,13 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
                 onClicked: {
                     mainPageStack.push(presentationDJMode);
+                    mainWindow.desktopKoView.startPresentationFromBeginning();
+                    DocumentManager.doc().setPresentationMonitor(mainWindow.lastScreen());
+                    DocumentManager.doc().setPresenterViewEnabled(false);
                     closeToolbarMenus();
-                    mainWindow.fullScreen = true;
+                    if(mainWindow.lastScreen() > 0) {
+                        mainWindow.fullScreen = true;
+                    }
                 }
                 Calligra.PresentationModel {
                     id: presentationModel

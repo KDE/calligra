@@ -37,6 +37,7 @@ Rectangle {
         laserScribbler.clear();
         scribbler.opacity = 0;
         scribbler.clear();
+        mainWindow.desktopKoView.qPresentationMode().navigateToPage(goToSlide);
         base.currentSlide = goToSlide;
     }
     Item {
@@ -158,8 +159,11 @@ Rectangle {
         MouseArea {
             anchors.fill: parent;
             onClicked: {
+                mainWindow.desktopKoView.stopPresentation();
                 mainPageStack.pop();
-                mainWindow.fullScreen = false;
+                if(mainWindow.fullScreen === true) {
+                    mainWindow.fullScreen = false;
+                }
             }
         }
     }
