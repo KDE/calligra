@@ -42,7 +42,7 @@ void KPrTextBlockPaintStrategy::setAnimationCache(KPrAnimationCache *animationCa
     m_animationCache = animationCache;
 }
 
-QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground)
+QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground) const
 {
     return defaultBackground;
 }
@@ -60,7 +60,7 @@ void KPrTextBlockPaintStrategy::applyStrategy(QPainter *painter)
     painter->setClipping(false);
 }
 
-bool KPrTextBlockPaintStrategy::isVisible()
+bool KPrTextBlockPaintStrategy::isVisible() const
 {
     if (m_animationCache) {
         return m_animationCache->value(m_textBlockData, "visibility", true).toBool();

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _SECTIONS_SAVER_H_
-#define _SECTIONS_SAVER_H_
+#ifndef _SECTIONSIO_H_
+#define _SECTIONSIO_H_
 
 #include <QObject>
 #include <QMap>

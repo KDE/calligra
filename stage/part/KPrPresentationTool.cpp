@@ -32,6 +32,7 @@
 #include <QCursor>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDBusConnection>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>

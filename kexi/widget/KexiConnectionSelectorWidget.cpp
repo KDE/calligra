@@ -428,7 +428,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
                 "Do you want to remove database connection \"%1\" from the list of available connections?",
                 item->data()->serverInfoString(true)),
             QString(), //caption
-            KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+            KStandardGuiItem::remove(), KStandardGuiItem::cancel(),
             QString(), //dont'ask name
             KMessageBox::Notify | KMessageBox::Dangerous)) {
         return;

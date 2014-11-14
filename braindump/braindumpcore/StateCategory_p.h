@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _STATECATEGORY_P_H_
+#define _STATECATEGORY_P_H_
+
 #include "StateCategory.h"
 
 #include <QMap>
@@ -26,3 +29,4 @@ struct StateCategory::Private {
     int priority;
 };
 
+#endif
