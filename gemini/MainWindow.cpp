@@ -33,6 +33,7 @@
 #include <QMessageBox>
 #include <QToolButton>
 #include <QDesktopServices>
+#include <QDesktopWidget>
 #include <QFileInfo>
 #include <QGLWidget>
 
@@ -478,6 +479,7 @@ void MainWindow::documentChanged()
         d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
         qApp->processEvents();
         d->desktopKoView = d->desktopView->rootView();
+        emit desktopKoViewChanged();
     //    d->desktopKoView->setQtMainWindow(d->desktopView);
     //    connect(d->desktopKoView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     //    connect(d->desktopKoView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
@@ -622,6 +624,17 @@ void MainWindow::setFullScreen(bool newValue)
     }
     d->fullScreenThrottle->start();
     emit fullScreenChanged();
+}
+
+QObject* MainWindow::desktopKoView() const
+{
+    return d->desktopKoView;
+}
+
+int MainWindow::lastScreen() const
+{
+    QDesktopWidget desktop;
+    return desktop.screenCount() - 1;
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)

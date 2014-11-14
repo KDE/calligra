@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow
     Q_PROPERTY(QString currentTouchPage READ currentTouchPage WRITE setCurrentTouchPage NOTIFY currentTouchPageChanged)
     Q_PROPERTY(bool temporaryFile READ temporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
     Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
+    Q_PROPERTY(QObject* desktopKoView READ desktopKoView NOTIFY desktopKoViewChanged)
 
 public:
     explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
@@ -54,6 +55,9 @@ public:
 
     bool fullScreen() const;
     void setFullScreen(bool newValue);
+
+    QObject* desktopKoView() const;
+    Q_INVOKABLE int lastScreen() const;
 
     Q_INVOKABLE void setAlternativeSaveAction(QAction* altAction);
 
@@ -83,6 +87,7 @@ Q_SIGNALS:
     void currentTouchPageChanged();
     void temporaryFileChanged();
     void fullScreenChanged();
+    void desktopKoViewChanged();
     void documentSaved();
 
 private Q_SLOTS:
