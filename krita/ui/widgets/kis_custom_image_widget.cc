@@ -132,7 +132,17 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     KisConfig cfg;
     intNumLayers->setValue(cfg.numDefaultLayers());
-
+    cmbColor->setColor(cfg.defaultBackgroundColor());
+    setBackgroundOpacity(cfg.defaultBackgroundOpacity());
+    
+    KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
+    
+    if (bgStyle == KisConfig::LAYER) {
+      radioBackgroundAsLayer->setChecked(true);
+    } else {
+      radioBackgroundAsProjection->setChecked(true);
+    }
+    
     fillPredefined();
     switchPortraitLandscape();
 }
@@ -250,43 +260,26 @@ KisDoc2* KisCustomImageWidget::createNewImage()
     }
     KisDoc2 *doc = static_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
-    QColor qc = cmbColor->color();
-
     qint32 width, height;
     double resolution;
-    resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+    resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
     width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
 
+    QColor qc = cmbColor->color();
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
-    doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
 
-    KisImageWSP image = doc->image();
-    if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
-        if (layer) {
-            layer->setOpacity(OPACITY_OPAQUE_U8);
-        }
-        // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
-        if (layer && backgroundOpacity() < OPACITY_OPAQUE_U8) {
-            KisFillPainter painter;
-            painter.begin(layer->paintDevice());
-            painter.fillRect(0, 0, width, height, bgColor, backgroundOpacity());
+    bool backgroundAsLayer = radioBackgroundAsLayer->isChecked();
 
-        }
-
-        layer->setDirty(QRect(0, 0, width, height));
-        for(int i = 1; i < intNumLayers->value(); ++i) {
-            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
-            image->addNode(layer, image->root(), i);
-            layer->setDirty(QRect(0, 0, width, height));
-        }
-    }
+    doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());
+    cfg.setDefaultBackgroundOpacity(backgroundOpacity());
+    cfg.setDefaultBackgroundColor(cmbColor->color());
+    cfg.setDefaultBackgroundStyle(backgroundAsLayer ? KisConfig::LAYER : KisConfig::PROJECTION);
 
     return doc;
 }
@@ -304,6 +297,10 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
         return 0;
 
     return (opacity * 255) / 100;
+}
+
+void KisCustomImageWidget::setBackgroundOpacity(quint8 value) {
+  sliderOpacity->setValue((value * 100) / 255);
 }
 
 void KisCustomImageWidget::clipboardDataChanged()
