@@ -67,10 +67,10 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
             this, SLOT(delimiterClicked(int)));
     connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
-    connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged(const QString &)),
-            this, SLOT(textChanged(const QString &)));
-    connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
-            this, SLOT(textquoteSelected(const QString &)));
+    connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(textChanged(QString)));
+    connect(m_dialog->m_comboQuote, SIGNAL(activated(QString)),
+            this, SLOT(textquoteSelected(QString)));
     connect(m_dialog->m_selectionOnly, SIGNAL(toggled(bool)),
             this, SLOT(selectionOnlyChanged(bool)));
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));

@@ -135,7 +135,7 @@ CollectionTreeWidget::CollectionTreeWidget(QWidget* parent): QTreeWidget(parent)
     setAcceptDrops(true);
     setItemDelegate(new SheetDelegate(this, this));
 
-    connect(this, SIGNAL(itemPressed(QTreeWidgetItem*, int)),
+    connect(this, SIGNAL(itemPressed(QTreeWidgetItem*,int)),
             this, SLOT(handleMousePress(QTreeWidgetItem*)));
 
     loadOptions();
