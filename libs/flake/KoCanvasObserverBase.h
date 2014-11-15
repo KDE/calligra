@@ -24,6 +24,7 @@ class KoCanvasBase;
 class KoCanvasObserverBasePrivate;
 
 #include "flake_export.h"
+#include <QString>
 
 /**
  * An abstract canvas observer interface class.
@@ -37,7 +38,7 @@ public:
     KoCanvasObserverBase();
     virtual ~KoCanvasObserverBase();
 
-    virtual QString observerName() = 0;
+    virtual QString observerName() { return ""; }
 
     /**
      * set observed canvas
