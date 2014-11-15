@@ -627,8 +627,8 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // Always forward tab/backtab to parent, so that pressing them leaves
         // editing mode. To insert literal tabs you can always use the external
         // editor.
-        
-	if (textUnderCursor()!= "" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())){
+
+        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
 	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
 	}
 	event->ignore();
@@ -639,7 +639,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         if (event->modifiers() & Qt::ShiftModifier) {
             break; // pass to TextEdit
         }
-	if (textUnderCursor()!= "" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
+        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
 	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
 	}
 	event->ignore(); // pass to parent
