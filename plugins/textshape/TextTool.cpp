@@ -167,27 +167,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     createActions();
 
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
-    m_textEditingPlugins = canvas->resourceManager()->
-        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
-    if (m_textEditingPlugins == 0) {
-        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
-        QVariant variant;
-        variant.setValue(m_textEditingPlugins);
-        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
-    }
-
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
-        connect(plugin, SIGNAL(startMacro(const QString &)),
-                this, SLOT(startMacro(const QString &)));
-        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-        QHash<QString, KAction*> actions = plugin->actions();
-        QHash<QString, KAction*>::iterator i = actions.begin();
-        while (i != actions.end()) {
-            addAction(i.key(), i.value());
-            ++i;
-        }
-    }
-
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
@@ -931,7 +910,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     } else {
         if (event->button() == Qt::RightButton) {
             m_tablePenMode = false;
-            KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+            KoTextEditingPlugin *plugin = textEditingPluginContainer()->spellcheck();
             if (plugin)
                 plugin->setCurrentCursorPosition(m_textShapeData->document(), -1);
 
@@ -980,7 +959,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
     //activate context-menu for spelling-suggestions
     if (event->button() == Qt::RightButton) {
-        KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+        KoTextEditingPlugin *plugin = textEditingPluginContainer()->spellcheck();
         if (plugin)
             plugin->setCurrentCursorPosition(m_textShapeData->document(), m_textEditor.data()->position());
 
@@ -1089,6 +1068,33 @@ QMimeData *TextTool::generateMimeData() const
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
 
     return drag.takeMimeData();
+}
+
+TextEditingPluginContainer *TextTool::textEditingPluginContainer()
+{
+    m_textEditingPlugins = canvas()->resourceManager()->
+        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
+
+    if (m_textEditingPlugins == 0) {
+        m_textEditingPlugins = new TextEditingPluginContainer(canvas()->resourceManager());
+        QVariant variant;
+        variant.setValue(m_textEditingPlugins.data());
+        canvas()->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
+
+        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
+            connect(plugin, SIGNAL(startMacro(const QString &)),
+                    this, SLOT(startMacro(const QString &)));
+            connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+            QHash<QString, KAction*> actions = plugin->actions();
+            QHash<QString, KAction*>::iterator i = actions.begin();
+            while (i != actions.end()) {
+                addAction(i.key(), i.value());
+                ++i;
+            }
+        }
+
+    }
+    return m_textEditingPlugins;
 }
 
 void TextTool::copy() const
@@ -2600,7 +2606,7 @@ void TextTool::showStyleManager(int styleId)
 
 void TextTool::startTextEditingPlugin(const QString &pluginId)
 {
-    KoTextEditingPlugin *plugin = m_textEditingPlugins->plugin(pluginId);
+    KoTextEditingPlugin *plugin = textEditingPluginContainer()->plugin(pluginId);
     if (plugin) {
         if (m_textEditor.data()->hasSelection()) {
             plugin->checkSection(m_textShapeData->document(), m_textEditor.data()->selectionStart(), m_textEditor.data()->selectionEnd());
@@ -2754,23 +2760,30 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    if (m_textShapeData && m_textEditingPlugins)
-        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+    if (m_textShapeData && textEditingPluginContainer()) {
+        foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    }
 }
 
 void TextTool::finishedParagraph()
 {
-    if (m_textShapeData&& m_textEditingPlugins)
-        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+    if (m_textShapeData && textEditingPluginContainer()) {
+        foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    }
 }
 
 void TextTool::startingSimpleEdit()
 {
-    if (m_textShapeData && m_textEditingPlugins)
-        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+    if (m_textShapeData && textEditingPluginContainer()) {
+        foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
             plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    }
+
 }
 
 void TextTool::setTextColor(const KoColor &color)
