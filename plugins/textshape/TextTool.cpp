@@ -103,7 +103,6 @@
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 #include "KoShapeBasedDocumentBase.h"
 #include <KoAnnotation.h>
-#include <KoGlobal.h>
 #include <KoShapeRegistry.h>
 #include <kuser.h>
 
@@ -3011,9 +3010,9 @@ void TextTool::insertAnnotation()
     textEditor()->addAnnotation(shape);
 
     // Set annotation creator.
-    KConfig *config = KoGlobal::calligraConfig();
-    config->reparseConfiguration();
-    KConfigGroup authorGroup(config, "Author");
+    KConfig cfg("calligrarc");
+    cfg.reparseConfiguration();
+    KConfigGroup authorGroup(&cfg, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
     KGlobal::config()->reparseConfiguration();
     KConfigGroup appAuthorGroup(KGlobal::config(), "Author");

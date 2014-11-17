@@ -678,7 +678,7 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
-                   ${Boost_INCLUDE_DIRS} 
+                   ${Boost_INCLUDE_DIRS}
                    ${QT_INCLUDES}
                    ${KDE4_INCLUDES})
 
@@ -721,15 +721,19 @@ set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgets)
 
 # BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES
-                   ${KOWIDGETS_INCLUDES} 
+set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
+set(KOWIDGETS_INCLUDES ${KDE4_INCLUDES}
+                    ${BASICFLAKES_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${TEXTLAYOUT_INCLUDES}
                     ${KOWIDGETS_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)

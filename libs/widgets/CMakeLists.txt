@@ -30,7 +30,7 @@ set(kowidgets_LIB_SRCS
     KoZoomHandler.cpp
     KoZoomMode.cpp
     KoDpi.cpp
-
+    KoGlobal.cpp
     KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
@@ -70,7 +70,6 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
-
     KoResourceModelBase.cpp
 )
 
@@ -114,7 +113,7 @@ install( FILES
     KoDpi.h
     KoZoomHandler.h
     KoZoomMode.h
-
+    KoGlobal.h
     KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
