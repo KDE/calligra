@@ -168,6 +168,7 @@ set(kritaui_LIB_SRCS
     recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
+    tool/kis_rectangle_constraint_widget.cpp
     tool/kis_shape_tool_helper.cpp
     tool/kis_tool.cc
     tool/kis_tool_freehand.cc
@@ -350,6 +351,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgflipbookselector.ui
     forms/wdganimationselector.ui
+    forms/wdgrectangleconstraints.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
