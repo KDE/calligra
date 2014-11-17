@@ -248,8 +248,8 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
      */
     QPointF pos = adjustPosition(event->point, event->point);
     qreal perspective = 1.0;
-    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
-        if (grid->contains(pos)) {
+    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid && grid->contains(pos)) {
             perspective = grid->distance(pos);
             break;
         }
@@ -368,8 +368,8 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
 qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 {
     qreal perspective = 1.0;
-    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
-        if (grid->contains(documentPoint)) {
+    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid && grid->contains(documentPoint)) {
             perspective = grid->distance(documentPoint);
             break;
         }

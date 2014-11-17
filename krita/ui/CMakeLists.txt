@@ -281,6 +281,8 @@ set(kritaui_LIB_SRCS
     kis_animation_layer.cpp
     kis_animation_model.cpp
 
+    kis_abstract_perspective_grid.cpp
+
 # build these last for now
     kis_image_view.cpp
     kis_main_window.cpp

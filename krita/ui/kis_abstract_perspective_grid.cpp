@@ -1,3 +1,4 @@
+
 /*
  * This file is part of Krita
  *
@@ -17,31 +18,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_abstract_perspective_grid.h"
 
-#ifndef KIS_ABSTRACT_PERSPECTIVE_GRID_H
-#define KIS_ABSTRACT_PERSPECTIVE_GRID_H
-
-#include <QPointF>
-#include <QObject>
-
-#include "krita_export.h"
-
-class KRITAUI_EXPORT KisAbstractPerspectiveGrid : public QObject
+KisAbstractPerspectiveGrid::KisAbstractPerspectiveGrid(QObject *parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-public:
-
-    KisAbstractPerspectiveGrid(QObject * parent = 0);
-
-    virtual ~KisAbstractPerspectiveGrid() {}
-
-    virtual bool contains(const QPointF& pt) const = 0;
-    /**
-     * Returns the reciprocal of the distance from the given point
-     * to the 'observer', in the range [0, 1] where 0 = inifinite
-     * distance and 1 = closest.
-     */
-    virtual qreal distance(const QPointF& pt) const = 0;
-};
-
-#endif
+}
