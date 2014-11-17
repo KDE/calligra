@@ -146,7 +146,7 @@ bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {
 
-        // So far we only have support for text-properies and list-level-properties.
+        // So far we only have support for text-properties and list-level-properties.
         QString propertiesType = reader.qualifiedName().toString();
         kDebug() << "properties type: " << propertiesType;
 
