@@ -32,12 +32,15 @@
 
 #include <kdebug.h>
 #include <klineedit.h>
+#include <KStandardAction>
+#include <KAction>
 
 #include <QLabel>
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QWhatsThis>
 
 //! Templorary hides db list
 //! @todo reenable this when implemented
@@ -55,7 +58,7 @@ public:
     bool connectionOnly;
     KexiProjectData data;
     KexiDBDriverComboBox *driversCombo;
-
+    QAction *savePasswordHelpAction;
 };
 
 class KexiDBConnectionDialog::Private
@@ -77,6 +80,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     iconLabel->setPixmap(DesktopIcon(KEXI_DATABASE_SERVER_ICON_NAME));
 
     QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
+    driversComboLyr->setMargin(0);
     d->driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(),
             KexiDBDriverComboBox::ShowServerDrivers);
     driversComboLyr->addWidget(d->driversCombo);
@@ -90,7 +94,12 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     btnLoadDBList->setIcon(koIcon("view-refresh"));
     btnLoadDBList->setToolTip(i18n("Load database list from the server"));
     btnLoadDBList->setWhatsThis(
-        i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
+        i18n("Loads database list from the server, so you can select one using the <interface>Name</interface> combo box."));
+
+    btnSavePasswordHelp->setIcon(koIcon("help-contextual"));
+    btnSavePasswordHelp->setToolTip(KStandardAction::whatsThis(0, 0, btnSavePasswordHelp)->text().remove('&'));
+    d->savePasswordHelpAction = QWhatsThis::createAction(chkSavePassword);
+    connect(btnSavePasswordHelp, SIGNAL(clicked()), this, SLOT(slotShowSavePasswordHelp()));
 
     QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
     hbox->addStretch(2);
@@ -234,7 +243,17 @@ void KexiDBConnectionWidget::slotCBToggled(bool on)
 {
     if (sender() == chkPortDefault) {
         customPortEdit->setEnabled(!on);
+        portLbl->setEnabled(!on);
+        if (on) {
+            portLbl->setBuddy(customPortEdit);
+        }
     }
+}
+
+void KexiDBConnectionWidget::slotShowSavePasswordHelp()
+{
+    QWhatsThis::showText(chkSavePassword->mapToGlobal(QPoint(0, chkSavePassword->height())),
+                         chkSavePassword->whatsThis());
 }
 
 //-----------
