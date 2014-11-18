@@ -61,6 +61,7 @@
 #include <part/KWFactory.h>
 #include <stage/part/KPrDocument.h>
 #include <stage/part/KPrFactory.h>
+#include <stage/part/KPrViewModePresentation.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
@@ -285,6 +286,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<RecentFilesModel>("org.calligra", 1, 0, "RecentFilesModel");
     qmlRegisterType<TemplatesModel>("org.calligra", 1, 0, "TemplatesModel");
     qmlRegisterType<CloudAccountsModel>("org.calligra", 1, 0, "CloudAccountsModel");
+    qmlRegisterType<KPrViewModePresentation>();
 
     qApp->setActiveWindow( this );
 
