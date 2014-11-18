@@ -32,7 +32,7 @@ class KPrViewModePresenterView;
 class KPrEndOfSlideShowPage;
 class KPrView;
 
-class KPrViewModePresentation : public KoPAViewMode
+class STAGE_EXPORT KPrViewModePresentation : public KoPAViewMode
 {
     Q_OBJECT
 

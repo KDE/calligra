@@ -22,7 +22,6 @@
 #define KPRVIEW_H
 
 #include "stage_export.h"
-#include "KPrViewModePresentation.h"
 #include <QObject>
 #include <KoPAView.h>
 
@@ -35,6 +34,7 @@ class KPrViewAdaptor;
 
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
+class KPrViewModePresentation;
 class KPrViewModePresenterView;
 class KActionMenu;
 class KoPAPageBase;
@@ -65,10 +65,7 @@ public:
     /**
      * Get the presentation view mode
      */
-    KPrViewModePresentation * presentationMode() const;
-    // This will make people bawlk, for good reason. It allows for a quick and dirty
-    // presentation mode show off in Calligra Gemini, but will need to be done better.
-    Q_INVOKABLE QObject* qPresentationMode() { return presentationMode(); }
+    Q_INVOKABLE KPrViewModePresentation * presentationMode() const;
 
     /**
      * Get the slides sorter view mode
