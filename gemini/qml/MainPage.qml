@@ -392,12 +392,16 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
                 onClicked: {
                     mainPageStack.push(presentationDJMode);
-                    mainWindow.desktopKoView.startPresentationFromBeginning();
-                    DocumentManager.doc().setPresentationMonitor(mainWindow.lastScreen());
-                    DocumentManager.doc().setPresenterViewEnabled(false);
                     closeToolbarMenus();
                     if(mainWindow.lastScreen() > 0) {
+                        // don't do the whole song and dance with presenting unless we've got a useful
+                        // external screen to do the presentation on. For on-device presentations, we
+                        // need desktop controls anyway, so heuristics say - presentation in touch need
+                        // external screen.
                         mainWindow.fullScreen = true;
+                        DocumentManager.doc().setPresentationMonitor(mainWindow.lastScreen());
+                        DocumentManager.doc().setPresenterViewEnabled(false);
+                        mainWindow.desktopKoView.startPresentationFromBeginning();
                     }
                 }
                 Calligra.PresentationModel {
