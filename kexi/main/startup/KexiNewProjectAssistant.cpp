@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
+   Copyright (C) 2014 Roman Shtemberko <shtemberko@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,6 +55,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>
+#include <QFileInfo>
  
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -256,13 +258,40 @@ bool KexiProjectTitleSelectionPage::isAcceptable()
         return false;
     }
     KUrl url = contents->file_requester->url();
+    QFileInfo fileInfo(contents->file_requester->text());
+    if (fileInfo.dir().isRelative()) {
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+                                                     contents->file_requester,
+            i18nc("@info", "<filename>%1</filename> is a relative path. "
+            "<note>Enter absolute path of a file to be created.</note>",
+            fileInfo.filePath()));
+        return false;
+    }
     if (!url.isValid() || !url.isLocalFile() || url.fileName().isEmpty()) {
         messageWidget = new KexiContextMessageWidget(contents->formLayout,
             contents->file_requester,
-            i18n("Enter valid project filename. The file should be located on this computer."));
+            i18n("Enter a valid project filename. The file should be located on this computer."));
+        return false;
+    }
+    if (fileInfo.isDir()) {
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+            contents->file_requester,
+            i18nc("@info", "<filename>%1</filename> is a directory name. "
+                  "<note>Enter name of a file to be created.</note>",
+                  fileInfo.filePath()));
         return false;
     }
     if (!fileHandler->checkSelectedUrl()) {
+        return false;
+    };
+    QFileInfo writableChecker(fileInfo.dir().path());
+    if (!writableChecker.isWritable()) {
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+            contents->file_requester,
+            i18nc("@info","Could not create database file <filename>%1</filename>. "
+                "<note>There is no permission to create this file. "
+                "Pick another directory or change permissions so the file can be created.</note>",
+                contents->file_requester->url().toLocalFile()));
         return false;
     }
     //urlSelected(url); // to save recent dir
