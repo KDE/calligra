@@ -212,6 +212,7 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
         KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
         KexiStartupFileHandler::SavingFileBasedDB,
         contents->file_requester);
+    fileHandler->setDefaultExtension("kexi");
     connect(fileHandler, SIGNAL(askForOverwriting(KexiContextMessage)),
             this, SLOT(askForOverwriting(KexiContextMessage)));
 

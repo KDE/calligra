@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -68,6 +68,16 @@ public:
         }
     }
 
+    void setUrl(const KUrl& url)
+    {
+        if (requester) {
+            requester->setUrl(url);
+        }
+        else {
+            dialog->setUrl(url);
+        }
+    }
+
     QPointer<KFileDialog> dialog;
     QPointer<KUrlRequester> requester;
     QString lastFileName;
@@ -78,6 +88,9 @@ public:
     QString recentDirClass;
     
     QPointer<QEventLoop> messageWidgetLoop;
+    //! Used in KexiStartupFileHandler::askForOverwriting() to remember path that
+    //! was recently accepted for overwrite by the user.
+    QString recentFilePathConfirmed;
 };
 
 //------------------
@@ -111,10 +124,7 @@ void KexiStartupFileHandler::init(const KUrl &startDirOrVariable, Mode mode)
     else {
         url = startDirOrVariable;
     }
-    if (d->requester)
-        d->requester->setUrl(url);
-    else
-        d->dialog->setUrl(url);
+    d->setUrl(url);
     setMode(mode);
     QAction *previewAction = d->dialog->actionCollection()->action("preview");
     if (previewAction)
@@ -348,7 +358,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
     }
 #endif
     //kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
-    if (!url.isValid()) {
+    if (!url.isValid() || QFileInfo(url.path()).isDir()) {
         KMessageBox::error(d->dialog->parentWidget(), i18n("Enter a filename."));
         return false;
     }
@@ -375,7 +385,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
                 path += (QLatin1String(".") + defaultExtension);
                 kDebug() << "appended extension, result:" << path;
                 url = KUrl(path);
-                d->dialog->setUrl(url);
+                d->setUrl(url);
             }
         }
     }
@@ -433,6 +443,10 @@ void KexiStartupFileHandler::updateUrl(const QString &name)
 bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
 {
     QFileInfo fi(filePath);
+    if (d->recentFilePathConfirmed == filePath) {
+        return true;
+    }
+    d->recentFilePathConfirmed.clear();
     if (!fi.exists())
         return true;
     KexiContextMessage message(
@@ -450,7 +464,11 @@ bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
     if (!d->messageWidgetLoop) {
         d->messageWidgetLoop = new QEventLoop;
     }
-    return d->messageWidgetLoop->exec();
+    bool ok = d->messageWidgetLoop->exec();
+    if (ok) {
+        d->recentFilePathConfirmed = filePath;
+    }
+    return ok;
 }
 
 void KexiStartupFileHandler::setLocationText(const QString& fn)
