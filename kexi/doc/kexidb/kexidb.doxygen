@@ -180,7 +180,7 @@ EXPAND_ONLY_PREDEF     = YES
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = ../../kexidb
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = QT_VERSION=311
+PREDEFINED             = QT_VERSION=486
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
