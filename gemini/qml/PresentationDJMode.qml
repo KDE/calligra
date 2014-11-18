@@ -37,7 +37,7 @@ Rectangle {
         laserScribbler.clear();
         scribbler.opacity = 0;
         scribbler.clear();
-        mainWindow.desktopKoView.qPresentationMode().navigateToPage(goToSlide);
+        mainWindow.desktopKoView.presentationMode().navigateToPage(goToSlide);
         base.currentSlide = goToSlide;
     }
     Item {
