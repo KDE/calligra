@@ -184,10 +184,15 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         if (m_canvas) {
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
             connect(m_canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
+            if (m_chkUseOcio->isChecked() && m_ocioConfig) {
+                m_canvas->setDisplayFilter(m_displayFilter);
+            }
+            else {
+                m_canvas->setDisplayFilter(KisDisplayFilterSP());
+            }
         }
     }
     resetOcioConfiguration();
-    updateDisplaySettings();
 }
 
 void LutDockerDock::slotUpdateIcons()

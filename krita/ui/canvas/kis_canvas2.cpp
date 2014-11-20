@@ -477,8 +477,6 @@ void KisCanvas2::startUpdateInPatches(QRect imageRect)
 
 void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
 {
-    if (m_d->displayColorConverter->displayFilter() == displayFilter) return;
-
     m_d->displayColorConverter->setDisplayFilter(displayFilter);
 
     if (m_d->currentCanvasIsOpenGL) {
