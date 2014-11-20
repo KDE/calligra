@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Roman Shtemberko <shtemberko@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #include <db/connection.h>
 #include <db/utils.h>
 #include <db/drivermanager.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include "kexidbdrivercombobox.h"
 
 #include <KoIcon.h>
@@ -342,8 +344,22 @@ bool KexiDBConnectionTabWidget::savePasswordOptionSelected() const
 
 void KexiDBConnectionTabWidget::slotTestConnection()
 {
+    KexiDB::ConnectionData connectionData = *currentProjectData().connectionData();
+    bool savePasswordChecked = connectionData.savePassword;
+    if (!savePasswordChecked) {
+        connectionData.password = mainWidget->passwordEdit->text(); //not saved otherwise
+    }
+    if (mainWidget->passwordEdit->text().isEmpty()) {
+        connectionData.password = QString::null;
+        if (savePasswordChecked) {
+            connectionData.savePassword = false; //for getPasswordIfNeeded()
+        }
+        if (~KexiDBPasswordDialog::getPasswordIfNeeded(&connectionData,this)) {
+            return;
+        }
+    }
     KexiGUIMessageHandler msgHandler;
-    KexiDB::connectionTestDialog(this, *currentProjectData().connectionData(),
+    KexiDB::connectionTestDialog(this, connectionData,
                                  msgHandler);
 }
 
