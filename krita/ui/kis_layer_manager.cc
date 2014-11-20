@@ -268,7 +268,7 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 void KisLayerManager::activateLayer(KisLayerSP layer)
 {
     if (m_imageView) {
-        m_imageView->setCurrentLayer(layer);
+        m_imageView->setCurrentNode(layer);
         emit sigLayerActivated(layer);
         layersUpdated();
         if (layer) {

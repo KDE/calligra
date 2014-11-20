@@ -112,8 +112,6 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     if (!node) {
         selection->setActiveLayer(0);
         imageView->setCurrentNode(0);
-        imageView->setCurrentLayer(0);
-        imageView->setCurrentMask(0);
         maskManager->activateMask(0);
         layerManager->activateLayer(0);
     } else {

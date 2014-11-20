@@ -91,8 +91,6 @@ public:
     KisView2 *parentView;
 
     KisNodeSP currentNode;
-    KisLayerSP currentLayer;
-    KisMaskSP currentMask;
 
     KisMirrorAxis* mirrorAxis;
 
@@ -607,24 +605,22 @@ KisNodeSP KisImageView::currentNode() const
     return d->currentNode;
 }
 
-void KisImageView::setCurrentLayer(KisLayerSP layer)
-{
-    d->currentLayer = layer;
-}
-
 KisLayerSP KisImageView::currentLayer() const
 {
-    return d->currentLayer;
-}
-
-void KisImageView::setCurrentMask(KisMaskSP mask)
-{
-    d->currentMask = mask;
+    KisNodeSP node;
+    KisMaskSP mask = currentMask();
+    if (mask) {
+        node = mask->parent();
+    }
+    else {
+        node = d->currentNode;
+    }
+     return dynamic_cast<KisLayer*>(node.data());
 }
 
 KisMaskSP KisImageView::currentMask() const
 {
-   return d->currentMask;
+   return dynamic_cast<KisMask*>(d->currentNode.data());
 }
 
 KisSelectionSP KisImageView::selection()

@@ -92,11 +92,7 @@ public:
 
     void setCurrentNode(KisNodeSP node);
     KisNodeSP currentNode() const;
-
-    void setCurrentLayer(KisLayerSP layer);
     KisLayerSP currentLayer() const;
-
-    void setCurrentMask(KisMaskSP mask);
     KisMaskSP currentMask() const;
 
     /// Convenience method to get at the active selection (the
