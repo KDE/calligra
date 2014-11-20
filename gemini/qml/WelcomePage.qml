@@ -55,7 +55,7 @@ Page {
                     leftMargin: Constants.DefaultMargin;
                     verticalCenter: parent.verticalCenter;
                 }
-                text: "Calligra Suite";
+                text: "Calligra Gemini";
                 font: Settings.theme.font("welcomeHeader");
                 color: "white";
             }
