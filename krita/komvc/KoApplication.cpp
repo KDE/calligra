@@ -22,7 +22,6 @@
 #include "KoApplication.h"
 
 #ifndef QT_NO_DBUS
-#include "KoApplicationAdaptor.h"
 #include <QtDBus>
 #endif
 
@@ -139,11 +138,6 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
-
-#ifndef QT_NO_DBUS
-    new KoApplicationAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/application", this);
-#endif
 
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )

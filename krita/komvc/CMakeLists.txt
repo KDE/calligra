@@ -21,7 +21,6 @@ set(komvc_LIB_SRCS
     KoApplication.cpp
     KoDockerManager.cpp
     KoDocument.cpp
-    KoDocumentAdaptor.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp
@@ -67,14 +66,6 @@ set(komvc_LIB_SRCS
     thememanager.cpp
 )
 
-if( QT_QTDBUS_FOUND )
-    set(komvc_LIB_SRCS ${komvc_LIB_SRCS}
-        KoApplicationAdaptor.cpp
-        KoViewAdaptor.cpp
-        KoPartAdaptor.cpp
-    )
-endif( QT_QTDBUS_FOUND )
-
 if (APPLE)
     set(komvc_LIB_SRCS ${komvc_LIB_SRCS}
         MacSupport.mm
@@ -113,10 +104,3 @@ install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
 endif (APPLE)
-
-if( QT_QTDBUS_FOUND )
-    install( FILES
-        KoApplicationAdaptor.h
-        KoViewAdaptor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
-endif( QT_QTDBUS_FOUND )

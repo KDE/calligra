@@ -71,11 +71,6 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
-#ifndef QT_NO_DBUS
-#include <kio/jobuidelegate.h>
-#include <QDBusConnection>
-#include "KoDocumentAdaptor.h"
-#endif
 #include <QApplication>
 
 // Define the protocol used here for embedded documents' URL
@@ -323,12 +318,6 @@ public:
         KIO::JobFlags flags = KIO::DefaultFlags;
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
-#ifndef QT_NO_DBUS
-        m_job->ui()->setWindow(0);
-        if (m_job->ui()) {
-            m_job->ui()->setWindow(parentPart->currentMainwindow());
-        }
-#endif
         QObject::connect(m_job, SIGNAL(result(KJob*)), document, SLOT(_k_slotJobFinished(KJob*)));
         QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)), document, SLOT(_k_slotGotMimeType(KIO::Job*,QString)));
     }
@@ -458,12 +447,6 @@ KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
     setAutoSave(defaultAutoSave());
 
     setObjectName(newObjectName());
-
-#ifndef QT_NO_DBUS
-    new KoDocumentAdaptor(this);
-    QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-#endif
-
 
     d->docInfo = new KoDocumentInfo(this);
 
@@ -2648,9 +2631,6 @@ bool KoDocument::saveToUrl()
             return false;
         }
         d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
-#ifndef QT_NO_DBUS
-        d->m_uploadJob->ui()->setWindow( 0 );
-#endif
         connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
         return true;
     }

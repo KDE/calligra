@@ -49,12 +49,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 
-#ifndef QT_NO_DBUS
-#include <QDBusConnection>
-#include "KoPartAdaptor.h"
-#endif
-
-
 QList<QPointer<KoPart> > KoPart::s_partList;
 
 class KoPart::Private
@@ -90,11 +84,6 @@ KoPart::KoPart(QObject *parent)
         : QObject(parent)
         , d(new Private(this))
 {
-#ifndef QT_NO_DBUS
-    new KoPartAdaptor(this);
-    QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-#endif
-
     s_partList.append(this);
 }
 
