@@ -70,6 +70,15 @@ set(kowidgets_LIB_SRCS KoZoomWidget.cpp
     KoResourceFiltering.cpp
 
     KoResourceModelBase.cpp
+
+    KoToolBox.cpp
+    KoToolBoxDocker.cpp
+    KoToolBoxFactory.cpp
+    KoToolDocker.cpp
+    
+    KoModeBox.cpp
+    KoModeBoxDocker.cpp
+    KoModeBoxFactory.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
