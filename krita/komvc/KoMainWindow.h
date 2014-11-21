@@ -98,20 +98,6 @@ public:
 
     KoPart* part();
 
-
-private:
-
-    /**
-     * The application should call this to show or hide a toolbar.
-     * It also takes care of the corresponding action in the settings menu.
-     */
-    void showToolbar(const char * tbName, bool shown);
-
-    /**
-     * @return TRUE if the toolbar @p tbName is visible
-     */
-    bool toolbarIsVisible(const char *tbName);
-
 public:
 
     /**

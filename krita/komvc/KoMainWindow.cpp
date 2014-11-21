@@ -1510,34 +1510,6 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
 
-bool KoMainWindow::toolbarIsVisible(const char *tbName)
-{
-    QWidget *tb = toolBar(tbName);
-    return !tb->isHidden();
-}
-
-void KoMainWindow::showToolbar(const char * tbName, bool shown)
-{
-    QWidget * tb = toolBar(tbName);
-    if (!tb) {
-        kWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found.";
-        return;
-    }
-    if (shown)
-        tb->show();
-    else
-        tb->hide();
-
-    // Update the action appropriately
-    foreach(QAction* action, d->toolbarList) {
-        if (action->objectName() != tbName) {
-            //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
-            static_cast<KToggleAction *>(action)->setChecked(shown);
-            break;
-        }
-    }
-}
-
 void KoMainWindow::viewFullscreen(bool fullScreen)
 {
     if (fullScreen) {
