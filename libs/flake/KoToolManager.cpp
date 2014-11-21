@@ -782,6 +782,7 @@ void KoToolManager::addController(KoCanvasController *controller)
         return;
     d->setup();
     d->attachCanvas(controller);
+    connect(controller->proxyObject, SIGNAL(destroyed(QObject*)), this, SLOT(attemptCanvasControllerRemoval(QObject*)));
     connect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     connect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
 }
@@ -792,6 +793,14 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
     disconnect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     disconnect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
     d->detachCanvas(controller);
+}
+
+void KoToolManager::attemptCanvasControllerRemoval(QObject* controller)
+{
+    KoCanvasControllerProxyObject* controllerActual = qobject_cast<KoCanvasControllerProxyObject*>(controller);
+    if (controllerActual) {
+        removeCanvasController(controllerActual->canvasController());
+    }
 }
 
 void KoToolManager::updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController)

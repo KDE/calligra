@@ -148,6 +148,9 @@ private:
     long m_charsWithoutSpace;
     long m_lines;
     long m_paragraphs;
+
+    // to ensure we're not running over ourselves.
+    bool m_running;
 };
 
 #endif // KWSTATISTICSWIDGET_H

@@ -160,7 +160,7 @@ void KWCanvasItem::updateInputMethodInfo()
 
 void KWCanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    painter->fillRect(option->exposedRect, Qt::darkGray);
+    painter->fillRect(option->exposedRect, QColor::fromRgb(232, 233, 234));
     KWCanvasBase::paint(*painter, option->exposedRect);
 }
 

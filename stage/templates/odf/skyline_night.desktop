@@ -1,6 +1,6 @@
 [Desktop Entry]
 Icon=skyline_night
-Name=Skyline Night
+Name=Skyline
 Name[bs]=Noćno nebo
 Name[ca]=Horitzó nocturn
 Name[ca@valencia]=Horitzó nocturn
@@ -63,3 +63,6 @@ Comment[zh_TW]=Skyline Night
 Type=Link
 URL=.source/skyline_night.otp
 X-KDE-Hidden=false
+X-KDE-Thumbnail=.thumbnail/skyline_night.png
+X-KDE-VariantName=Night
+X-KDE-Color=purple

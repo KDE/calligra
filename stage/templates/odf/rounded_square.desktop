@@ -71,3 +71,4 @@ Comment[zh_TW]=圓角方形
 Type=Link
 URL=.source/rounded_square.otp
 X-KDE-Hidden=false
+X-KDE-Thumbnail=.thumbnail/rounded_square.png

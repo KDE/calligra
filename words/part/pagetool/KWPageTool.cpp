@@ -35,6 +35,7 @@
 #include <KoPointerEvent.h>
 #include <KoTextDocument.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
 
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
@@ -51,8 +52,8 @@ KWPageTool::~KWPageTool()
 
 void KWPageTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    Q_UNUSED(painter)
+    Q_UNUSED(converter)
 }
 
 void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)

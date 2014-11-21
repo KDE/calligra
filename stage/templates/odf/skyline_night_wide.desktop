@@ -1,6 +1,6 @@
 [Desktop Entry]
 Icon=skyline_night_wide
-Name=Skyline Night Wide
+Name=Skyline Wide
 Name[bs]=Noćno nebo široko
 Name[ca]=Horitzó nocturn ample
 Name[ca@valencia]=Horitzó nocturn ample
@@ -63,3 +63,7 @@ Comment[zh_TW]=Skyline Night Wide
 Type=Link
 URL=.source/skyline_night_wide.otp
 X-KDE-Hidden=false
+X-KDE-TemplateIsWideFormat=true
+X-KDE-Thumbnail=.thumbnail/skyline_night_wide.png
+X-KDE-VariantName=Night
+X-KDE-Color=purple
