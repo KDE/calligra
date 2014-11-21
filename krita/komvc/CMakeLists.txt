@@ -30,8 +30,6 @@ set(komvc_LIB_SRCS
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
-    KoRulerController.cpp
-    KoRuler.cpp
     KoToolBox.cpp
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
