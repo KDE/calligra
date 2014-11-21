@@ -1,0 +1,11 @@
+[Desktop Entry]
+Icon=cohere-magenta
+Name=Cohere
+Comment=Cohere designed presentation template
+X-KDE-Color=magenta
+X-KDE-Swatch=ColorPalettes-Magenta-1
+X-KDE-TemplateIsWideFormat=true
+Type=Link
+URL=.source/cohere-magenta.otp
+X-KDE-Hidden=false
+X-KDE-Thumbnail=.thumbnail/cohere-magenta.png

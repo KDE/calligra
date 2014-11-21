@@ -1,0 +1,11 @@
+[Desktop Entry]
+Icon=cohere-blue
+Name=Cohere
+Comment=Cohere designed presentation template
+X-KDE-Color=blue
+X-KDE-Swatch=ColorPalettes-Blue-1
+X-KDE-TemplateIsWideFormat=true
+Type=Link
+URL=.source/cohere-blue.otp
+X-KDE-Hidden=false
+X-KDE-Thumbnail=.thumbnail/cohere-blue.png

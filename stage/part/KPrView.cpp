@@ -67,6 +67,7 @@
 #include <QDesktopWidget>
 
 #include "KPrPdfPrintJob.h"
+#include "gemini/ViewModeSwitchEvent.h"
 
 KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
   : KoPAView(part, document, KoPAView::ModeBox, parent)
@@ -327,6 +328,33 @@ void KPrView::initActions()
     m_actionBlackPresentation->setEnabled(false);
 
     connect(tabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));
+}
+
+bool KPrView::event(QEvent* event)
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (activePage()) {
+                syncObject->currentSlide = kopaDocument()->pageIndex(activePage());
+                syncObject->shapes = shapeManager()->shapes();
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (syncObject->initialized) {
+                shapeManager()->setShapes(syncObject->shapes);
+                doUpdateActivePage( kopaDocument()->pageByIndex(syncObject->currentSlide, false) );
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
+            }
+
+            return true;
+        }
+    }
+    return QWidget::event(event);
 }
 
 void KPrView::startPresentation()

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Icon=skyline_morning_wide
-Name=Skyline Morning Wide
+Name=Skyline Wide
 Name[bs]=Jutarnje nebo široko
 Name[ca]=Horitzó matinal ample
 Name[ca@valencia]=Horitzó matinal ample
@@ -63,3 +63,7 @@ Comment[zh_TW]=Skyline Morning Wide
 Type=Link
 URL=.source/skyline_morning_wide.otp
 X-KDE-Hidden=false
+X-KDE-TemplateIsWideFormat=true
+X-KDE-Thumbnail=.thumbnail/skyline_morning_wide.png
+X-KDE-VariantName=Morning
+X-KDE-Color=blue

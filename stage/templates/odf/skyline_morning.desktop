@@ -1,6 +1,6 @@
 [Desktop Entry]
 Icon=skyline_morning
-Name=Skyline Morning
+Name=Skyline
 Name[bs]=Jutarnje nebo
 Name[ca]=Horitzó matinal
 Name[ca@valencia]=Horitzó matinal
@@ -63,3 +63,6 @@ Comment[zh_TW]=Skyline Morning
 Type=Link
 URL=.source/skyline_morning.otp
 X-KDE-Hidden=false
+X-KDE-Thumbnail=.thumbnail/skyline_morning.png
+X-KDE-VariantName=Morning
+X-KDE-Color=blue
