@@ -33,13 +33,6 @@ set(komain_LIB_SRCS
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
-    KoModeBox.cpp
-    KoModeBoxDocker.cpp
-    KoModeBoxFactory.cpp
-    KoToolBox.cpp
-    KoToolBoxDocker.cpp
-    KoToolBoxFactory.cpp
-    KoToolDocker_p.cpp
     KoVersionDialog.cpp
     KoView.cpp
     calligraversion.cpp
@@ -165,7 +158,6 @@ install( FILES
     KoMainWindow.h
     KoPageWidgetItem.h
     MacSupport.h
-    KoModeBoxFactory.h
     KoPart.h
     KoPrintJob.h
     KoVersionDialog.h
