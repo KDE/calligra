@@ -45,7 +45,6 @@ OdfCollectionLoader::OdfCollectionLoader(const QString& path, QObject* parent)
     m_odfStore = 0;
     m_shapeLoadingContext = 0;
     m_loadingContext = 0;
-    m_filterManager = 0;
 
     m_loadingTimer = new QTimer(this);
     m_loadingTimer->setInterval(0);
@@ -55,8 +54,6 @@ OdfCollectionLoader::OdfCollectionLoader(const QString& path, QObject* parent)
 
 OdfCollectionLoader::~OdfCollectionLoader()
 {
-    delete m_filterManager;
-    m_filterManager = 0;
     delete m_shapeLoadingContext;
     delete m_loadingContext;
     m_shapeLoadingContext = 0;
