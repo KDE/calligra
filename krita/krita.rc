@@ -1,17 +1,46 @@
 <?xml version="1.0"?>
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="59">
+<kpartgui name="Krita" version="59"
+               xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
+                         http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
-  <Separator/>
+ <Menu name="file" noMerge="1"><text>&amp;File</text>
+  <Action name="file_new" />
+  <Action name="activeauthor" />
+  <Action name="file_open" />
+  <Action name="file_open_recent" />
+  <Separator />
+  <Action name="file_save" />
+  <Action name="file_save_as" />
+  <Action name="file_reload_file" />
+  <Action name="file_versions_file"/>
+  <Separator />
+  <Action name="file_import_file" />
+  <Action name="file_export_file" />
+  <Action name="file_export_pdf" />
+  <Action name="file_send_file" />
+  <Separator />
   <Action name="save_incremental_version"/>
   <Action name="save_incremental_backup"/>
   <Action name="createTemplate"/>
+  <Separator />
+  <Action name="file_print" />
+  <Action name="file_print_preview" />
+  <Separator/>
+  <Action name="file_documentinfo" />
+  <DefineGroup name="file_infos" />
+  <Separator />
+  <Action name="file_close" />
+  <Action name="file_close_all" />
+  <Action name="file_quit" />
  </Menu>
 
  <Menu name="edit"><text>&amp;Edit</text>
-     <Merge/>
-     <Separator/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="copy_merged"/>
@@ -162,14 +191,29 @@
   <Action name="view_toggledockers" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"/>
   <Action name="settings_active_author" group="settings_configure"/>
+  <Action name="settings_dockers_menu"/>
+  <DefineGroup name="settings_show"/>
+  <Separator/>
+  <Action name="options_configure_keybinding"/>
+  <Action name="options_configure_toolbars"/>
+  <DefineGroup name="settings_configure"/>
   <Action name="preferences" group="settings_configure"/>
   <Action name="theme_menu"/>
-  <Action name="palette_manager"/>
 </Menu>
 
 <Action name="window"/>
 
 </MenuBar>
+
+<ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
+  <Action name="file_new" />
+  <Action name="file_open" />
+  <Action name="file_save" />
+  <!--
+  <Action name="file_print" />
+  <Action name="file_print_preview" />
+  //-->
+</ToolBar>
 
 <ToolBar name="BrushesAndStuff" position="top">
      <Text>Brushes and Stuff</Text>

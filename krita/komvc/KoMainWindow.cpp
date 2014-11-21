@@ -280,9 +280,9 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     actionCollection()->addAssociatedWidget(this);
 
     QString doc;
-    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "calligra/calligra_shell.rc");
+    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KStandardDirs::locateLocal("data", "calligra/calligra_shell.rc"));
+    setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
