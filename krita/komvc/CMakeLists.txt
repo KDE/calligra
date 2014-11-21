@@ -28,10 +28,6 @@ set(komvc_LIB_SRCS
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
-    KoToolBox.cpp
-    KoToolBoxDocker.cpp
-    KoToolBoxFactory.cpp
-    KoToolDocker_p.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
