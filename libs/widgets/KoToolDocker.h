@@ -26,11 +26,13 @@
 
 class QWidget;
 
+#include <kowidgets_export.h>
+
 /**
  * The tool docker shows the tool option widget associated with the
  * current tool and the current canvas.
  */
-class KoToolDocker : public QDockWidget
+class KOWIDGETS_EXPORT KoToolDocker : public QDockWidget
 {
     Q_OBJECT
 public:

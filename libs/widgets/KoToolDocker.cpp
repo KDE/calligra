@@ -19,7 +19,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KoToolDocker_p.h"
+#include "KoToolDocker.h"
 
 #include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
@@ -265,4 +265,4 @@ void KoToolDocker::resetWidgets()
     d->resetWidgets();
 }
 
-#include <KoToolDocker_p.moc>
+#include <KoToolDocker.moc>
