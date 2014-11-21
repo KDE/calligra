@@ -2168,11 +2168,9 @@ void Form::createPropertiesForWidget(QWidget *w)
     // add subproperties if available
     WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
-// QStrList tmpList; //used to allocate copy of names
     if (subpropIface) {
-        const QSet<QByteArray> subproperies(subpropIface->subproperies());
-        foreach(const QByteArray& propName, subproperies) {
-//   tmpList.append( *it );
+        const QSet<QByteArray> subproperties(subpropIface->subproperties());
+        foreach(const QByteArray& propName, subproperties) {
             propNames.insert(propName);
             kDebug() << "Added subproperty: " << propName;
         }
