@@ -20,8 +20,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#ifndef KOODFDOCUMENT_H
-#define KOODFDOCUMENT_H
+#ifndef KODOCUMENTBASE_H
+#define KODOCUMENTBASE_H
 
 class KoStore;
 class KoOdfReadStore;
@@ -37,7 +37,7 @@ class KUrl;
  * implementation is still in KoDocument, though that should probably
  * change.
  */
-class KOODF_EXPORT KoOdfDocument
+class KOODF_EXPORT KoDocumentBase
 {
 public:
 
@@ -52,14 +52,14 @@ public:
     };
 
     /**
-     * create a new KoOdfDocument
+     * create a new KoDocumentBase
      */
-    KoOdfDocument();
+    KoDocumentBase();
 
     /**
      * delete this document
      */
-    virtual ~KoOdfDocument();
+    virtual ~KoDocumentBase();
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -97,6 +97,72 @@ public:
      *  using the ODF format.
      */
     virtual bool saveOdf(SavingContext &documentContext) = 0;
+
+    /**
+     * Checks whether the document is currently in the process of autosaving
+     */
+    virtual bool isAutosaving() const = 0;
+
+    /**
+     * Returns true if this document or any of its internal child documents are modified.
+     */
+    virtual bool isModified() const = 0;
+
+    /**
+     *  @return true if the document is empty.
+     */
+    virtual bool isEmpty() const = 0;
+
+    /**
+     * Returns the actual mimetype of the document
+     */
+    virtual QByteArray mimeType() const = 0;
+
+    /**
+     * @brief Sets the mime type for the document.
+     *
+     * When choosing "save as" this is also the mime type
+     * selected by default.
+     */
+    virtual void setMimeType(const QByteArray & mimeType) = 0;
+
+    virtual QString localFilePath() const = 0;
+
+    /**
+     * Return the set of SupportedSpecialFormats that the application wants to
+     * offer in the "Save" file dialog.
+     */
+    virtual int supportedSpecialFormats() const = 0;
+
+    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
+    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
+        SaveAsDirectoryStore = 2,
+        SaveAsFlatXML = 4,
+        SaveEncrypted = 8
+                        // bitfield! next value is 16
+    };
+    virtual int specialOutputFlag() const = 0;
+
+    /**
+     * @brief Set the format in which the document should be saved.
+     *
+     * This is called on loading, and in "save as", so you shouldn't
+     * have to call it.
+     *
+     * @param mimeType the mime type (format) to use.
+     * @param specialOutputFlag is for "save as older version" etc.
+     */
+    virtual void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) = 0;
+
+    virtual QByteArray outputMimeType() const = 0;
+
+    /**
+     * Sets the document URL to empty URL
+     * KParts doesn't allow this, but %Calligra apps have e.g. templates
+     * After using loadNativeFormat on a template, one wants
+     * to set the url to KUrl()
+     */
+    virtual void resetURL() = 0;
 
 private:
     class Private;

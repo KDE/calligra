@@ -8,7 +8,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
     cmake_policy(SET CMP0017 NEW)
 endif()
 
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
     cmake_policy(SET CMP0022 OLD)
 endif()
 
@@ -668,6 +668,13 @@ include(MacroCalligraBuildTest)
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
+
+set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
+                       ${CMAKE_BINARY_DIR}/libs/version 
+)
+
+include_directories(${KOVERSION_INCLUDES})
+
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
@@ -676,11 +683,12 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
+                   ${KOVERSION_INCLUDES} 
                    ${KDE4_INCLUDES})
-
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
+                   ${KOVERSION_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources

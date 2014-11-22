@@ -27,7 +27,7 @@
 #include <QString>
 #include <QStringList>
 
-#include "komain_export.h"
+#include "koodf_export.h"
 #include <KoXmlReader.h>
 
 class QDomDocument;
@@ -48,7 +48,7 @@ class KoPartAdaptor;
  * stored in two QMap and can be accessed through aboutInfo() and authorInfo().
  * The about info can be changed with setAboutInfo() and setAuthorInfo()
  */
-class KOMAIN_EXPORT KoDocumentInfo : public QObject
+class KOODF_EXPORT KoDocumentInfo : public QObject
 {
     Q_OBJECT
 
@@ -87,7 +87,7 @@ public:
      * Save the KoDocumentInfo to an Calligra-1.3 DomDocument
      * @return the QDomDocument to which was saved
      */
-    QDomDocument save();
+    QDomDocument save(QDomDocument &doc);
 
     /**
      * Set information about the author.

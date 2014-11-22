@@ -21,19 +21,19 @@
 */
 
 
-#include "KoOdfDocument.h"
+#include "KoDocumentBase.h"
 
-class KoOdfDocument::Private {
+class KoDocumentBase::Private {
 public:
 };
 
-KoOdfDocument::KoOdfDocument()
+KoDocumentBase::KoDocumentBase()
     : d( new Private )
 {
 }
 
 
-KoOdfDocument::~KoOdfDocument()
+KoDocumentBase::~KoDocumentBase()
 {
     delete d;
 }

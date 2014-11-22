@@ -24,7 +24,7 @@
 #include "ui_koDocumentInfoAuthorWidget.h"
 
 #include "KoDocumentInfo.h"
-#include "KoDocument.h"
+#include "KoDocumentBase.h"
 #include "KoMainWindow.h"
 #include "KoGlobal.h"
 #include <KoEncryptionChecker.h>
@@ -112,7 +112,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
+    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (doc) {
         KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
         if (! mime)
@@ -181,7 +181,7 @@ bool KoDocumentInfoDlg::isDocumentSaved()
 
 void KoDocumentInfoDlg::initAboutTab()
 {
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
+    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
 
     if (doc) {
         d->aboutUi->filePathLabel->setText(doc->localFilePath());
@@ -218,8 +218,8 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->aboutUi->lblRevision->setText(d->info->aboutInfo("editing-cycles"));
 
-    if (doc && (doc->supportedSpecialFormats() & KoDocument::SaveEncrypted)) {
-        if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
+    if (doc && (doc->supportedSpecialFormats() & KoDocumentBase::SaveEncrypted)) {
+        if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
             if (d->toggleEncryption) {
                 d->aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
                 d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
@@ -311,13 +311,13 @@ void KoDocumentInfoDlg::slotResetMetaData()
 
 void KoDocumentInfoDlg::slotToggleEncryption()
 {
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
+    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (!doc)
         return;
 
     d->toggleEncryption = !d->toggleEncryption;
 
-    if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
+    if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
         if (d->toggleEncryption) {
             d->aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
             d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
@@ -345,12 +345,13 @@ void KoDocumentInfoDlg::slotSaveEncryption()
     if (!d->applyToggleEncryption)
         return;
 
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
+    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (!doc)
         return;
-    KoMainWindow* mainWindow = dynamic_cast< KoMainWindow* >(parent());
 
-    if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
+    KMainWindow* mainWindow = dynamic_cast< KMainWindow* >(parent());
+
+    if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
         // Decrypt
         if (KMessageBox::warningContinueCancel(
                     this,
@@ -364,7 +365,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
             return;
         }
         bool modified = doc->isModified();
-        doc->setOutputMimeType(doc->outputMimeType(), doc->specialOutputFlag() & ~KoDocument::SaveEncrypted);
+        doc->setOutputMimeType(doc->outputMimeType(), doc->specialOutputFlag() & ~KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
                         this,
@@ -405,7 +406,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
             doc->resetURL();
         }
         doc->setMimeType(doc->nativeOasisMimeType());
-        doc->setOutputMimeType(doc->nativeOasisMimeType(), KoDocument::SaveEncrypted);
+        doc->setOutputMimeType(doc->nativeOasisMimeType(), KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
                         this,
@@ -428,7 +429,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
         }
     }
     // Why do the dirty work ourselves?
-    mainWindow->slotFileSave();
+    emit saveRequested();
     d->toggleEncryption = false;
     d->applyToggleEncryption = false;
     // Detects when the user cancelled saving
