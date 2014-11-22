@@ -1,11 +1,5 @@
 add_subdirectory( tests )
 
-# generate calligraversion.h
-configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
-
-# generate calligragitversion.h
-configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if (APPLE)
@@ -26,16 +20,11 @@ set(komain_LIB_SRCS
     KoDockerManager.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
-    KoDocumentInfo.cpp
-    KoDocumentInfoDlg.cpp
-    KoDocumentInfoPropsPage.cpp
-    KoGlobal.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
     KoVersionDialog.cpp
     KoView.cpp
-    calligraversion.cpp
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
@@ -95,8 +84,6 @@ if (APPLE)
 endif (APPLE)
 
 kde4_add_ui_files( komain_LIB_SRCS
-   koDocumentInfoAboutWidget.ui
-   koDocumentInfoAuthorWidget.ui
    config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
@@ -139,7 +126,6 @@ install( FILES
     KoApplication.h
     KoDocument.h
     KoDocumentEntry.h
-    KoDocumentInfo.h
     KoDocumentSectionModel.h
     KoFilter.h
     KoFilterChain.h
@@ -154,7 +140,6 @@ install( FILES
     KoFindMatch.h
     KoFindOption.h
     KoFindOptionSet.h
-    KoGlobal.h
     KoMainWindow.h
     KoPageWidgetItem.h
     MacSupport.h
@@ -162,8 +147,6 @@ install( FILES
     KoPrintJob.h
     KoVersionDialog.h
     KoView.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

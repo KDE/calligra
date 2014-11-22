@@ -19,18 +19,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koGlobal_h
-#define koGlobal_h
+#ifndef KOGLOBAL_H
+#define KOGLOBAL_H
 
 #include <QStringList>
 #include <QFont>
 #include <QMap>
 
-#include "komain_export.h"
+#include "kowidgets_export.h"
 
 class KConfig;
 
-class KOMAIN_EXPORT KoGlobal
+class KOWIDGETS_EXPORT KoGlobal
 {
 public:
     /// For KoApplication
@@ -92,4 +92,4 @@ private:
     friend class this_is_a_singleton; // work around gcc warning
 };
 
-#endif // koGlobal
+#endif // KOGLOBAL
