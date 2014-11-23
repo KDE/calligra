@@ -45,7 +45,7 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Filter");
+    const KService::List offers = KoServiceLocator::instance()->entries("Krita/FileFilter");
 
     KService::List::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();
