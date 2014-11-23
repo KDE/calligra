@@ -1658,6 +1658,11 @@ void ResourceRequest::setCurrentSchedulePtr( Schedule *ns )
 void ResourceRequest::setCurrentSchedulePtr( Resource *resource, Schedule *ns )
 {
     resource->setCurrentSchedulePtr( resourceSchedule( ns, resource ) );
+    if( resource->type() == Resource::Type_Team ) {
+        foreach ( Resource *member, resource->teamMembers() ) {
+            member->setCurrentSchedulePtr( resourceSchedule( ns, member ) );
+        }
+    }
     foreach ( Resource *r, m_required ) {
         r->setCurrentSchedulePtr( resourceSchedule( ns, r ) );
     }
