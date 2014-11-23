@@ -102,9 +102,9 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     KexiDB::QueryColumnInfo::Vector fields(query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields));
     QString buffer;
 
-    KSaveFile *kSaveFile = 0;
+    QScopedPointer<KSaveFile> kSaveFile;
     QTextStream *stream = 0;
-    QTextStream *kSaveFileTextStream = 0; // we'll delete it as KSaveFile's stream
+    QScopedPointer<QTextStream> kSaveFileTextStream;
 
     const bool copyToClipboard = options.mode == Clipboard;
     if (copyToClipboard) {
@@ -124,20 +124,18 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
                 kWarning() << "Fname is empty";
                 return false;
             }
-            kSaveFile = new KSaveFile(options.fileName);
+            kSaveFile.reset(new KSaveFile(options.fileName));
 
             kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
 
             if (kSaveFile->open()) {
-                kSaveFileTextStream = new QTextStream(kSaveFile);
-                stream = kSaveFileTextStream;
+                kSaveFileTextStream.reset(new QTextStream(kSaveFile.data()));
+                stream = kSaveFileTextStream.data();
                 kDebug() << "have a stream";
             }
             if (QFile::NoError != kSaveFile->error() || !stream) {//sanity
                 kWarning() << "Status != 0 or stream == 0";
 //! @todo show error
-                delete kSaveFileTextStream;
-                delete kSaveFile;
                 return false;
             }
         }
@@ -146,8 +144,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //! @todo escape strings
 
 #define _ERR \
-    delete [] isText; \
-    if (kSaveFile) { kSaveFile->abort(); delete kSaveFile; delete kSaveFileTextStream; } \
+    if (kSaveFile) { kSaveFile->abort(); } \
     return false
 
 #define APPEND(what) \
@@ -165,11 +162,11 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     const QString textQuote(options.textQuote.left(1));
     const QByteArray escapedTextQuote((textQuote + textQuote).toLatin1());   //ok?
     //cache for faster checks
-    bool *isText = new bool[fieldsCount];
-    bool *isDateTime = new bool[fieldsCount];
-    bool *isTime = new bool[fieldsCount];
-    bool *isBLOB = new bool[fieldsCount];
-    uint *visibleFieldIndex = new uint[fieldsCount];
+    QScopedArrayPointer<bool> isText(new bool[fieldsCount]);
+    QScopedArrayPointer<bool> isDateTime(new bool[fieldsCount]);
+    QScopedArrayPointer<bool> isTime(new bool[fieldsCount]);
+    QScopedArrayPointer<bool> isBLOB(new bool[fieldsCount]);
+    QScopedArrayPointer<uint> visibleFieldIndex(new uint[fieldsCount]);
 // bool isInteger[fieldsCount]; //cache for faster checks
 // bool isFloatingPoint[fieldsCount]; //cache for faster checks
     for (uint i = 0; i < fieldsCount; i++) {
@@ -263,12 +260,6 @@ kDebug() << 1;
     if (copyToClipboard)
         kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
 
-    delete [] isText;
-    delete [] isDateTime;
-    delete [] isTime;
-    delete [] isBLOB;
-    delete [] visibleFieldIndex;
-
     kDebug() << "Done";
     
     if (kSaveFile) {
@@ -276,8 +267,6 @@ kDebug() << 1;
         if (!kSaveFile->finalize()) {
                 kDebug() << "Error finalizing stream!";
         }
-        delete kSaveFileTextStream;
-        delete kSaveFile;
     }
     return true;
 }
