@@ -25,7 +25,6 @@
 
 #include "KoDocumentInfo.h"
 #include "KoDocumentBase.h"
-#include "KoMainWindow.h"
 #include "KoGlobal.h"
 #include <KoEncryptionChecker.h>
 #include "KoPageWidgetItem.h"
@@ -36,7 +35,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-
+#include <kmainwindow.h>
 
 #include <QLabel>
 #include <QLineEdit>
