@@ -40,7 +40,7 @@ class PropertyPrivate
 {
 public:
     PropertyPrivate()
-            : caption(0), listData(0), changed(false), storable(true),
+            : type(0), caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
             sets(0), parent(0), children(0), relatedProperties(0)
