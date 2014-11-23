@@ -1,6 +1,13 @@
 [Desktop Entry]
 Icon=skyline_morning
 Name=Skyline
+Name[fi]=Taivaanranta
+Name[nl]=Horizon
+Name[pt]=Linha Celeste Nocturna
+Name[pt_BR]=Linha celeste
+Name[sk]=Panoráma
+Name[uk]=Горизонт
+Name[x-test]=xxSkylinexx
 Comment=Skyline Morning
 Comment[bs]=Jutarnje nebo
 Comment[ca]=Horitzó matinal
