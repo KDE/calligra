@@ -49,7 +49,7 @@ public:
     QWidget* subwidget() const;
 
     //! \return a set of subproperties available for this widget.
-    QSet<QByteArray> subproperies() const;
+    QSet<QByteArray> subproperties() const;
 
     //! \return a metaproperty for a widget's subproperty
     //! or invalid metaproperty if there is no such subproperty.

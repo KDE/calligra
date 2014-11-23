@@ -80,12 +80,19 @@ set(kowidgets_LIB_SRCS
     KoModeBox.cpp
     KoModeBoxDocker.cpp
     KoModeBoxFactory.cpp
+
+    KoDocumentInfoDlg.cpp
+    KoDocumentInfoPropsPage.cpp
+
+    KoGlobal.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
     KoCsvImportDialog.ui
-    KoPageLayoutWidget.ui
+    koDocumentInfoAboutWidget.ui
+    koDocumentInfoAuthorWidget.ui
     KoEditColorSet.ui
+    KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
 )
 
@@ -148,6 +155,8 @@ install( FILES
     KoDockWidgetTitleBarButton.h
 
     KoResourceModelBase.h
+
+    KoGlobal.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

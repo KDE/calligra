@@ -22,6 +22,7 @@ Comment[ca]=Connector d'importació de documents «Valors separats per tabulacio
 Comment[de]=„Durch Tabulator getrennte Werte“-Dokument-Importmodul für Kexi
 Comment[en_GB]="Tab Separated Values" Document Import Plugin for Kexi
 Comment[es]=Complemento de importación de documentos de «valores separados por tabuladores» para Kexi
+Comment[fi]=”Sarkaimin eroteltujen arvojen” (TSV) tiedostojen tuontiliitännäinen Kexille
 Comment[fr]=Module d'importation de document «séparations par tabulation» pour Kexi
 Comment[it]=Estensione di importazione dei documenti con valori separati da tabulazioni di Kexi
 Comment[nl]="Tab Separated Values" Import-plug-in van document voor Kexi

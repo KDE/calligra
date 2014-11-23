@@ -20,10 +20,8 @@
 
 #include "KoDocumentInfo.h"
 
-#include "KoDocument.h"
-#include "calligraversion.h"
+#include "KoDocumentBase.h"
 #include "KoOdfWriteStore.h"
-#include <KoGlobal.h>
 #include "KoXmlNS.h"
 
 #include <QDateTime>
@@ -37,6 +35,8 @@
 #include <klocale.h>
 #include <kuser.h>
 #include <kemailsettings.h>
+
+#include <calligraversion.h>
 
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
@@ -92,12 +92,9 @@ bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
     return true;
 }
 
-QDomDocument KoDocumentInfo::save()
+QDomDocument KoDocumentInfo::save(QDomDocument &doc)
 {
     updateParametersAndBumpNumCycles();
-
-    QDomDocument doc = KoDocument::createDomDocument("document-info"
-                       /*DTD name*/, "document-info" /*tag name*/, "1.1");
 
     QDomElement s = saveAboutInfo(doc);
     if (!s.isNull())
@@ -378,7 +375,7 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
 
 void KoDocumentInfo::updateParametersAndBumpNumCycles()
 {
-    KoDocument *doc = dynamic_cast< KoDocument *>(parent());
+    KoDocumentBase *doc = dynamic_cast< KoDocumentBase *>(parent());
     if (doc && doc->isAutosaving()) {
         return;
     }
@@ -391,18 +388,18 @@ void KoDocumentInfo::updateParametersAndBumpNumCycles()
 
 void KoDocumentInfo::updateParameters()
 {
-    KoDocument *doc = dynamic_cast< KoDocument *>(parent());
+    KoDocumentBase *doc = dynamic_cast< KoDocumentBase *>(parent());
     if (doc && (!doc->isModified() && !doc->isEmpty())) {
         return;
     }
 
-    KConfig *config = KoGlobal::calligraConfig();
-    config->reparseConfiguration();
-    KConfigGroup authorGroup(config, "Author");
+    KConfig config("calligrarc");
+    config.reparseConfiguration();
+    KConfigGroup authorGroup(&config, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
-    KGlobal::config()->reparseConfiguration();
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    config.reparseConfiguration();
+    KConfigGroup appAuthorGroup(&config, "Author");
     QString profile = appAuthorGroup.readEntry("active-profile", "");
 
     if (profiles.contains(profile)) {

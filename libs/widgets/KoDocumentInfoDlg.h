@@ -28,7 +28,7 @@ class KoDocumentRdfBase;
 class KPageWidgetItem;
 class KoPageWidgetItem;
 
-#include "komain_export.h"
+#include "kowidgets_export.h"
 
 /**
  * @short The dialog that shows information about the document
@@ -48,7 +48,7 @@ class KoPageWidgetItem;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KOWIDGETS_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 
@@ -84,6 +84,9 @@ private slots:
     void slotToggleEncryption();
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
+
+signals:
+    void saveRequested();
 
 private:
     /** Sets up the aboutWidget and fills the widgets with content */

@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koGlobal_h
-#define koGlobal_h
+#ifndef KOGLOBAL_H
+#define KOGLOBAL_H
 
 #include <QStringList>
 #include <QFont>
@@ -92,4 +92,4 @@ private:
     friend class this_is_a_singleton; // work around gcc warning
 };
 
-#endif // koGlobal
+#endif // KOGLOBAL

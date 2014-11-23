@@ -250,7 +250,7 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         QSize rSize(request->width(), request->height());
 
         pix = new QPixmap();
-        pix->convertFromImage(page.thumbnail(rSize, shapeManager));
+        pix->convertFromImage(page.thumbnail(rSize, shapeManager, true));
     }
 
 // API change
