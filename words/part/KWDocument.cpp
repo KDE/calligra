@@ -267,7 +267,7 @@ QPixmap KWDocument::generatePreview(const QSize &size)
     // that the view, its canvas and the shapemanager is not destroyed in between
     KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem(this))->shapeManager();
 
-    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager, true));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
