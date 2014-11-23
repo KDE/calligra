@@ -625,7 +625,7 @@ KexiWindowData *KexiWindow::data() const
 void KexiWindow::setData(KexiWindowData* data)
 {
     if (data != d->data)
-        delete(KexiWindowData*)d->data;
+        delete d->data;
     d->data = data;
 }
 

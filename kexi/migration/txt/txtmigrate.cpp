@@ -33,6 +33,8 @@ TxtMigrate::TxtMigrate(QObject *parent, const QVariantList& args)
         : KexiMigrate(parent, args)
 {
   m_DataFile = 0;
+  m_Row = -1;
+  m_FileRow = -1;
 }
 
 

@@ -458,10 +458,10 @@ void KexiTableView::updateFonts(bool repaint)
 void KexiTableView::updateAllVisibleRowsBelow(int row)
 {
     //get last visible row
-    int r = rowAt(clipper()->height() + contentsY());
-    if (r == -1) {
-        r = rows() + 1 + (isInsertingEnabled() ? 1 : 0);
-    }
+//    int r = rowAt(clipper()->height() + contentsY());
+//    if (r == -1) {
+//        r = rows() + 1 + (isInsertingEnabled() ? 1 : 0);
+//    }
     //update all visible rows below
     int leftcol = m_horizontalHeader->sectionAt(m_horizontalHeader->offset());
 // int row = m_curRow;

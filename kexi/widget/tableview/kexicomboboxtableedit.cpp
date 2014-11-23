@@ -235,11 +235,10 @@ void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVari
     }
     if (!val.isNull()) {
         KexiDB::TableViewData *relData = column()->relatedData();
-        KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
         if (relData) {
             int rowToHighlight;
             txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
-        } else if ((lookupFieldSchema = this->lookupFieldSchema())) {
+        } else if (lookupFieldSchema()) {
             /* handled at at KexiTableView level
               if (popup()) {
                 KexiDB::RecordData *it = popup()->tableView()->selectedItem();

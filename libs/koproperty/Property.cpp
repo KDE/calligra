@@ -715,7 +715,7 @@ Property::addSet(Set *set)
         d->set = set;
         return;
     }
-    if ((Set*)d->set == set || d->sets->contains(set))
+    if (d->set == set || d->sets->contains(set))
         return;
     if (!d->sets) {
         d->sets = new QList< QPointer<Set> >;

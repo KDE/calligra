@@ -120,8 +120,7 @@ bool xBaseMigrate::drv_disconnect()
   while ( tempDbfList != NULL ) {
     xbDbf* currentDbf = tempDbfList->dbf;
     tempDbfList = tempDbfList->NextDbf;
-    int returnCode;
-    if ( ( returnCode = currentDbf->CloseDatabase() ) != XB_NO_ERROR ) {
+    if (currentDbf->CloseDatabase() != XB_NO_ERROR) {
       // File not open error
       kDebug()<<"File Not Open";
     }

@@ -337,8 +337,6 @@ void KMessageWidgetPrivate::createLayout()
     //closeButton->setAutoRaise(buttons.isEmpty());
 
     QHBoxLayout* buttonLayout = 0;
-    QSpacerItem *leftContentSpacerItem = 0;
-    QSpacerItem *rightContentSpacerItem = 0;
     int leftContentSpacerItemWidth = LAYOUT_SPACING;
     int rightContentSpacerItemWidth = LAYOUT_SPACING;
     int bottomContentSpacerItemHeight = LAYOUT_SPACING;
@@ -360,9 +358,9 @@ void KMessageWidgetPrivate::createLayout()
         QGridLayout* layout = new QGridLayout(content);
         layout->setSpacing(LAYOUT_SPACING);
         if (contentsWidget) {
-            layout->addItem(leftContentSpacerItem = new QSpacerItem(leftContentSpacerItemWidth, LAYOUT_SPACING), 0, 0);
+            layout->addItem(new QSpacerItem(leftContentSpacerItemWidth, LAYOUT_SPACING), 0, 0);
             layout->addWidget(contentsWidget, 1, 0, 1, 2);
-            layout->addItem(rightContentSpacerItem = new QSpacerItem(rightContentSpacerItemWidth, LAYOUT_SPACING), 3, 0);
+            layout->addItem(new QSpacerItem(rightContentSpacerItemWidth, LAYOUT_SPACING), 3, 0);
 
 /*            if (contentsWidget->maximumWidth() < QWIDGETSIZE_MAX
                 && contentsWidget->maximumHeight() < QWIDGETSIZE_MAX
@@ -379,13 +377,13 @@ void KMessageWidgetPrivate::createLayout()
             }*/
         }
         else {
-            layout->addItem(leftContentSpacerItem = new QSpacerItem(leftContentSpacerItemWidth, LAYOUT_SPACING), 0, 0);
+            layout->addItem(new QSpacerItem(leftContentSpacerItemWidth, LAYOUT_SPACING), 0, 0);
             layout->addWidget(iconLabel, 1, 1, Qt::AlignCenter | Qt::AlignTop);
             //iconLabel->setContentsMargins(0, LAYOUT_SPACING, 0, 0);
             iconLabel->setAlignment(Qt::AlignCenter | Qt::AlignTop);
             layout->addWidget(textLabel, 1, 2);
             textLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-            layout->addItem(rightContentSpacerItem = new QSpacerItem(rightContentSpacerItemWidth, LAYOUT_SPACING), 0, 3);
+            layout->addItem(new QSpacerItem(rightContentSpacerItemWidth, LAYOUT_SPACING), 0, 3);
         }
 
         buttonLayout = new QHBoxLayout;
