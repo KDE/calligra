@@ -58,7 +58,9 @@ int connectionMessageHandler(DBPROCESS* dbproc, DBINT msgno, int msgstate, int s
 SybaseConnectionInternal::SybaseConnectionInternal(KexiDB::Connection* connection)
         : ConnectionInternal(connection)
         , dbProcess(0)
+        , sybase_owned(false)
         , res(0)
+
 {
 }
 
@@ -281,7 +283,6 @@ SybaseCursorData::SybaseCursorData(KexiDB::Connection* connection)
         : SybaseConnectionInternal(connection)
         , numRows(0)
 {
-    sybase_owned = false;
 }
 
 SybaseCursorData::~SybaseCursorData()

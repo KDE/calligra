@@ -126,7 +126,7 @@ private:
 };
 
 struct KexiMatchData {
-    KexiMatchData() : exactMatchIndex(-1) { }
+    KexiMatchData() : exactMatchIndex(-1), partial(false) { }
     KexiMatchData(const KexiIndexMapper& indices, int em, bool p) :
         indices(indices), exactMatchIndex(em), partial(p) { }
     KexiIndexMapper indices;
