@@ -42,11 +42,11 @@
 #include <qgl.h>
 #endif
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoColorProfile.h>
-#include <KoApplication.h>
+#include <KisApplication.h>
 #include <KoFileDialog.h>
-#include <KoPart.h>
+#include <KisPart.h>
 #include <KoColorSpaceEngine.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
@@ -115,7 +115,7 @@ void GeneralTab::setDefault()
     chkShowRootLayer->setChecked(false);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
-    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
+    m_autosaveSpinBox->setValue(KisDocument::defaultAutoSave() / 60);
     m_undoStackSize->setValue(30);
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
@@ -739,9 +739,9 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-        foreach(QPointer<KoPart> part, KoPart::partList()) {
-            if (!part) continue;
-            foreach(QPointer<KoDocument> doc, part->documents()) {
+        KisPart *part = KisPart::instance();
+        if (part) {
+            foreach(QPointer<KisDocument> doc, part->documents()) {
                 if (doc) {
                     doc->setAutoSave(dialog->m_general->autoSaveInterval());
                     doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());

@@ -24,7 +24,7 @@
 #include <QSignalMapper>
 #include "kis_liquify_properties.h"
 
-#include "KoMainWindow.h"
+#include "KisMainWindow.h"
 #include "kis_view2.h"
 
 

@@ -22,12 +22,12 @@
 
 #include <QLayout>
 
-#include <KoFilter.h>
-#include <KoFilterManager.h>
+#include <KisImportExportFilter.h>
+#include <KisImportExportManager.h>
 
 #include <filter/kis_filter_configuration.h>
-#include <kis_doc2.h>
-#include <kis_part2.h>
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
@@ -69,10 +69,10 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 
     dbgPlugins << "Use as reference file : " << fileName;
 
-    KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *d = KisPart::instance()->createDocument();
 
-    KoFilterManager manager(d);
-    KoFilter::ConversionStatus status;
+    KisImportExportManager manager(d);
+    KisImportExportFilter::ConversionStatus status;
     QString s = manager.importDocument(fileName, QString(), status);
     dbgPlugins << "import returned" << s << "and status" << status;
     KisImageWSP importedImage = d->image();

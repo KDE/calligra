@@ -63,24 +63,24 @@
 
 #include <KoToolRegistry.h>
 #include <KoStore.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoZoomHandler.h>
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
-#include <KoView.h>
-#include <KoDockerManager.h>
+#include <KisView.h>
+#include <KisDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceItemChooserSync.h>
 #include <KoDockWidgetTitleBar.h>
 #include <KoCompositeOp.h>
-#include <KoTemplateCreateDia.h>
+#include <KisTemplateCreateDia.h>
 #include <KoCanvasController.h>
-#include <KoDocumentEntry.h>
+#include <KisDocumentEntry.h>
 #include <KoProperties.h>
-#include <KoPart.h>
+#include <KisPart.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -97,7 +97,7 @@
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
@@ -109,7 +109,7 @@
 #include "kis_painting_assistants_decoration.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
-#include "kis_print_job.h"
+#include "KisPrintJob.h"
 #include "kis_progress_widget.h"
 #include "kis_resource_server_provider.h"
 #include "kis_selection.h"
@@ -132,9 +132,9 @@
 #include "input/kis_input_profile_manager.h"
 #include "kis_canvas_controls_manager.h"
 #include "kis_mainwindow_observer.h"
-#include "kis_main_window.h"
+#include "KisMainWindow.h"
 #include "kis_painting_assistants_manager.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 #include "kis_tooltip_manager.h"
 #include <kis_tool_freehand.h>
@@ -280,7 +280,6 @@ public:
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager *paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
-    KisFlipbook *flipbook;
     KisActionManager* actionManager;
     QMainWindow* mainWindow;
     QPointer<KisFloatingMessage> savedFloatingMessage;
@@ -436,12 +435,12 @@ KisView2::~KisView2()
     delete m_d;
 }
 
-void KisView2::setCurrentView(KoView *view)
+void KisView2::setCurrentView(KisView *view)
 {
     bool first = true;
     if (m_d->currentImageView) {
         first = false;
-        KisDoc2* doc = qobject_cast<KisDoc2*>(m_d->currentImageView->document());
+        KisDocument* doc = m_d->currentImageView->document();
         if (doc) {
             doc->disconnect(this);
         }
@@ -466,7 +465,7 @@ void KisView2::setCurrentView(KoView *view)
         resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
 
         // Wait for the async image to have loaded
-        KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
+        KisDocument* doc = view->document();
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         m_d->currentImageView = imageView;
@@ -950,7 +949,7 @@ void KisView2::loadPlugins()
     }
 }
 
-KoPrintJob * KisView2::createPrintJob()
+KisPrintJob * KisView2::createPrintJob()
 {
     return new KisPrintJob(image());
 }
@@ -998,10 +997,10 @@ void KisView2::setQtMainWindow(QMainWindow* newMainWindow)
     m_d->mainWindow = newMainWindow;
 }
 
-KisDoc2 *KisView2::document() const
+KisDocument *KisView2::document() const
 {
     if (m_d->currentImageView && m_d->currentImageView->document()) {
-        return qobject_cast<KisDoc2*>(m_d->currentImageView->document());
+        return m_d->currentImageView->document();
     }
     return 0;
 }
@@ -1009,7 +1008,7 @@ KisDoc2 *KisView2::document() const
 void KisView2::slotCreateTemplate()
 {
     if (!document()) return;
-    KoTemplateCreateDia::createTemplate("krita_template", ".kra",
+    KisTemplateCreateDia::createTemplate("krita_template", ".kra",
                                         KisFactory2::componentData(), document(), mainWindow());
 }
 
@@ -1297,7 +1296,7 @@ void KisView2::showJustTheCanvas(bool toggled)
 
 #endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
 
-    KoMainWindow* main = mainWindow();
+    KisMainWindow* main = mainWindow();
 
     if(!main) {
         dbgUI << "Unable to switch to canvas-only mode, main window not found";
@@ -1445,9 +1444,9 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int
 #endif
 }
 
-KoMainWindow *KisView2::mainWindow() const
+KisMainWindow *KisView2::mainWindow() const
 {
-    return qobject_cast<KoMainWindow*>(m_d->mainWindow);
+    return qobject_cast<KisMainWindow*>(m_d->mainWindow);
 }
 
 

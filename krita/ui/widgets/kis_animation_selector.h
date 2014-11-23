@@ -26,7 +26,7 @@
 #include "kis_global.h"
 
 #include <KoUnit.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 
 #include "kis_properties_configuration.h"
 #include "ui_wdganimationselector.h"
@@ -53,7 +53,7 @@ public:
     virtual ~KisAnimationSelector();
 
 signals:
-    void documentSelected(KoDocument*);
+    void documentSelected(KisDocument*);
 
 private slots:
     void createAnimation();

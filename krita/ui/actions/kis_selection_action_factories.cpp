@@ -21,9 +21,9 @@
 #include <klocale.h>
 #include <kundo2command.h>
 
-#include <KoMainWindow.h>
-#include <KoDocumentEntry.h>
-#include <KoPart.h>
+#include <KisMainWindow.h>
+#include <KisDocumentEntry.h>
+#include <KisPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
 #include <KoShapeRegistry.h>
@@ -55,7 +55,7 @@
 #include "kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -343,8 +343,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    KisPart2 *part = static_cast<KisPart2*>(view->document()->documentPart());
-    KisDoc2 *doc = qobject_cast<KisDoc2*>(part->createDocument());
+    KisDocument *doc = KisPart::instance()->createDocument();
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -363,9 +362,9 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = part->createMainWindow();
+    KisMainWindow *win = KisPart::instance()->createMainWindow();
     win->show();
-    win->addView(part->createView(doc, win));
+    win->addView(KisPart::instance()->createView(doc, win));
 }
 
 void KisInvertSelectionOperaton::runFromXML(KisView2* view, const KisOperationConfiguration& config)

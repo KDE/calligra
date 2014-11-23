@@ -35,14 +35,14 @@
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoSelection.h>
 
 #include "kis_tool_proxy.h"
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"

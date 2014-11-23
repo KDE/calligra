@@ -37,15 +37,15 @@
 #include <kurlcombobox.h>
 
 #include <KoIcon.h>
-#include <KoFilterManager.h>
-#include <KoDocument.h>
+#include <KisImportExportManager.h>
+#include <KisDocument.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoPointerEvent.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
-#include <KoPart.h>
-#include <KoMainWindow.h>
+#include <KisPart.h>
+#include <KisMainWindow.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter.h>
@@ -74,7 +74,7 @@
 #include "dialogs/kis_dlg_layer_properties.h"
 #include "dialogs/kis_dlg_generator_layer.h"
 #include "dialogs/kis_dlg_file_layer.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_filter_manager.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
@@ -94,7 +94,7 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
@@ -177,7 +177,7 @@ public:
 
             QRect r = m_image->bounds();
 
-            KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+            KisDocument *d = KisPart::instance()->createDocument();
 
             d->prepareForImport();
 
@@ -804,7 +804,7 @@ void KisLayerManager::layersUpdated()
 
 void KisLayerManager::saveGroupLayers()
 {
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
 
     KDialog dlg;
     QWidget *page = new QWidget(&dlg);

@@ -24,8 +24,8 @@
 #include <QDebug>
 #include <QFile>
 
-#include <KoPart.h>
-#include <KoApplication.h>
+#include <KisPart.h>
+#include <KisApplication.h>
 
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -133,8 +133,9 @@ void KisSplashScreen::toggleShowAtStartup(bool toggle)
 
 void KisSplashScreen::linkClicked(const QString &link)
 {
-    if (KoPart::partList().size() > 0) {
-        KoPart::partList().first()->openExistingFile(KUrl(link));
+    KisPart *part = KisPart::instance();
+    if (part) {
+        part->openExistingFile(KUrl(link));
     }
     if (isTopLevel()) {
         close();

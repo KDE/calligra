@@ -29,7 +29,7 @@
 
 #include <KoColor.h>
 #include <KoIcon.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoFileDialog.h>
 
 #include <kis_types.h>
@@ -37,7 +37,7 @@
 
 #include "kis_import_catcher.h"
 #include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "dialogs/kis_dlg_image_properties.h"
 #include "commands/kis_image_commands.h"
 #include "kis_action.h"
@@ -93,7 +93,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
         KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setCaption(i18n("Import Image"));
         dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-        dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
         QStringList fileNames = dialog.urls();
         foreach(const QString &fileName, fileNames) {
             urls << KUrl::fromLocalFile(fileName);

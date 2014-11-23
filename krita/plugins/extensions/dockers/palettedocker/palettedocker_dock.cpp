@@ -36,7 +36,7 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_main_window.h>
+#include <KisMainWindow.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_view2.h>
 #include <kis_display_color_converter.h>

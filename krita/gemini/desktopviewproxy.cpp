@@ -33,37 +33,37 @@
 
 #include <boost/config/posix_features.hpp>
 
-#include <KoMainWindow.h>
-#include <KoFilterManager.h>
+#include <KisMainWindow.h>
+#include <KisImportExportManager.h>
 #include <KoFileDialog.h>
-#include <KoDocumentEntry.h>
+#include <KisDocumentEntry.h>
 
 #include "MainWindow.h"
 #include <sketch/DocumentManager.h>
 #include <sketch/RecentFileManager.h>
 #include <sketch/Settings.h>
 #include <kis_config.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_view2.h>
 
 class DesktopViewProxy::Private
 {
 public:
-    Private(MainWindow* mainWindow, KoMainWindow* desktopView)
+    Private(MainWindow* mainWindow, KisMainWindow* desktopView)
         : mainWindow(mainWindow)
         , desktopView(desktopView)
         , isImporting(false)
     {}
     MainWindow* mainWindow;
-    KoMainWindow* desktopView;
+    KisMainWindow* desktopView;
     bool isImporting;
 };
 
-DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
+DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KisMainWindow* parent)
     : QObject(parent)
     , d(new Private(mainWindow, parent))
 {
-    Q_ASSERT(parent); // "There MUST be a KoMainWindow assigned, otherwise everything will blow up");
+    Q_ASSERT(parent); // "There MUST be a KisMainWindow assigned, otherwise everything will blow up");
 
     // Hide this one... as it doesn't work at all well and release happens :P
     QAction* closeAction = d->desktopView->actionCollection()->action("file_close");
@@ -88,7 +88,7 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
     //Hide the "Load existing as new" action. It serves little purpose and currently
     //does the same as open. We cannot just remove it from the action collection though
-    //since that causes a crash in KoMainWindow.
+    //since that causes a crash in KisMainWindow.
     loadExistingAsNewAction->setVisible(false);
 
     // Recent files need a touch more work, as they aren't simply an action.
@@ -115,10 +115,10 @@ void DesktopViewProxy::fileNew()
 
 void DesktopViewProxy::fileOpen()
 {
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
+    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
     KService::Ptr service = entry.service();
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KIS_MIME_TYPE,
-                                                               KoFilterManager::Import,
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                               KisImportExportManager::Import,
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
 

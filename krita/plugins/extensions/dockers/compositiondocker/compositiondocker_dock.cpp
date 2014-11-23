@@ -35,10 +35,10 @@
 #include <KoCanvasBase.h>
 #include <KoFileDialog.h>
 
-#include <kis_part2.h>
+#include <KisPart.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
@@ -203,7 +203,7 @@ void CompositionDockerDock::exportClicked()
 #else
         QRect r = image->bounds();
 
-        KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+        KisDocument *d = KisPart::instance()->createDocument();
 
         d->prepareForImport();
 

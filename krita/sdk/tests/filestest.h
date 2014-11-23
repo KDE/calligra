@@ -26,14 +26,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
-#include <kis_doc2.h>
-#include <KoPart.h>
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_part2.h>
+#include <KisPart.h>
 
 #include <ktemporaryfile.h>
 #include <QFileInfo>
@@ -60,12 +60,12 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+            KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
-            KoFilterManager manager(doc);
+            KisImportExportManager manager(doc);
             manager.setBatchMode(true);
 
-            KoFilter::ConversionStatus status;
+            KisImportExportFilter::ConversionStatus status;
             QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
                                                status);
             qDebug() << s;

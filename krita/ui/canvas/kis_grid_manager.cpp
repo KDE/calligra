@@ -33,7 +33,7 @@
 #include "kis_grid_decoration.h"
 #include "kis_image.h"
 #include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image_view.h"
 
 KisGridManager::KisGridManager(KisView2 * parent) : QObject(parent)

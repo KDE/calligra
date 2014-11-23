@@ -35,9 +35,9 @@
 #include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
-#include <KoDocument.h>
-#include <KoMainWindow.h>
-#include <KoDocumentEntry.h>
+#include <KisDocument.h>
+#include <KisMainWindow.h>
+#include <KisDocumentEntry.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -54,7 +54,7 @@
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"

@@ -30,7 +30,7 @@
 #include <kis_animation.h>
 #include <kis_canvas2.h>
 #include <kis_animation_doc.h>
-#include <kis_part2.h>
+#include <KisPart.h>
 #include <kis_animation_model.h>
 
 #include "kis_timeline.h"

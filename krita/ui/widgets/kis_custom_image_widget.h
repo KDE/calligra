@@ -25,8 +25,8 @@
 
 #include <ui_wdgnewimage.h>
 
-class KoDocument;
-class KisDoc2;
+class KisDocument;
+class KisDocument;
 class KoID;
 
 enum CustomImageWidgetType { CUSTOM_DOCUMENT, NEW_IMG_FROM_CB };
@@ -75,12 +75,12 @@ private slots:
     void switchPortraitLandscape();
 
 signals:
-    /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
-    void documentSelected(KoDocument*);
+    /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'
+    void documentSelected(KisDocument*);
 
 protected:
     
-    KisDoc2 *createNewImage();
+    KisDocument *createNewImage();
     
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);

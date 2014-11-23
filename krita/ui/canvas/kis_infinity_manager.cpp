@@ -29,7 +29,7 @@
 #include <kis_canvas2.h>
 #include <input/kis_input_manager.h>
 #include <kis_config.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_canvas_controller.h>
 #include <kis_image_view.h>

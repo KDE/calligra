@@ -1,5 +1,5 @@
 #include "kis_mainwindow_observer.h"
-#include "kis_main_window.h"
+#include "KisMainWindow.h"
 
 KisMainwindowObserver::KisMainwindowObserver()
 {

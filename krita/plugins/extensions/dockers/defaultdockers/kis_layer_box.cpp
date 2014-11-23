@@ -47,10 +47,10 @@
 #include <kactioncollection.h>
 
 #include <KoIcon.h>
-#include <KoDocumentSectionView.h>
+#include <KisDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -69,7 +69,7 @@
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
 #include "kis_selection_mask.h"
@@ -272,7 +272,7 @@ KisLayerBox::~KisLayerBox()
 }
 
 
-void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KoDocumentSectionView *sectionView)
+void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KisDocumentSectionView *sectionView)
 {
     if (!root) return;
     if (nodeModel.isNull()) return;
@@ -321,7 +321,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         m_image = m_canvas->image();
 
-        KisDoc2* doc = static_cast<KisDoc2*>(m_canvas->imageView()->document());
+        KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
@@ -521,17 +521,17 @@ void KisLayerBox::slotMergeLayer()
 
 void KisLayerBox::slotMinimalView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::MinimalMode);
 }
 
 void KisLayerBox::slotDetailedView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::DetailedMode);
 }
 
 void KisLayerBox::slotThumbnailView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::ThumbnailMode);
 }
 
 void KisLayerBox::slotRmClicked()

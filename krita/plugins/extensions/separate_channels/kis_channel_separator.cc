@@ -34,7 +34,7 @@
 #include <kpluginfactory.h>
 #include <kmimetype.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoUpdater.h>
 #include <KoFileDialog.h>
 #include <KoColorSpace.h>
@@ -42,7 +42,7 @@
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
@@ -52,7 +52,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include "kis_iterator_ng.h"
-#include <kis_part2.h>
+#include <KisPart.h>
 #include <kis_view2.h>
 #include <kis_paint_device.h>
 #include <kis_node_manager.h>
@@ -236,7 +236,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-                dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+                dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
                 KUrl url = dialog.url();
 
                 if (url.isEmpty())
@@ -250,7 +250,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();
 
-                KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+                KisDocument *d = KisPart::instance()->createDocument();
                 d->prepareForImport();
 
                 KisImageWSP dst = KisImageWSP(new KisImage(d->createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));

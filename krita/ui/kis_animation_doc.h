@@ -20,8 +20,8 @@
 #ifndef KIS_ANIMATION_DOC_H
 #define KIS_ANIMATION_DOC_H
 
-#include "kis_doc2.h"
-#include "kis_part2.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "kranimstore/kis_animation_store.h"
 #include "kis_animation.h"
 
@@ -47,11 +47,11 @@ class KisAnimationLayer;
  * It also manages a state of the animation and the
  * animation file on disk
  */
-class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
+class KRITAUI_EXPORT KisAnimationDoc : public KisDocument
 {
     Q_OBJECT
 public:
-    KisAnimationDoc(const KisPart2 *part);
+    KisAnimationDoc(const KisPart *part);
     virtual ~KisAnimationDoc();
 
     /// @return the total number of layers and masks excluding the root layer

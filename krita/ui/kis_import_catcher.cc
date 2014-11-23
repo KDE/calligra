@@ -23,13 +23,13 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
 #include "kis_node_manager.h"
 #include "kis_types.h"
 #include "kis_count_visitor.h"
 #include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
@@ -38,14 +38,14 @@
 #include "kis_group_layer.h"
 #include "kis_statusbar.h"
 #include "kis_progress_widget.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 #include <QMessageBox>
 
 struct KisImportCatcher::Private
 {
 public:
-    KisDoc2* doc;
+    KisDocument* doc;
     KisView2* view;
     KUrl url;
     bool importAsLayer;
@@ -117,7 +117,7 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
         : m_d(new Private)
 {
-    m_d->doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    m_d->doc = KisPart::instance()->createDocument();
 
     KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
     m_d->doc->setProgressProxy(progressProxy);

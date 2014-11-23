@@ -49,7 +49,7 @@
 #include "kis_view2.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
-#include <kis_doc2.h>
+#include <KisDocument.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
@@ -151,7 +151,7 @@ void MainWindow::resetWindowTitle()
         fileName = i18n("Untitled");
 
     KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
-    KisDoc2* document = DocumentManager::instance()->document();
+    KisDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
         flags |= KDialog::ModifiedCaption;
     }

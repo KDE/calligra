@@ -22,7 +22,7 @@
 #include "kis_animation.h"
 #include "kis_canvas2.h"
 #include "kis_animation_doc.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 #include "kis_config.h"
 #include "kis_opacity_selector_view.h"
 

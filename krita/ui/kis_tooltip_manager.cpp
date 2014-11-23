@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kmenubar.h>
 
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include "kis_view2.h"
 
 KisTooltipManager::KisTooltipManager(KisView2* view) : QObject(view), m_view(view), m_recording(false)

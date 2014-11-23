@@ -26,7 +26,7 @@
 #include <KoShapeManager.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
-#include <KoView.h>
+#include <KisView.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
@@ -40,7 +40,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
 #include "kis_node_shape.h"
@@ -62,13 +62,13 @@
 struct KisShapeController::Private
 {
 public:
-    KisDoc2 *doc;
+    KisDocument *doc;
     KisNameServer *nameServer;
 
     KisNodeShapesGraph shapesGraph;
 };
 
-KisShapeController::KisShapeController(KisDoc2 *doc, KisNameServer *nameServer)
+KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServer)
     : KisDummiesFacadeBase(doc)
     , m_d(new Private())
 {

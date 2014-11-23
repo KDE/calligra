@@ -26,9 +26,9 @@
 #include "kis_layer.h"
 #include "kis_shape_layer.h"
 #include "kis_paint_layer.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_shape_controller.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -69,9 +69,9 @@ QStringList KisMimeData::formats () const
     return f;
 }
 
-KisDoc2 *createDocument(QList<KisNodeSP> nodes)
+KisDocument *createDocument(QList<KisNodeSP> nodes)
 {
-    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc = KisPart::instance()->createDocument();
     QRect rc;
     foreach(KisNodeSP node, nodes) {
         rc |= node->exactBounds();
@@ -96,7 +96,7 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
     KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
     Q_ASSERT(!store->bad());
     
-    KisDoc2 *doc = createDocument(nodes);
+    KisDocument *doc = createDocument(nodes);
     doc->saveNativeFormatCalligra(store);
     delete doc;
 
@@ -110,7 +110,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
 
-        KisDoc2 *doc = createDocument(m_nodes);
+        KisDocument *doc = createDocument(m_nodes);
         doc->image()->refreshGraph();
         doc->image()->waitForDone();
 
@@ -252,7 +252,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     if (data->hasFormat("application/x-krita-node")) {
         QByteArray ba = data->data("application/x-krita-node");
 
-        KisDoc2 *tempDoc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+        KisDocument *tempDoc = KisPart::instance()->createDocument();
         bool result = tempDoc->loadNativeFormatFromStore(ba);
 
         if (result) {
@@ -270,7 +270,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         QByteArray ba = data->data("application/x-krita-node-url");
         QString localFile = QUrl::fromEncoded(ba).toLocalFile();
 
-        KisDoc2 *tempDoc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+        KisDocument *tempDoc = KisPart::instance()->createDocument();
         bool result = tempDoc->loadNativeFormat(localFile);
 
         if (result) {

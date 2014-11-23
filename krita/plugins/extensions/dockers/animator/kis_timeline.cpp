@@ -18,7 +18,7 @@
 
 #include "kis_timeline.h"
 
-#include <KoPart.h>
+#include <KisPart.h>
 
 #include <KActionCollection>
 
@@ -38,7 +38,7 @@
 
 #include<kis_canvas2.h>
 #include<kis_view2.h>
-#include<kis_doc2.h>
+#include<KisDocument.h>
 #include<kis_animation_doc.h>
 #include<kis_image.h>
 #include<kis_debug.h>

@@ -24,7 +24,7 @@
 #include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
 
-class KisDoc2;
+class KisDocument;
 class KoID;
 
 /**

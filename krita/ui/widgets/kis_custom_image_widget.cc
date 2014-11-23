@@ -58,9 +58,9 @@
 #include <kis_painter.h>
 
 #include "kis_config.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 #include "kis_clipboard.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
@@ -219,13 +219,13 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    KisDoc2 *doc = createNewImage();
+    KisDocument *doc = createNewImage();
     if (doc) {
         emit documentSelected(doc);
     }
 }
 
-KisDoc2* KisCustomImageWidget::createNewImage()
+KisDocument* KisCustomImageWidget::createNewImage()
 {
 
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
@@ -258,7 +258,7 @@ KisDoc2* KisCustomImageWidget::createNewImage()
             }
         }
     }
-    KisDoc2 *doc = static_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc = static_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     qint32 width, height;
     double resolution;

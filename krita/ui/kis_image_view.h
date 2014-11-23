@@ -19,7 +19,7 @@
 #ifndef KIS_IMAGE_VIEW_H
 #define KIS_IMAGE_VIEW_H
 
-#include <KoView.h>
+#include <KisView.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
@@ -34,7 +34,7 @@ class KoCanvasController;
 class KisZoomManager;
 class KisCanvas2;
 class KisView2;
-class KisDoc2;
+class KisDocument;
 class KisCanvasResourceProvider;
 class KisCoordinatesConverter;
 
@@ -43,23 +43,23 @@ class KisCoordinatesConverter;
 /**
  * @brief The KisImageView class shows a single document's image in a canvas.
  */
-class KRITAUI_EXPORT KisImageView : public KoView
+class KRITAUI_EXPORT KisImageView : public KisView
 {
     Q_OBJECT
 public:
-    explicit KisImageView(KoPart *part, KisDoc2 * doc, KoMainWindow *parent);
+    explicit KisImageView(KisPart *part, KisDocument * doc, KisMainWindow *parent);
     virtual ~KisImageView();
 
     // Temporary while teasing apart view and mainwindow
     void setParentView(KisView2 *view);
     KisView2 *parentView() const;
 
-    // KoView implementation
+    // KisView implementation
     virtual void updateReadWrite(bool readwrite) {
         Q_UNUSED(readwrite);
     }
 
-    // KoView implementation
+    // KisView implementation
     virtual KoZoomController *zoomController() const;
 
     /**

@@ -33,7 +33,7 @@
 
 #include <klocale.h>
 
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoFileDialog.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -43,7 +43,7 @@
 
 #include "KoIcon.h"
 #include <kis_view2.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_config.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>

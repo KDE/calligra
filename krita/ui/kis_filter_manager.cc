@@ -29,7 +29,7 @@
 #include <kactioncollection.h>
 
 #include <KoID.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 
 // krita/image
 #include <filter/kis_filter.h>

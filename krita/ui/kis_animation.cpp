@@ -20,8 +20,8 @@
 #include "krita_export.h"
 #include "kis_config.h"
 
-#include <KoApplication.h>
-#include <KoPart.h>
+#include <KisApplication.h>
+#include <KisPart.h>
 
 #include <QFile>
 #include <QDomDocument>

@@ -23,7 +23,7 @@
 
 #include <kis_image.h>
 #
-#include "kis_doc2.h"
+#include "KisDocument.h"
 
 #include <krita_export.h>
 
@@ -136,7 +136,7 @@ private:
     void applySelectionFilter(KisSelectionFilter *filter);
 
     KisView2 * m_view;
-    KisDoc2 * m_doc;
+    KisDocument * m_doc;
     QPointer<KisImageView>m_imageView;
     KisClipboard * m_clipboard;
 

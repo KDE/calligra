@@ -29,7 +29,7 @@
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -56,7 +56,7 @@
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
@@ -104,7 +104,7 @@ struct KisKraLoader::Private
 {
 public:
 
-    KisDoc2* document;
+    KisDocument* document;
     QString imageName; // used to be stored in the image, is now in the documentInfo block
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
@@ -154,7 +154,7 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
     }
 }
 
-KisKraLoader::KisKraLoader(KisDoc2 * document, int syntaxVersion)
+KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion)
         : m_d(new Private())
 {
     m_d->document = document;
@@ -608,7 +608,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
         if (result == KMessageBox::Yes) {
 
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-            dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+            dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
             QString url = dialog.url();
 

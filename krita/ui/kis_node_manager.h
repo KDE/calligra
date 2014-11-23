@@ -31,7 +31,7 @@ class KoCompositeOp;
 class KoColorSpace;
 class KUndo2MagicString;
 
-class KisDoc2;
+class KisDocument;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;

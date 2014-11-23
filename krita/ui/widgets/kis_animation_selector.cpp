@@ -56,7 +56,7 @@
 
 #include "kis_clipboard.h"
 #include "kis_animation_doc.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 #include "kis_animation.h"
@@ -175,7 +175,7 @@ void KisAnimationSelector::openAnimation()
     animation->setLocation(txtOpenFile->text());
     animation->setBgColor(KoColor(inputBackground->color(), colorSpaceSelector->currentColorSpace()));
 
-    KisAnimationDoc *document = KisPart2::instance()->createAnimationDoc();
+    KisAnimationDoc *document = KisPart::instance()->createAnimationDoc();
     //Load a temporary image before opening the animation file
     document->newImage(animation->name(), animation->width(), animation->height(), animation->colorSpace(),
                          animation->bgColor(), animation->description(), animation->resolution());
@@ -237,7 +237,7 @@ void KisAnimationSelector::createAnimation()
 
     animation->setLocation(animationLocation);
 
-    KisAnimationDoc *document = KisPart2::instance()->createAnimationDoc();
+    KisAnimationDoc *document = KisPart::instance()->createAnimationDoc();
     document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);
 
     KisImageWSP image = document->image();

@@ -87,16 +87,12 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
-    kis_doc2.cc
-    kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
     kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    kis_flipbook.cpp
-    kis_flipbook_item.cpp
     kis_animation.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
@@ -121,7 +117,6 @@ set(kritaui_LIB_SRCS
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
-    kis_print_job.cpp
     kis_resource_server_provider.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
@@ -189,7 +184,6 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
-    widgets/KisFlipbookSelector.cpp
     widgets/kis_animation_selector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
@@ -283,9 +277,46 @@ set(kritaui_LIB_SRCS
 
     kis_abstract_perspective_grid.cpp
 
+
+    KisApplication.cpp
+    KisAutoSaveRecoveryDialog.cpp
+    KisDetailsPane.cpp
+    KisDockerManager.cpp
+    KisDocument.cpp
+    KisDocumentEntry.cpp
+    KisDocumentSectionDelegate.cpp
+    KisDocumentSectionToolTip.cpp
+    KisDocumentSectionView.cpp
+    KisFilterChain.cpp
+    KisFilterChainLink.cpp
+    KisFilterChainLinkList.cpp
+    KisImportExportFilter.cpp
+    KisFilterEdge.cpp
+    KisFilterEntry.cpp
+    KisFilterGraph.cpp
+    KisImportExportManager.cpp
+    KisImportExportManager_p.cpp
+    KisFilterVertex.cpp
+    KisMainWindow.cpp
+    KisOpenPane.cpp
+    KisPart.cpp
+    KisPrintJob.cpp
+    KisRecentDocumentsPane.cpp
+    KisStandardAction.cpp
+    KisStartupDialog.cpp
+    KisTemplate.cpp
+    KisTemplateCreateDia.cpp
+    KisTemplateGroup.cpp
+    KisTemplates.cpp
+    KisTemplatesPane.cpp
+    KisTemplateTree.cpp
+    KisUndoStackAction.cpp
+    KisView.cpp
+
+    thememanager.cpp
+
 # build these last for now
     kis_image_view.cpp
-    kis_main_window.cpp
     kis_mainwindow_observer.cpp
     kis_view2.cpp
 )
@@ -351,9 +382,10 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
-    forms/wdgflipbookselector.ui
     forms/wdganimationselector.ui
     forms/wdgrectangleconstraints.ui
+    forms/KisDetailsPaneBase.ui
+    forms/KisOpenPaneBase.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
@@ -370,9 +402,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_Xinput_LIB})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komvc kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komvc kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -390,7 +422,7 @@ if(HAVE_OPENGL)
 
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komvc ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

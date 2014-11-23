@@ -24,22 +24,22 @@
 
 #include <kurl.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_signal_compressor.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 struct KisSafeDocumentLoader::Private
 {
     Private()
-        : doc(dynamic_cast<KisDoc2*>(KisPart2::instance()->createDocument())),
+        : doc(KisPart::instance()->createDocument()),
           fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
           isLoading(false),
           fileChangedFlag(false)
     {
     }
 
-    QScopedPointer<KisDoc2>  doc;
+    QScopedPointer<KisDocument>  doc;
     QFileSystemWatcher fileWatcher;
     KisSignalCompressor fileChangedSignalCompressor;
     QTimer delayedLoadTimer;

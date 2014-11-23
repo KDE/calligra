@@ -27,7 +27,7 @@
 #include <commands/kis_node_commands.h>
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_view2.h"
 #include <kis_layer.h>
 #include <kis_clone_layer.h>

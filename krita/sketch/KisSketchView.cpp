@@ -35,7 +35,7 @@
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoUnit.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
@@ -50,7 +50,7 @@
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_canvas2.h"
 #include <kis_canvas_controller.h>
 #include <kis_qpainter_canvas.h>
@@ -67,7 +67,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_qpainter_canvas.h>
-#include <kis_part2.h>
+#include <KisPart.h>
 #include <kis_canvas_decoration.h>
 #include <kis_tool_freehand.h>
 
@@ -104,7 +104,7 @@ public:
 
     KisSketchView* q;
 
-    QPointer<KisDoc2> doc;
+    QPointer<KisDocument> doc;
     QPointer<KisView2> view;
     QPointer<KisCanvas2> canvas;
     KUndo2Stack* undoStack;

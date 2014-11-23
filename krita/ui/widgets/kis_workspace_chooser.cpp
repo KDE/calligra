@@ -28,7 +28,7 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoResource.h>
 
 #include "KoPattern.h"

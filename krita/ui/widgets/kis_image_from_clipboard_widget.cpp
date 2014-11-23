@@ -55,7 +55,7 @@
 #include <kis_painter.h>
 
 #include "kis_clipboard.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
@@ -85,7 +85,7 @@ KisImageFromClipboard::~KisImageFromClipboard()
 
 void KisImageFromClipboard::createImage()
 {
-    KisDoc2 *doc = createNewImage();
+    KisDocument *doc = createNewImage();
     
     KisImageWSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {

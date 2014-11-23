@@ -27,7 +27,7 @@
 
 #include <KoToolManager.h>
 #include <KoDocumentInfo.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -43,15 +43,15 @@
 #include "kis_mimedata.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_canvas2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_zoom_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas_controller.h"
 #include "kis_config.h"
 #include "kis_mirror_axis.h"
 #include "kis_tool_freehand.h"
-#include "kis_part2.h"
-#include "kis_main_window.h"
+#include "KisPart.h"
+#include "KisMainWindow.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -87,7 +87,7 @@ public:
     KisCanvasController *canvasController;
     KisCanvas2 *canvas;
     KisZoomManager *zoomManager;
-    KisDoc2 *doc;
+    KisDocument *doc;
     KisView2 *parentView;
 
     KisNodeSP currentNode;
@@ -97,8 +97,8 @@ public:
     KActionCollection* actionCollection;
 };
 
-KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, KoMainWindow *parent)
-    : KoView(part, doc, parent)
+KisImageView::KisImageView(KisPart *part, KisDocument *doc, KisMainWindow *parent)
+    : KisView(part, doc, parent)
     , d(new Private())
 {
     Q_ASSERT(doc);
@@ -483,7 +483,7 @@ bool KisImageView::event(QEvent *event)
 void KisImageView::closeEvent(QCloseEvent *event)
 {
     // Check whether we're the last view
-    int viewCount = KisPart2::instance()->viewCount(document());
+    int viewCount = KisPart::instance()->viewCount(document());
     if (viewCount > 1) {
         // there are others still, so don't bother the user
         event->accept();
@@ -657,7 +657,7 @@ void KisImageView::slotLoadingFinished()
             this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
 
 
-    KisDoc2* doc = static_cast<KisDoc2*>(document());
+    KisDocument* doc = static_cast<KisDocument*>(document());
     KisNodeSP activeNode = doc->preActivatedNode();
     doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 

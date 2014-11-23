@@ -29,17 +29,17 @@
 #include <kpluginfactory.h>
 #include <kmimetype.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoFileDialog.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 
-#include <kis_part2.h>
+#include <KisPart.h>
 #include <kis_debug.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_action.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_device.h>
@@ -65,7 +65,7 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 {
     KisImageWSP image = m_view->image();
 
-    KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *d = KisPart::instance()->createDocument();
     d->prepareForImport();
 
     KisImageWSP dst = new KisImage(d->createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());
@@ -91,7 +91,7 @@ void Imagesplit::slotImagesplit()
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
     QStringList listFileType;
     foreach(const QString &tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType( tempStr );

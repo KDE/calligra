@@ -30,11 +30,11 @@
 #include "kis_node_manager.h"
 #include "kis_view2.h"
 #include "kis_image_view.h"
-#include "kis_part2.h"
-#include <KoDocument.h>
-#include <KoPart.h>
+#include "KisPart.h"
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_action_manager.h>
-#include "KoMainWindow.h"
+#include "KisMainWindow.h"
 #include "kis_selection_mask.h"
 
 namespace TestUtil
@@ -49,8 +49,8 @@ public:
         undoStore = new KisSurrogateUndoStore();
         image = createImage(undoStore);
 
-        part = KisPart2::instance();
-        doc = qobject_cast<KisDoc2*>(part->createDocument());
+        part = KisPart::instance();
+        doc = qobject_cast<KisDocument*>(part->createDocument());
         doc->setCurrentImage(image);
 
 
@@ -60,7 +60,7 @@ public:
 
         QVERIFY(checkLayersInitial());
 
-        mainWindow = new KoMainWindow(part, doc->documentPart()->componentData());
+        mainWindow = new KisMainWindow(part, doc->documentPart()->componentData());
         imageView = new KisImageView(doc->documentPart(), doc, mainWindow);
         view = new KisView2(mainWindow);
 
@@ -163,9 +163,9 @@ public:
 protected:
     KisImageView *imageView;
     KisView2 *view;
-    KisDoc2 *doc;
-    KisPart2 *part;
-    KoMainWindow *mainWindow;
+    KisDocument *doc;
+    KisPart *part;
+    KisMainWindow *mainWindow;
 };
 
 }

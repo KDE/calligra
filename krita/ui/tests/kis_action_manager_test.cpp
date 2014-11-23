@@ -20,10 +20,10 @@
 #include "kis_action_manager_test.h"
 #include <kdebug.h>
 
-#include <KoPart.h>
-#include <KoMainWindow.h>
-#include <kis_doc2.h>
-#include <kis_part2.h>
+#include <KisPart.h>
+#include <KisMainWindow.h>
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_image_view.h>
 #include <util.h>
 #include <kis_action.h>
@@ -33,9 +33,9 @@
 
 void KisActionManagerTest::testUpdateGUI()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
-    QPointer<KisImageView> view = new KisImageView(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    KisDocument* doc = createEmptyDocument();
+    KisMainWindow* mainWindow = doc->documentPart()->createMainWindow();
+    QPointer<KisImageView> view = new KisImageView(static_cast<KisPart*>(doc->documentPart()), static_cast<KisDocument*>(doc), mainWindow);
     doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
@@ -60,9 +60,9 @@ void KisActionManagerTest::testUpdateGUI()
 
 void KisActionManagerTest::testCondition()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
-    QPointer<KisImageView> view = new KisImageView(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    KisDocument* doc = createEmptyDocument();
+    KisMainWindow* mainWindow = doc->documentPart()->createMainWindow();
+    QPointer<KisImageView> view = new KisImageView(static_cast<KisPart*>(doc->documentPart()), static_cast<KisDocument*>(doc), mainWindow);
     doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
@@ -97,9 +97,9 @@ void KisActionManagerTest::testCondition()
 
 void KisActionManagerTest::testTakeAction()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
-    QPointer<KisImageView> view = new KisImageView(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    KisDocument* doc = createEmptyDocument();
+    KisMainWindow* mainWindow = doc->documentPart()->createMainWindow();
+    QPointer<KisImageView> view = new KisImageView(static_cast<KisPart*>(doc->documentPart()), static_cast<KisDocument*>(doc), mainWindow);
     doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);

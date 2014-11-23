@@ -28,10 +28,10 @@
 
 #include "kis_config.h"
 
-#include "KoMainWindow.h"
+#include "KisMainWindow.h"
 #include "KoZoomController.h"
-#include "kis_doc2.h"
-#include "kis_part2.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "kis_view2.h"
 #include "kis_image_view.h"
 #include "kis_canvas2.h"
@@ -53,8 +53,7 @@ public:
         m_image->initialRefreshGraph();
         QVERIFY(checkLayersInitial(m_image));
 
-        m_part = KisPart2::instance();
-        m_doc = qobject_cast<KisDoc2*>(m_part->createDocument());
+        m_doc = KisPart::instance()->createDocument();
 
         m_doc->setCurrentImage(m_image);
 
@@ -86,7 +85,7 @@ public:
         return m_view;
     }
 
-    KoMainWindow* mainWindow() {
+    KisMainWindow* mainWindow() {
         return m_mainWindow;
     }
 
@@ -117,10 +116,10 @@ public:
 private:
     KisSurrogateUndoStore *m_undoStore;
     KisImageSP m_image;
-    KoPart *m_part;
-    KisDoc2 *m_doc;
+    KisPart *m_part;
+    KisDocument *m_doc;
     QPointer<KisImageView>m_view;
-    KoMainWindow *m_mainWindow;
+    KisMainWindow *m_mainWindow;
 };
 
 template<class P, class T>

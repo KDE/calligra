@@ -55,7 +55,7 @@
 #include "KritaNamespace.h"
 #include "PanelConfiguration.h"
 #include "DocumentManager.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_view2.h"
 #include "kis_clipboard.h"
 

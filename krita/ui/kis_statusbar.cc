@@ -46,7 +46,7 @@
 
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 
 enum {
     IMAGE_SIZE_ID,

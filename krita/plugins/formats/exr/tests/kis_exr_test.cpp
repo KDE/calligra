@@ -41,16 +41,16 @@ void KisExrTest::testRoundTrip()
 {
     QString inputFileName(TestUtil::fetchDataFileLazy("CandleGlass.exr"));
 
-    KisDoc2 *doc1 = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc1 = KisPart::instance()->createDocument();
 
-    KoFilterManager manager(doc1);
+    KisImportExportManager manager(doc1);
     manager.setBatchMode(true);
 
-    KoFilter::ConversionStatus status;
+    KisImportExportFilter::ConversionStatus status;
     QString s = manager.importDocument(inputFileName, QString(),
                                        status);
 
-    QCOMPARE(status, KoFilter::OK);
+    QCOMPARE(status, KisImportExportFilter::OK);
     QVERIFY(doc1->image());
 
 
@@ -72,14 +72,14 @@ void KisExrTest::testRoundTrip()
     QVERIFY(QFileInfo(savedFileName).exists());
 
     {
-        KisDoc2 *doc2 = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+        KisDocument *doc2 = KisPart::instance()->createDocument();
 
-        KoFilterManager manager(doc2);
+        KisImportExportManager manager(doc2);
         manager.setBatchMode(true);
 
         s = manager.importDocument(savedFileName, QString(), status);
 
-        QCOMPARE(status, KoFilter::OK);
+        QCOMPARE(status, KisImportExportFilter::OK);
         QVERIFY(doc2->image());
 
         QVERIFY(TestUtil::comparePaintDevicesClever<half>(

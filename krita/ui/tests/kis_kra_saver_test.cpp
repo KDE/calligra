@@ -22,7 +22,7 @@
 
 #include <QBitArray>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoShapeContainer.h>
 #include <KoPathShape.h>
@@ -30,7 +30,7 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -48,7 +48,7 @@
 
 void KisKraSaverTest::testRoundTrip()
 {
-    KisDoc2* doc = createCompleteDocument();
+    KisDocument* doc = createCompleteDocument();
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
     doc->saveNativeFormat("roundtriptest.kra");
@@ -56,7 +56,7 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDoc2 *doc2 = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc2 = KisPart::instance()->createDocument();
 
     doc2->loadNativeFormat("roundtriptest.kra");
 
@@ -73,13 +73,13 @@ void KisKraSaverTest::testRoundTrip()
 
 void KisKraSaverTest::testSaveEmpty()
 {
-    KisDoc2* doc = createEmptyDocument();
+    KisDocument* doc = createEmptyDocument();
     doc->saveNativeFormat("emptytest.kra");
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDoc2 *doc2 = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc2 = KisPart::instance()->createDocument();
     doc2->loadNativeFormat("emptytest.kra");
 
     KisCountVisitor cv2(list, KoProperties());

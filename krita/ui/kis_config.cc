@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -841,7 +841,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval()  const
 {
-    return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());
+    return m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave());
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const

@@ -43,7 +43,7 @@
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include <string>
 
 
@@ -52,13 +52,13 @@ using namespace KRA;
 struct KisKraSaver::Private
 {
 public:
-    KisDoc2* doc;
+    KisDocument* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QString imageName;
     QStringList errorMessages;
 };
 
-KisKraSaver::KisKraSaver(KisDoc2* document)
+KisKraSaver::KisKraSaver(KisDocument* document)
         : m_d(new Private)
 {
     m_d->doc = document;

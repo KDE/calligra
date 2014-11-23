@@ -25,7 +25,7 @@
 #include <kis_types.h>
 
 class KisView2;
-class KisDoc2;
+class KisDocument;
 class KActionCollection;
 class KisActionManager;
 class KisImageView;

@@ -17,7 +17,7 @@
  */
 
 #include "kis_animation_doc.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 #include "kis_animation.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -29,7 +29,7 @@
 #include "kranimstore/kis_animation_store.h"
 #include "kis_animation_layer.h"
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
 #include <QList>
 #include <QHash>
@@ -99,8 +99,8 @@ public:
     int localPlaybackRange;
 };
 
-KisAnimationDoc::KisAnimationDoc(const KisPart2 *part)
-    : KisDoc2(part)
+KisAnimationDoc::KisAnimationDoc(const KisPart *part)
+    : KisDocument(part)
     , d(new KisAnimationDocPrivate())
 {
     setMimeType(APP_MIMETYPE);
@@ -985,7 +985,7 @@ KisKranimLoader* KisAnimationDoc::kranimLoader()
 void KisAnimationDoc::updateActiveFrame()
 {
     setPreActivatedNode(d->currentFrame);
-    QPointer<KoView> view = documentPart()->views().first();
+    QPointer<KisView> view = documentPart()->views().first();
     if (view) {
         //dynamic_cast<KisView2*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
     }

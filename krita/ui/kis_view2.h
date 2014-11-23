@@ -23,8 +23,8 @@
 #include <QQueue>
 #include <QPointer>
 
-#include <KoMainWindow.h>
-#include <KoView.h>
+#include <KisMainWindow.h>
+#include <KisView.h>
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
@@ -43,7 +43,7 @@ class KoCanvasController;
 
 class KisCanvas2;
 class KisCanvasResourceProvider;
-class KisDoc2;
+class KisDocument;
 class KisFilterManager;
 class KisGridManager;
 class KisImage;
@@ -58,7 +58,6 @@ class KisUndoAdapter;
 class KisZoomManager;
 class KisPaintopBox;
 class KisCanvasController;
-class KisFlipbook;
 class KisActionManager;
 
 
@@ -85,7 +84,7 @@ public:
 
 public:  // Krita specific interfaces
 
-    void setCurrentView(KoView *view);
+    void setCurrentView(KisView *view);
 
     /// Return the image this view is displaying
     KisImageWSP image() const;
@@ -108,7 +107,7 @@ public:  // Krita specific interfaces
     /**
       * This adds a widget to the statusbar for this view.
       * If you use this method instead of using statusBar() directly,
-      * KoView will take care of removing the items when the view GUI is deactivated
+      * KisView will take care of removing the items when the view GUI is deactivated
       * and readding them when it is reactivated.
       * The parameters are the same as QStatusBar::addWidget().
       *
@@ -142,7 +141,7 @@ public:  // Krita specific interfaces
     KisNodeManager * nodeManager() const;
 
     KisActionManager* actionManager() const;
-    
+
     /**
      * Convenience method to get at the active node, which may be
      * a layer or a mask or a selection
@@ -180,11 +179,11 @@ public:  // Krita specific interfaces
     /// gui elements
     void updateGUI();
 
-    KisDoc2* document() const;
+    KisDocument* document() const;
 
 public:
 
-    virtual KoPrintJob * createPrintJob();
+    virtual KisPrintJob * createPrintJob();
 
     KisGridManager * gridManager() const;
     KisPerspectiveGridManager* perspectiveGridManager() const;
@@ -201,11 +200,11 @@ public:
                              int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
     /// @return the KoMaindow this view is in, or 0
-    KoMainWindow *mainWindow() const;
+    KisMainWindow *mainWindow() const;
 
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
-    /// This can be checked by qobject_casting to KoMainWindow to check the difference.
+    /// This can be checked by qobject_casting to KisMainWindow to check the difference.
     QMainWindow* qtMainWindow() const;
 
     /// The mainWindow function will return the shell() value, unless this function is called

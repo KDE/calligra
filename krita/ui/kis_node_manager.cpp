@@ -29,7 +29,7 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoShapeLayer.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoFileDialog.h>
 
 #include <kis_types.h>
@@ -42,12 +42,12 @@
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
 
-#include "kis_part2.h"
+#include "KisPart.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_shape_controller.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_mask_manager.h"
 #include "kis_group_layer.h"
 #include "kis_layer_manager.h"
@@ -979,7 +979,7 @@ void KisNodeManager::saveNodeAsImage()
     KoFileDialog dialog(m_d->view->mainWindow(), KoFileDialog::SaveFile, "krita/savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", node->name()));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
     QString filename = dialog.url();
 
     if (filename.isEmpty()) return;
@@ -995,7 +995,7 @@ void KisNodeManager::saveNodeAsImage()
 
     QRect savedRect = image->bounds() | node->exactBounds();
 
-    KisDoc2 *d = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *d = KisPart::instance()->createDocument();
 
     d->prepareForImport();
 

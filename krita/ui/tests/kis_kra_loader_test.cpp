@@ -20,19 +20,19 @@
 
 #include <qtest_kde.h>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "testutil.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 
 void KisKraLoaderTest::testLoading()
 {
-    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc = KisPart::instance()->createDocument();
     doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     KisImageWSP image = doc->image();
     image->lock();
@@ -62,7 +62,7 @@ void KisKraLoaderTest::testObligeSingleChild()
 {
     QString fileName = TestUtil::fetchDataFileLazy("single_layer_no_channel_flags.kra");
 
-    KisDoc2 *doc = qobject_cast<KisDoc2*>(KisPart2::instance()->createDocument());
+    KisDocument *doc = KisPart::instance()->createDocument();
     doc->loadNativeFormat(fileName);
     KisImageWSP image = doc->image();
 

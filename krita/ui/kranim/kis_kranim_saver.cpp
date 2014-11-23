@@ -19,7 +19,7 @@
 #include "kis_kranim_saver.h"
 #include "kis_kranim_tags.h"
 #include "kis_animation_doc.h"
-#include "kis_part2.h"
+#include "KisPart.h"
 #include "kis_animation.h"
 #include "kis_layer.h"
 #include "kis_store_paintdevice_writer.h"
