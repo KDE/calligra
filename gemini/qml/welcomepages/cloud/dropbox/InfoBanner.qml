@@ -19,29 +19,55 @@
 import QtQuick 1.1
 
 Rectangle {
-    id: i_infobanner; anchors.fill: parent; color: "transparent"; visible: false; z:42
-    property alias text: banner_text.text
+    id: base;
+    function show(message) {
+        banner_text.text = message;
+        opacity = 1;
+        closeTimer.start();
+    }
+
+    anchors.fill: parent;
+    anchors.margins: 20;
+    color: "transparent";
+    opacity: 0;
+    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+    z:42
 
     Rectangle {
-        x: 20; y: 20; width: parent.width-40; height: banner_text.paintedHeight + 10;
-        color: Qt.rgba(128,128,128,0.9);
-        radius: 20; clip: true
-        Text {
-            id: banner_text
-            //anchors.fill: parent
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 10
-            anchors.topMargin: 10
-            font: Settings.theme.font("application");
-            wrapMode: Text.WordWrap
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: 20;
         }
+        height: banner_text.paintedHeight + 20;
+        color: Qt.rgba(128,128,128,0.9);
+        radius: 20;
+        border {
+            width: 1;
+            color: "silver";
+        }
+        clip: true;
     }
-    onVisibleChanged: {
-        //console.log("Infobanneri visible changes")
-        if(visible == true) closeTimer.start();
+    Text {
+        id: banner_text;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: 30;
+        }
+        height: paintedHeight;
+        font: Settings.theme.font("application");
+        wrapMode: Text.Wrap;
     }
     Timer {
-        id: closeTimer; interval: 3000; running: false; repeat: false; onTriggered: i_infobanner.visible = false
+        id: closeTimer;
+        interval: 3000;
+        running: false;
+        repeat: false;
+        onTriggered: {
+            base.opacity = 0;
+        }
     }
 }

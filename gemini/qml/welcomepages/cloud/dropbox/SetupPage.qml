@@ -128,12 +128,12 @@ Item {
         }
     }
 
+    InfoBanner { id: i_infobanner; }
     function signOutNow(){
         if (!controllerMIT.is_transfer()){
             pageStack.push(signoutconfirmationDlg)
         }else{
-            i_infobanner.text = "Please complete the upload/download tasks in Files Transfer before Sign out."
-            i_infobanner.visible = true
+            i_infobanner.show("Please complete the upload/download tasks in Files Transfer before Sign out.");
         }
     }
 }
