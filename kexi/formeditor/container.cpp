@@ -1046,7 +1046,7 @@ Container::createGridLayout(bool testOnly)
             }
             i++;
         }
-        //kDebug() << "the widget " << w->objectName() << " wil be in the row " << wrow <<
+        //kDebug() << "the widget " << w->objectName() << " will be in the row " << wrow <<
         //" and will go to the row " << endrow;
 
         // .. and column(s)
@@ -1069,7 +1069,7 @@ Container::createGridLayout(bool testOnly)
             }
             i++;
         }
-        //kDebug() << "the widget " << w->objectName() << " wil be in the col " << wcol <<
+        //kDebug() << "the widget " << w->objectName() << " will be in the col " << wcol <<
         // " and will go to the col " << endcol;
 
         ObjectTreeItem *item = d->form->objectTree()->lookup(w->objectName());

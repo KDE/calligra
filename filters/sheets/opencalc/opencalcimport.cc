@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "opencalcimport.h"
+
 #include <float.h>
 #include <math.h>
 
@@ -29,15 +31,12 @@
 #include <QList>
 #include <QByteArray>
 
-#include "opencalcimport.h"
-
 #include <kdebug.h>
 #include <KoDocumentInfo.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <kcodecs.h>
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <ooutils.h>

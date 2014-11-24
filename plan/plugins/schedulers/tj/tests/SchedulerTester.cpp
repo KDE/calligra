@@ -33,7 +33,6 @@
 #include <QDir>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>

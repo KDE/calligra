@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef MSOOXMLXMLDIAGRAMREADER_P_H
-#define MSOOXMLXMLDIAGRAMREADER_P_H
+#ifndef MSOOXMLDIAGRAMREADER_P_H
+#define MSOOXMLDIAGRAMREADER_P_H
 
 #include <cmath>
 #include <QString>

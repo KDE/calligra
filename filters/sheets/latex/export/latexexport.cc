@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "latexexportdialog.h"
 #include "latexexport.h"
+
+#include "latexexportdialog.h"
 // KDE
 #include <kdebug.h>
 #include <KoFilterChain.h>

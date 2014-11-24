@@ -182,7 +182,7 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
     if (asianPhonetics) size += asianPhoneticsSize;
 
     str.clear();
-    for (unsigned k = 0; k < len; k++) {
+    for (unsigned k = 0; k < len; ++k) {
         unsigned uchar;
         if (unicode) {
             uchar = readU16(data + offset);
@@ -203,7 +203,7 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
 
     // read format runs
     std::map<unsigned, unsigned> formatRunsMap;
-    for (unsigned k = 0; k < formatRuns; k++) {
+    for (unsigned k = 0; k < formatRuns; ++k) {
         unsigned index = readU16(data + offset);
         unsigned font = readU16(data + offset + 2);
         if (index < len)
@@ -275,7 +275,7 @@ EString EString::fromSheetName(const void* p, unsigned datasize)
         str = QString(buffer);
         delete[] buffer;
     } else {
-        for (unsigned k = 0; k < len; k++) {
+        for (unsigned k = 0; k < len; ++k) {
             unsigned uchar = readU16(data + offset + k * 2);
             str.append(QString(QChar(uchar)));
         }
@@ -672,11 +672,11 @@ void FormulaRecord::writeData(XlsRecordOutputStream &o) const
     o.writeUnsigned(32, 0); // chn
     // actual formula
     unsigned totalSize = 0;
-    for (unsigned i = 0; i < d->tokens.size(); i++) {
+    for (unsigned i = 0; i < d->tokens.size(); ++i) {
         totalSize += d->tokens[i].size() + 1;
     }
     o.writeUnsigned(16, totalSize);
-    for (unsigned i = 0; i < d->tokens.size(); i++) {
+    for (unsigned i = 0; i < d->tokens.size(); ++i) {
         o.writeUnsigned(8, d->tokens[i].id()); // ptg
         std::vector<unsigned char> data = d->tokens[i].data();
         o.writeBlob(QByteArray::fromRawData(reinterpret_cast<char*>(&data[0]), data.size()));
@@ -693,7 +693,7 @@ void FormulaRecord::dump(std::ostream& out) const
 
     FormulaTokens ts = tokens();
     out << "             Tokens : " << ts.size() << std::endl;
-    for (unsigned i = 0; i < ts.size(); i++)
+    for (unsigned i = 0; i < ts.size(); ++i)
         out << "                       " << ts[i]  << std::endl;
 
 }
@@ -771,7 +771,7 @@ void SharedFormulaRecord::dump(std::ostream& out) const
 
     FormulaTokens ts = tokens();
     out << "             Tokens : " << ts.size() << std::endl;
-    for (unsigned i = 0; i < ts.size(); i++)
+    for (unsigned i = 0; i < ts.size(); ++i)
         out << "                       " << ts[i]  << std::endl;
 
 }
@@ -865,7 +865,7 @@ void MulRKRecord::dump(std::ostream& out) const
     out << "                Row : " << row() << std::endl;
     out << "       First Column : " << firstColumn() << std::endl;
     out << "        Last Column : " << lastColumn() << std::endl;
-    for (unsigned c = firstColumn(); c <= lastColumn(); c++) {
+    for (unsigned c = firstColumn(); c <= lastColumn(); ++c) {
         out << "          Column  " << c << " : " << asFloat(c - firstColumn());
         out << "  Encoded: " << std::hex << encodedRK(c - firstColumn());
         out << "  Xf: " << std::dec << xfIndex(c - firstColumn());
@@ -980,12 +980,12 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             // XLUnicodeStringNoCch
             QString str;
             if (fHighByte) {
-                for (unsigned k = 0; k < len*2; k++) {
+                for (unsigned k = 0; k < len*2; ++k) {
                     unsigned zc = readU16(data + 15 + k * 2);
                     str.append(QString(zc));
                 }
             } else {
-                for (unsigned k = 0; k < len; k++) {
+                for (unsigned k = 0; k < len; ++k) {
                     unsigned char uc = readU8(data + 15 + k) + 0x0 * 256;
                     str.append(QString(uc));
                 }
@@ -1231,7 +1231,7 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
     unsigned int nextContinuePos = continuePositions[0];
 
     d->strings.clear();
-    for (unsigned i = 0; i < count; i++) {
+    for (unsigned i = 0; i < count; ++i) {
         // check against size
         if (offset >= size) {
             std::cerr << "Warning: reached end of SST record, but not all strings have been read!" << std::endl;
@@ -1261,7 +1261,7 @@ void SSTRecord::writeData(XlsRecordOutputStream &out) const
     }
     out.writeUnsigned(32, d->total);
     out.writeUnsigned(32, count());
-    for (unsigned i = 0; i < count(); i++) {
+    for (unsigned i = 0; i < count(); ++i) {
         if (i % dsst == 0 && d->esst) {
             d->esst->setIb(i/dsst, out.pos());
             d->esst->setCbOffset(i/dsst, out.recordPos() + 4);
@@ -1314,7 +1314,7 @@ void SSTRecord::dump(std::ostream& out) const
     out << "SST" << std::endl;
     out << "         Occurrences : " << d->total << std::endl;
     out << "              Count : " << count() << std::endl;
-    for (unsigned i = 0; i < count(); i++)
+    for (unsigned i = 0; i < count(); ++i)
         out << "         String #" << std::setw(2) << i << " : " <<
         stringAt(i) << std::endl;
 }

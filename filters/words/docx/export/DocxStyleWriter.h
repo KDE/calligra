@@ -33,7 +33,7 @@ class OdfReaderContext;
 class DocxStyleWriter
 {
 public:
-    DocxStyleWriter(OdfReaderContext *context);
+    explicit DocxStyleWriter(OdfReaderContext *context);
     virtual ~DocxStyleWriter();
 
     void read();

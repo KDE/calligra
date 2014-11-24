@@ -478,6 +478,7 @@ void KexiProjectNavigator::slotRename()
     KexiNameDialog dialog(
         i18nc("@info Rename object %1:", "Rename <resource>%1</resource>:", partItem->name()),
         this);
+    dialog.setButtonText(KexiNameDialog::Ok, i18nc("@action:button Rename object", "Rename"));
     if (!d->model->project()) {
         kWarning() << "No KexiProject assigned!";
         return;

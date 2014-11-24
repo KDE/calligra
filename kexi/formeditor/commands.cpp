@@ -1905,6 +1905,7 @@ class RemovePageCommand::Private
 {
 public:
     Private()
+     : pageIndex(-1)
     {
     }
     Form *form;

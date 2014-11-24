@@ -29,8 +29,9 @@ using KFormDesigner::Form;
 
 ScriptManager::ScriptManager(QObject *parent, const char *name)
         : QObject(parent, name)
+        , m_manager(Kross::Api::Manager::scriptManager())
+        , m_formManager(0)
 {
-    m_manager = Kross::Api::Manager::scriptManager();
 }
 
 ScriptManager::~ScriptManager()

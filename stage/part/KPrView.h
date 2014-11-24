@@ -65,7 +65,7 @@ public:
     /**
      * Get the presentation view mode
      */
-    KPrViewModePresentation * presentationMode() const;
+    Q_INVOKABLE KPrViewModePresentation * presentationMode() const;
 
     /**
      * Get the slides sorter view mode
@@ -140,6 +140,7 @@ public slots:
 protected:
     void initGUI();
     void initActions();
+    virtual bool event(QEvent* event);
 
 protected slots:
     void createAnimation();

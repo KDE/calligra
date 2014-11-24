@@ -24,8 +24,6 @@
 
 #include "KPrPresentationToolEventForwarder.h"
 
-class KoPACanvas;
-
 class KPrPresentationHighlightWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT

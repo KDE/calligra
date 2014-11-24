@@ -68,7 +68,7 @@ public:
      @code
       QString tableName = "Employees";
       QString translated
-       = part->i18nMessage("Design of object \"%1\" has been modified.")
+       = part->i18nMessage("Design of object <resource>%1</resource> has been modified.")
         .subs(tableName).toString();
      @endcode */
     virtual KLocalizedString i18nMessage(const QString& englishMessage,

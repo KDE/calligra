@@ -44,7 +44,6 @@
 #include <KoShape.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStyleStack.h>

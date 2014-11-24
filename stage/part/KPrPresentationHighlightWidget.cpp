@@ -21,7 +21,7 @@
 
 #include "KPrPresentationHighlightWidget.h"
 
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 
 #include <QMouseEvent>
 #include <QColor>

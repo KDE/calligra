@@ -35,7 +35,7 @@ namespace KSpread
 * This class is a leader which will call the callbacks
 * to the worker with your own implementation for your export filter.
 *
-* To write an export filter, just instanciate a leader and
+* To write an export filter, just instantiate a leader and
 * implement you own worker based on the BaseWorker.
 *
 * @short A Leader for an KSpread export filter

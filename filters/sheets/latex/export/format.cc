@@ -19,13 +19,14 @@
 **
 */
 
+#include "format.h"
+
 #include <stdlib.h>
 
 #include <kdebug.h>
 
 #include "column.h"
 #include "fileheader.h" /* for the use of _header (color and underlined) */
-#include "format.h"
 #include "row.h"
 #include <QTextStream>
 

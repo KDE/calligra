@@ -2,7 +2,7 @@
 add_subdirectory( tests )
 
 include_directories(${KOODF_INCLUDES}
-                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${KUNDO2_INCLUDES})
 
 

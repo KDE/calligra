@@ -59,7 +59,6 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
-#include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
@@ -68,7 +67,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoView.h>
 
@@ -100,7 +98,7 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/MapAdaptor.h"
 #include "interfaces/SheetAdaptor.h"
-#include <QtDBus>
+#include <QDBusConnection>
 #endif
 
 // chart shape

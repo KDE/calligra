@@ -186,7 +186,7 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
                 lookahead++;
 
                 // Go to find more matches.
-                for (int j = i + 1, k = 1; (j <=  winIndex) && (k < m_buffSize); j++, k++) {
+                for (int j = i + 1, k = 1; (j <=  winIndex) && (k < m_buffSize); ++j, ++k) {
                     if ((lookahead == m_maxBlockSize) || (lookahead >= input.size())) {
                         break;
                     }

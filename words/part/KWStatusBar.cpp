@@ -32,7 +32,6 @@
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
-#include <KoZoomInput.h>
 #include <QStackedWidget>
 #include <QLabel>
 #include <QLineEdit>

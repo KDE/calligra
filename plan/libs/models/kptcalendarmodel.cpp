@@ -331,8 +331,8 @@ QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
             return i18n( a->timeZone().name().toUtf8() );
         case Role::EnumList: {
             QStringList lst;
-            foreach ( const QString &s, KSystemTimeZones::timeZones()->zones().keys() ) {
-                lst << i18n( s.toUtf8() );
+            foreach ( const KTimeZone &tz, KSystemTimeZones::timeZones()->zones() ) {
+                lst << i18n( tz.name().toUtf8() );
             }
             lst.sort();
             return lst;

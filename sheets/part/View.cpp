@@ -50,7 +50,6 @@
 #include <QMenu>
 #include <QPixmap>
 #include <QResizeEvent>
-#include <QTimer>
 #include <QToolButton>
 #ifndef QT_NO_SQL
 #include <QSqlDatabase>
@@ -77,7 +76,6 @@
 // Calligra includes
 #include <KoGlobal.h>
 #include <KoColor.h>
-#include <KoDpi.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
@@ -155,7 +153,6 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
 #include <knotifyconfigwidget.h>
-#include <QtDBus>
 #endif
 
 using namespace Calligra::Sheets;

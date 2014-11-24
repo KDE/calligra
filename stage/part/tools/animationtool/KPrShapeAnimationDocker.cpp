@@ -50,7 +50,6 @@
 //Calligra Headers
 #include <KoToolManager.h>
 #include <KoSelection.h>
-#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoPAViewBase.h>

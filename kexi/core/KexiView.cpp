@@ -249,7 +249,6 @@ KexiView::KexiView(QWidget *parent)
 
         const bool userMode = KexiMainWindowIface::global()->userMode();
 
-        bool addSeparator = false;
         if (userMode
                 || d->window->supportedViewModes() == Kexi::DataViewMode
                 || d->window->supportedViewModes() == Kexi::DesignViewMode
@@ -266,11 +265,6 @@ KexiView::KexiView(QWidget *parent)
         (void)d->mainMenu();
 
         if (d->viewMode == Kexi::DesignViewMode || d->viewMode == Kexi::TextViewMode) {
-            if (addSeparator) {
-                d->topBarLyr->addWidget(new KexiToolBarSeparator(d->topBarHWidget));
-                addSeparator = false;
-            }
-
             QAction *a = sharedAction("project_save");
             d->saveDesignButton = new KexiSmallToolButton(a, d->topBarHWidget);
             d->saveDesignButton->setText(i18n("Save"));

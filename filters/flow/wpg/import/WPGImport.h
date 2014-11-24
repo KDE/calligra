@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef VSDXIMPORT_H
-#define VSDXIMPORT_H
+#ifndef WPGIMPORT_H
+#define WPGIMPORT_H
 
 #include <KoFilter.h>
 #include <QVariantList>
@@ -36,4 +36,4 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
-#endif // VSDXIMPORT_H
+#endif // WPGIMPORT_H

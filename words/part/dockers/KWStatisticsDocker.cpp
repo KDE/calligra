@@ -25,8 +25,6 @@
 #include <QDebug>
 #include <klocale.h>
 #include <kdebug.h>
-#include <KoToolManager.h>
-#include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
 #include "KWCanvas.h"
 
