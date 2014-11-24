@@ -82,9 +82,11 @@ Item {
     Page {
         id: signoutconfirmationDlg
         //PageHeader { title: "Log Out" }
-        Item {
+        Rectangle {
             anchors.fill: parent;
-
+            anchors.margins: Settings.theme.adjustedPixel(16);
+            radius: Settings.theme.adjustedPixel(8);
+            color: "white";
             Text {
                 anchors {
                     bottom: signoutButtonsRow.top;
@@ -92,16 +94,21 @@ Item {
                     right: parent.right;
                     margins: Constants.DefaultMargin;
                 }
-                color: "white"
+                color: "black"
                 font: Settings.theme.font("application");
                 wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
                 text: "Do you really want to log out of DropBox?"
             }
             Row {
                 id: signoutButtonsRow;
                 anchors.centerIn: parent;
                 width: childrenRect.width;
+                spacing: Settings.theme.adjustedPixel(8);
                 CohereButton {
+                    textColor: "#5b6573";
+                    textSize: Settings.theme.adjustedPixel(18);
+                    color: "#D2D4D5";
                     text: "Yes"
                     onClicked: {
                         controllerMIT.logout()
@@ -109,6 +116,9 @@ Item {
                     }
                 }
                 CohereButton {
+                    textColor: "#5b6573";
+                    textSize: Settings.theme.adjustedPixel(18);
+                    color: "#D2D4D5";
                     text: "No"
                     onClicked: {
                         pageStack.pop()
