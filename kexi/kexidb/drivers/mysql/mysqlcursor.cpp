@@ -127,7 +127,7 @@ QVariant MySqlCursor::value(uint pos)
 bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
 {
     // KexiDBDrvDbg << "Position is" << (long)m_at;
-    if (d->numRows <= 0)
+    if (d->numRows == 0)
         return false;
 
 //! @todo js: use MYSQL_FIELD::type here!
