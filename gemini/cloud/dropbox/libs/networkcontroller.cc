@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QDir>
+#include <QSslError>
 
 NetworkController::NetworkController(QObject *parent) :
     QObject(parent),
@@ -39,7 +40,9 @@ NetworkController::NetworkController(QObject *parent) :
 
     m_droprestapi = new DropRestAPI();
 
+    QObject::connect(m_networkaccessmanager, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError>&)), this, SLOT(sslErrors(QNetworkReply*, const QList<QSslError>&)));
     QObject::connect(m_networkaccessmanager, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
+    QObject::connect(m_file_transfer, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError>&)), this, SLOT(sslErrors(QNetworkReply*, const QList<QSslError>&)));
     QObject::connect(m_file_transfer, SIGNAL(finished(QNetworkReply*)), this, SLOT(file_transfer_finished(QNetworkReply*)));
 }
 
@@ -79,6 +82,27 @@ void NetworkController::file_transfer_finished(QNetworkReply *networkreply){
     networkreply->deleteLater();
 }
 
+void NetworkController::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
+{
+    QString errorDescription;
+    Q_FOREACH(const QSslError& error, errors) {
+        if(error.error() != QSslError::NoError) {
+            errorDescription.append('\n').append(error.errorString());
+        }
+    }
+
+    if(errorDescription.length() > 0) {
+        emit network_error(QString("An error occured when attempting to make a secure connection:%1").arg(errorDescription));
+    } else {
+        // This may seem weird, but apparently NoError is reported sometimes as
+        // an error... so we need to ignore it.
+        QSslError noError(QSslError::NoError);
+        QList<QSslError> expectedSslErrors;
+        expectedSslErrors.append(noError);
+        reply->ignoreSslErrors(expectedSslErrors);
+    }
+}
+
 void NetworkController::finished(QNetworkReply *networkreply){
     if (networkreply->error() > 0){
 
@@ -107,9 +131,11 @@ void NetworkController::finished(QNetworkReply *networkreply){
                     networkreply->error() == QNetworkReply::ProtocolUnknownError ||
                     networkreply->error() == QNetworkReply::UnknownNetworkError ||
                     networkreply->error() == QNetworkReply::UnknownProxyError
-                    )
+                    ) {
                 emit network_error("");
-            else{
+            } else if(networkreply->error() == QNetworkReply::SslHandshakeFailedError) {
+                // do nothing... We have an SSL refusal, and need to respect that.
+            } else{
                 if (m_state == NetworkController::DELETE)
                     emit delete_finished(false);
                 else if(m_state == NetworkController::CREATE)

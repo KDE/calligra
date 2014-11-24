@@ -144,8 +144,9 @@ signals:
 
 
 public slots:
-     void uploadProgress(qint64 sent, qint64 total);
-     void downloadProgress(qint64 received,qint64 total);
+    void uploadProgress(qint64 sent, qint64 total);
+    void downloadProgress(qint64 received,qint64 total);
+    void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
 
 
 private slots:
