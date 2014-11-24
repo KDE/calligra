@@ -39,7 +39,7 @@
 #include <kis_selection_manager.h>
 
 #include <kis_image_view.h>
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
 #include "kis_zoom_manager.h"
@@ -53,7 +53,7 @@ enum {
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KisView2 * view)
+KisStatusBar::KisStatusBar(KisViewManager * view)
         : m_view(view)
         , m_imageView(0)
 {

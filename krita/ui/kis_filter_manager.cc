@@ -38,7 +38,7 @@
 #include <kis_paint_device.h>
 
 // krita/ui
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include <kis_bookmarked_configuration_manager.h>
 
@@ -63,7 +63,7 @@ struct KisFilterManager::Private {
     QHash<KisFilter*, KAction*> filters2Action;
     KActionCollection *actionCollection;
     KisActionManager *actionManager;
-    KisView2 *view;
+    KisViewManager *view;
 
     KisSafeFilterConfigurationSP lastConfiguration;
     KisSafeFilterConfigurationSP currentlyAppliedConfiguration;
@@ -74,7 +74,7 @@ struct KisFilterManager::Private {
     QPointer<KisDlgFilter> filterDialog;
 };
 
-KisFilterManager::KisFilterManager(KisView2 * view)
+KisFilterManager::KisFilterManager(KisViewManager * view)
     : d(new Private)
 {
     d->view = view;

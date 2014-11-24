@@ -34,7 +34,7 @@ class KToggleAction;
 class KActionCollection;
 class KoViewConverter;
 
-class KisView2;
+class KisViewManager;
 class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
@@ -55,7 +55,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
     Q_PROPERTY(bool havePixelsSelected READ havePixelsSelected NOTIFY currentSelectionChanged);
 public:
 
-    KisSelectionManager(KisView2 * view);
+    KisSelectionManager(KisViewManager * view);
     virtual ~KisSelectionManager();
 
     void setup(KActionCollection * collection, KisActionManager* actionManager);
@@ -135,7 +135,7 @@ private:
     void copyFromDevice(KisPaintDeviceSP device);
     void applySelectionFilter(KisSelectionFilter *filter);
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     KisDocument * m_doc;
     QPointer<KisImageView>m_imageView;
     KisClipboard * m_clipboard;

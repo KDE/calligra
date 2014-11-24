@@ -33,7 +33,7 @@ class QRectF;
 class QPainter;
 class KoViewConverter;
 class KisCoordinatesConverter;
-class KisView2;
+class KisViewManager;
 
 
 /**

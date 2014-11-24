@@ -22,7 +22,7 @@
 #include <kactioncollection.h>
 
 #include "kis_action.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "operations/kis_operation_ui_factory.h"
 #include "operations/kis_operation_registry.h"
@@ -34,14 +34,14 @@ class KisActionManager::Private {
 public:
     Private() {}
 
-    KisView2* view;
+    KisViewManager* view;
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
     QPointer<KisImageView> imageView;
 };
 
-KisActionManager::KisActionManager(KisView2* view) : d(new Private)
+KisActionManager::KisActionManager(KisViewManager* view) : d(new Private)
 {
     d->view = view;
     d->imageView = 0;

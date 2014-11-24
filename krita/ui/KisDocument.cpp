@@ -108,7 +108,7 @@
 
 // Local
 #include "kis_factory2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_clipboard.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
@@ -2901,7 +2901,7 @@ vKisNodeSP KisDocument::activeNodes() const
 {
     vKisNodeSP nodes;
     foreach(KisView *v, documentPart()->views()) {
-        KisView2 *view = qobject_cast<KisView2*>(v);
+        KisViewManager *view = qobject_cast<KisViewManager*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
             if (activeNode && !nodes.contains(activeNode)) {
@@ -2920,7 +2920,7 @@ QList<KisPaintingAssistant*> KisDocument::assistants()
     QList<KisPaintingAssistant*> assistants;
     // KOMVC: TODO
     //    foreach(KisView *v, documentPart()->views()) {
-    //        KisView2 *view = qobject_cast<KisView2*>(v);
+    //        KisViewManager *view = qobject_cast<KisViewManager*>(v);
     //        if (view) {
     //            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
     //            assistants.append(assistantsDecoration->assistants());

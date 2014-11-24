@@ -30,7 +30,7 @@
 #include <KoCanvasBase.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 

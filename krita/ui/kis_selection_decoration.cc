@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection.h"
 #include "kis_image.h"
 #include "flake/kis_shape_selection.h"

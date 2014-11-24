@@ -30,7 +30,7 @@ class QAction;
 class KActionCollection;
 
 class KisFilterStrategy;
-class KisView2;
+class KisViewManager;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
 class KisAction;
@@ -48,7 +48,7 @@ class KisLayerManager : public QObject
 
 public:
 
-    KisLayerManager(KisView2 * view);
+    KisLayerManager(KisViewManager * view);
     ~KisLayerManager();
     void setView(QPointer<KisImageView>view);
 
@@ -122,7 +122,7 @@ private:
 
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     QPointer<KisImageView>m_imageView;
 
     KisAction *m_imageFlatten;

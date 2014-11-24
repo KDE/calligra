@@ -22,7 +22,7 @@
 #include <QVariant>
 #include <QObject>
 
-class KisView2;
+class KisViewManager;
 
 /**
  * The animator plugin class
@@ -34,7 +34,7 @@ public:
     AnimatorPlugin(QObject *parent, const QVariantList &);
     virtual ~AnimatorPlugin();
 private:
-    KisView2* m_view;
+    KisViewManager* m_view;
 };
 
 #endif

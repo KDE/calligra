@@ -27,7 +27,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image_view.h"
 #include "input/kis_input_manager.h"
 #include "input/kis_tablet_event.h"
@@ -166,7 +166,7 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 {
     bool isXMirrored = coordinatesConverter->xAxisMirrored();
 
-    view->parentView()->
+    view->viewManager()->
         showFloatingMessage(
             i18nc("floating message about mirroring",
                   "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
@@ -187,7 +187,7 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
     qreal rotationAngle = coordinatesConverter->rotationAngle();
 
 
-    view->parentView()->
+    view->viewManager()->
         showFloatingMessage(
             i18nc("floating message about rotation", "Rotation: %1° ",
                   KritaUtils::prettyFormatReal(rotationAngle)),
@@ -228,7 +228,7 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
     Q_ASSERT(kritaCanvas);
 
     if (!canvas()->canvasIsOpenGL() && value) {
-        m_d->view->parentView()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
+        m_d->view->viewManager()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
                                                           "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
 

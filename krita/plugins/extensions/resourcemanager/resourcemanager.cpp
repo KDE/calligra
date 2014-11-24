@@ -38,7 +38,7 @@
 
 #include <kis_debug.h>
 #include <kis_action.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
 #include <kis_paintop_preset.h>

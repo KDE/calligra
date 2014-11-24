@@ -23,7 +23,7 @@
 #include "kis_timeline_header.h"
 #include "kis_animation_frame_widget.h"
 #include "kis_animation_doc.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include <QPainter>
 

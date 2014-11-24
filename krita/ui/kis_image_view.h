@@ -29,11 +29,11 @@ class QCloseEvent;
 
 class KoZoomManager;
 class KoZoomController;
-class KoCanvasController;
 
+class KisCanvasController;
 class KisZoomManager;
 class KisCanvas2;
-class KisView2;
+class KisViewManager;
 class KisDocument;
 class KisCanvasResourceProvider;
 class KisCoordinatesConverter;
@@ -51,8 +51,8 @@ public:
     virtual ~KisImageView();
 
     // Temporary while teasing apart view and mainwindow
-    void setParentView(KisView2 *view);
-    KisView2 *parentView() const;
+    void setViewManager(KisViewManager *view);
+    KisViewManager *viewManager() const;
 
     // KisView implementation
     virtual void updateReadWrite(bool readwrite) {
@@ -72,7 +72,7 @@ public:
      * and knows where to start painting on the canvas widget, i.e.,
      * the document offset.
      */
-    KoCanvasController *canvasController() const;
+    KisCanvasController *canvasController() const;
     KisCanvasResourceProvider *resourceProvider() const;
 
     /**
@@ -99,6 +99,8 @@ public:
     /// selection of the current layer, or, if that does not exist,
     /// the global selection.
     KisSelectionSP selection();
+
+    KisPrintJob * createPrintJob();
 
 protected:
 

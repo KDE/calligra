@@ -48,7 +48,7 @@
 
 #include <kis_global.h>
 #include <canvas/kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_painter.h>
 #include <kis_cursor.h>
 #include <kis_image.h>

@@ -36,7 +36,7 @@
 
 #include <kis_types.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 
 class QModelIndex;
@@ -66,7 +66,7 @@ public:
     virtual ~KisLayerBox();
     QString observerName() { return "KisLayerBox"; }
     /// reimplemented from KisMainwindowObserver
-    virtual void setMainWindow(KisView2* kisview);
+    virtual void setMainWindow(KisViewManager* kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 private slots:
@@ -111,7 +111,7 @@ private slots:
     void selectionChanged(const QModelIndexList selection);
 
 private:
-    inline void connectActionToButton(KisView2* view, QAbstractButton *button, const QString &id);
+    inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);

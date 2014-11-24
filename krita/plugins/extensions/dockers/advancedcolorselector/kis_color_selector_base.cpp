@@ -35,7 +35,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_node.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_image_view.h>
 #include "kis_image.h"
 #include "kis_display_color_converter.h"
@@ -146,7 +146,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(reset()));
 
-        setColor(Acs::currentColor(m_canvas->view()->resourceProvider(), Acs::Foreground));
+        setColor(Acs::currentColor(m_canvas->viewManager()->resourceProvider(), Acs::Foreground));
     }
     if (m_popup) {
         m_popup->setCanvas(canvas);

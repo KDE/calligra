@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_VIEW_2
-#define KIS_VIEW_2
+#ifndef KIS_GUI_CLIENT_H
+#define KIS_GUI_CLIENT_H
 
 #include <QDockWidget>
 #include <QQueue>
@@ -67,7 +67,7 @@ class KisActionManager;
  * Following the broad model-view-controller idea this class shows you one view on the document.
  * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc.
  */
-class KRITAUI_EXPORT KisView2 : public QObject, public KXMLGUIClient
+class KRITAUI_EXPORT KisViewManager : public QObject
 {
 
     Q_OBJECT
@@ -78,9 +78,13 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(QWidget *parent);
-    virtual ~KisView2();
+    KisViewManager(QWidget *parent, KActionCollection *actionCollection);
+    virtual ~KisViewManager();
 
+    /**
+     * Retrieves the entire action collection.
+     */
+    virtual KActionCollection* actionCollection() const;
 
 public:  // Krita specific interfaces
 
@@ -131,12 +135,6 @@ public:  // Krita specific interfaces
     /// selections.
     KisSelectionManager * selectionManager();
 
-    /// The CanvasController decorates the canvas with scrollbars
-    /// and knows where to start painting on the canvas widget, i.e.,
-    /// the document offset.
-    KoCanvasController * canvasController();
-    KisCanvasController *canvasControllerWidget();
-
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager() const;
 
@@ -153,9 +151,6 @@ public:  // Krita specific interfaces
 
     /// Convenience method to get at the active paint device
     KisPaintDeviceSP activeDevice();
-
-    /// The zoommanager handles everything action-related to zooming
-    KisZoomManager * zoomManager();
 
     /// The filtermanager handles everything action-related to filters
     KisFilterManager * filterManager();
@@ -182,8 +177,6 @@ public:  // Krita specific interfaces
     KisDocument* document() const;
 
 public:
-
-    virtual KisPrintJob * createPrintJob();
 
     KisGridManager * gridManager() const;
     KisPerspectiveGridManager* perspectiveGridManager() const;
@@ -247,9 +240,12 @@ private:
     void createManagers();
     void loadPlugins();
 
+    /// The zoommanager handles everything action-related to zooming
+    KisZoomManager * zoomManager();
+
 private:
-    class KisView2Private;
-    KisView2Private * const m_d;
+    class KisViewManagerPrivate;
+    KisViewManagerPrivate * const d;
 };
 
 #endif

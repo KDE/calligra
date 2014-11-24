@@ -41,7 +41,7 @@
 #include <kis_types.h>
 #include <kis_colorspace_convert_visitor.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_paint_device.h>
 #include <kis_action.h>
 #include <kis_group_layer.h>

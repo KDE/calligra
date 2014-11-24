@@ -32,7 +32,7 @@
 #include <ktemporaryfile.h>
 
 #include "KisDocument.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -41,7 +41,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_paint_layer.h"
 
-KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
+KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
     : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);

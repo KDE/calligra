@@ -36,14 +36,14 @@
 #include <kis_image.h>
 
 #include "kis_import_catcher.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "KisDocument.h"
 #include "dialogs/kis_dlg_image_properties.h"
 #include "commands/kis_image_commands.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
-KisImageManager::KisImageManager(KisView2 * view)
+KisImageManager::KisImageManager(KisViewManager * view)
         : m_view(view)
 {
 }

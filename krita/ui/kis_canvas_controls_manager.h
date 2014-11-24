@@ -25,7 +25,7 @@
 
 #include <krita_export.h>
 
-class KisView2;
+class KisViewManager;
 class KisActionManager;
 class KActionCollection;
 class KisImageView;
@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisCanvasControlsManager: public QObject
     Q_OBJECT
 
 public:
-    KisCanvasControlsManager(KisView2 * view);
+    KisCanvasControlsManager(KisViewManager * view);
     virtual ~KisCanvasControlsManager();
 
     void setup(KActionCollection *actionCollection, KisActionManager *actionManager);
@@ -52,7 +52,7 @@ private:
     void stepAlpha(float step);
 
 private:
-    KisView2 * m_view;
+    KisViewManager * m_view;
 };
 
 #endif // KIS_CANVAS_CONTROLS_MANAGER_H

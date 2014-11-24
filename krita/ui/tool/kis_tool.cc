@@ -45,7 +45,7 @@
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_selection.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -734,7 +734,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        kiscanvas->view()->showFloatingMessage(message, koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -742,12 +742,12 @@ bool KisTool::nodeEditable()
 bool KisTool::selectionEditable()
 {
     KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
-    KisView2 * view = kisCanvas->view();
+    KisViewManager * view = kisCanvas->viewManager();
 
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
     }
     return editable;
 }

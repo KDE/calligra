@@ -37,7 +37,7 @@
 #include <KoIcon.h>
 
 #include<kis_canvas2.h>
-#include<kis_view2.h>
+#include<KisViewManager.h>
 #include<KisDocument.h>
 #include<kis_animation_doc.h>
 #include<kis_image.h>
@@ -67,8 +67,8 @@ KisTimelineWidget::KisTimelineWidget(QWidget *parent)
 
 void KisTimelineWidget::init()
 {
-    KActionCollection* actionCollection = m_canvas->view()->actionCollection();
-    KisActionManager* actionManager = m_canvas->view()->actionManager();
+    KActionCollection* actionCollection = m_canvas->viewManager()->actionCollection();
+    KisActionManager* actionManager = m_canvas->viewManager()->actionManager();
 
     m_lastBrokenFrame = QRect();
     m_frameBreakState = false;
@@ -251,14 +251,14 @@ void KisTimelineWidget::init()
     setLayout(lay);
 
     connect(m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
-    connect(m_playbackDialog, SIGNAL(playbackStateChanged()), dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SLOT(playbackStateChanged()));
+    connect(m_playbackDialog, SIGNAL(playbackStateChanged()), dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document()), SLOT(playbackStateChanged()));
 
     m_imported = false;
 }
 
 void KisTimelineWidget::frameSelectionChanged(QRect frame)
 {
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->frameSelectionChanged(frame);
+    dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document())->frameSelectionChanged(frame);
 }
 
 void KisTimelineWidget::resizeEvent(QResizeEvent *event)
@@ -274,7 +274,7 @@ void KisTimelineWidget::setCanvas(KisCanvas2 *canvas)
     if (!m_timeline) {
         init();
     }
-    KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(canvas->view()->document());
+    KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(canvas->viewManager()->document());
     // TODO: workaround to not crash when loading normal images
     if (!doc) {
         return;
@@ -283,8 +283,8 @@ void KisTimelineWidget::setCanvas(KisCanvas2 *canvas)
     m_timeline->setModel(new KisAnimationModel(doc));
 
     // Connect all the document signals here
-    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
-    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
+    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
+    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document()), SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
 }
 
 void KisTimelineWidget::unsetCanvas()
@@ -331,13 +331,13 @@ void KisTimelineWidget::moveLayerUpUiUpdate(int layer)
 void KisTimelineWidget::paintLayerPressed()
 {
     addLayerUiUpdate();
-    dynamic_cast<KisAnimationDoc*>(getCanvas()->view()->document())->addPaintLayer();
+    dynamic_cast<KisAnimationDoc*>(getCanvas()->viewManager()->document())->addPaintLayer();
 }
 
 void KisTimelineWidget::vectorLayerPressed()
 {
     addLayerUiUpdate();
-    dynamic_cast<KisAnimationDoc*>(getCanvas()->view()->document())->addVectorLayer();
+    dynamic_cast<KisAnimationDoc*>(getCanvas()->viewManager()->document())->addVectorLayer();
 }
 
 void KisTimelineWidget::removeLayerPressed()
@@ -486,17 +486,17 @@ void KisTimelineWidget::playbackOptionsPressed()
 
 void KisTimelineWidget::playAnimation()
 {
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->play();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document())->play();
 }
 
 void KisTimelineWidget::pauseAnimation()
 {
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->pause();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document())->pause();
 }
 
 void KisTimelineWidget::stopAnimation()
 {
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->stop();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document())->stop();
 }
 
 void KisTimelineWidget::timelineWidthChanged(int width)

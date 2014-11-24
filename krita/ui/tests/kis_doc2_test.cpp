@@ -28,7 +28,7 @@
 #include "kis_undo_store.h"
 #include "kis_factory2.h"
 #include "KisPart.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include "util.h"
 #include <kis_image_view.h>
 #include "KisPart.h"

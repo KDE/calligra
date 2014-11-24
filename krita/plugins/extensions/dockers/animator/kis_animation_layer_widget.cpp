@@ -20,7 +20,7 @@
 #include "kis_canvas2.h"
 #include "kis_animation_doc.h"
 #include "KisPart.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include <KoIcon.h>
 
@@ -105,7 +105,7 @@ void KisAnimationLayerWidget::onionSkinToggleClicked()
     }
 
     // Make onion skin changes in the canvas
-    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->onionSkinStateToggled(m_layerBox->onionSkinStates());
+    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->viewManager()->document())->onionSkinStateToggled(m_layerBox->onionSkinStates());
 }
 
 void KisAnimationLayerWidget::lockToggleClicked()
@@ -123,7 +123,7 @@ void KisAnimationLayerWidget::lockToggleClicked()
     }
 
     // Make lock state changes in the canvas
-    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->lockStateToggled(m_layerBox->lockStates());
+    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->viewManager()->document())->lockStateToggled(m_layerBox->lockStates());
 }
 
 void KisAnimationLayerWidget::visibilityToggleClicked()
@@ -141,5 +141,5 @@ void KisAnimationLayerWidget::visibilityToggleClicked()
     }
 
     // Make the visibilty state changes in the canvas
-    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->visibilityStateToggled(m_layerBox->visibilityStates());
+    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->viewManager()->document())->visibilityStateToggled(m_layerBox->visibilityStates());
 }

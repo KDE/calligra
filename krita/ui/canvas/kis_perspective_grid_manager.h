@@ -30,7 +30,7 @@ class KisPerspectiveGridDecoration;
 class KAction;
 class KActionCollection;
 class KToggleAction;
-class KisView2;
+class KisViewManager;
 
 class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
 {
@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
 public:
     /** Create a perspective manager for this view
      */
-    KisPerspectiveGridManager(KisView2 * parent);
+    KisPerspectiveGridManager(KisViewManager * parent);
     ~KisPerspectiveGridManager();
     void setup(KActionCollection * collection);
     /**

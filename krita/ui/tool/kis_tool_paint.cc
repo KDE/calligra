@@ -56,7 +56,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_cubic_curve.h>
 
@@ -116,8 +116,8 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (kiscanvas && kiscanvas->view()) {
-        connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
+    if (kiscanvas && kiscanvas->viewManager()) {
+        connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
     }
 }
 

@@ -55,7 +55,7 @@
 #include <kis_canvas_controller.h>
 #include <kis_qpainter_canvas.h>
 #include "kis_config.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include <kis_image_signal_router.h>
 #include "kis_clipboard.h"
@@ -105,7 +105,7 @@ public:
     KisSketchView* q;
 
     QPointer<KisDocument> doc;
-    QPointer<KisView2> view;
+    QPointer<KisViewManager> view;
     QPointer<KisCanvas2> canvas;
     KUndo2Stack* undoStack;
 
@@ -306,7 +306,7 @@ void KisSketchView::documentAboutToBeDeleted()
     if (d->redoAction)
         d->redoAction->disconnect(this);
 
-    KisView2 *oldView = d->view;
+    KisViewManager *oldView = d->view;
     disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     d->view = 0;
     emit viewChanged();
@@ -326,7 +326,7 @@ void KisSketchView::documentChanged()
 
 	KisSketchPart *part = DocumentManager::instance()->part();
 	Q_ASSERT(part);
-	QPointer<KisView2> view = qobject_cast<KisView2*>(part->createView(d->doc, QApplication::activeWindow()));
+	QPointer<KisViewManager> view = qobject_cast<KisViewManager*>(part->createView(d->doc, QApplication::activeWindow()));
     d->view = view;
     d->view->setShowFloatingMessage(false);
 

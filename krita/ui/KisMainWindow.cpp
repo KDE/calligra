@@ -102,7 +102,7 @@
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "KisDocument.h"
 #include "kis_image_view.h"
 #include "dialogs/kis_dlg_preferences.h"
@@ -485,7 +485,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     m_documentMapper = new QSignalMapper(this);
     connect(m_documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
-    m_guiClient = new KisView2(this);
+    m_guiClient = new KisViewManager(this, actionCollection());
 
     m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
 
@@ -519,8 +519,6 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
 
     m_closeAll = new KAction(i18n("Close All"), this);
     connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllWindows()));
-
-    guiFactory()->addClient(m_guiClient);
 
     setAutoSaveSettings(part->componentData().componentName(), false);
 
@@ -669,7 +667,7 @@ void KisMainWindow::slotPreferences()
 
         // XXX: should this be changed for the views in other windows as well?
         foreach(QPointer<KisView> koview, part()->views()) {
-            KisView2 *view = qobject_cast<KisView2*>(koview);
+            KisViewManager *view = qobject_cast<KisViewManager*>(koview);
             if (view) {
                 view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
 
@@ -1220,7 +1218,6 @@ void KisMainWindow::redo()
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     m_mdiArea->closeAllSubWindows();
-    guiFactory()->removeClient(m_guiClient);
 
     if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
         e->setAccepted(false);

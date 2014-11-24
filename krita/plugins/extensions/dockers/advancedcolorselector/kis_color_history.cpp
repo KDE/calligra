@@ -17,7 +17,7 @@
 
 #include "kis_color_history.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image_view.h"
 #include "kis_canvas_resource_provider.h"
 

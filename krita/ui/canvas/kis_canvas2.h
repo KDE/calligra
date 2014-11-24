@@ -38,7 +38,7 @@ class KoToolProxy;
 class KoColorProfile;
 
 class KisCanvasDecoration;
-class KisView2;
+class KisViewManager;
 class KisPaintopBox;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
@@ -75,7 +75,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, QPointer<KisImageView> view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, QPointer<KisImageView> viewManager, KoShapeBasedDocumentBase* sc);
 
     virtual ~KisCanvas2();
 
@@ -154,7 +154,7 @@ public: // KoCanvasBase implementation
 public: // KisCanvas2 methods
 
     KisImageWSP image() const;
-    KisView2* view() const;
+    KisViewManager* viewManager() const;
     QPointer<KisImageView>imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
@@ -230,7 +230,7 @@ public:
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     void initializeImage();
-    // interface for KisView2 only
+    // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);
 
     void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);

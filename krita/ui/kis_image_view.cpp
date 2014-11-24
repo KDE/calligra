@@ -38,7 +38,7 @@
 
 #include "kis_image_manager.h"
 #include "kis_node_manager.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_shape_controller.h"
 #include "kis_mimedata.h"
 #include "kis_node_commands_adapter.h"
@@ -52,6 +52,7 @@
 #include "kis_tool_freehand.h"
 #include "KisPart.h"
 #include "KisMainWindow.h"
+#include "KisPrintJob.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -88,7 +89,7 @@ public:
     KisCanvas2 *canvas;
     KisZoomManager *zoomManager;
     KisDocument *doc;
-    KisView2 *parentView;
+    KisViewManager *parentView;
 
     KisNodeSP currentNode;
 
@@ -154,7 +155,7 @@ KisImageView::~KisImageView()
     delete d;
 }
 
-void KisImageView::setParentView(KisView2 *view)
+void KisImageView::setViewManager(KisViewManager *view)
 {
     d->parentView = view;
     KoToolManager::instance()->addController(d->canvasController);
@@ -162,7 +163,7 @@ void KisImageView::setParentView(KisView2 *view)
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 }
 
-KisView2* KisImageView::parentView() const
+KisViewManager* KisImageView::viewManager() const
 {
     return d->parentView;
 }
@@ -177,7 +178,7 @@ KisZoomManager *KisImageView::zoomManager() const
     return d->zoomManager;
 }
 
-KoCanvasController *KisImageView::canvasController() const
+KisCanvasController *KisImageView::canvasController() const
 {
     return d->canvasController;
 }
@@ -210,7 +211,7 @@ KisCoordinatesConverter *KisImageView::viewConverter() const
 
 void KisImageView::dragEnterEvent(QDragEnterEvent *event)
 {
-    dbgUI << "KisView2::dragEnterEvent";
+    dbgUI << "KisViewManager::dragEnterEvent";
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
     if (event->mimeData()->hasImage()
@@ -254,13 +255,13 @@ void KisImageView::dropEvent(QDropEvent *event)
 
         foreach(KisNodeSP node, nodes) {
             if (node) {
-                KisNodeCommandsAdapter adapter(parentView());
-                if (!parentView()->nodeManager()->activeLayer()) {
+                KisNodeCommandsAdapter adapter(viewManager());
+                if (!viewManager()->nodeManager()->activeLayer()) {
                     adapter.addNode(node, kisimage->rootLayer() , 0);
                 } else {
                     adapter.addNode(node,
-                                    parentView()->nodeManager()->activeLayer()->parent(),
-                                    parentView()->nodeManager()->activeLayer());
+                                    viewManager()->nodeManager()->activeLayer()->parent(),
+                                    viewManager()->nodeManager()->activeLayer());
                 }
             }
         }
@@ -339,7 +340,7 @@ bool KisImageView::event(QEvent *event)
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            parentView()->canvasControllerWidget()->setFocus();
+            d->canvasController->setFocus();
             qApp->processEvents();
 
             KisCanvasResourceProvider* provider = resourceProvider();
@@ -355,7 +356,7 @@ bool KisImageView::event(QEvent *event)
             syncObject->opacity = provider->opacity();
             syncObject->globalAlphaLock = provider->globalAlphaLock();
 
-            syncObject->documentOffset = parentView()->canvasControllerWidget()->scrollBarValue() - pos();
+            syncObject->documentOffset = d->canvasController->scrollBarValue() - pos();
             syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
             syncObject->rotationAngle = canvasBase()->rotationAngle();
 
@@ -388,7 +389,7 @@ bool KisImageView::event(QEvent *event)
         }
         case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-            parentView()->canvasControllerWidget()->setFocus();
+            d->canvasController->setFocus();
             qApp->processEvents();
 
             if(syncObject->initialized) {
@@ -450,11 +451,11 @@ bool KisImageView::event(QEvent *event)
                 }
 
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
-                parentView()->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
+                d->canvasController->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
 
                 QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
-                parentView()->canvasControllerWidget()->setScrollBarValue(newOffset);
+                d->canvasController->setScrollBarValue(newOffset);
 
                 KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
                 if(tool && syncObject->smoothingOptions) {
@@ -525,7 +526,7 @@ bool KisImageView::queryClose()
         switch (res) {
         case KMessageBox::Yes : {
             bool isNative = (document()->outputMimeType() == document()->nativeFormatMimeType());
-            if (!parentView()->mainWindow()->saveDocument(document(), !isNative))
+            if (!viewManager()->mainWindow()->saveDocument(document(), !isNative))
                 return false;
             break;
         }
@@ -670,4 +671,9 @@ void KisImageView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
+}
+
+KisPrintJob * KisImageView::createPrintJob()
+{
+    return new KisPrintJob(image());
 }

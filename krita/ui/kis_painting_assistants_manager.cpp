@@ -20,14 +20,14 @@
 #include "kis_painting_assistants_manager.h"
 #include "kis_painting_assistants_decoration.h"
 #include "kis_image_view.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include <klocale.h>
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
-KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisView2* view) : QObject(view)
+KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisViewManager* view) : QObject(view)
     , m_imageView(0)
 {
 

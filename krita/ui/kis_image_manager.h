@@ -24,7 +24,7 @@
 #include <kurl.h>
 #include <krita_export.h>
 
-class KisView2;
+class KisViewManager;
 class KActionCollection;
 class KisFilterStrategy;
 class KisActionManager;
@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisImageManager : public QObject
 public:
 
 
-    KisImageManager(KisView2 * view);
+    KisImageManager(KisViewManager * view);
     ~KisImageManager() {}
 
     void setView(QPointer<KisImageView>imageView);
@@ -67,7 +67,7 @@ public slots:
     void slotImageColor();
 
 private:
-    KisView2 * m_view;
+    KisViewManager * m_view;
 };
 
 #endif // KIS_IMAGE_MANAGER

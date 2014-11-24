@@ -27,7 +27,7 @@
 #include "kis_node_manager.h"
 #include "kis_timeline.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
 #include "kis_animation_layer_widget.h"

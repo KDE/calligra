@@ -28,7 +28,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image_view.h"
 #include "KisPart.h"
 #include <KisDocument.h>
@@ -62,7 +62,7 @@ public:
 
         mainWindow = new KisMainWindow(part, doc->documentPart()->componentData());
         imageView = new KisImageView(doc->documentPart(), doc, mainWindow);
-        view = new KisView2(mainWindow);
+        view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
@@ -162,7 +162,7 @@ public:
 
 protected:
     KisImageView *imageView;
-    KisView2 *view;
+    KisViewManager *view;
     KisDocument *doc;
     KisPart *part;
     KisMainWindow *mainWindow;

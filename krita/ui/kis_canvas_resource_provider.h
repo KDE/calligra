@@ -34,7 +34,7 @@ class KoAbstractGradient;
 class KoResource;
 
 class KoCanvasBase;
-class KisView2;
+class KisViewManager;
 class KoPattern;
 class KisFilterConfiguration;
 
@@ -72,7 +72,7 @@ public:
     };
 
 
-    KisCanvasResourceProvider(KisView2 * view);
+    KisCanvasResourceProvider(KisViewManager * view);
     ~KisCanvasResourceProvider();
 
     void setResourceManager(KoCanvasResourceManager *resourceManager);
@@ -187,7 +187,7 @@ signals:
 
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     KoCanvasResourceManager *m_resourceManager;
     const KoColorProfile *m_displayProfile;
     bool m_fGChanged;

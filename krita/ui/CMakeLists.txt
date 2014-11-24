@@ -318,7 +318,7 @@ set(kritaui_LIB_SRCS
 # build these last for now
     kis_image_view.cpp
     kis_mainwindow_observer.cpp
-    kis_view2.cpp
+    KisViewManager.cpp
 )
 
 if(WIN32)
@@ -439,7 +439,7 @@ install( FILES
     tool/kis_tool.h
     kis_canvas_resource_provider.h
     kis_cursor.h
-    kis_view2.h
+    KisViewManager.h
     kis_ui_types.h
 #    kis_cmb_composite.h
 #    kis_cmb_idlist.h

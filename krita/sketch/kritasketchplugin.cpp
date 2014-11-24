@@ -56,7 +56,7 @@
 #include "PanelConfiguration.h"
 #include "DocumentManager.h"
 #include "KisDocument.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_clipboard.h"
 
 #include <QDeclarativeEngine>

@@ -33,7 +33,7 @@ class KUndo2MagicString;
 
 class KisDocument;
 class KisFilterStrategy;
-class KisView2;
+class KisViewManager;
 class KisFilterConfiguration;
 class KisActionManager;
 class KisImageView;
@@ -49,7 +49,7 @@ class KRITAUI_EXPORT KisNodeManager : public QObject
 
 public:
 
-    KisNodeManager(KisView2 * view);
+    KisNodeManager(KisViewManager * view);
     ~KisNodeManager();
     
     void setView(QPointer<KisImageView>imageView);

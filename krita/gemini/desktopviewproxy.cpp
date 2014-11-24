@@ -44,7 +44,7 @@
 #include <sketch/Settings.h>
 #include <kis_config.h>
 #include <KisDocument.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 class DesktopViewProxy::Private
 {
@@ -183,7 +183,7 @@ void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 /**
  * @brief Override to allow for full-screen support with Canvas-mode
  *
- * The basic behaviour of the KisView2 is to check the KoConfig and
+ * The basic behaviour of the KisViewManager is to check the KoConfig and
  * to adjust the main window appropriately. If "hideTitlebar" is set
  * true, then it switches the window between windowed and full-screen.
  * To prevent it leaving the full-screen mode, we set the mode to false
@@ -192,7 +192,7 @@ void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
  */
 void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)
 {
-    KisView2* kisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    KisViewManager* kisView = qobject_cast<KisViewManager*>(d->desktopView->rootView());
     if(toggled) {
         kisView->showJustTheCanvas(toggled);
     }
@@ -217,7 +217,7 @@ void DesktopViewProxy::documentChanged()
 {
     // Remove existing linking for toggling canvas, in order
     // to over-ride the window state behaviour
-    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+    KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
     QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
     toggleJustTheCanvasAction->disconnect(view);
     connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
@@ -225,7 +225,7 @@ void DesktopViewProxy::documentChanged()
 
 void DesktopViewProxy::updateKeyBindings()
 {
-    KisView2* view = qobject_cast<KisView2*>(d->mainWindow->sketchKisView());
+    KisViewManager* view = qobject_cast<KisViewManager*>(d->mainWindow->sketchKisView());
     foreach(QAction* action, d->desktopView->actions()) {
         QAction* otherAction = view->action(action->objectName().toLatin1());
         if(otherAction) {

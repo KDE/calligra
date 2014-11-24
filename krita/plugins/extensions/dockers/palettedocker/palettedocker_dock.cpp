@@ -38,7 +38,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
@@ -185,7 +185,7 @@ PaletteDockerDock::~PaletteDockerDock()
     }
 }
 
-void PaletteDockerDock::setMainWindow(KisView2* kisview)
+void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));

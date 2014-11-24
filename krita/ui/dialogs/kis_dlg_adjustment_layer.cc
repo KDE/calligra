@@ -34,14 +34,14 @@
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"
 #include <kis_config.h>
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisNodeFilterInterface* nfi,
                                              KisPaintDeviceSP paintDevice,
                                              const QString &layerName,
                                              const QString &caption,
-                                             KisView2 *view, QWidget *parent)
+                                             KisViewManager *view, QWidget *parent)
     : KDialog(parent)
     , m_node(node)
     , m_nodeFilterInterface(nfi)

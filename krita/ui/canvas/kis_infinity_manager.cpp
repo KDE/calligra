@@ -25,7 +25,7 @@
 #include <KoCanvasController.h>
 
 #include <kis_debug.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <input/kis_input_manager.h>
 #include <kis_config.h>

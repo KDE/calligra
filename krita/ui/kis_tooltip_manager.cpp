@@ -28,9 +28,9 @@
 #include <kmenubar.h>
 
 #include <KisMainWindow.h>
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
-KisTooltipManager::KisTooltipManager(KisView2* view) : QObject(view), m_view(view), m_recording(false)
+KisTooltipManager::KisTooltipManager(KisViewManager* view) : QObject(view), m_view(view), m_recording(false)
 {
     m_view->mainWindow()->menuBar()->installEventFilter(this);
 }
@@ -67,7 +67,7 @@ void KisTooltipManager::record()
 {
     m_recording = true;
     QList<QAction*> actions =  m_view->actionCollection()->actions();
-    foreach(KXMLGUIClient* client, m_view->childClients() ) {
+    foreach(KXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
         actions.append(client->actionCollection()->actions());
     }
 

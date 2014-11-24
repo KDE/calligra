@@ -309,11 +309,6 @@ void KisView::removeStatusBarItem(QWidget *widget)
     }
 }
 
-KisPrintJob * KisView::createPrintJob()
-{
-    kWarning(30003) << "Printing not implemented in this application";
-    return 0;
-}
 
 KisPrintJob * KisView::createPdfPrintJob()
 {

@@ -24,7 +24,7 @@
 
 #include <KoCanvasBase.h>
 #include "channelmodel.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_layer.h>
 #include <kis_node_manager.h>

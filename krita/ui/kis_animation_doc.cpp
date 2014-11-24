@@ -22,7 +22,7 @@
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kranim/kis_kranim_saver.h"
 #include "kranim/kis_kranim_loader.h"
@@ -987,7 +987,7 @@ void KisAnimationDoc::updateActiveFrame()
     setPreActivatedNode(d->currentFrame);
     QPointer<KisView> view = documentPart()->views().first();
     if (view) {
-        //dynamic_cast<KisView2*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
+        //dynamic_cast<KisViewManager*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
     }
 }
 

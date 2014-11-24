@@ -36,7 +36,7 @@
 #include <KoDrag.h>
 #include <KoShapeOdfSaveHelper.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_clipboard.h"
 #include "kis_pixel_selection.h"
@@ -62,7 +62,7 @@
 
 namespace ActionHelper {
 
-    void copyFromDevice(KisView2 *view, KisPaintDeviceSP device) {
+    void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device) {
         KisImageWSP image = view->image();
         if (!image) return;
         
@@ -109,7 +109,7 @@ namespace ActionHelper {
 
 }
 
-void KisSelectAllActionFactory::run(KisView2 *view)
+void KisSelectAllActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
@@ -140,7 +140,7 @@ void KisSelectAllActionFactory::run(KisView2 *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisDeselectActionFactory::run(KisView2 *view)
+void KisDeselectActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
@@ -152,7 +152,7 @@ void KisDeselectActionFactory::run(KisView2 *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisReselectActionFactory::run(KisView2 *view)
+void KisReselectActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
@@ -164,7 +164,7 @@ void KisReselectActionFactory::run(KisView2 *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
+void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 {
     KisNodeSP node = view->activeNode();
     if (!node || !node->hasEditablePaintDevice()) return;
@@ -214,14 +214,14 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     applicator.end();
 }
 
-void KisClearActionFactory::run(KisView2 *view)
+void KisClearActionFactory::run(KisViewManager *view)
 {
     // XXX: "Add saving of XML data for Clear action"
 
     view->canvasBase()->toolProxy()->deleteSelection();
 }
 
-void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
+void KisImageResizeToSelectionActionFactory::run(KisViewManager *view)
 {
     // XXX: "Add saving of XML data for Image Resize To Selection action"
 
@@ -231,7 +231,7 @@ void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
     view->image()->cropImage(selection->selectedExactRect());
 }
 
-void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
+void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
 {
     KisImageSP image = view->image();
     if (!image) return;
@@ -297,7 +297,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
     }
 }
 
-void KisCopyMergedActionFactory::run(KisView2 *view)
+void KisCopyMergedActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
@@ -311,7 +311,7 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisPasteActionFactory::run(KisView2 *view)
+void KisPasteActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
@@ -333,7 +333,7 @@ void KisPasteActionFactory::run(KisView2 *view)
     }
 }
 
-void KisPasteNewActionFactory::run(KisView2 *view)
+void KisPasteNewActionFactory::run(KisViewManager *view)
 {
     Q_UNUSED(view);
 
@@ -367,13 +367,13 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     win->addView(KisPart::instance()->createView(doc, win));
 }
 
-void KisInvertSelectionOperaton::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
     runFilter(filter, view, config);
 }
 
-void KisSelectionToVectorActionFactory::run(KisView2 *view)
+void KisSelectionToVectorActionFactory::run(KisViewManager *view)
 {
     KisSelectionSP selection = view->selection();
 
@@ -409,7 +409,7 @@ void KisSelectionToVectorActionFactory::run(KisView2 *view)
 class KisShapeSelectionPaste : public KoOdfPaste
 {
 public:
-    KisShapeSelectionPaste(KisView2* view) : m_view(view)
+    KisShapeSelectionPaste(KisViewManager* view) : m_view(view)
     {
     }
 
@@ -435,10 +435,10 @@ public:
         return true;
     }
 private:
-    KisView2* m_view;
+    KisViewManager* m_view;
 };
 
-void KisShapesToVectorSelectionActionFactory::run(KisView2* view)
+void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
     QList<KoShape*> shapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
 

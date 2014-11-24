@@ -38,7 +38,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_decoration.h>
@@ -361,7 +361,7 @@ void KisRulerAssistantTool::addAssistant()
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant);
     if (grid) {
-        m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+        m_canvas->viewManager()->resourceProvider()->addPerspectiveGrid(grid);
     }
     m_newAssistant = 0;
 }
@@ -371,7 +371,7 @@ void KisRulerAssistantTool::removeAssistant(KisPaintingAssistant* assistant)
 {
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
     if (grid) {
-        m_canvas->view()->resourceProvider()->removePerspectiveGrid(grid);
+        m_canvas->viewManager()->resourceProvider()->removePerspectiveGrid(grid);
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
@@ -477,7 +477,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 void KisRulerAssistantTool::removeAllAssistants()
 {
-    m_canvas->view()->resourceProvider()->clearPerspectiveGrids();
+    m_canvas->viewManager()->resourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
@@ -485,7 +485,7 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
-    KoFileDialog dialog(m_canvas->view()->mainWindow(), KoFileDialog::OpenFile, "OpenAssistant");
+    KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenAssistant");
     dialog.setCaption(i18n("Select an Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter("Krita Assistant (*.krassistant)");
@@ -549,7 +549,7 @@ void KisRulerAssistantTool::loadAssistants()
                         m_canvas->paintingAssistantsDecoration()->addAssistant(assistant);
                         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
                         if (grid) {
-                            m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+                            m_canvas->viewManager()->resourceProvider()->addPerspectiveGrid(grid);
                         }
                     } else {
                         errors = true;
@@ -615,7 +615,7 @@ void KisRulerAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    KoFileDialog dialog(m_canvas->view()->mainWindow(), KoFileDialog::SaveFile, "OpenAssistant");
+    KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "OpenAssistant");
     dialog.setCaption(i18n("Save Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter("Krita Assistant (*.krassistant)");

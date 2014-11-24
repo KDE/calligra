@@ -48,7 +48,7 @@
 #include "kis_name_server.h"
 #include "kis_mask.h"
 #include "kis_shape_layer.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_node.h"
 
 #include <KoTextDocumentLayout.h>
@@ -155,7 +155,7 @@ void KisShapeController::addShape(KoShape* shape)
 
     if (belongsToShapeSelection(shape)) {
 
-        KisSelectionSP selection = canvas->view()->selection();
+        KisSelectionSP selection = canvas->viewManager()->selection();
         if (selection) {
             if (!selection->shapeSelection()) {
                 selection->setShapeSelection(new KisShapeSelection(image(), selection));

@@ -28,7 +28,7 @@
 #include "kis_node_manager.h"
 #include "kis_types.h"
 #include "kis_count_visitor.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -46,7 +46,7 @@ struct KisImportCatcher::Private
 {
 public:
     KisDocument* doc;
-    KisView2* view;
+    KisViewManager* view;
     KUrl url;
     bool importAsLayer;
 
@@ -114,7 +114,7 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
                     currentActiveLayer->lastChild());
 }
 
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
+KisImportCatcher::KisImportCatcher(const KUrl & url, KisViewManager * view, bool importAsLayer)
         : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();

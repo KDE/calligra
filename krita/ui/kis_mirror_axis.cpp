@@ -34,7 +34,7 @@
 #include <KoIcon.h>
 
 #include "kis_canvas_resource_provider.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image_view.h"
 #include "kis_image.h"
 #include "canvas/kis_canvas_controller.h"

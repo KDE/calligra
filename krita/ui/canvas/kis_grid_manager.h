@@ -28,7 +28,7 @@
 #include <krita_export.h>
 
 class KisGridDecoration;
-class KisView2;
+class KisViewManager;
 class KActionCollection;
 class KToggleAction;
 class KAction;
@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisGridManager : public QObject
 {
     Q_OBJECT
 public:
-    KisGridManager(KisView2 * parent);
+    KisGridManager(KisViewManager * parent);
     virtual ~KisGridManager();
 public:
 

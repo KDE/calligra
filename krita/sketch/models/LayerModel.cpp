@@ -20,7 +20,7 @@
 #include "LayerThumbProvider.h"
 #include <PropertyContainer.h>
 #include <kis_node_model.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_node_manager.h>
 #include <kis_dummies_facade_base.h>
@@ -91,7 +91,7 @@ public:
     QHash<const KisNode*, LayerModelMetaInfo> layerMeta;
     KisNodeModel* nodeModel;
     bool aboutToRemoveRoots;
-    KisView2* view;
+    KisViewManager* view;
     KisCanvas2* canvas;
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
@@ -248,7 +248,7 @@ QObject* LayerModel::view() const
 
 void LayerModel::setView(QObject *newView)
 {
-    KisView2* view = qobject_cast<KisView2*>(newView);
+    KisViewManager* view = qobject_cast<KisViewManager*>(newView);
     // This has to happen very early, and we will be filling it back up again soon anyway...
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this);

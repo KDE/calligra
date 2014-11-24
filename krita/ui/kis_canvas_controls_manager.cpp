@@ -26,7 +26,7 @@
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 
@@ -34,7 +34,7 @@
 
 const int STEP = 25;
 
-KisCanvasControlsManager::KisCanvasControlsManager(KisView2 * view) : m_view(view)
+KisCanvasControlsManager::KisCanvasControlsManager(KisViewManager * view) : m_view(view)
 {
 
 }

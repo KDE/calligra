@@ -31,7 +31,7 @@
 #include "kis_config.h"
 #include "kis_image.h"
 #include "kis_perspective_grid.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_perspective_grid_decoration.h"
 #include "kis_image_view.h"
 
@@ -40,7 +40,7 @@
 /*                 KisPerspectiveGridManager                   */
 /***************************************************************/
 
-KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent) : QObject(parent)
+KisPerspectiveGridManager::KisPerspectiveGridManager(KisViewManager * parent) : QObject(parent)
     , m_imageView(0)
 {
 }

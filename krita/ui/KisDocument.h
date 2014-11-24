@@ -63,7 +63,7 @@ class KoDocumentInfoDlg;
 class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
-class KisView2;
+class KisViewManager;
 class KisPart;
 
 class KisSketchPart;

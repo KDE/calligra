@@ -27,7 +27,7 @@
 #include "kis_image_view.h"
 
 class KActionCollection;
-class KisView2;
+class KisViewManager;
 class KisAction;
 class KisOperationUIFactory;
 class KisOperation;
@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisActionManager
 {
 
 public:
-    KisActionManager(KisView2* view);
+    KisActionManager(KisViewManager* view);
     virtual ~KisActionManager();
 
     void setView(QPointer<KisImageView> imageView);

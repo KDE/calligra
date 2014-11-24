@@ -53,12 +53,12 @@
 #include <kis_types.h>
 #include "kis_iterator_ng.h"
 #include <KisPart.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_paint_device.h>
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 
-KisChannelSeparator::KisChannelSeparator(KisView2 * view)
+KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
         : m_view(view)
 {
 }

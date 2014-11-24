@@ -36,7 +36,7 @@ public:
      ArtisticColorSelectorDock();
     ~ArtisticColorSelectorDock();
      QString observerName() { return "ArtisticColorSelectorDock"; }
-    virtual void setMainWindow(KisView2* kisview);
+    virtual void setMainWindow(KisViewManager* kisview);
     
 private slots:
     void slotCanvasResourceChanged(int key, const QVariant& value);

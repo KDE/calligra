@@ -46,7 +46,7 @@
 #include <KoZoomController.h>
 #include <KoIcon.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
 #include <KisDocument.h>
@@ -72,7 +72,7 @@ public:
 	}
 	MainWindow* q;
     bool allowClose;
-    KisView2* sketchKisView;
+    KisViewManager* sketchKisView;
     QString currentSketchPage;
 	QTimer *centerer;
 };
@@ -202,7 +202,7 @@ void MainWindow::setSketchKisView(QObject* newView)
         d->sketchKisView->disconnect(this);
     if (d->sketchKisView != newView)
     {
-        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
         connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
         d->centerer->start();
         emit sketchKisViewChanged();

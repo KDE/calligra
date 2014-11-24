@@ -23,7 +23,7 @@
 
 #include <kis_types.h>
 
-class KisView2;
+class KisViewManager;
 class KisCanvas2;
 class KisSpecificColorSelectorWidget;
 
@@ -40,7 +40,7 @@ public slots:
     void layerChanged(const KisNodeSP);
 private:
     KisCanvas2 *m_canvas;
-    KisView2 *m_view;
+    KisViewManager *m_view;
     KisSpecificColorSelectorWidget* m_colorSelector;
 };
 

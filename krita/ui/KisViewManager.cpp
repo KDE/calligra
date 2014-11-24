@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <QPrinter>
 
 #include <QDesktopServices>
@@ -213,12 +213,12 @@ class BlockingUserInputEventFilter : public QObject
     }
 };
 
-class KisView2::KisView2Private
+class KisViewManager::KisViewManagerPrivate
 {
 
 public:
 
-    KisView2Private()
+    KisViewManagerPrivate()
         : filterManager(0)
         , statusBar(0)
         , selectionManager(0)
@@ -235,10 +235,11 @@ public:
         , canvasResourceProvider(0)
         , canvasResourceManager(0)
         , guiUpdateCompressor(0)
+        , actionCollection(0)
     {
     }
 
-    ~KisView2Private() {
+    ~KisViewManagerPrivate() {
         delete filterManager;
         delete selectionManager;
         delete nodeManager;
@@ -289,27 +290,27 @@ public:
     KoCanvasResourceManager* canvasResourceManager;
     QList<StatusBarItem> statusBarItems;
     KisSignalCompressor* guiUpdateCompressor;
+    KActionCollection *actionCollection;
 };
 
 
-KisView2::KisView2(QWidget * parent)
-    : KXMLGUIClient(),
-      m_d(new KisView2Private())
+KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionCollection)
+    : d(new KisViewManagerPrivate())
 {
-    m_d->mainWindow = dynamic_cast<QMainWindow*>(parent);
+    d->actionCollection = _actionCollection;
+    d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
-    setXMLFile(QString("%1.rc").arg(qAppName()));
-    m_d->canvasResourceProvider = new KisCanvasResourceProvider(this);
-    m_d->canvasResourceManager = new KoCanvasResourceManager();
-    m_d->canvasResourceProvider->setResourceManager(m_d->canvasResourceManager);
+    d->canvasResourceProvider = new KisCanvasResourceProvider(this);
+    d->canvasResourceManager = new KoCanvasResourceManager();
+    d->canvasResourceProvider->setResourceManager(d->canvasResourceManager);
 
-    m_d->guiUpdateCompressor = new KisSignalCompressor(30, KisSignalCompressor::POSTPONE, this);
-    connect(m_d->guiUpdateCompressor, SIGNAL(timeout()), this, SLOT(guiUpdateTimeout()));
+    d->guiUpdateCompressor = new KisSignalCompressor(30, KisSignalCompressor::POSTPONE, this);
+    connect(d->guiUpdateCompressor, SIGNAL(timeout()), this, SLOT(guiUpdateTimeout()));
 
     createActions();
     createManagers();
 
-    m_d->controlFrame = new KisControlFrame(this, mainWindow());
+    d->controlFrame = new KisControlFrame(this, mainWindow());
 
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
@@ -338,23 +339,23 @@ KisView2::KisView2(QWidget * parent)
         mainWindow()->dockerManager()->setIcons(false);
     }
 
-    m_d->statusBar = new KisStatusBar(this);
+    d->statusBar = new KisStatusBar(this);
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
-    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
+    connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
-            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
+            d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
+            d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
-    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+    connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
     connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            m_d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
+            d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     loadPlugins();
 
@@ -392,14 +393,14 @@ KisView2::KisView2(QWidget * parent)
         }
     }
 
-    m_d->actionManager->updateGUI();
+    d->actionManager->updateGUI();
 
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
 }
 
 
-KisView2::~KisView2()
+KisViewManager::~KisViewManager()
 {
     KisConfig cfg;
     if (resourceProvider() && resourceProvider()->currentPreset()) {
@@ -407,8 +408,8 @@ KisView2::~KisView2()
     }
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
-    if (m_d->filterManager->isStrokeRunning()) {
-        m_d->filterManager->cancel();
+    if (d->filterManager->isStrokeRunning()) {
+        d->filterManager->cancel();
     }
 
     // The reason for this is to ensure the shortcuts are saved at the right time,
@@ -419,7 +420,7 @@ KisView2::~KisView2()
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {
             const QObject* obj = dynamic_cast<const QObject*>(collection->parentGUIClient());
-            if(obj && qobject_cast<const KisView2*>(obj) && !obj->objectName().startsWith("view_0"))
+            if(obj && qobject_cast<const KisViewManager*>(obj) && !obj->objectName().startsWith("view_0"))
                 break;
             collection->setConfigGroup("krita/shortcuts");
             collection->writeSettings(&group);
@@ -432,34 +433,39 @@ KisView2::~KisView2()
             collection->writeSettings(&group);
         }
     }
-    delete m_d;
+    delete d;
 }
 
-void KisView2::setCurrentView(KisView *view)
+KActionCollection *KisViewManager::actionCollection() const
+{
+    return d->actionCollection;
+}
+
+void KisViewManager::setCurrentView(KisView *view)
 {
     bool first = true;
-    if (m_d->currentImageView) {
+    if (d->currentImageView) {
         first = false;
-        KisDocument* doc = m_d->currentImageView->document();
+        KisDocument* doc = d->currentImageView->document();
         if (doc) {
             doc->disconnect(this);
         }
-        canvasController()->proxyObject->disconnect(m_d->statusBar);
-        m_d->nodeManager->disconnect(doc->image());
+        d->currentImageView->canvasController()->proxyObject->disconnect(d->statusBar);
+        d->nodeManager->disconnect(doc->image());
 
-        m_d->rotateCanvasRight->disconnect();
-        m_d->rotateCanvasLeft->disconnect();
-        m_d->mirrorCanvas->disconnect();
-        m_d->wrapAroundAction->disconnect();
-        canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
-        resourceProvider()->disconnect(m_d->currentImageView->canvasBase());
+        d->rotateCanvasRight->disconnect();
+        d->rotateCanvasLeft->disconnect();
+        d->mirrorCanvas->disconnect();
+        d->wrapAroundAction->disconnect();
+        d->currentImageView->canvasController()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
+        resourceProvider()->disconnect(d->currentImageView->canvasBase());
     }
 
     QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
 
     if (imageView) {
 
-        imageView->setParentView(this);
+        imageView->setViewManager(this);
 
         connect(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
         resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
@@ -468,32 +474,32 @@ void KisView2::setCurrentView(KisView *view)
         KisDocument* doc = view->document();
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
-        m_d->currentImageView = imageView;
-        imageView->canvasBase()->setSharedResourceManager(m_d->canvasResourceManager);
+        d->currentImageView = imageView;
+        imageView->canvasBase()->setSharedResourceManager(d->canvasResourceManager);
 
-        connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
-        connect(m_d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasRight15()));
-        connect(m_d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasLeft15()));
-        connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(mirrorCanvas(bool)));
-        connect(m_d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
-        connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+        connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
+        connect(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
+        connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
+        connect(d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(mirrorCanvas(bool)));
+        connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+        connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     }
 
-    m_d->filterManager->setView(imageView);
-    m_d->selectionManager->setView(imageView);
-    m_d->nodeManager->setView(imageView);
-    m_d->imageManager->setView(imageView);
-    m_d->canvasControlsManager->setView(imageView);
-    m_d->actionManager->setView(imageView);
-    m_d->gridManager->setView(imageView);
-    m_d->statusBar->setView(imageView);
-    m_d->paintingAssistantsManager->setView(imageView);
-    m_d->perspectiveGridManager->setView(imageView);
+    d->filterManager->setView(imageView);
+    d->selectionManager->setView(imageView);
+    d->nodeManager->setView(imageView);
+    d->imageManager->setView(imageView);
+    d->canvasControlsManager->setView(imageView);
+    d->actionManager->setView(imageView);
+    d->gridManager->setView(imageView);
+    d->statusBar->setView(imageView);
+    d->paintingAssistantsManager->setView(imageView);
+    d->perspectiveGridManager->setView(imageView);
 
-    if (m_d->currentImageView) {
-        canvasControllerWidget()->activate();
-        canvasControllerWidget()->setFocus();
+    if (d->currentImageView) {
+        d->currentImageView->canvasController()->activate();
+        d->currentImageView->canvasController()->setFocus();
     }
     actionManager()->updateGUI();
 
@@ -518,15 +524,15 @@ void KisView2::setCurrentView(KisView *view)
 }
 
 
-KoZoomController *KisView2::zoomController() const
+KoZoomController *KisViewManager::zoomController() const
 {
-    if (m_d->currentImageView) {
-        return m_d->currentImageView->zoomController();
+    if (d->currentImageView) {
+        return d->currentImageView->zoomController();
     }
     return 0;
 }
 
-KisImageWSP KisView2::image() const
+KisImageWSP KisViewManager::image() const
 {
     if (document()) {
         return document()->image();
@@ -534,142 +540,126 @@ KisImageWSP KisView2::image() const
     return 0;
 }
 
-KisCanvasResourceProvider * KisView2::resourceProvider()
+KisCanvasResourceProvider * KisViewManager::resourceProvider()
 {
-    return m_d->canvasResourceProvider;
+    return d->canvasResourceProvider;
 }
 
-KisCanvas2 * KisView2::canvasBase() const
+KisCanvas2 * KisViewManager::canvasBase() const
 {
-    if (m_d && m_d->currentImageView) {
-        return m_d->currentImageView->canvasBase();
+    if (d && d->currentImageView) {
+        return d->currentImageView->canvasBase();
     }
     return 0;
 }
 
-QWidget* KisView2::canvas() const
+QWidget* KisViewManager::canvas() const
 {
-    if (m_d && m_d->currentImageView && m_d->currentImageView->canvasBase()->canvasWidget()) {
-        return m_d->currentImageView->canvasBase()->canvasWidget();
+    if (d && d->currentImageView && d->currentImageView->canvasBase()->canvasWidget()) {
+        return d->currentImageView->canvasBase()->canvasWidget();
     }
     return 0;
 }
 
-KisStatusBar * KisView2::statusBar() const
+KisStatusBar * KisViewManager::statusBar() const
 {
-    return m_d->statusBar;
+    return d->statusBar;
 }
 
-void KisView2::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
+void KisViewManager::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     StatusBarItem item(widget, stretch, permanent);
     KStatusBar * sb = mainWindow()->statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
-    m_d->statusBarItems.append(item);
+    d->statusBarItems.append(item);
 }
 
-void KisView2::removeStatusBarItem(QWidget * widget)
+void KisViewManager::removeStatusBarItem(QWidget * widget)
 {
     KStatusBar *sb = mainWindow()->statusBar();
 
-    int itemCount = m_d->statusBarItems.count();
+    int itemCount = d->statusBarItems.count();
     for (int i = itemCount-1; i >= 0; --i) {
-        StatusBarItem &sbItem = m_d->statusBarItems[i];
+        StatusBarItem &sbItem = d->statusBarItems[i];
         if (sbItem.widget() == widget) {
             if (sb) {
                 sbItem.ensureItemHidden(sb);
             }
-            m_d->statusBarItems.removeOne(sbItem);
+            d->statusBarItems.removeOne(sbItem);
             break;
         }
     }
 }
 
-KisPaintopBox* KisView2::paintOpBox() const
+KisPaintopBox* KisViewManager::paintOpBox() const
 {
-    return m_d->controlFrame->paintopBox();
+    return d->controlFrame->paintopBox();
 }
 
-KoProgressUpdater* KisView2::createProgressUpdater(KoProgressUpdater::Mode mode)
+KoProgressUpdater* KisViewManager::createProgressUpdater(KoProgressUpdater::Mode mode)
 {
-    return new KisProgressUpdater(m_d->statusBar->progress(), document()->progressProxy(), mode);
+    return new KisProgressUpdater(d->statusBar->progress(), document()->progressProxy(), mode);
 }
 
-KisSelectionManager * KisView2::selectionManager()
+KisSelectionManager * KisViewManager::selectionManager()
 {
-    return m_d->selectionManager;
+    return d->selectionManager;
 }
 
-KoCanvasController * KisView2::canvasController()
+KisNodeSP KisViewManager::activeNode()
 {
-    if (m_d && m_d->currentImageView) {
-        return m_d->currentImageView->canvasController();
-    }
-    return 0;
-}
-
-KisCanvasController *KisView2::canvasControllerWidget()
-{
-    if (m_d && m_d->currentImageView) {
-        return dynamic_cast<KisCanvasController*>(canvasController());
-    }
-    return 0;
-}
-
-KisNodeSP KisView2::activeNode()
-{
-    if (m_d->nodeManager)
-        return m_d->nodeManager->activeNode();
+    if (d->nodeManager)
+        return d->nodeManager->activeNode();
     else
         return 0;
 }
 
-KisLayerSP KisView2::activeLayer()
+KisLayerSP KisViewManager::activeLayer()
 {
-    if (m_d->nodeManager)
-        return m_d->nodeManager->activeLayer();
+    if (d->nodeManager)
+        return d->nodeManager->activeLayer();
     else
         return 0;
 }
 
-KisPaintDeviceSP KisView2::activeDevice()
+KisPaintDeviceSP KisViewManager::activeDevice()
 {
-    if (m_d->nodeManager)
-        return m_d->nodeManager->activePaintDevice();
+    if (d->nodeManager)
+        return d->nodeManager->activePaintDevice();
     else
         return 0;
 }
 
-KisZoomManager * KisView2::zoomManager()
+KisZoomManager * KisViewManager::zoomManager()
 {
-    if (m_d->currentImageView) {
-        return m_d->currentImageView->zoomManager();
+    if (d->currentImageView) {
+        return d->currentImageView->zoomManager();
     }
     return 0;
 }
 
-KisFilterManager * KisView2::filterManager()
+KisFilterManager * KisViewManager::filterManager()
 {
-    return m_d->filterManager;
+    return d->filterManager;
 }
 
-KisImageManager * KisView2::imageManager()
+KisImageManager * KisViewManager::imageManager()
 {
-    return m_d->imageManager;
+    return d->imageManager;
 }
 
-KisSelectionSP KisView2::selection()
+KisSelectionSP KisViewManager::selection()
 {
-    if (m_d->currentImageView) {
-        return m_d->currentImageView->selection();
+    if (d->currentImageView) {
+        return d->currentImageView->selection();
     }
     return 0;
 
 }
 
-bool KisView2::selectionEditable()
+bool KisViewManager::selectionEditable()
 {
     KisLayerSP layer = activeLayer();
     if (layer) {
@@ -683,7 +673,7 @@ bool KisView2::selectionEditable()
     return true;
 }
 
-KisUndoAdapter * KisView2::undoAdapter()
+KisUndoAdapter * KisViewManager::undoAdapter()
 {
     if (!document()) return 0;
 
@@ -694,7 +684,7 @@ KisUndoAdapter * KisView2::undoAdapter()
 }
 
 
-void KisView2::slotLoadingFinished()
+void KisViewManager::slotLoadingFinished()
 {
     if (!document()) return;
 
@@ -727,14 +717,14 @@ void KisView2::slotLoadingFinished()
      * progress updaters. The latter way should be deprecated in favour
      * of displaying the status of the global strokes queue
      */
-    image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
-    connect(m_d->statusBar->progress(), SIGNAL(sigCancellationRequested()),
+    image()->compositeProgressProxy()->addProxy(d->statusBar->progress()->progressProxy());
+    connect(d->statusBar->progress(), SIGNAL(sigCancellationRequested()),
             image(), SLOT(requestStrokeCancellation()));
 
-    m_d->currentImageView->canvasBase()->initializeImage();
+    d->currentImageView->canvasBase()->initializeImage();
 
-    if (m_d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+    if (d->controlFrame) {
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
     }
 
     if (image()->locked()) {
@@ -757,8 +747,8 @@ void KisView2::slotLoadingFinished()
     if (mainWindow() && zoomManager() && zoomManager()->zoomController())
         zoomManager()->zoomController()->setAspectMode(true);
 
-    if (m_d->currentImageView && m_d->currentImageView->viewConverter())
-        m_d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    if (d->currentImageView && d->currentImageView->viewConverter())
+        d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
 
     //    if (m_d->paintingAssistantsDecoration){
@@ -773,60 +763,60 @@ void KisView2::slotLoadingFinished()
     emit sigLoadingFinished();
 }
 
-void KisView2::slotSavingFinished()
+void KisViewManager::slotSavingFinished()
 {
     if(mainWindow())
         mainWindow()->updateCaption();
 }
 
-void KisView2::createActions()
+void KisViewManager::createActions()
 {
-    m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
-    m_d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
-    actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
-    connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+    d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
+    actionCollection()->addAction("save_incremental_version", d->saveIncremental);
+    connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
-    m_d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
-    m_d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
-    actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
-    connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
+    d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
+    d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
+    actionCollection()->addAction("save_incremental_backup", d->saveIncrementalBackup);
+    connect(d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
     connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
-    m_d->saveIncremental->setEnabled(false);
-    m_d->saveIncrementalBackup->setEnabled(false);
+    d->saveIncremental->setEnabled(false);
+    d->saveIncrementalBackup->setEnabled(false);
 
     KAction *tabletDebugger = new KAction(i18n("Toggle Tablet Debugger"), this);
     actionCollection()->addAction("tablet_debugger", tabletDebugger );
     tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
-    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
-    actionCollection()->addAction("createTemplate", m_d->createTemplate);
-    connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
+    d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
+    actionCollection()->addAction("createTemplate", d->createTemplate);
+    connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
-    m_d->mirrorCanvas->setChecked(false);
-    actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
+    d->mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
+    d->mirrorCanvas->setChecked(false);
+    actionCollection()->addAction("mirror_canvas", d->mirrorCanvas);
+    d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
 
-    m_d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
-    m_d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
-    m_d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
-    actionCollection()->addAction("open_resources_directory", m_d->openResourcesDirectory);
-    connect(m_d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
+    d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
+    d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
+    d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
+    actionCollection()->addAction("open_resources_directory", d->openResourcesDirectory);
+    connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
-    m_d->rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
-    actionCollection()->addAction("rotate_canvas_right", m_d->rotateCanvasRight);
-    m_d->rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
+    d->rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
+    actionCollection()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
 
-    m_d->rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
-    actionCollection()->addAction("rotate_canvas_left", m_d->rotateCanvasLeft);
-    m_d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
+    d->rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
+    actionCollection()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
 
-    m_d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
-    actionCollection()->addAction("wrap_around_mode", m_d->wrapAroundAction);
-    m_d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
+    d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
+    actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
+    d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
@@ -862,74 +852,74 @@ void KisView2::createActions()
 
 
 
-void KisView2::createManagers()
+void KisViewManager::createManagers()
 {
     // Create the managers for filters, selections, layers etc.
     // XXX: When the currentlayer changes, call updateGUI on all
     // managers
 
-    m_d->actionManager = new KisActionManager(this);
+    d->actionManager = new KisActionManager(this);
 
-    m_d->filterManager = new KisFilterManager(this);
-    m_d->filterManager->setup(actionCollection(), actionManager());
+    d->filterManager = new KisFilterManager(this);
+    d->filterManager->setup(actionCollection(), actionManager());
 
-    m_d->selectionManager = new KisSelectionManager(this);
-    m_d->selectionManager->setup(actionCollection(), actionManager());
+    d->selectionManager = new KisSelectionManager(this);
+    d->selectionManager->setup(actionCollection(), actionManager());
 
-    m_d->nodeManager = new KisNodeManager(this);
-    m_d->nodeManager->setup(actionCollection(), actionManager());
+    d->nodeManager = new KisNodeManager(this);
+    d->nodeManager->setup(actionCollection(), actionManager());
 
-    m_d->imageManager = new KisImageManager(this);
-    m_d->imageManager->setup(actionCollection(), actionManager());
+    d->imageManager = new KisImageManager(this);
+    d->imageManager->setup(actionCollection(), actionManager());
 
-    m_d->gridManager = new KisGridManager(this);
-    m_d->gridManager->setup(actionCollection());
+    d->gridManager = new KisGridManager(this);
+    d->gridManager->setup(actionCollection());
 
-    m_d->perspectiveGridManager = new KisPerspectiveGridManager(this);
-    m_d->perspectiveGridManager->setup(actionCollection());
+    d->perspectiveGridManager = new KisPerspectiveGridManager(this);
+    d->perspectiveGridManager->setup(actionCollection());
 
-    m_d->paintingAssistantsManager = new KisPaintingAssistantsManager(this);
-    m_d->paintingAssistantsManager->setup(actionCollection());
+    d->paintingAssistantsManager = new KisPaintingAssistantsManager(this);
+    d->paintingAssistantsManager->setup(actionCollection());
 
-    m_d->canvasControlsManager = new KisCanvasControlsManager(this);
-    m_d->canvasControlsManager->setup(actionCollection(), actionManager());
+    d->canvasControlsManager = new KisCanvasControlsManager(this);
+    d->canvasControlsManager->setup(actionCollection(), actionManager());
 
     // XXX: KOMVC: move mirror decoration to KisImageView, create a manager for it???
     //    m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
     //    m_d->canvas->addDecoration(m_d->mirrorAxis);
 }
 
-void KisView2::updateGUI()
+void KisViewManager::updateGUI()
 {
-    m_d->guiUpdateCompressor->start();
+    d->guiUpdateCompressor->start();
 }
 
-void KisView2::slotBlacklistCleanup()
+void KisViewManager::slotBlacklistCleanup()
 {
     KisDlgBlacklistCleanup dialog;
     dialog.exec();
 }
 
-void KisView2::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
+void KisViewManager::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
 {
-    if (!m_d->currentImageView) return;
-    m_d->currentImageView->resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
+    if (!d->currentImageView) return;
+    d->currentImageView->resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateGUI();
 }
 
-void KisView2::slotImageResolutionChanged()
+void KisViewManager::slotImageResolutionChanged()
 {
-    if (!m_d->currentImageView) return;
-    m_d->currentImageView->resetImageSizeAndScroll(false);
+    if (!d->currentImageView) return;
+    d->currentImageView->resetImageSizeAndScroll(false);
     zoomManager()->updateGUI();
 }
 
-void KisView2::slotNodeChanged()
+void KisViewManager::slotNodeChanged()
 {
     updateGUI();
 }
 
-void KisView2::loadPlugins()
+void KisViewManager::loadPlugins()
 {
     // Load all plugins
     const KService::List offers = KoServiceLocator::instance()->entries("Krita/ViewPlugin");
@@ -942,47 +932,58 @@ void KisView2::loadPlugins()
         KXMLGUIClient* plugin =
                 dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
-            insertChildClient(plugin);
+            mainWindow()->insertChildClient(plugin);
         } else {
             errKrita << "Fail to create an instance for " << service->name() << " " << error;
         }
     }
 }
 
-KisPrintJob * KisView2::createPrintJob()
+
+KisNodeManager * KisViewManager::nodeManager() const
 {
-    return new KisPrintJob(image());
+    return d->nodeManager;
 }
 
-KisNodeManager * KisView2::nodeManager() const
+KisActionManager* KisViewManager::actionManager() const
 {
-    return m_d->nodeManager;
+    return d->actionManager;
 }
 
-KisActionManager* KisView2::actionManager() const
+KisPerspectiveGridManager* KisViewManager::perspectiveGridManager() const
 {
-    return m_d->actionManager;
+    return d->perspectiveGridManager;
 }
 
-KisPerspectiveGridManager* KisView2::perspectiveGridManager() const
+KisGridManager * KisViewManager::gridManager() const
 {
-    return m_d->perspectiveGridManager;
+    return d->gridManager;
 }
 
-KisGridManager * KisView2::gridManager() const
+KisPaintingAssistantsManager* KisViewManager::paintingAssistantsManager() const
 {
-    return m_d->gridManager;
+    return d->paintingAssistantsManager;
 }
 
-KisPaintingAssistantsManager* KisView2::paintingAssistantsManager() const
+KisDocument *KisViewManager::document() const
 {
-    return m_d->paintingAssistantsManager;
+    if (d->currentImageView && d->currentImageView->document()) {
+        return d->currentImageView->document();
+    }
+    return 0;
 }
 
-QMainWindow* KisView2::qtMainWindow() const
+void KisViewManager::slotCreateTemplate()
 {
-    if(m_d->mainWindow)
-        return m_d->mainWindow;
+    if (!document()) return;
+    KisTemplateCreateDia::createTemplate("krita_template", ".kra",
+                                        KisFactory2::componentData(), document(), mainWindow());
+}
+
+QMainWindow* KisViewManager::qtMainWindow() const
+{
+    if (d->mainWindow)
+        return d->mainWindow;
 
     //Fallback for when we have not yet set the main window.
     QMainWindow* w = qobject_cast<QMainWindow*>(qApp->activeWindow());
@@ -992,33 +993,19 @@ QMainWindow* KisView2::qtMainWindow() const
     return mainWindow();
 }
 
-void KisView2::setQtMainWindow(QMainWindow* newMainWindow)
+void KisViewManager::setQtMainWindow(QMainWindow* newMainWindow)
 {
-    m_d->mainWindow = newMainWindow;
+    d->mainWindow = newMainWindow;
 }
 
-KisDocument *KisView2::document() const
+
+void KisViewManager::slotDocumentSaved()
 {
-    if (m_d->currentImageView && m_d->currentImageView->document()) {
-        return m_d->currentImageView->document();
-    }
-    return 0;
+    d->saveIncremental->setEnabled(true);
+    d->saveIncrementalBackup->setEnabled(true);
 }
 
-void KisView2::slotCreateTemplate()
-{
-    if (!document()) return;
-    KisTemplateCreateDia::createTemplate("krita_template", ".kra",
-                                        KisFactory2::componentData(), document(), mainWindow());
-}
-
-void KisView2::slotDocumentSaved()
-{
-    m_d->saveIncremental->setEnabled(true);
-    m_d->saveIncrementalBackup->setEnabled(true);
-}
-
-void KisView2::slotSaveIncremental()
+void KisViewManager::slotSaveIncremental()
 {
     if (!document()) return;
 
@@ -1114,7 +1101,7 @@ void KisView2::slotSaveIncremental()
 
 }
 
-void KisView2::slotSaveIncrementalBackup()
+void KisViewManager::slotSaveIncrementalBackup()
 {
     if (!document()) return;
 
@@ -1223,30 +1210,30 @@ void KisView2::slotSaveIncrementalBackup()
     }
 }
 
-void KisView2::disableControls()
+void KisViewManager::disableControls()
 {
     // prevents possible crashes, if somebody changes the paintop during dragging by using the mousewheel
     // this is for Bug 250944
     // the solution blocks all wheel, mouse and key event, while dragging with the freehand tool
     // see KisToolFreehand::initPaint() and endPaint()
-    m_d->controlFrame->paintopBox()->installEventFilter(&m_d->blockingEventFilter);
-    foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
-        child->installEventFilter(&m_d->blockingEventFilter);
+    d->controlFrame->paintopBox()->installEventFilter(&d->blockingEventFilter);
+    foreach(QObject* child, d->controlFrame->paintopBox()->children()) {
+        child->installEventFilter(&d->blockingEventFilter);
     }
 }
 
-void KisView2::enableControls()
+void KisViewManager::enableControls()
 {
-    m_d->controlFrame->paintopBox()->removeEventFilter(&m_d->blockingEventFilter);
-    foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
-        child->removeEventFilter(&m_d->blockingEventFilter);
+    d->controlFrame->paintopBox()->removeEventFilter(&d->blockingEventFilter);
+    foreach(QObject* child, d->controlFrame->paintopBox()->children()) {
+        child->removeEventFilter(&d->blockingEventFilter);
     }
 }
 
-void KisView2::showStatusBar(bool toggled)
+void KisViewManager::showStatusBar(bool toggled)
 {
-    if (m_d->currentImageView && m_d->currentImageView->statusBar()) {
-        m_d->currentImageView->statusBar()->setVisible(toggled);
+    if (d->currentImageView && d->currentImageView->statusBar()) {
+        d->currentImageView->statusBar()->setVisible(toggled);
     }
 }
 
@@ -1254,7 +1241,7 @@ void KisView2::showStatusBar(bool toggled)
 #include <QGLContext>
 #endif
 
-void KisView2::showJustTheCanvas(bool toggled)
+void KisViewManager::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;
 
@@ -1349,20 +1336,20 @@ void KisView2::showJustTheCanvas(bool toggled)
     }
 }
 
-void KisView2::toggleTabletLogger()
+void KisViewManager::toggleTabletLogger()
 {
-    if (m_d->currentImageView) {
-        m_d->currentImageView->canvasBase()->toggleTabletLogger();
+    if (d->currentImageView) {
+        d->currentImageView->canvasBase()->toggleTabletLogger();
     }
 }
 
-void KisView2::openResourcesDirectory()
+void KisViewManager::openResourcesDirectory()
 {
     QString dir = KStandardDirs::locateLocal("data", "krita");
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 
-void KisView2::updateIcons()
+void KisViewManager::updateIcons()
 {
 #if QT_VERSION >= 0x040700
     QColor background = mainWindow()->palette().background().color();
@@ -1409,34 +1396,34 @@ void KisView2::updateIcons()
     }
 #endif
 }
-void KisView2::makeStatusBarVisible()
+void KisViewManager::makeStatusBarVisible()
 {
-    m_d->mainWindow->statusBar()->setVisible(true);
+    d->mainWindow->statusBar()->setVisible(true);
 }
 
-void KisView2::guiUpdateTimeout()
+void KisViewManager::guiUpdateTimeout()
 {
-    m_d->nodeManager->updateGUI();
-    m_d->selectionManager->updateGUI();
-    m_d->filterManager->updateGUI();
+    d->nodeManager->updateGUI();
+    d->selectionManager->updateGUI();
+    d->filterManager->updateGUI();
     if (zoomManager()) {
         zoomManager()->updateGUI();
     }
-    m_d->gridManager->updateGUI();
-    m_d->perspectiveGridManager->updateGUI();
-    m_d->actionManager->updateGUI();
+    d->gridManager->updateGUI();
+    d->perspectiveGridManager->updateGUI();
+    d->actionManager->updateGUI();
 }
 
-void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
+void KisViewManager::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
-    if(m_d->showFloatingMessage && qtMainWindow()) {
-        if (m_d->savedFloatingMessage) {
-            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
+    if(d->showFloatingMessage && qtMainWindow()) {
+        if (d->savedFloatingMessage) {
+            d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
         } else {
-            m_d->savedFloatingMessage = new KisFloatingMessage(message, qtMainWindow()->centralWidget(), false, timeout, priority, alignment);
-            m_d->savedFloatingMessage->setShowOverParent(true);
-            m_d->savedFloatingMessage->setIcon(icon);
-            m_d->savedFloatingMessage->showMessage();
+            d->savedFloatingMessage = new KisFloatingMessage(message, qtMainWindow()->centralWidget(), false, timeout, priority, alignment);
+            d->savedFloatingMessage->setShowOverParent(true);
+            d->savedFloatingMessage->setIcon(icon);
+            d->savedFloatingMessage->showMessage();
         }
     }
 #if QT_VERSION >= 0x040700
@@ -1444,32 +1431,33 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int
 #endif
 }
 
-KisMainWindow *KisView2::mainWindow() const
+KisMainWindow *KisViewManager::mainWindow() const
 {
-    return qobject_cast<KisMainWindow*>(m_d->mainWindow);
+    return qobject_cast<KisMainWindow*>(d->mainWindow);
 }
 
 
-void KisView2::showHideScrollbars()
+void KisViewManager::showHideScrollbars()
 {
-    if (!canvasController()) return;
+    if (!d->currentImageView) return;
+    if (!d->currentImageView->canvasController()) return;
 
     KisConfig cfg;
     bool toggled = actionCollection()->action("view_show_just_the_canvas")->isChecked();
 
     if ( (toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars()) ) {
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        d->currentImageView->canvasController()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        d->currentImageView->canvasController()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     } else {
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        d->currentImageView->canvasController()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        d->currentImageView->canvasController()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
 }
 
-void KisView2::setShowFloatingMessage(bool show)
+void KisViewManager::setShowFloatingMessage(bool show)
 {
-    m_d->showFloatingMessage = show;
+    d->showFloatingMessage = show;
 }
 
 
-#include "kis_view2.moc"
+#include "KisViewManager.moc"

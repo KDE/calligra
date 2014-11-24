@@ -30,7 +30,7 @@
 class KisWorkspaceResource;
 class KoColorSetWidget;
 class KoColor;
-class KisView2;
+class KisViewManager;
 
 /**
  * A color palette in table form.

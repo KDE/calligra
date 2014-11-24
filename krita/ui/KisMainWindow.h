@@ -50,7 +50,7 @@ class KisPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
 class QDockWidget;
-class KisView2;
+class KisViewManager;
 class KisImageView;
 
 
@@ -444,11 +444,8 @@ private slots:
 // ---------------------  PartManager
 protected:
 
-    /**
-     * Sets the active View.
-     */
-    void createMainwindowGUI();
     void setToolbarList(QList<QAction*> toolbarList);
+
 private slots:
 
     /**
@@ -478,7 +475,7 @@ private:
 
     bool m_constructing;
 
-    KisView2 *m_guiClient;
+    KisViewManager *m_guiClient;
 
     QMdiArea *m_mdiArea;
     QMdiSubWindow *m_activeSubWindow;

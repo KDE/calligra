@@ -25,7 +25,7 @@
 #include "kis_liquify_properties.h"
 
 #include "KisMainWindow.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 
 template<typename T> inline T sign(T x) {
@@ -282,7 +282,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     tooBigLabelWidget->hide();
 
-    connect(canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
+    connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
     slotUpdateIcons();
 }
 

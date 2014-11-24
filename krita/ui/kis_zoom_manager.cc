@@ -41,7 +41,7 @@
 #include <KoDpi.h>
 
 #include "KisDocument.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image_view.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"

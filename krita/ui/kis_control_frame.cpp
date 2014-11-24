@@ -54,7 +54,7 @@
 #include "widgets/kis_iconwidget.h"
 
 #include "widgets/kis_gradient_chooser.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_pattern.h"
@@ -64,7 +64,7 @@
 #include <kis_canvas2.h>
 
 
-KisControlFrame::KisControlFrame(KisView2 *view, QWidget *parent, const char* name)
+KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)
         : QObject(view)
         , m_view(view)
         , m_patternWidget(0)
@@ -135,7 +135,7 @@ void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
     m_gradientWidget->slotSetItem(gradient);
 }
 
-void KisControlFrame::createPatternsChooser(KisView2 * view)
+void KisControlFrame::createPatternsChooser(KisViewManager * view)
 {
     m_patternChooserPopup = new QWidget(m_patternWidget);
     m_patternChooserPopup->setObjectName("pattern_chooser_popup");
@@ -176,7 +176,7 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
 }
 
-void KisControlFrame::createGradientsChooser(KisView2 * view)
+void KisControlFrame::createGradientsChooser(KisViewManager * view)
 {
     m_gradientChooserPopup = new QWidget(m_gradientWidget);
     m_gradientChooserPopup->setObjectName("gradient_chooser_popup");

@@ -45,7 +45,7 @@
 #include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_abstract_canvas_widget.h"
@@ -62,6 +62,7 @@
 #include "kis_display_color_converter.h"
 #include "kis_exposure_gamma_correction_interface.h"
 #include "kis_image_view.h"
+#include "kis_canvas_controller.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -258,10 +259,10 @@ void KisCanvas2::addCommand(KUndo2Command *command)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    if (!view()) return m_d->shapeManager;
-    if (!view()->nodeManager()) return m_d->shapeManager;
+    if (!viewManager()) return m_d->shapeManager;
+    if (!viewManager()->nodeManager()) return m_d->shapeManager;
 
-    KisLayerSP activeLayer = view()->nodeManager()->activeLayer();
+    KisLayerSP activeLayer = viewManager()->nodeManager()->activeLayer();
     if (activeLayer && activeLayer->isEditable()) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
         if (shapeLayer) {
@@ -701,10 +702,10 @@ const KoColorProfile *  KisCanvas2::monitorProfile()
     return m_d->displayColorConverter->monitorProfile();
 }
 
-KisView2* KisCanvas2::view() const
+KisViewManager* KisCanvas2::viewManager() const
 {
     if (m_d->view) {
-        return m_d->view->parentView();
+        return m_d->view->viewManager();
     }
     return 0;
 }
@@ -825,7 +826,7 @@ void KisCanvas2::setCursor(const QCursor &cursor)
 
 void KisCanvas2::slotSelectionChanged()
 {
-    KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(view()->activeLayer().data());
+    KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(viewManager()->activeLayer().data());
     if (!shapeLayer) {
         return;
     }

@@ -65,7 +65,7 @@
 #include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
 #include "canvas/kis_canvas2.h"
@@ -99,7 +99,7 @@ private:
     QAbstractButton* m_button;
 };
 
-inline void KisLayerBox::connectActionToButton(KisView2* view, QAbstractButton *button, const QString &id)
+inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
 {
     Q_ASSERT(view);
     KisAction *action = view->actionManager()->actionByName(id);
@@ -111,7 +111,7 @@ inline void KisLayerBox::connectActionToButton(KisView2* view, QAbstractButton *
 inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
 {
     Q_ASSERT(m_canvas);
-    menu->addAction(m_canvas->view()->actionManager()->actionByName(id));
+    menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
 }
 
 KisLayerBox::KisLayerBox()
@@ -296,7 +296,7 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, Ki
     sectionView->blockSignals(false);
 }
 
-void KisLayerBox::setMainWindow(KisView2* kisview)
+void KisLayerBox::setMainWindow(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 
@@ -358,9 +358,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
-        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->
+            m_canvas->viewManager()->actionManager()->
                 addAction(action->objectName(),
                           action,
                           actionCollection);
@@ -385,9 +385,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 void KisLayerBox::unsetCanvas()
 {
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
+            m_canvas->viewManager()->actionManager()->takeAction(action, actionCollection);
         }
         m_newLayerMenu->clear();
     }
@@ -663,7 +663,7 @@ void KisLayerBox::slotExpanded(const QModelIndex &index)
 void KisLayerBox::slotSelectOpaque()
 {
     if (!m_canvas) return;
-    QAction *action = m_canvas->view()->actionManager()->actionByName("selectopaque");
+    QAction *action = m_canvas->viewManager()->actionManager()->actionByName("selectopaque");
     if (action) {
         action->trigger();
     }

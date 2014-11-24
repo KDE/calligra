@@ -24,7 +24,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kis_image.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_action.h>
 
 #include "dlg_clonesarray.h"

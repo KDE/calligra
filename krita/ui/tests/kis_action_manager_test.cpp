@@ -28,7 +28,7 @@
 #include <util.h>
 #include <kis_action.h>
 #include <kis_action_manager.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 
 void KisActionManagerTest::testUpdateGUI()
@@ -40,20 +40,20 @@ void KisActionManagerTest::testUpdateGUI()
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    view->parentView()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
 
     KisAction* action2 = new KisAction("dummy", this);
     action2->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
-    view->parentView()->actionManager()->addAction("dummy", action2, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action2, mainWindow->actionCollection());
     
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
     QVERIFY(!action2->isEnabled());
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
     doc->image()->addNode(paintLayer1);
 
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
     QVERIFY(!action2->isEnabled());
 }
@@ -68,30 +68,30 @@ void KisActionManagerTest::testCondition()
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    view->parentView()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
     doc->image()->addNode(paintLayer1);
 
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 
     // visible
     paintLayer1->setVisible(false);
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
 
     paintLayer1->setVisible(true);
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 
     // locked
     paintLayer1->setUserLocked(true);
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
 
     paintLayer1->setUserLocked(false);
-    view->parentView()->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 }
 
@@ -103,11 +103,11 @@ void KisActionManagerTest::testTakeAction()
     doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
-    view->parentView()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
-    QVERIFY(view->parentView()->actionManager()->actionByName("dummy") != 0);
+    view->viewManager()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
+    QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") != 0);
 
-    view->parentView()->actionManager()->takeAction(action, mainWindow->actionCollection());
-    QVERIFY(view->parentView()->actionManager()->actionByName("dummy") == 0);
+    view->viewManager()->actionManager()->takeAction(action, mainWindow->actionCollection());
+    QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") == 0);
 }
 
 

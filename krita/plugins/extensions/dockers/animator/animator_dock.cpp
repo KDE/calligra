@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 #include <kis_action.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_animation.h>
 #include <kis_canvas2.h>
 #include <kis_animation_doc.h>
@@ -47,7 +47,7 @@ AnimatorDock::AnimatorDock()
 void AnimatorDock::setCanvas(KoCanvasBase *canvasBase)
 {
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(canvasBase);
-    if (canvas && canvas->view() && canvas->view()->document()) {
+    if (canvas && canvas->viewManager() && canvas->viewManager()->document()) {
         m_timeLine->setCanvas(canvas);
     }
 }

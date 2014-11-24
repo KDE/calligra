@@ -36,7 +36,7 @@
 #include "kis_canvas_decoration.h"
 #include "../kis_config.h"
 #include "kis_canvas2.h"
-#include "../kis_view2.h"
+#include "../KisViewManager.h"
 #include "../kis_selection_manager.h"
 
 struct KisCanvasWidgetBase::Private
@@ -144,7 +144,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     }
 
     // then paint the guides
-    m_d->canvas->view()->document()->guidesData().paintGuides(gc,
+    m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
                                                               *m_d->viewConverter,
                                                               updateWidgetRect);
 

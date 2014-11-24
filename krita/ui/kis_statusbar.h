@@ -28,7 +28,7 @@
 class QLabel;
 class QToolButton;
 class KSqueezedTextLabel;
-class KisView2;
+class KisViewManager;
 class KisProgressWidget;
 
 #include "krita_export.h"
@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KisView2 * view);
+    KisStatusBar(KisViewManager * view);
     ~KisStatusBar();
 
     void setView(QPointer<KisImageView> imageView);
@@ -61,7 +61,7 @@ private slots:
 
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     QPointer<KisImageView> m_imageView;
     KisProgressWidget * m_progress;
 

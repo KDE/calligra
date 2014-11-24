@@ -46,7 +46,7 @@ class KoColorSpace;
 class KoResource;
 class KoCanvasController;
 
-class KisView2;
+class KisViewManager;
 class KisCanvasResourceProvider;
 class KisPopupButton;
 class KisPaintOpPresetsPopup;
@@ -99,7 +99,7 @@ class KisPaintopBox : public QWidget
 
 public:
 
-    KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
+    KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
     ~KisPaintopBox();
 
 public slots:
@@ -172,7 +172,7 @@ private:
     QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
-    KisView2*                            m_view;
+    KisViewManager*                            m_view;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;

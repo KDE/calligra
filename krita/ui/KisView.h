@@ -118,7 +118,7 @@ public:
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
      */
-    virtual KisPrintJob * createPrintJob();
+    virtual KisPrintJob * createPrintJob() = 0;
 
     /**
      * In order to export the document represented by this view a new print job should

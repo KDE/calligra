@@ -78,7 +78,7 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_iterator_ng.h"
 #include "kis_clipboard.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_filters.h"
 #include "kis_figure_painting_tool_helper.h"
 #include "kis_image_view.h"
@@ -89,7 +89,7 @@
 #include "operations/kis_operation_configuration.h"
 
 
-KisSelectionManager::KisSelectionManager(KisView2 * view)
+KisSelectionManager::KisSelectionManager(KisViewManager * view)
         : m_view(view),
           m_doc(0),
           m_imageView(0),

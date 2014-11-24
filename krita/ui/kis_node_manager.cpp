@@ -46,7 +46,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_shape_controller.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "KisDocument.h"
 #include "kis_mask_manager.h"
 #include "kis_group_layer.h"
@@ -76,7 +76,7 @@ struct KisNodeManager::Private {
         delete maskManager;
     }
 
-    KisView2 * view;
+    KisViewManager * view;
     QPointer<KisImageView>imageView;
     KisLayerManager * layerManager;
     KisMaskManager * maskManager;
@@ -142,7 +142,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     return true;
 }
 
-KisNodeManager::KisNodeManager(KisView2 *view)
+KisNodeManager::KisNodeManager(KisViewManager *view)
     : m_d(new Private())
 {
     m_d->view = view;

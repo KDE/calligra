@@ -28,7 +28,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "KisDocument.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
@@ -51,7 +51,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_image_view.h"
 
-KisMaskManager::KisMaskManager(KisView2 * view)
+KisMaskManager::KisMaskManager(KisViewManager * view)
     : m_view(view)
     , m_imageView(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))

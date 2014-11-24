@@ -36,7 +36,7 @@
 #include <kis_image.h>
 #include <kis_resource_server_provider.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <KoPattern.h>
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_macro.h>
@@ -79,8 +79,8 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/bigbrother.rc")
         , m_recorder(0)
 {
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
+    if (parent->inherits("KisViewManager")) {
+        m_view = (KisViewManager*) parent;
 
         KisAction* action = 0;
         // Open and play action

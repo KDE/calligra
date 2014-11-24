@@ -25,7 +25,7 @@
 
 #include "kis_image_view.h"
 
-class KisView2;
+class KisViewManager;
 class KToggleAction;
 class KActionCollection;
 class KisPaintingAssistantsDecoration;
@@ -36,7 +36,7 @@ class KisPaintingAssistantsManager : public QObject
     Q_OBJECT
 
 public:
-    KisPaintingAssistantsManager(KisView2* view);
+    KisPaintingAssistantsManager(KisViewManager* view);
     virtual ~KisPaintingAssistantsManager();
 
     void setup(KActionCollection* collection);

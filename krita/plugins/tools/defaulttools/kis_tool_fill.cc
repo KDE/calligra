@@ -43,7 +43,7 @@
 #include <kis_selection.h>
 #include <kis_system_locker.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_slider_spin_box.h>

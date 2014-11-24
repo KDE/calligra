@@ -29,7 +29,7 @@
 
 #include <kis_mainwindow_observer.h>
 
-class KisView2;
+class KisViewManager;
 class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class ColorSetChooser;
@@ -43,7 +43,7 @@ public:
     PaletteDockerDock();
     virtual ~PaletteDockerDock();
     QString observerName() { return "PaletteDockerDock"; }
-    virtual void setMainWindow(KisView2* kisview);
+    virtual void setMainWindow(KisViewManager* kisview);
 
 public: // KoResourceServerObserver
 

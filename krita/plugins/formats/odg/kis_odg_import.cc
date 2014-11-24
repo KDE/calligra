@@ -28,7 +28,7 @@
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_shape_layer.h>
 
 #include <KoOdfReadStore.h>

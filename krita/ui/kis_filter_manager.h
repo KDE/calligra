@@ -24,7 +24,7 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-class KisView2;
+class KisViewManager;
 class KisDocument;
 class KActionCollection;
 class KisActionManager;
@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisFilterManager : public QObject
 
 public:
 
-    KisFilterManager(KisView2 * parent);
+    KisFilterManager(KisViewManager * parent);
     ~KisFilterManager();
     void setView(QPointer<KisImageView>imageView);
 

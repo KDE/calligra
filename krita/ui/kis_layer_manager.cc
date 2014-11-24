@@ -84,7 +84,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_selection_manager.h"
 #include "kis_statusbar.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_zoom_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
@@ -226,7 +226,7 @@ private:
     QString m_mimeFilter;
 };
 
-KisLayerManager::KisLayerManager(KisView2 * view)
+KisLayerManager::KisLayerManager(KisViewManager * view)
     : m_view(view)
     , m_imageView(0)
     , m_imageFlatten(0)

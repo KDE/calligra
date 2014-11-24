@@ -40,10 +40,10 @@
 #include "kis_favorite_resource_manager.h"
 
 #include "kis_config.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 
-KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
+KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
     : m_view(view)
     , m_displayProfile(0)
 {

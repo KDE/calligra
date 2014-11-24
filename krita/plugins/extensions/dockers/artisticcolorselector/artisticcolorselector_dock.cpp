@@ -25,7 +25,7 @@
 #include <QButtonGroup>
 
 #include "artisticcolorselector_dock.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 
 #include "ui_wdgArtisticColorSelector.h"
@@ -108,7 +108,7 @@ ArtisticColorSelectorDock::~ArtisticColorSelectorDock()
     delete m_resetMenu;
 }
 
-void ArtisticColorSelectorDock::setMainWindow(KisView2* kisview)
+void ArtisticColorSelectorDock::setMainWindow(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor().toQColor());

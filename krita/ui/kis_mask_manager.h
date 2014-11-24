@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_image_view.h"
 
-class KisView2;
+class KisViewManager;
 class KActionCollection;
 class KisAction;
 class KToggleAction;
@@ -45,7 +45,7 @@ class KisMaskManager : public QObject
 public:
 
 
-    KisMaskManager(KisView2 * view);
+    KisMaskManager(KisViewManager * view);
     ~KisMaskManager() {}
     void setView(QPointer<KisImageView>view);
 
@@ -127,7 +127,7 @@ private:
     void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet = false);
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     QPointer<KisImageView>m_imageView;
     KisNodeCommandsAdapter* m_commandsAdapter;
 

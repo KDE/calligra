@@ -49,7 +49,7 @@
 #include "kis_config.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_painting_assistants_decoration.h>
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
@@ -200,7 +200,7 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
-        canvas2->view()->disableControls();
+        canvas2->viewManager()->disableControls();
     }
 
     initStroke(event);
@@ -232,7 +232,7 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     notifyModified();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
-        canvas2->view()->enableControls();
+        canvas2->viewManager()->enableControls();
     }
 
     setMode(KisTool::HOVER_MODE);
@@ -248,7 +248,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
      */
     QPointF pos = adjustPosition(event->point, event->point);
     qreal perspective = 1.0;
-    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider()->perspectiveGrids()) {
         if (grid && grid->contains(pos)) {
             perspective = grid->distance(pos);
             break;
@@ -368,7 +368,7 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
 qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 {
     qreal perspective = 1.0;
-    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider()->perspectiveGrids()) {
         if (grid && grid->contains(documentPoint)) {
             perspective = grid->distance(documentPoint);
             break;

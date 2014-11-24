@@ -30,9 +30,9 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisView2 *view, QWidget *parent)
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent)
         : KDialog(parent)
         , m_customName(false)
         , m_freezeName(false)

@@ -35,7 +35,7 @@
 
 #include "KoPattern.h"
 #include "kis_resource_server_provider.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>
