@@ -683,11 +683,8 @@ void KexiMenuWidgetPrivate::hideUpToMenuBar()
 
 void KexiMenuWidgetPrivate::hideMenu(KexiMenuWidget *menu, bool justRegister)
 {
-    return; // js
-    if (!menu)
-        return;
-    if (!justRegister)
-        menu->hide();
+    Q_UNUSED(menu);
+    Q_UNUSED(justRegister);
 }
 
 #if 0
