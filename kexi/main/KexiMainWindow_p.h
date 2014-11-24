@@ -517,6 +517,12 @@ public:
     KexiTabbedToolBarStyle* customStyle;
 };
 
+//! @return true is @a style name is specific regarding tab styling
+static bool isSpecificTabStyle(const QString &styleName)
+{
+    return styleName == "oxygen" || styleName == "qtcurve" || styleName == "gtk+";
+}
+
 //! Style proxy for KexiTabbedToolBar, to get the "Kexi" tab style right.
 class KexiTabbedToolBarStyle : public KexiUtils::StyleProxy
 {
@@ -552,9 +558,10 @@ public:
                 }
 
                 QStyleOptionTabV2 newOpt(*opt);
-                newOpt.text = ((styleName == "qtcurve" || styleName == "oxygen") ? " " : "")
+                const bool specificStyle = isSpecificTabStyle(styleName);
+                newOpt.text = (specificStyle ? " " : "")
                         + tabBar->tabText(index)
-                        + ((styleName == "qtcurve" || styleName == "oxygen") ? " " : "");
+                        + (specificStyle ? " " : "");
                 if (!mouseOver
                     && unselectedOrMenuVisible
                     && index > 0)
@@ -569,7 +576,7 @@ public:
                     newOpt.state |= State_Selected;
                     if (tbar->mainMenuVisible()) {
                         bg = newOpt.palette.brush(QPalette::Active, QPalette::Highlight);
-                        if (styleName != "oxygen" && styleName != "qtcurve") {
+                        if (!specificStyle) {
                             newOpt.palette.setBrush(QPalette::WindowText,
                                                     newOpt.palette.brush(QPalette::Active, QPalette::HighlightedText));
                             newOpt.palette.setBrush(QPalette::ButtonText,
@@ -596,15 +603,11 @@ public:
                     newOpt.palette.setBrush(QPalette::Window, bg);
                     newOpt.palette.setBrush(QPalette::Button, // needed e.g. for Plastique style
                                             bg);
-/*                    newOpt.palette.setBrush(QPalette::WindowText,
-                                            newOpt.palette.brush(QPalette::HighlightedText));
-                    newOpt.palette.setBrush(QPalette::ButtonText, // needed e.g. for Plastique style
-                                            newOpt.palette.brush(QPalette::HighlightedText));*/
-                    //newOpt.rect.setWidth(newOpt.rect.width() - KEXITABBEDTOOLBAR_FIRSTTAB_SPACING);
                     KexiUtils::StyleProxy::drawControl(element, &newOpt, painter, widget);
                     painter->setFont(origFont);
-                    if (!mouseOver || tbar->mainMenuVisible())
+                    if (!mouseOver || tbar->mainMenuVisible() || styleName == "gtk+") {
                         return;
+                    }
                 }
                 if (index > 0 || mouseOver) {
                     const QPalette::ColorGroup hbGroup =  (styleName == "oxygen")
@@ -619,7 +622,7 @@ public:
                         newOpt.state |= State_Selected;
                     }
                     else {
-                        if (styleName != "oxygen" && styleName != "qtcurve") {
+                        if (!specificStyle) {
                             newOpt.palette.setBrush(QPalette::WindowText,
                                                     newOpt.palette.brush(QPalette::Inactive, QPalette::HighlightedText));
                             newOpt.palette.setBrush(QPalette::ButtonText,
@@ -635,7 +638,9 @@ public:
                     if (origOpacity != -1.0) {
                         // restore opacity and draw labels using full this opacity
                         painter->setOpacity(origOpacity);
-                        KexiUtils::StyleProxy::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
+                        if (index > 0) {
+                            KexiUtils::StyleProxy::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
+                        }
                     }
                     return;
                 }
@@ -708,8 +713,7 @@ QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
     ot.initFrom(this);
     QFont f(font());
     f.setBold(true);
-    const QString styleName(style()->objectName());
-    ot.text = ((styleName == "qtcurve" || styleName == "oxygen") ? "  " : "") + tabText(index);
+    ot.text = (isSpecificTabStyle(style()->objectName()) ? "  " : "") + tabText(index);
     ot.fontMetrics = QFontMetrics(f);
     int w = customStyle->pixelMetric(QStyle::PM_TabBarTabHSpace, &ot, this);
     if (w <= 0) { // needed e.g. for oxygen
@@ -736,9 +740,6 @@ void KexiTabbedToolBar::Private::toggleMainMenu()
 
 void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
 {
-    q->tabBar()->update(q->tabRect(q->tabBar()->currentIndex()));
-    q->tabBar()->update(q->tabRect(0));
-
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
     if (!mainMenu) {
         mainMenu = new KexiMainMenu(q, mainWindow);
@@ -755,6 +756,7 @@ void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
     //mainMenu->setContent(0);
     mainMenu->show();
     mainMenu->setFocus();
+    q->update(); // tab bar could have a line that should be repainted
 }
 
 void KexiTabbedToolBar::Private::updateMainMenuGeometry()
@@ -799,10 +801,9 @@ void KexiTabbedToolBar::Private::hideMainMenu()
 {
     if (!mainMenu || !mainMenu->isVisible())
         return;
-    q->tabBar()->update(q->tabRect(q->tabBar()->currentIndex()));
-    q->tabBar()->update(q->tabRect(0));
     mainMenu->hide();
     mainMenu->setContent(0);
+    q->update();  // tab bar could have a line that should be repainted
 }
 
 void KexiTabbedToolBar::Private::hideContentsOrMainMenu()
