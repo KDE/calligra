@@ -129,8 +129,6 @@ public:
     {
         part = _part;
         parent = w;
-        mainWindowGuiIsBuilt = false;
-        forQuit = false;
         activeView = 0;
         firstTime = true;
         progress = 0;
@@ -217,8 +215,6 @@ public:
 
     QList<QAction *> toolbarList;
 
-    bool mainWindowGuiIsBuilt;
-    bool forQuit;
     bool firstTime;
     bool windowSizeDirty;
     bool readOnly;
@@ -554,7 +550,18 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     m_constructing = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
-    createMainwindowGUI();
+
+    if (isHelpMenuEnabled() && !d->m_helpMenu) {
+        d->m_helpMenu = new KHelpMenu( this, componentData.aboutData(), false, actionCollection() );
+        connect(d->m_helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
+    }
+
+    QString f = xmlFile();
+    setXMLFile(KStandardDirs::locate("config", "ui/ui_standards.rc", componentData));
+    setXMLFile( f, true );
+    guiFactory()->addClient( this );
+
+
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -1308,7 +1315,7 @@ bool KisMainWindow::queryClose()
 
     //kDebug(30003) <<"KisMainWindow::queryClose() viewcount=" << d->activeView->document()->viewCount()
     //               << " mainWindowCount=" << d->activeView->document()->mainWindowCount() << endl;
-    if (!d->forQuit && d->part->mainwindowCount() > 1)
+    if (d->part->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
@@ -1997,28 +2004,7 @@ KRecentFilesAction *KisMainWindow::recentAction() const
     return d->recent;
 }
 
-void KisMainWindow::createMainwindowGUI()
-{
-    if (d->mainWindowGuiIsBuilt) return;
 
-    if ( isHelpMenuEnabled() && !d->m_helpMenu ) {
-        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
-        connect(d->m_helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
-    }
-
-    QString f = xmlFile();
-    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );
-    if ( !f.isEmpty() )
-        setXMLFile( f, true );
-    else
-    {
-        QString auto_file( componentData().componentName() + "ui.rc" );
-        setXMLFile( auto_file, true );
-    }
-
-    guiFactory()->addClient( this );
-    d->mainWindowGuiIsBuilt = true;
-}
 
 void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
 {

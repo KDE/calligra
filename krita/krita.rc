@@ -184,6 +184,7 @@
 </Menu>
 
 <Menu name="tools"><text>&amp;Tools</text>
+    <Action name="dummy"/>
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
