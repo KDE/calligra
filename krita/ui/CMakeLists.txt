@@ -25,8 +25,6 @@ if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
 endif (APPLE)
 
-configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
-
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
