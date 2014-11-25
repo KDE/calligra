@@ -561,7 +561,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     setXMLFile( f, true );
     guiFactory()->addClient( this );
 
-
+#if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
     foreach(QAction* action, actionCollection()->actions()) {
@@ -572,7 +572,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
         Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
         existingShortcuts.insert(action->shortcut());
     }
-
+#endif
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
