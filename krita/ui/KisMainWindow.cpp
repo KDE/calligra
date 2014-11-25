@@ -329,8 +329,6 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
 
     d->sendFileAction = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
 
-    d->closeFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
-
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
 
     d->closeAll = new KAction(i18n("Close All"), this);
@@ -381,7 +379,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     d->printActionPreview->setEnabled(false);
     d->sendFileAction->setEnabled(false);
     d->exportPdf->setEnabled(false);
-    d->closeFile->setEnabled(false);
+    //d->closeFile->setEnabled(false);
     d->encryptDocument->setEnabled(false);
 #ifndef NDEBUG
     d->uncompressToDir->setEnabled(false);
@@ -512,9 +510,11 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
 
     m_close = new KAction(i18n("Close"), this);
     connect(m_close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+    actionCollection()->addAction("file_close", m_close);
 
     m_closeAll = new KAction(i18n("Close All"), this);
     connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllWindows()));
+    actionCollection()->addAction("file_close_all", m_closeAll);
 
     setAutoSaveSettings(part->componentData().componentName(), false);
 
@@ -640,7 +640,7 @@ void KisMainWindow::addView(KisView *view)
     d->printActionPreview->setEnabled(viewHasDocument);
     d->sendFileAction->setEnabled(viewHasDocument);
     d->exportPdf->setEnabled(viewHasDocument);
-    d->closeFile->setEnabled(viewHasDocument);
+    //d->closeFile->setEnabled(viewHasDocument);
 //     statusBar()->setVisible(viewHasDocument);
 
     updateCaption();
