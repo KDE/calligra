@@ -462,7 +462,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
 
-    QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
+    QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::SubWindowView);
 
     m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -561,6 +561,17 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     setXMLFile( f, true );
     guiFactory()->addClient( this );
 
+
+    //check for colliding shortcuts
+    QSet<QKeySequence> existingShortcuts;
+    foreach(QAction* action, actionCollection()->actions()) {
+        if(action->shortcut() == QKeySequence(0)) {
+            continue;
+        }
+        qDebug() << "shortcut " << action->text() << " " << action->shortcut();
+        Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
+        existingShortcuts.insert(action->shortcut());
+    }
 
 }
 

@@ -361,19 +361,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
 
     KisInputProfileManager::instance()->loadProfiles();
 
-#if 0
-    //check for colliding shortcuts
-    QSet<QKeySequence> existingShortcuts;
-    foreach(QAction* action, actionCollection()->actions()) {
-        if(action->shortcut() == QKeySequence(0)) {
-            continue;
-        }
-        dbgUI << "shortcut " << action->text() << " " << action->shortcut();
-        Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
-        existingShortcuts.insert(action->shortcut());
-    }
-#endif
-
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     if (rserver->resources().isEmpty()) {
         KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
