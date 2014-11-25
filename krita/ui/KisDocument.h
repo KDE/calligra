@@ -752,6 +752,8 @@ signals:
 
 private slots:
 
+    void setImageModified();
+
     void slotAutoSave();
 
     /// Called by the undo stack when undo or redo is called
@@ -760,9 +762,8 @@ private slots:
 protected:
 
     bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
-public:
 
-    void setImageModified();
+public:
 
     /**
      * Create a new image that has this document as a parent and
