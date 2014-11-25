@@ -25,7 +25,9 @@ Page {
 
     property string urlString : "https://www.dropbox.com/1/oauth/authorize?display=mobile&oauth_token="+ controllerMIT.oauth_token
 
-    Component.onCompleted: controllerMIT.oauth_v1_request_token()
+    Component.onCompleted: {
+        controllerMIT.oauth_v1_request_token()
+    }
 
     DropboxWebView { id: webView }
 
@@ -34,8 +36,8 @@ Page {
     Connections {
         target: controllerMIT
         onNetwork_error : {
-            i_infobanner.text = error
-            i_infobanner.visible = true
+            i_infobanner.show(error);
+            console.debug("Network error while loading DropBox:\n" + error);
         }
         onAuthenticate_finished : {
             pageStack.pop();

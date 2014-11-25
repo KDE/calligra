@@ -75,6 +75,7 @@ signals:
 protected slots:
     void slotLocationRadioClicked();
     void slotCBToggled(bool on);
+    void slotShowSavePasswordHelp();
 
 protected:
     void setDataInternal(const KexiProjectData& data, bool connectionOnly,

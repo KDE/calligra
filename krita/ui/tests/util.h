@@ -50,6 +50,8 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "kis_default_bounds.h"
+#include "kis_transform_mask_params_interface.h"
+
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
@@ -81,6 +83,9 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     return vectorSelection;
 }
 
+QTransform createTestingTransform() {
+    return QTransform(1,2,3,4,5,6,7,8,9);
+}
 
 KisDocument* createCompleteDocument()
 {
@@ -184,6 +189,13 @@ KisDocument* createCompleteDocument()
     selectionMask2->setName("selectionMask2");
     selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
+
+    KisTransformMaskSP transformMask = new KisTransformMask();
+    transformMask->setName("testTransformMask");
+    transformMask->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                          new KisDumbTransformMaskParams(createTestingTransform())));
+
+    image->addNode(transformMask, paintLayer2);
 
     return doc;
 }

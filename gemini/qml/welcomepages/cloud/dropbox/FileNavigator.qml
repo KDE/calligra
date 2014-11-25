@@ -381,15 +381,13 @@ Item {
         }
 
         onNotification : {
-            i_infobanner.text = notification
-            i_infobanner.visible = true
+            i_infobanner.show(notification);
             console.log("notification:"+ notification)
         }
 
         onDelete_selected_items_finished: {
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            i_infobanner.text = result
-            i_infobanner.visible = true
+            i_infobanner.show(result);
             console.log("onDelete_selected_items_finished:" + result);
         }
 
@@ -404,8 +402,7 @@ Item {
 
         onStopTransfer: {
             if (!controllerMIT.is_push_notification()){
-                i_infobanner.text = "Files transfer completed"
-                i_infobanner.visible = true
+                i_infobanner.show("Files transfer completed");
             }
 
             if(page.downloadWasRequested) {
@@ -442,15 +439,13 @@ Item {
 
         onCreate_folder_finished: {
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            i_infobanner.text = result
-            i_infobanner.visible = true
+            i_infobanner.show(result);
             console.log("onCreate_folder_finished:" + result)
         }
 
         onRename_folder_finished: {
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            i_infobanner.text = result
-            i_infobanner.visible = true
+            i_infobanner.show(result);
         }
 
         onMove_files_folders_finished: {
@@ -458,15 +453,13 @@ Item {
             m_is_move = false
             m_is_copy = false
             toolicon_show(true);
-            i_infobanner.text = result
-            i_infobanner.visible = true
+            i_infobanner.show(result);
         }
 
         onShares_finished:{ //result
             b_indicator.visible = false; b_indicator_wrap.visible=false;
             if (!result){
-                i_infobanner.text = "Could not create share link, try again later."
-                i_infobanner.visible = true
+                i_infobanner.show("Could not create share link, try again later.");
             }
         }
 
