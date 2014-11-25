@@ -553,7 +553,7 @@ void KisPart::setComponentData(const KComponentData &componentData)
 KisView *KisPart::createViewInstance(KisDocument *document, KisMainWindow *parent)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QPointer<KisImageView>v = new KisImageView(this, document, parent);
+    QPointer<KisImageView>v = new KisImageView(this, document, parent->actionCollection(), parent);
 
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.

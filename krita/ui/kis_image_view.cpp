@@ -98,7 +98,7 @@ public:
     KActionCollection* actionCollection;
 };
 
-KisImageView::KisImageView(KisPart *part, KisDocument *doc, KisMainWindow *parent)
+KisImageView::KisImageView(KisPart *part, KisDocument *doc, KActionCollection *actionCollection, QWidget *parent)
     : KisView(part, doc, parent)
     , d(new Private())
 {
@@ -107,7 +107,7 @@ KisImageView::KisImageView(KisPart *part, KisDocument *doc, KisMainWindow *paren
 
     setFocusPolicy(Qt::NoFocus);
 
-    d->actionCollection = parent->actionCollection();
+    d->actionCollection = actionCollection;
 
     d->doc = doc;
     d->viewConverter = new KisCoordinatesConverter();

@@ -27,6 +27,8 @@
 
 class QCloseEvent;
 
+class KActionCollection;
+
 class KoZoomManager;
 class KoZoomController;
 
@@ -47,7 +49,7 @@ class KRITAUI_EXPORT KisImageView : public KisView
 {
     Q_OBJECT
 public:
-    explicit KisImageView(KisPart *part, KisDocument * doc, KisMainWindow *parent);
+    explicit KisImageView(KisPart *part, KisDocument *doc, KActionCollection *actionCollection, QWidget *parent);
     virtual ~KisImageView();
 
     // Temporary while teasing apart view and mainwindow

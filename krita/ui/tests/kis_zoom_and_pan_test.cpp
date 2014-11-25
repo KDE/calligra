@@ -58,7 +58,7 @@ public:
         m_doc->setCurrentImage(m_image);
 
         m_mainWindow = m_doc->documentPart()->createMainWindow();
-        m_view = new KisImageView(m_part, m_doc, m_mainWindow);
+        m_view = new KisImageView(m_part, m_doc, m_mainWindow->actionCollection(), m_mainWindow);
 
         m_image->refreshGraph();
 
