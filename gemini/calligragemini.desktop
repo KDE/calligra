@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Gemini
+Name[cs]=Calligra Gemini
 Name[de]=Calligra Gemini
 Name[fi]=Calligra Gemini
 Name[nl]=Calligra Gemini
@@ -11,6 +12,7 @@ Name[uk]=Calligra Gemini
 Name[x-test]=xxCalligra Geminixx
 Version=1.0
 GenericName=Word Processing and Presentation
+GenericName[cs]=Práce s textem a prezentacemi
 GenericName[de]=Textverarbeitung und Präsentation
 GenericName[fi]=Tekstinkäsittely ja esitykset
 GenericName[nl]=Tekstverwerking en presentatie
