@@ -21,6 +21,9 @@ include_directories(
 
 add_subdirectory( tests )
 
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+endif (APPLE)
 
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
@@ -343,6 +346,13 @@ if(UNIX)
     endif(NOT APPLE)
 endif(UNIX)
 
+if (APPLE)
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            MacSupport.mm
+        )
+endif (APPLE)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 kde4_add_ui_files(kritaui_LIB_SRCS
@@ -400,7 +410,10 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
-
+if(APPLE)
+    target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
+endif (APPLE)
+            
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
@@ -431,6 +444,9 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
+if (APPLE)
+    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
+endif (APPLE)
 
 install( FILES
     canvas/kis_canvas2.h
