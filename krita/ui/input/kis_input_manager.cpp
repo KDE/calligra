@@ -595,8 +595,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
         //Ensure we have focus so we get key events.
-        // XXX: KOMVC Commented out because it kept setting focus to its canvas, even when we were selecting another one
-        //d->canvas->canvasWidget()->setFocus();
+        d->canvas->canvasWidget()->setFocus();
         stop_ignore_cursor_events();
         touch_stop_block_press_events();
 
