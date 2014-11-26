@@ -37,6 +37,15 @@ WebView {
         text: "Trying to load login page..."
         color: "Grey"
         z: 10
+        BusyIndicator {
+            id: b_indicator
+            anchors {
+                top: parent.verticalCenter
+                topMargin: parent.font.pixelSize;
+                horizontalCenter: parent.horizontalCenter
+            }
+            running: parent.visible;
+        }
     }
 }
 
