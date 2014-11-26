@@ -154,6 +154,7 @@ public slots:
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
+    virtual bool event(QEvent* event);
 
 private:
     void setupActions();

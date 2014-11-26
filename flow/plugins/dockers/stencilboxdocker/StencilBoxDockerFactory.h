@@ -36,4 +36,5 @@ public:
         return DockLeft;
     }
 };
+
 #endif //STENCILBOXDOCKERFACTORY_H

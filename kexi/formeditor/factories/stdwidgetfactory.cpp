@@ -793,7 +793,7 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
     if (false) {
     }
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
-    else if (tag == "column" && classname == "QTreeWidget")) {
+    else if (tag == "column" && classname == "QTreeWidget") {
         QTreeWidget *tw = dynamic_cast<QTreeWidget*>(w);
         int id = 0;
         for (QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
    
    Based on qmenu.cpp from Qt 4.7
 
@@ -63,7 +63,8 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-const int logoBottomMargin = 84 - 12;
+const int calligraLogoPixmapInternalWidth = 100;
+const int calligraLogoPixmapInternalHeight = 71;
 const char calligraUrl[] = "http://www.calligra.org";
 
 // from oxygenhelper.cpp:
@@ -682,11 +683,8 @@ void KexiMenuWidgetPrivate::hideUpToMenuBar()
 
 void KexiMenuWidgetPrivate::hideMenu(KexiMenuWidget *menu, bool justRegister)
 {
-    return; // js
-    if (!menu)
-        return;
-    if (!justRegister)
-        menu->hide();
+    Q_UNUSED(menu);
+    Q_UNUSED(justRegister);
 }
 
 #if 0
@@ -2098,11 +2096,69 @@ void KexiMenuWidgetPrivate::updateLogoPixmap()
     calligraLogoPixmap = QPixmap(calligraLogo);
 }
 
+int KexiMenuWidgetPrivate::bottomOfLastItem() const
+{
+    if (actionRects.isEmpty()) {
+        return 0;
+    }
+    return actionRects.last().bottom();
+}
+
+/* Logo's pixmap is consisted of logo and some glow (cutted-off vertically).
+   (without the glow the math would be simpler)
+ +--------+   +
+ |  glow  |   |--- glowHeight - cutOffGlow
+ | +----+ |   +
+ | |logo| |   |--- calligraLogoPixmapInternalHeight
+ | +----+ |   +
+ |  glow  |   |--- glowHeight - cutOffGlow
+ +--------+   +
+*/
+const int glowHeight = 64;
+const int cutOffGlow = 12;
+const int spacingAfterLastItem = 10;
+
+//! @return distance between bottom border of the logo and bottom border of the entire menu widget
+int KexiMenuWidgetPrivate::logoBottomMargin() const
+{
+/*
+    +----------------+
+    | Menu item 1    |                             |
+    | ...            |                             |
+    | Last menu item |                             | q->height()
+    +----------------+ <--- bottomOfLastItem()     |
+    |                | |--- spacingAfterLastItem   |
+    +----------------+
+    |      glow      |
+    |     +----+     |
+    |     |logo|     |
+    |     +----+     | +
+    |      glow      | |--- bottomMargin
+    +----------------+ +
+*/
+    int bottomMargin = glowHeight - cutOffGlow;
+    if ((q->height() - bottomMargin - calligraLogoPixmapInternalHeight - cutOffGlow)
+            <= (bottomOfLastItem() + spacingAfterLastItem))
+    {
+        /* Special case when the last menu item would cover the logo: keep the logo below
+            +----------------+
+            |     +----+     |
+            |     |logo|     |
+            +----------------+ |--- bottomMargin (can be 0 or negative)
+                               |    */
+        bottomMargin = q->height() - bottomOfLastItem() - spacingAfterLastItem
+                       - cutOffGlow - calligraLogoPixmapInternalHeight;
+    }
+    return bottomMargin;
+}
+
 void KexiMenuWidgetPrivate::updateLogo()
 {
-    const QRect logoRect((q->width() - 2 - 100) / 2,
-                         q->height() - logoBottomMargin - 71 - 12,
-                         100, 71);
+    const QRect logoRect((q->width() - 2 - calligraLogoPixmapInternalWidth) / 2,
+                         q->height() - logoBottomMargin()
+                         - calligraLogoPixmapInternalHeight - cutOffGlow,
+                         calligraLogoPixmapInternalWidth,
+                         calligraLogoPixmapInternalHeight);
     if (!clickableLogoArea) {
         updateLogoPixmap();
         clickableLogoArea = new ClickableLogoArea(q);
@@ -2314,6 +2370,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     QColor textColor;
     textColor = palette().color(QPalette::Base);
     p.setPen(QPen(textColor));
+    const int logoBottomMargin = d->logoBottomMargin();
     p.drawText(0, height() - logoBottomMargin + 1, width(), logoBottomMargin - 1,
                Qt::AlignHCenter | Qt::AlignTop,
                QLatin1String(Kexi::versionString()));
@@ -2326,7 +2383,8 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
 
     // logo
     p.drawPixmap((width() - d->calligraLogoPixmap.width()) / 2,
-                    height() - d->calligraLogoPixmap.height() - 20,
+                    height() - logoBottomMargin - d->calligraLogoPixmap.height()
+                    + calligraLogoPixmapInternalHeight - 20,
                     d->calligraLogoPixmap);
 }
 
@@ -2472,7 +2530,9 @@ KexiMenuWidget::event(QEvent *e)
         }
         d->itemsDirty = 1;
         d->updateActionRects();
-        break; }
+        d->updateLogo();
+        break;
+    }
     case QEvent::Show:
         d->mouseDown = 0;
         d->updateActionRects();
