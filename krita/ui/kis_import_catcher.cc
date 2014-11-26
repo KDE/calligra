@@ -48,7 +48,7 @@ public:
     KisDocument* doc;
     KisViewManager* view;
     KUrl url;
-    bool importAsLayer;
+    QString layerType;
 
     QString prettyLayerName() const;
     void importAsPaintLayer(KisPaintDeviceSP device);
@@ -84,38 +84,8 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
-// NOTE: Unused currently
-void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device)
-{
-    KisLayerSP currentActiveLayer = view->activeLayer();
-
-    if (!currentActiveLayer) {
-        KisNodeSP node = view->activeNode();
-        if (!node) return;
-
-        do {
-            currentActiveLayer = dynamic_cast<KisLayer*>(node.data());
-        } while (!currentActiveLayer && (node = node->parent()));
-
-        if (!currentActiveLayer) return;
-    }
-
-    KisTransparencyMaskSP mask = new KisTransparencyMask();
-    mask->setSelection(new KisSelection(new KisDefaultBounds(currentActiveLayer->image())));
-    mask->setName(prettyLayerName());
-
-    QRect rc(device->exactBounds());
-    KisPainter painter(mask->paintDevice());
-    painter.bitBlt(rc.topLeft(), device, rc);
-
-    KisNodeCommandsAdapter adapter(view);
-    adapter.addNode(mask,
-                    currentActiveLayer,
-                    currentActiveLayer->lastChild());
-}
-
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisViewManager * view, bool importAsLayer)
-        : m_d(new Private)
+KisImportCatcher::KisImportCatcher(const KUrl & url, KisViewManager * view, const QString &layerType)
+    : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();
 
@@ -123,7 +93,8 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisViewManager * view, bool
     m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    m_d->importAsLayer = importAsLayer;
+    m_d->layerType = layerType;
+
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     bool result = m_d->doc->openUrl(url);
 
@@ -138,10 +109,10 @@ void KisImportCatcher::slotLoadingFinished()
     importedImage->waitForDone();
 
     if (importedImage && importedImage->projection()->exactBounds().isValid()) {
-        if (m_d->importAsLayer) {
-            m_d->importAsPaintLayer(importedImage->projection());
+        if (m_d->layerType != "KisPaintLayer") {
+            m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection());
         } else {
-            m_d->importAsTransparencyMask(importedImage->projection());
+            m_d->importAsPaintLayer(importedImage->projection());
         }
     }
 

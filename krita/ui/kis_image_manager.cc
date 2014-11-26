@@ -58,13 +58,27 @@ void KisImageManager::setup(KActionCollection * actionCollection, KisActionManag
 
     KisAction *action  = new KisAction(i18n("I&mport Layer..."), this);
     actionManager->addAction("import_layer_from_file", action, actionCollection);
-
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = new KisAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionManager->addAction("image_properties", action, actionCollection);
-
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
+
+    action  = new KisAction(koIcon("document-new"), i18n("as Paint Layer..."), this);
+    actionManager->addAction("import_layer_as_paint_layer", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
+
+    action  = new KisAction(koIcon("edit-copy"), i18n("as Transparency Mask..."), this);
+    actionManager->addAction("import_layer_as_transparency_mask", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
+
+    action  = new KisAction(koIcon("bookmarks"), i18n("as Filter Mask..."), this);
+    actionManager->addAction("import_layer_as_filter_mask", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
+
+    action  = new KisAction(koIcon("edit-paste"), i18n("as Selection Mask..."), this);
+    actionManager->addAction("import_layer_as_selection_mask", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));
 
     action = new KisAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
     action->setToolTip(i18n("Change the background color of the image"));
@@ -75,10 +89,26 @@ void KisImageManager::setup(KActionCollection * actionCollection, KisActionManag
 
 void KisImageManager::slotImportLayerFromFile()
 {
-    importImage(KUrl(), true);
+    importImage(KUrl(), "KisPaintLayer");
 }
 
-qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
+void KisImageManager::slotImportLayerAsTransparencyMask()
+{
+    importImage(KUrl(), "KisTransparencyMask");
+}
+
+void KisImageManager::slotImportLayerAsFilterMask()
+{
+    importImage(KUrl(), "KisFilterMask");
+}
+
+void KisImageManager::slotImportLayerAsSelectionMask()
+{
+    importImage(KUrl(), "KisSelectionMask");
+}
+
+
+qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType)
 {
     KisImageWSP currentImage = m_view->image();
 
@@ -107,7 +137,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
         return 0;
 
     for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher(*it, m_view, importAsLayer);
+        new KisImportCatcher(*it, m_view, layerType);
     }
 
     m_view->canvas()->update();

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=cohere-magenta
 Name=Cohere
+Name[it]=Cohere
 Name[nl]=Cohere
 Name[pt]=Cohere
 Name[pt_BR]=Cohere
@@ -8,6 +9,7 @@ Name[sk]=Cohere
 Name[uk]=Cohere
 Name[x-test]=xxCoherexx
 Comment=Cohere designed presentation template
+Comment[it]=Modello di presentazione progettato da Cohere
 Comment[nl]=Met Cohere ontworpen presentatiesjabloon
 Comment[pt]=Modelo de apresentações desenhadas pela Cohere
 Comment[pt_BR]=Modelo de apresentações desenhados pelo Cohere
