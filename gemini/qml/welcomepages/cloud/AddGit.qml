@@ -19,8 +19,7 @@
 import QtQuick 1.1
 import org.calligra 1.0
 import "../../components"
-import "git" as Git
- 
+
 Rectangle {
     anchors.fill: parent;
     anchors.margins: Settings.theme.adjustedPixel(16);
@@ -38,7 +37,7 @@ Rectangle {
         MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
         SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
     }
-    Git.CreateCheckout {
+    Loader {
         anchors {
             top: parent.top;
             left: parent.left;
@@ -46,6 +45,7 @@ Rectangle {
             bottom: closeButton.top;
             margins: Settings.theme.adjustedPixel(8);
         }
+        source: "git/createCheckoutContainer.qml";
     }
     CohereButton {
         id: closeButton;
