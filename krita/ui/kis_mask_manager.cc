@@ -99,9 +99,7 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 
 void KisMaskManager::activateMask(KisMaskSP mask)
 {
-    if (m_imageView) {
-        m_imageView->setCurrentNode(mask);
-    }
+    Q_UNUSED(mask);
 }
 
 void KisMaskManager::masksUpdated()
