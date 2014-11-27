@@ -24,6 +24,7 @@
 #include <QXmlStreamWriter>
 #include <QDesktopServices>
 #include <QFile>
+#include <QLineF>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -213,6 +214,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 return;
             }
         }
+        
     }
 
     if (m_handleDrag) {
@@ -268,6 +270,12 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         if (m_newAssistant->numHandles() <= 1) {
+            if (key == "vanishing point"){
+                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(-70,0)));
+                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(-140,0)));
+                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(70,0)));
+                m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(140,0)));
+                }
             addAssistant();
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
@@ -301,6 +309,13 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         QPointF adjust = event->point - m_mousePosition;
         foreach(KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += adjust;
+            
+        }
+        if (m_assistantDrag->id()== "vanishing point"){
+            foreach(KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
+                *handle += adjust;
+            
+            }
         }
         m_mousePosition = event->point;
         m_canvas->updateCanvas();
@@ -323,7 +338,52 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
                 }
             }
         }
-
+        
+        //this following bit sets the translations for the vanishing-point handles.
+        if(m_handleDrag && assistant->id() == "vanishing point") {
+            //for inner handles, the outer handle gets translated.
+            if (m_handleDrag == assistant->sideHandles()[0]){
+            QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
+            
+            qreal length = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]).length();
+            if (length<2.0){length=2.0;}
+            length +=perspectiveline.length();
+            perspectiveline.setLength(length);
+            *assistant->sideHandles()[1] = perspectiveline.p2();
+            }
+            else if (m_handleDrag == assistant->sideHandles()[2]){
+            QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
+            
+            qreal length = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
+            if (length<2.0){length=2.0;}
+            length +=perspectiveline.length();
+            perspectiveline.setLength(length);
+            *assistant->sideHandles()[3] = perspectiveline.p2();
+            }
+            //for outer handles, only the vanishing point is translated, but only if there's an intersection.
+            else if (m_handleDrag == assistant->sideHandles()[1]|| m_handleDrag == assistant->sideHandles()[3]){
+            QPointF vanishingpoint(0,0);
+            QLineF perspectiveline = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]);
+            QLineF perspectiveline2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]);
+            if (QLineF(perspectiveline2).intersect(QLineF(perspectiveline), &vanishingpoint) != QLineF::NoIntersection){
+            *assistant->handles()[0] = vanishingpoint;}
+            }//and for the vanishing point itself, only the outer handles get translated.
+            else if (m_handleDrag == assistant->handles()[0]){
+            QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
+            QLineF perspectiveline2 = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
+            qreal length =  QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]).length();
+            qreal length2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
+            if (length<2.0){length=2.0;}
+            if (length2<2.0){length2=2.0;}
+            length +=perspectiveline.length();
+            length2 +=perspectiveline2.length();
+            perspectiveline.setLength(length);
+            perspectiveline2.setLength(length2);
+            *assistant->sideHandles()[1] = perspectiveline.p2();
+            *assistant->sideHandles()[3] = perspectiveline2.p2();
+            }
+        
+        }
     }
     if (wasHiglightedNode && !m_higlightedNode) {
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -457,6 +517,23 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
             path.addEllipse(QRectF(rightMiddle-QPointF(6,6),QSizeF(12,12)));
             path.addEllipse(QRectF(bottomMiddle-QPointF(6,6),QSizeF(12,12)));
             KisPaintingAssistant::drawPath(_gc, path);
+        }
+        if(assistant->id()=="vanishing point") {
+            if (assistant->sideHandles().size() == 4) {
+            // Draw the line
+            QPointF p0 = _converter.documentToView(*assistant->handles()[0]);
+            QPointF p1 = _converter.documentToView(*assistant->sideHandles()[0]);
+            QPointF p2 = _converter.documentToView(*assistant->sideHandles()[1]);
+            QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
+            QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
+            QPainterPath preview;
+            _gc.setPen(QColor(0, 0, 0, 75));
+            // Draw control lines
+            _gc.drawLine(p0, p1);
+            _gc.drawLine(p0, p3);
+            _gc.drawLine(p1, p2);
+            _gc.drawLine(p3, p4);
+            }
         }
     }
 
