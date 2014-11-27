@@ -240,7 +240,7 @@ BOOL isWow64()
 
 bool KisApplication::start()
 {
-#ifdef Q_OS_WIN
+#ifdef Q_OS_WIN  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
         KMessageBox::information(0,
@@ -254,13 +254,14 @@ bool KisApplication::start()
 #endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
+
+    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
+    KGlobal::dirs()->addPrefix(appdir.absolutePath());
+
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     if (!env.contains("KDEHOME")) {
         qputenv("KDEHOME", QFile::encodeName(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
-    }
-    if (!env.contains("KDESYCOCA")) {
-        qputenv("KDESYCOCA", QFile::encodeName(appdir.absolutePath() + "/sycoca"));
     }
     if (!env.contains("XDG_DATA_DIRS")) {
         qputenv("XDG_DATA_DIRS", QFile::encodeName(appdir.absolutePath() + "/share"));
@@ -273,8 +274,10 @@ bool KisApplication::start()
     }
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                                      + appdir.absolutePath() + "/lib/kde4" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
                                       + appdir.absolutePath()));
+
 #endif
 
     if (d->splashScreen) {
