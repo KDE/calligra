@@ -2071,9 +2071,11 @@ void KisMainWindow::updateWindowMenu()
     menu->addSeparator();
     menu->addAction(m_close);
     menu->addAction(m_closeAll);
-    menu->addSeparator();
-    menu->addAction(m_mdiTile);
-    menu->addAction(m_mdiCascade);
+    if (m_mdiArea->viewMode() == QMdiArea::SubWindowView) {
+        menu->addSeparator();
+        menu->addAction(m_mdiTile);
+        menu->addAction(m_mdiCascade);
+    }
     menu->addSeparator();
     menu->addAction(m_mdiNextWindow);
     menu->addAction(m_mdiPreviousWindow);
