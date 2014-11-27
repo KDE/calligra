@@ -148,46 +148,6 @@ KisApplication::KisApplication(const QByteArray &nativeMimeType)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
-#ifdef Q_OS_WIN
-    QDir appdir(applicationDirPath());
-    appdir.cdUp();
-
-    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
-    KGlobal::dirs()->addPrefix(appdir.absolutePath());
-
-
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    // If there's no kdehome, set it and restart the process.
-    if (!env.contains("KDEHOME")) {
-        qputenv("KDEHOME", QFile::encodeName(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
-    }
-    if (!env.contains("KDESYCOCA")) {
-        qputenv("KDESYCOCA", QFile::encodeName(appdir.absolutePath() + "/sycoca"));
-    }
-    if (!env.contains("XDG_DATA_DIRS")) {
-        qputenv("XDG_DATA_DIRS", QFile::encodeName(appdir.absolutePath() + "/share"));
-    }
-    if (!env.contains("KDEDIR")) {
-        qputenv("KDEDIR", QFile::encodeName(appdir.absolutePath()));
-    }
-    if (!env.contains("KDEDIRS")) {
-        qputenv("KDEDIRS", QFile::encodeName(appdir.absolutePath()));
-    }
-    qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
-                                      + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib/kde4" + ";"
-                                      + appdir.absolutePath() + "/Frameworks" + ";"
-                                      + appdir.absolutePath()));
-#endif
-
-#if KDE_IS_VERSION(4,6,0)
-        // if there's no document, add the current working directory
-        // to the recent dirs so the open dialog and open pane show
-        // the directory from where the app was started, instead of
-        // the last directory from where we opened a file
-        KRecentDirs::add(":OpenDialog", QDir::currentPath());
-#endif
-
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
@@ -240,7 +200,7 @@ BOOL isWow64()
 
 bool KisApplication::start()
 {
-#ifdef Q_OS_WIN  || defined (Q_OS_MACX)
+#if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
         KMessageBox::information(0,
@@ -337,9 +297,6 @@ bool KisApplication::start()
         QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
                                                                                     "Try restarting or reinstalling."));
-#ifdef Q_OS_WIN
-        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
-#endif
         return false;
     }
 
@@ -528,6 +485,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     QStringList filters;
     filters << QString(".%1-%2-%3-autosave%4").arg(d->part->componentData().componentName()).arg("*").arg("*").arg(extension);
+
 #ifdef Q_OS_WIN
         QDir dir = QDir::tempPath();
 #else
