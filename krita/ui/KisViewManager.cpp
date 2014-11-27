@@ -1251,7 +1251,7 @@ void KisViewManager::showJustTheCanvas(bool toggled)
                 cfg.hideScrollbarsFullscreen()) {
 
             int result =
-                    KMessageBox::warningYesNo(this,
+                    KMessageBox::warningYesNo(0,
                                               "Intel(R) HD Graphics video adapters "
                                               "are known to have problems with running "
                                               "Krita in pure canvas only mode. At least "
