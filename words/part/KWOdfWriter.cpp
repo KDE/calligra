@@ -130,6 +130,8 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
         KoGenStyle layoutStyle = pageStyle.saveOdf();
         if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
             masterStyle.addProperty("style:display-name", pageStyle.displayName());
+        if (!pageStyle.nextStyleName().isEmpty())
+            masterStyle.addProperty("style:next-style-name", pageStyle.nextStyleName());
         masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
         QString name = context.mainStyles().insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
         m_masterPages.insert(pageStyle, name);
@@ -151,6 +153,10 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
+        if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
+            masterStyle.addProperty("style:display-name", pageStyle.displayName());
+        if (!pageStyle.nextStyleName().isEmpty())
+            masterStyle.addProperty("style:next-style-name", pageStyle.nextStyleName());
         masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
 
         int index = 0;
