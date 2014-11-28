@@ -585,7 +585,7 @@ void KisRulerAssistantTool::loadAssistants()
                 if (assistant && !xml.attributes().value("ref").isEmpty()) {
                     KisPaintingAssistantHandleSP handle = handleMap.value(xml.attributes().value("ref").toString().toInt());
                     if (handle) {
-                        assistant->addHandle(handle);
+                       assistant->addHandle(handle);
                     } else {
                         errors = true;
                     }
@@ -623,6 +623,14 @@ void KisRulerAssistantTool::loadAssistants()
             if (xml.name() == "assistant") {
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
+                        if (assistant->id() == "vanishing point"){
+                        //ideally we'd save and load side-handles as well, but this is all I've got//
+                            QPointF pos = *assistant->handles()[0];
+                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(-70,0)));
+                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(-140,0)));
+                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(70,0)));
+                            assistant->addSideHandle(new KisPaintingAssistantHandle(pos+QPointF(140,0)));
+                        }
                         m_canvas->paintingAssistantsDecoration()->addAssistant(assistant);
                         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
                         if (grid) {
@@ -669,6 +677,7 @@ void KisRulerAssistantTool::saveAssistants()
         int id = handleMap.size();
         handleMap.insert(handle, id);
         xml.writeStartElement("handle");
+        //xml.writeAttribute("type", handle->handleType());
         xml.writeAttribute("id", QString::number(id));
         xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
         xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
