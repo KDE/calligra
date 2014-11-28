@@ -60,7 +60,10 @@ void KisRectangleConstraintWidget::rectangleChanged(const QRectF &rect)
     
     if (!chkWidth->isChecked()) intWidth->setValue(rect.width());
     if (!chkHeight->isChecked()) intHeight->setValue(rect.height());
-    if (!chkRatio->isChecked()) doubleRatio->setValue(fabs(rect.width()) / fabs(rect.height()));
+
+    if (!chkRatio->isChecked() && !(rect.width() == 0 && rect.height() == 0)) {
+        doubleRatio->setValue(fabs(rect.width()) / fabs(rect.height()));
+    }
   
     intWidth->blockSignals(false);
     intHeight->blockSignals(false);

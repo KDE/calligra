@@ -127,7 +127,7 @@ void KisToolRectangleBase::applyConstraints(QSizeF &area, bool overrideRatio) {
     if (m_isWidthForced) {
       area.setHeight(area.width() / ratio);
     } else {
-      area.setWidth(area.width() * ratio);
+      area.setWidth(area.height() * ratio);
     }
   }
 }
@@ -231,7 +231,10 @@ void KisToolRectangleBase::updateArea() {
     QRectF bound;
     bound.setTopLeft(m_dragStart);
     bound.setBottomRight(m_dragEnd);
-    canvas()->updateCanvas(convertToPt(bound.normalized()).adjusted(-100, -100, +200, +200));
+
+    bound = bound.normalized();
+
+    canvas()->updateCanvas(convertToPt(bound).adjusted(-100, -100, +200, +200));
     
     emit rectangleChanged(bound);
 }
