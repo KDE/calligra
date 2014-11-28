@@ -85,6 +85,7 @@ KoReportItemChart::KoReportItemChart(QDomNode & element)
 
 KoReportItemChart::~KoReportItemChart()
 {
+    delete m_set;
 }
 
 void KoReportItemChart::createProperties()

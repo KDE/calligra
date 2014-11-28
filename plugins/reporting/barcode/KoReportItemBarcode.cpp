@@ -128,6 +128,7 @@ void KoReportItemBarcode::createProperties()
 
 KoReportItemBarcode::~KoReportItemBarcode()
 {
+    delete m_set;
 }
 
 int KoReportItemBarcode::alignment()

@@ -264,6 +264,7 @@ KexiFormView::~KexiFormView()
     // in Kexi, so the main window wouldn't know the set in fact has been changed.
 //2.0    d->propertySet = 0;
     propertySetSwitched();
+    delete d;
 }
 
 void
