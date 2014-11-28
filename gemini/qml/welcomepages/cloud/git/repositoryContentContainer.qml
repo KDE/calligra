@@ -18,14 +18,13 @@
 
 import QtQuick 1.1
 import org.calligra 1.0
-import "../../components"
+import "../../../components"
 
-Page {
-    id: base;
-    property string pageName: "accountsPageGit";
-    property QtObject accountDetails: null;
-    Loader {
-        anchors.fill: parent;
-        source: "git/repositoryContentContainer.qml"
-    }
+RepositoryContent {
+    anchors.fill: parent;
+    localrepo: (accountDetails !== null) ? accountDetails.readProperty("localrepo") : "";
+    privateKeyFile: (accountDetails !== null) ? accountDetails.readProperty("privateKeyFile") : "";
+    needsPrivateKeyPassphrase: (accountDetails !== null) ? accountDetails.readProperty("needsPrivateKeyPassphrase") : false;
+    publicKeyFile: (accountDetails !== null) ? accountDetails.readProperty("publicKeyFile") : "";
+    userForRemote: (accountDetails !== null) ? accountDetails.readProperty("userForRemote") : "";
 }

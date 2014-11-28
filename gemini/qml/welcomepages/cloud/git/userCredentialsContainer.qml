@@ -18,14 +18,18 @@
 
 import QtQuick 1.1
 import org.calligra 1.0
-import "../../components"
+import "../../../components"
 
-Page {
-    id: base;
-    property string pageName: "accountsPageGit";
-    property QtObject accountDetails: null;
-    Loader {
-        anchors.fill: parent;
-        source: "git/repositoryContentContainer.qml"
+GetUserCredentials {
+    onAccepted: {
+        base.accountDetails.writeProperty("userForRemote", userForRemote);
+        base.accountDetails.writeProperty("privateKeyFile", privateKeyFile);
+        base.accountDetails.writeProperty("publicKeyFile", publicKeyFile);
+        base.accountDetails.writeProperty("needsPrivateKeyPassphrase", needsPrivateKeyPassphrase);
+        cloudAccounts.setAccountDetails(base.accountIndex, base.accountDetails);
+        dlgStack.pop();
+    }
+    onCancelled: {
+        dlgStack.pop();
     }
 }

@@ -1,4 +1,3 @@
- 
 /* This file is part of the KDE project
  * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
@@ -20,7 +19,6 @@
 import QtQuick 1.1
 import org.calligra 1.0
 import "../../components"
-import "git"
 
 Rectangle {
     id: base;
@@ -70,7 +68,7 @@ Rectangle {
         textSize: Settings.theme.adjustedPixel(18);
         color: "#D2D4D5";
         onClicked: {
-            dlgStack.push(userCredentials);
+            dlgStack.push(userCredentials.item);
             if(accountDetails.readProperty("userForRemote") !== undefined) {
                 dlgStack.currentPage.userForRemote = accountDetails.readProperty("userForRemote");
             }
@@ -115,20 +113,8 @@ Rectangle {
         onClicked: dlgStack.replace(addEmpty);
     }
 
-    Component {
+    Loader {
         id: userCredentials;
-        GetUserCredentials {
-            onAccepted: {
-                base.accountDetails.writeProperty("userForRemote", userForRemote);
-                base.accountDetails.writeProperty("privateKeyFile", privateKeyFile);
-                base.accountDetails.writeProperty("publicKeyFile", publicKeyFile);
-                base.accountDetails.writeProperty("needsPrivateKeyPassphrase", needsPrivateKeyPassphrase);
-                cloudAccounts.setAccountDetails(base.accountIndex, base.accountDetails);
-                dlgStack.pop();
-            }
-            onCancelled: {
-                dlgStack.pop();
-            }
-        }
+        source: "git/userCredentialsContainer.qml"
     }
 }
