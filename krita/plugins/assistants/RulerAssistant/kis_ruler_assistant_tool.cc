@@ -340,7 +340,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         }
         
         //this following bit sets the translations for the vanishing-point handles.
-        if(m_handleDrag && assistant->id() == "vanishing point" && assistant->sideHandles==4) {
+        if(m_handleDrag && assistant->id() == "vanishing point" && assistant->sideHandles().size()==4) {
             //for inner handles, the outer handle gets translated.
             if (m_handleDrag == assistant->sideHandles()[0]){
             QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
