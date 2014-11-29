@@ -793,10 +793,9 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
 
 KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP parent)
 {
+    Q_UNUSED(element);
     Q_UNUSED(parent);
-    QString attr;
     KisTransformMask* mask;
-    QString filtername;
 
     /**
      * We'll load the transform configuration later on a stage

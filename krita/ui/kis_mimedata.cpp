@@ -253,7 +253,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         QByteArray ba = data->data("application/x-krita-node");
 
         KisDocument *tempDoc = KisPart::instance()->createDocument();
-        bool result = tempDoc->loadNativeFormatFromStore(ba);
+        bool result = tempDoc->loadNativeFormatFromByteArray(ba);
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();

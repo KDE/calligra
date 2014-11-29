@@ -384,11 +384,6 @@ public:
     virtual bool saveNativeFormat(const QString & file);
 
     /**
-     * Saves the document in native ODF format to the given store.
-     */
-    bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
-
-    /**
      * Saves the document in the native format to the given store.
      */
     bool saveNativeFormatCalligra(KoStore *store);
@@ -553,7 +548,7 @@ public:
      */
     void saveUnitOdf(KoXmlWriter *settingsWriter) const;
 
-    bool loadNativeFormatFromStore(QByteArray &data);
+    bool loadNativeFormatFromByteArray(QByteArray &data);
 
     /// return the grid data for this document.
     KoGridData &gridData();
@@ -831,30 +826,18 @@ public:
      */
     QList<KisPaintingAssistant *> preLoadedAssistants();
 
-signals:
-
-    void sigLoadingFinished();
-
-
-protected slots:
-
-    void slotLoadingFinished();
 
 private:
 
     void init();
 
-private:
-
     bool saveToStream(QIODevice *dev);
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
-    bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 
     bool savePreview(KoStore *store);
-    bool saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter);
 
     QString prettyPathOrUrl() const;
 

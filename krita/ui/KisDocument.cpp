@@ -548,8 +548,6 @@ public:
 
 };
 
-
-
 KisDocument::KisDocument(const KisPart *parent)
     : d(new Private(this, parent))
 {
@@ -585,7 +583,6 @@ KisDocument::KisDocument(const KisPart *parent)
     KisResourceServerProvider::instance();
 
     init();
-    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
 }
@@ -609,13 +606,6 @@ KisDocument::~KisDocument()
     delete d;
 }
 
-void KisDocument::slotLoadingFinished() {
-    if (d->image) {
-        d->image->initialRefreshGraph();
-    }
-    setAutoSave(KisConfig().autoSaveInterval());
-}
-
 void KisDocument::init()
 {
     delete d->nserver;
@@ -629,9 +619,6 @@ void KisDocument::init()
     d->kraSaver = 0;
     d->kraLoader = 0;
 }
-
-
-
 
 KisPart *KisDocument::documentPart() const
 {
@@ -976,16 +963,13 @@ bool KisDocument::saveNativeFormat(const QString & file)
     }
 
     kDebug(30003) << "KisDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
-    QByteArray mimeType = d->outputMimeType;
-    kDebug(30003) << "KisDocument::savingTo mimeType=" << mimeType;
-    QByteArray nativeOasisMime = nativeOasisMimeType();
-    bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" || mimeType.startsWith("application/vnd.oasis.opendocument"));
 
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
-    KoStore *store = KoStore::createStore(file, KoStore::Write, mimeType, backend);
-    if (d->specialOutputFlag == SaveEncrypted && !d->password.isNull())
+    KoStore *store = KoStore::createStore(file, KoStore::Write, d->outputMimeType, backend);
+    if (d->specialOutputFlag == SaveEncrypted && !d->password.isNull()) {
         store->setPassword(d->password);
+    }
     if (store->bad()) {
         d->lastErrorMessage = i18n("Could not create the file for saving");   // more details needed?
         delete store;
@@ -994,87 +978,11 @@ bool KisDocument::saveNativeFormat(const QString & file)
 
         return false;
     }
-    if (oasis) {
-        d->image->unlock();
-        setAutoSave(realAutoSaveInterval);
 
-        return saveNativeFormatODF(store, mimeType);
-    } else {
-        d->image->unlock();
-        setAutoSave(realAutoSaveInterval);
+    d->image->unlock();
+    setAutoSave(realAutoSaveInterval);
 
-        return saveNativeFormatCalligra(store);
-    }
-}
-
-bool KisDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
-{
-    kDebug(30003) << "Saving to OASIS format";
-    // Tell KoStore not to touch the file names
-
-    KoOdfWriteStore odfStore(store);
-    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
-    KoEmbeddedDocumentSaver embeddedSaver;
-    SavingContext documentContext(odfStore, embeddedSaver);
-
-    if (!saveOdf(documentContext)) {
-        kDebug(30003) << "saveOdf failed";
-        odfStore.closeManifestWriter(false);
-        delete store;
-        return false;
-    }
-
-    // Save embedded objects
-    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug(30003) << "save embedded documents failed";
-        odfStore.closeManifestWriter(false);
-        delete store;
-        return false;
-    }
-
-    if (store->open("meta.xml")) {
-        if (!d->docInfo->saveOasis(store) || !store->close()) {
-            odfStore.closeManifestWriter(false);
-            delete store;
-            return false;
-        }
-        manifestWriter->addManifestEntry("meta.xml", "text/xml");
-    } else {
-        d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("meta.xml"));
-        odfStore.closeManifestWriter(false);
-        delete store;
-        return false;
-    }
-
-    if (store->open("Thumbnails/thumbnail.png")) {
-        if (!saveOasisPreview(store, manifestWriter) || !store->close()) {
-            d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
-            odfStore.closeManifestWriter(false);
-            delete store;
-            return false;
-        }
-        // No manifest entry!
-    } else {
-        d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
-        odfStore.closeManifestWriter(false);
-        delete store;
-        return false;
-    }
-
-    // Write out manifest file
-    if (!odfStore.closeManifestWriter()) {
-        d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml"));
-        delete store;
-        return false;
-    }
-
-    // Remember the given password, if necessary
-    if (store->isEncrypted() && !d->isExporting)
-        d->password = store->password();
-
-    delete store;
-
-    return true;
+    return saveNativeFormatCalligra(store);
 }
 
 bool KisDocument::saveNativeFormatCalligra(KoStore *store)
@@ -1200,28 +1108,6 @@ bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
 
     kDebug(30003) << "Saved document to store";
 
-    return true;
-}
-
-bool KisDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
-{
-    const QPixmap pix = generatePreview(QSize(128, 128));
-    if (pix.isNull())
-        return true; //no thumbnail to save, but the process succeeded
-
-    QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
-
-    if (preview.isNull())
-        return false; //thumbnail to save, but the process failed
-
-    // ### TODO: freedesktop.org Thumbnail specification (date...)
-    KoStoreDevice io(store);
-    if (!io.open(QIODevice::WriteOnly))
-        return false;
-    if (! preview.save(&io, "PNG", 0))
-        return false;
-    io.close();
-    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "image/png");
     return true;
 }
 
@@ -1884,41 +1770,38 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         in.close();
         d->isEmpty = false;
         return res;
-    } else { // It's a calligra store (tar.gz, zip, directory, etc.)
+    }
+    else { // It's a calligra store (tar.gz, zip, directory, etc.)
         in.close();
 
-        return loadNativeFormatFromStore(file);
-    }
-}
+        KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
+        KoStore *store = KoStore::createStore(file, KoStore::Read, "", backend);
 
-bool KisDocument::loadNativeFormatFromStore(const QString& file)
-{
-    KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
-    KoStore *store = KoStore::createStore(file, KoStore::Read, "", backend);
+        if (store->bad()) {
+            d->lastErrorMessage = i18n("Not a valid Calligra file: %1", file);
+            delete store;
+            QApplication::restoreOverrideCursor();
+            return false;
+        }
 
-    if (store->bad()) {
-        d->lastErrorMessage = i18n("Not a valid Calligra file: %1", file);
+        // Remember that the file was encrypted
+        if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)
+            d->specialOutputFlag = SaveEncrypted;
+
+        const bool success = loadNativeFormatFromStoreInternal(store);
+
+        // Retrieve the password after loading the file, only then is it guaranteed to exist
+        if (success && store->isEncrypted() && !d->isImporting)
+            d->password = store->password();
+
         delete store;
-        QApplication::restoreOverrideCursor();
-        return false;
+
+        return success;
+
     }
-
-    // Remember that the file was encrypted
-    if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)
-        d->specialOutputFlag = SaveEncrypted;
-
-    const bool success = loadNativeFormatFromStoreInternal(store);
-
-    // Retrieve the password after loading the file, only then is it guaranteed to exist
-    if (success && store->isEncrypted() && !d->isImporting)
-        d->password = store->password();
-
-    delete store;
-
-    return success;
 }
 
-bool KisDocument::loadNativeFormatFromStore(QByteArray &data)
+bool KisDocument::loadNativeFormatFromByteArray(QByteArray &data)
 {
     bool succes;
     KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
@@ -2175,7 +2058,10 @@ bool KisDocument::completeLoading(KoStore* store)
 
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
-    emit sigLoadingFinished();
+    if (d->image) {
+        d->image->initialRefreshGraph();
+    }
+    setAutoSave(KisConfig().autoSaveInterval());
 
     return true;
 
@@ -2959,7 +2845,7 @@ KisImageWSP KisDocument::image() const
 
 void KisDocument::setCurrentImage(KisImageWSP image)
 {
-    //if (!image.isValid()) return;
+    if (!image || !image.isValid()) return;
 
     if (d->image) {
         // Disconnect existing sig/slot connections
@@ -2968,12 +2854,11 @@ void KisDocument::setCurrentImage(KisImageWSP image)
     }
     d->image = image;
     d->shapeController->setImage(image);
-
     setModified(false);
-
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->initialRefreshGraph();
+    setAutoSave(KisConfig().autoSaveInterval());
 
-    emit sigLoadingFinished();
 }
 
 void KisDocument::initEmpty()
