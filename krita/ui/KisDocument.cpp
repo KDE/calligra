@@ -2804,14 +2804,13 @@ vKisNodeSP KisDocument::activeNodes() const
 QList<KisPaintingAssistant*> KisDocument::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    // KOMVC: TODO
-    //    foreach(KisView *v, documentPart()->views()) {
-    //        KisViewManager *view = qobject_cast<KisViewManager*>(v);
-    //        if (view) {
-    //            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
-    //            assistants.append(assistantsDecoration->assistants());
-    //        }
-    //    }
+    foreach(KisView *v, documentPart()->views()) {
+        KisImageView *view = qobject_cast<KisImageView*>(v);
+        if (view && view->document() == this) {
+            KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
+            assistants.append(assistantsDecoration->assistants());
+        }
+    }
     return assistants;
 }
 
