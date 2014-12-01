@@ -484,7 +484,7 @@ protected slots:
     void slotPartLoaded(KexiPart::Part* p);
 
     //! internal - creates and initializes kexi project
-    void createKexiProject(const KexiProjectData& new_data);
+    KexiProject* createKexiProject(const KexiProjectData& new_data);
 
     /*! Handles event when user double clicked (or single -depending on settings)
      or pressed Return key on the part item in the navigator.

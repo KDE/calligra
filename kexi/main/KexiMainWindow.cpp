@@ -1307,7 +1307,7 @@ static QString internalReason(KexiDB::Object *obj)
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
-    createKexiProject(projectData);
+    d->prj = createKexiProject(projectData);
     if (~KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
         delete d->prj;
         d->prj = 0;
@@ -2293,16 +2293,15 @@ void KexiMainWindow::slotProjectNew()
     createNewProject();
 }
 
-void
-KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
+KexiProject* KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
 {
-    d->prj = new KexiProject(new_data, this);
-    connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
+    KexiProject *prj = new KexiProject(new_data, this);
+    connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
 
     if (d->navigator){
-        connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
+        connect(prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
     }
-    
+    return prj;
 }
 
 //unused
@@ -2339,13 +2338,20 @@ void KexiMainWindow::createNewProject()
 
 tristate KexiMainWindow::createNewProject(KexiProjectData* projectData)
 {
-    createKexiProject(*projectData);
-    tristate res = d->prj->create(true /*overwrite*/);
+    KexiProject *prj = createKexiProject(*projectData);
+    tristate res = prj->create(true /*overwrite*/);
     if (res != true) {
-        delete d->prj;
-        d->prj = 0;
+        delete prj;
         return res;
     }
+    if (d->prj) {
+        res = closeProject();
+        if (res != true) {
+            delete prj;
+            return res;
+        }
+    }
+    d->prj = prj;
     d->tabbedToolBar->hideMainMenu();
     kDebug() << "new project created ---";
     setupProjectNavigator();
@@ -3597,7 +3603,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     if (!projectData)
         return false;
 
-    createKexiProject(*projectData); //initialize project
+    d->prj = createKexiProject(*projectData); //initialize project
 // d->prj->setFinal(true);         //announce that we are in fianl mode
 
     tristate res = d->prj->open();             //try to open database
