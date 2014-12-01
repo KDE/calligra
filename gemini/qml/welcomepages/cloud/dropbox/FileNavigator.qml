@@ -50,78 +50,50 @@ Item {
     Component {
         id: itemDelegate;
         Button {
-            width: ListView.view.width;
-            height: Settings.theme.adjustedPixel(64);
+            width: folderListView.cellWidth;
+            height: folderListView.cellHeight;
             enabled: model.is_dir ? true : Settings.mimeTypeToDocumentClass(model.mime_type) !== DocumentListModel.UnknownType;
             opacity: enabled ? 1 : 0.3
 
             Image {
                 id: icon;
                 anchors {
-                    left: parent.left;
                     top: parent.top;
-                    topMargin: fakeTheme.paddingSmall;
-                    bottom: parent.bottom;
-                    bottomMargin: fakeTheme.paddingSmall;
+                    left: parent.left;
+                    right: parent.right;
+                    margins: Constants.DefaultMargin / 2;
                 }
-                width: height;
+                height: parent.width;
                 fillMode: Image.PreserveAspectFit;
                 smooth: true;
+                asynchronous: true;
                 source: model.is_dir ? Settings.theme.icon("layer_group-black") : Settings.theme.icon("A4portrait-black");
+                sourceSize.width: width;
+                sourceSize.height: height;
             }
-
             Label {
+                id: lblName;
                 anchors {
-                    left: icon.right;
-                    leftMargin: fakeTheme.paddingSmall;
+                    left: parent.left;
                     right: parent.right;
-                    top: parent.top;
-                    topMargin: fakeTheme.paddingSmall;
                     bottom: parent.bottom;
+                    margins: Constants.DefaultMargin;
+                    bottomMargin: Constants.DefaultMargin * 2;
                 }
+                height: font.pixelSize + Constants.DefaultMargin * 2;
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
                 text:{
                     var nameof = model.path.split("/")
                     var nameof1 = nameof[nameof.length - 1]
-
-                    var maxlength = 30
-                    if (page.width > page.height)
-                        maxlength = 70
-
-                    if (nameof1.length >= maxlength)
-                        return nameof1.substring(0,maxlength-10) + " ... " + nameof1.substring(nameof1.length-10,nameof1.length)
-                    else
-                        return nameof1
+                    if(model.is_dir) {
+                        return nameof1;
+                    }
+                    return "%1 (%2)".arg(nameof1).arg(model.size);
                 }
-                elide: Text.ElideRight;
+                elide: Text.ElideMiddle;
                 font: Settings.theme.font("templateLabel");
-                verticalAlignment: Text.AlignTop
-            }
-            Label {
-                anchors {
-                    left: icon.right;
-                    leftMargin: fakeTheme.paddingSmall;
-                    top: parent.top;
-                    bottom: parent.bottom;
-                    bottomMargin: fakeTheme.paddingSmall;
-                }
-                visible: !model.is_dir;
-                text: model.size;
-                font: Settings.theme.font("applicationLight");
-                color: fakeTheme.secondaryColor;
-                verticalAlignment: Text.AlignBottom
-            }
-            Label {
-                anchors {
-                    right: parent.right;
-                    rightMargin: fakeTheme.paddingLarge;
-                    top: parent.top;
-                    bottom: parent.bottom;
-                    bottomMargin: fakeTheme.paddingSmall;
-                }
-                width: parent.width / 2;
-                text: Qt.formatDate(model.modified.split("+")[0]);
-                font: Settings.theme.font("applicationLight");
-                color: fakeTheme.secondaryColor;
+                color: "#5b6573";
             }
             onClicked: {
                 if(model.is_dir)
@@ -148,88 +120,58 @@ Item {
         id: downloadStatus;
         ListView {
             id: filestransferListView
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                topMargin: Settings.theme.adjustedPixel(64);
+            }
             model: filesTransferModel
             delegate: Item {
                 width: downloadStatus.width
-                height: 60
+                height: childrenRect.height;
 
-                Rectangle {
+                Column {
                     id:rec_main
                     anchors.fill: parent
-                    anchors.leftMargin: -1
-                    anchors.rightMargin: -1
-                    anchors.bottomMargin: 0
-                    color: "transparent"
+                    spacing: Constants.DefaultMargin;
 
                     Image {
-                        id: i_right
-                        x:5
-                        anchors.verticalCenter: parent.verticalCenter
-                        //source: "imgs/file.png"
+                        id: i_fstatus
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        source: Settings.theme.icon("SVG-Icon-Cloud-1"); //is_download ? Settings.theme.image("SVG-Icon-Cloud-1") : "image://theme/icon-s-cloud-upload"
+                    }
+                    Item {
+                        width: parent.width;
+                        height: Constants.DefaultMargin;
                     }
 
                     Label {
                         id: l_name
-                        x: i_right.width + 10
-                        y:5
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        height: font.pixelSize;
                         text: {
-                            var filename1 = model.filename.split("/")
-                            var filename2 = filename1[filename1.length-1]
-
-                            var maxlength = 30
-                            if (downloadStatus.width > downloadStatus.height)
-                                maxlength = 70
-
-                            if (filename2.length >= maxlength)
-                                return filename2.substring(0,maxlength-10) + " ... " + filename2.substring(filename2.length-10,filename2.length)
-                            else
-                                return filename2
+                            var filename1 = model.filename.split("/");
+                            var filename2 = filename1[filename1.length-1];
+                            return filename2;
                         }
-                        font.pixelSize: 20
-                        //color:"black"
-                    }
-
-                    Label {
-                        id: l_status
-                        y: l_name.y + l_name.height
-                        x: i_right.width + 10
-                        visible: is_finished || in_queue
-                        text: {
-                            if (is_finished)
-                                return (completed ? "Completed":"Failed ("+(is_cancelled?"it was cancelled by user":"network error")+")")+" "+(completed?"("+date+")":"")
-                            else {
-                                var dropbox_path1 = dropbox_path
-                                var maxlength = 30
-                                if (downloadStatus.width > downloadStatus.height)
-                                    maxlength = 70
-                                if (dropbox_path && dropbox_path.length >= maxlength)
-                                    dropbox_path1 = dropbox_path.substring(0,maxlength-10) + " ... " + dropbox_path.substring(dropbox_path.length-10,dropbox_path.length)
-
-                                //return "Pending ("+(dropbox_path1?dropbox_path1:"/")+")"
-                                return model.size+" | Pending..." //size of download or upload file
-                            }
-
-                        }
-                        font.pixelSize: 18
-                        color: completed ? fakeTheme.highlightColor : fakeTheme.secondaryColor
+                        color: "black"
                     }
 
                     ProgressBar {
                         id: pb_updown
-                        y: l_name.y + l_name.height
-                        x: i_right.width + 10
+                        anchors.horizontalCenter: parent.horizontalCenter;
                         visible: !is_finished && !in_queue
                         width: parent.width - 120
+                        height: 18
                         progress: progressing
                     }
 
                     Label {
                         id: lb_updown_total
-                        y: pb_updown.y+pb_updown.height
-                        x: i_right.width + 10
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        height: visible ? font.pixelSize : 0;
                         visible: !is_finished && !in_queue
-                        font.pixelSize: 18
+                        font: Settings.theme.font("templateLabel");
+                        color: "#5b6573";
                         text:""
                     }
 
@@ -244,13 +186,6 @@ Item {
                             }
                         }
                     }
-
-                    Image {
-                        id: i_fstatus
-                        x:parent.width - 40
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: Settings.theme.icon("SVG-Icon-Cloud-1"); //is_download ? Settings.theme.image("SVG-Icon-Cloud-1") : "image://theme/icon-s-cloud-upload"
-                    }
                 }
             } //end filestransferDeligate
             onCountChanged: {
@@ -260,15 +195,18 @@ Item {
         } //end ListView
     }
 
-    ListView {
+    GridView {
         id: folderListView
         visible:false
+        clip: true;
+        contentWidth: width;
         anchors.fill: parent;
-        model: folderListModel
-        delegate: itemDelegate
+        cellWidth: width / 4 - Constants.DefaultMargin;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
+        model: folderListModel;
+        delegate: itemDelegate;
+        //section.property: "section"
         cacheBuffer: 1000
-        section.property: "section"
-        clip: true
         header: Item {
             id: pageHeader;
             height: currentDir !== "/" ? backToRootButton.height : 0;
@@ -282,7 +220,7 @@ Item {
                 width: page.width;
                 height: Settings.theme.adjustedPixel(64);
                 opacity: currentDir !== "/" ? 1 : 0;
-                Behavior on opacity{ PropertyAnimation{ duration: 150; } }
+                Behavior on opacity{ PropertyAnimation{ duration: Constants.AnimationDuration; } }
                 image: Settings.theme.icon("back");
                 imageMargin: Settings.theme.adjustedPixel(8);
                 text: "Back to parent folder"
@@ -292,6 +230,7 @@ Item {
                 }
             }
         }
+        ScrollDecorator { flickableItem: folderListView; }
     }
 
     Item {

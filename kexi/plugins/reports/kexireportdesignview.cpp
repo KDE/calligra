@@ -194,4 +194,3 @@ void KexiReportDesignView::triggerAction(const QString &action)
 {
     m_reportDesigner->slotItem(action);
 }
-

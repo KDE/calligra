@@ -303,6 +303,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 if (!(ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Home
                         || key == Qt::Key_End || key == Qt::Key_Down || key == Qt::Key_Up))
                         /* ^^ home/end/down/up are already handled by widgets */
+                        && !ke->isAccepted()
                         && d->dataAwareObject->handleKeyPress(
                             ke, curRow, curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
                     if (ke->isAccepted())
