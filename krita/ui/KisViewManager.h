@@ -214,7 +214,6 @@ public slots:
 
 signals:
 
-    void sigLoadingFinished();
     void sigSavingFinished();
     void floatingMessageRequested(QString message, QString iconName);
 

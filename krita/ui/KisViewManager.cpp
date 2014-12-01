@@ -721,12 +721,6 @@ void KisViewManager::slotLoadingFinished()
         image()->unlock();
     }
 
-    // get the assistants and push them to the manager
-    // XXX: KOMVC: assistants!!!
-    //    QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
-    //    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
-    //        m_d->paintingAssistantsDecoration->addAssistant(assistant);
-    //    }
 
     /**
      * Dirty hack alert
@@ -737,17 +731,19 @@ void KisViewManager::slotLoadingFinished()
     if (d->currentImageView && d->currentImageView->viewConverter())
         d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
+//    QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
+//    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+//        m_d->paintingAssistantsDecoration->addAssistant(assistant);
+//    }
 
-    //    if (m_d->paintingAssistantsDecoration){
-    //        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
-    //            m_d->paintingAssistantsDecoration->addAssistant(assist);
-    //        }
-    //        m_d->paintingAssistantsDecoration->setVisible(true);
-    //    }
+//    if (m_d->paintingAssistantsDecoration){
+//        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
+//            m_d->paintingAssistantsDecoration->addAssistant(assist);
+//        }
+//        m_d->paintingAssistantsDecoration->setVisible(true);
+//    }
 
     updateGUI();
-
-    emit sigLoadingFinished();
 }
 
 void KisViewManager::slotSavingFinished()
