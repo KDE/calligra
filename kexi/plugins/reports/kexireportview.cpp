@@ -168,7 +168,7 @@ KexiReportView::~KexiReportView()
 
 void KexiReportView::slotPrintReport()
 {
-    QPrinter printer;
+    QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
     KoReportRendererBase *renderer;
 
