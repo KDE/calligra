@@ -28,7 +28,7 @@
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include "KisViewManager.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "input/kis_input_manager.h"
 #include "input/kis_tablet_event.h"
 #include "krita_utils.h"
@@ -41,7 +41,7 @@ struct KisCanvasController::Private {
     {
     }
 
-    QPointer<KisImageView>view;
+    QPointer<KisView>view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
     KisPaintopTransformationConnector *paintOpTransformationConnector;
@@ -86,7 +86,7 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(QPointer<KisImageView>parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {

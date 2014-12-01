@@ -43,7 +43,7 @@ public:
 
     void setup(KActionCollection * collection);
 
-    void setView(QPointer<KisImageView>imageView);
+    void setView(QPointer<KisView>imageView);
 
 public slots:
 
@@ -82,7 +82,7 @@ private:
     KAction* m_gridFastConfig32x32;
     KAction* m_gridFastConfig64x64;
 
-    QPointer<KisImageView> m_imageView;
+    QPointer<KisView> m_imageView;
     KisGridDecoration* m_gridDecoration;
 };
 

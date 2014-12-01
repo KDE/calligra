@@ -38,7 +38,7 @@ class KisViewManager;
 class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
-class KisImageView;
+class KisView;
 
 class KisSelectionFilter;
 class KisSelectionDecoration;
@@ -60,7 +60,7 @@ public:
 
     void setup(KActionCollection * collection, KisActionManager* actionManager);
 
-    void setView(QPointer<KisImageView>imageView);
+    void setView(QPointer<KisView>imageView);
 
 public:
     /**
@@ -137,7 +137,7 @@ private:
 
     KisViewManager * m_view;
     KisDocument * m_doc;
-    QPointer<KisImageView>m_imageView;
+    QPointer<KisView>m_imageView;
     KisClipboard * m_clipboard;
 
     KisNodeCommandsAdapter* m_adapter;

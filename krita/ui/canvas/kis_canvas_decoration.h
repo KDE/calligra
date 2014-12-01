@@ -25,7 +25,7 @@
 #include <krita_export.h>
 #include <kis_image.h>
 #include <kis_canvas2.h>
-#include <kis_image_view.h>
+#include <KisView.h>
 
 class QPoint;
 class QRect;
@@ -44,10 +44,10 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject
 {
     Q_OBJECT
 public:
-    KisCanvasDecoration(const QString& id, QPointer<KisImageView>parent);
+    KisCanvasDecoration(const QString& id, QPointer<KisView>parent);
     ~KisCanvasDecoration();
 
-    void setView(QPointer<KisImageView> imageView);
+    void setView(QPointer<KisView> imageView);
 
     const QString& id() const;
 
@@ -76,12 +76,12 @@ protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
 
     /// XXX: unify view and imageview!
-    QPointer<KisImageView>imageView();
+    QPointer<KisView>imageView();
 
     /**
-     * @return the parent KisImageView
+     * @return the parent KisView
      */
-    QPointer<KisImageView> view() const;
+    QPointer<KisView> view() const;
 private:
     struct Private;
     Private* const d;

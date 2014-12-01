@@ -66,7 +66,7 @@
 #include "kis_transaction.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 struct KisNodeManager::Private {
 
@@ -88,7 +88,7 @@ struct KisNodeManager::Private {
 
     KisNodeManager *q;
     KisViewManager * view;
-    QPointer<KisImageView>imageView;
+    QPointer<KisView>imageView;
     KisLayerManager * layerManager;
     KisMaskManager * maskManager;
     KisNodeManager* self;
@@ -184,7 +184,7 @@ KisNodeManager::~KisNodeManager()
     delete m_d;
 }
 
-void KisNodeManager::setView(QPointer<KisImageView>imageView)
+void KisNodeManager::setView(QPointer<KisView>imageView)
 {
     m_d->maskManager->setView(imageView);
     m_d->layerManager->setView(imageView);

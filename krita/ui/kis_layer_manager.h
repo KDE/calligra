@@ -23,7 +23,7 @@
 #include <QList>
 
 #include "kis_types.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class KAction;
 class QAction;
@@ -50,7 +50,7 @@ public:
 
     KisLayerManager(KisViewManager * view);
     ~KisLayerManager();
-    void setView(QPointer<KisImageView>view);
+    void setView(QPointer<KisView>view);
 
 signals:
 
@@ -123,7 +123,7 @@ private:
 private:
 
     KisViewManager * m_view;
-    QPointer<KisImageView>m_imageView;
+    QPointer<KisView>m_imageView;
 
     KisAction *m_imageFlatten;
     KisAction *m_imageMergeLayer;

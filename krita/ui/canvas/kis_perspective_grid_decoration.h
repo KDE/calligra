@@ -26,14 +26,14 @@
 #include "kis_canvas_decoration.h"
 #include <krita_export.h>
 
-class KisImageView;
+class KisView;
 
 class KRITAUI_EXPORT KisPerspectiveGridDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 
 public:
-    KisPerspectiveGridDecoration(QPointer<KisImageView> parent);
+    KisPerspectiveGridDecoration(QPointer<KisView> parent);
     virtual ~KisPerspectiveGridDecoration();
 
 protected:

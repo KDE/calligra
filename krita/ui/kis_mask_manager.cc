@@ -50,7 +50,7 @@
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_selection_commands.h"
 #include "kis_iterator_ng.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 KisMaskManager::KisMaskManager(KisViewManager * view)
     : m_view(view)
@@ -59,7 +59,7 @@ KisMaskManager::KisMaskManager(KisViewManager * view)
 {
 }
 
-void KisMaskManager::setView(QPointer<KisImageView>imageView)
+void KisMaskManager::setView(QPointer<KisView>imageView)
 {
     m_imageView = imageView;
 }

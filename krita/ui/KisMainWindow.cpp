@@ -104,7 +104,7 @@
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
@@ -656,27 +656,23 @@ void KisMainWindow::addView(KisView *view)
 
 }
 
-void KisMainWindow::showView(KisView *view)
+void KisMainWindow::showView(KisView *imageView)
 {
-    //qDebug() << "showView" << view << activeView();
-
-    QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
-    if (imageView && activeView() != view) {
+    if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
         imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
-        view->guiActivateEvent(true);
 
-        QMdiSubWindow *subwin = m_mdiArea->addSubWindow(view);
+        QMdiSubWindow *subwin = m_mdiArea->addSubWindow(imageView);
         subwin->setWindowIcon(QIcon(imageView->document()->generatePreview(QSize(64,64))));
-        subwin->setWindowTitle(view->document()->url().fileName());
+        subwin->setWindowTitle(imageView->document()->url().fileName());
         if (m_mdiArea->subWindowList().size() == 1) {
-            view->showMaximized();
+            imageView->showMaximized();
         }
         else {
-            view->show();
+            imageView->show();
         }
 
-        setActiveView(view);
+        setActiveView(imageView);
         updateWindowMenu();
     }
 }
@@ -2083,7 +2079,7 @@ void KisMainWindow::updateWindowMenu()
 
     QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
     for (int i = 0; i < windows.size(); ++i) {
-        QPointer<KisImageView>child = qobject_cast<KisImageView*>(windows.at(i)->widget());
+        QPointer<KisView>child = qobject_cast<KisView*>(windows.at(i)->widget());
         if (child) {
             QString text;
             if (i < 9) {
@@ -2116,7 +2112,6 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //qDebug() << "\t" << view << activeView();
         if (view && view != activeView()) {
-            view->guiActivateEvent(true);
             m_guiClient->setCurrentView(view);
             setActiveView(view);
         }
@@ -2162,13 +2157,13 @@ void KisMainWindow::showAboutApplication()
     dlg.exec();
 }
 
-QPointer<KisImageView>KisMainWindow::activeKisView()
+QPointer<KisView>KisMainWindow::activeKisView()
 {
     if (!m_mdiArea) return 0;
     QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow();
     //qDebug() << "activeKisView" << activeSubWindow;
     if (!activeSubWindow) return 0;
-    return qobject_cast<KisImageView*>(activeSubWindow->widget());
+    return qobject_cast<KisView*>(activeSubWindow->widget());
 }
 
 #include <KisMainWindow.moc>

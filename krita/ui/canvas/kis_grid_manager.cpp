@@ -34,7 +34,7 @@
 #include "kis_image.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
 {
@@ -114,7 +114,7 @@ void KisGridManager::updateGUI()
 
 }
 
-void KisGridManager::setView(QPointer< KisImageView > imageView)
+void KisGridManager::setView(QPointer< KisView > imageView)
 {
     if (m_imageView) {
         m_toggleGrid->disconnect();

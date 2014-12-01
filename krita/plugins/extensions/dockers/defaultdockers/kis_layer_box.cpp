@@ -74,7 +74,7 @@
 #include "kis_shape_controller.h"
 #include "kis_selection_mask.h"
 #include "kis_config.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 #include "ui_wdglayerbox.h"
 

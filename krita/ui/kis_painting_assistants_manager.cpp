@@ -19,7 +19,7 @@
 
 #include "kis_painting_assistants_manager.h"
 #include "kis_painting_assistants_decoration.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "KisViewManager.h"
 
 #include <klocale.h>
@@ -50,7 +50,7 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
     updateAction();
 }
 
-void KisPaintingAssistantsManager::setView(QPointer<KisImageView> imageView)
+void KisPaintingAssistantsManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
         m_toggleAssistant->disconnect();

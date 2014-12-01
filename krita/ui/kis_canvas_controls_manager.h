@@ -28,7 +28,7 @@
 class KisViewManager;
 class KisActionManager;
 class KActionCollection;
-class KisImageView;
+class KisView;
 
 class KRITAUI_EXPORT KisCanvasControlsManager: public QObject
 {
@@ -39,7 +39,7 @@ public:
     virtual ~KisCanvasControlsManager();
 
     void setup(KActionCollection *actionCollection, KisActionManager *actionManager);
-    void setView(QPointer<KisImageView>imageView);
+    void setView(QPointer<KisView>imageView);
 
 private slots:
     void makeColorLighter();

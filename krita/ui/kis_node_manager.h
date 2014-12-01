@@ -36,7 +36,7 @@ class KisFilterStrategy;
 class KisViewManager;
 class KisFilterConfiguration;
 class KisActionManager;
-class KisImageView;
+class KisView;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -52,7 +52,7 @@ public:
     KisNodeManager(KisViewManager * view);
     ~KisNodeManager();
     
-    void setView(QPointer<KisImageView>imageView);
+    void setView(QPointer<KisView>imageView);
 
 signals:
 

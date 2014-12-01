@@ -33,7 +33,7 @@
 #include "KisDocument.h"
 #include "KisPart.h"
 #include "KisViewManager.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_coordinates_converter.h"
@@ -58,7 +58,7 @@ public:
         m_doc->setCurrentImage(m_image);
 
         m_mainWindow = m_doc->documentPart()->createMainWindow();
-        m_view = new KisImageView(m_part, m_doc, m_mainWindow->actionCollection(), m_mainWindow);
+        m_view = new KisView(m_part, m_doc, m_mainWindow->actionCollection(), m_mainWindow);
 
         m_image->refreshGraph();
 
@@ -81,7 +81,7 @@ public:
         QApplication::removePostedEvents(0);
     }
 
-    QPointer<KisImageView> view() {
+    QPointer<KisView> view() {
         return m_view;
     }
 
@@ -118,7 +118,7 @@ private:
     KisImageSP m_image;
     KisPart *m_part;
     KisDocument *m_doc;
-    QPointer<KisImageView>m_view;
+    QPointer<KisView>m_view;
     KisMainWindow *m_mainWindow;
 };
 

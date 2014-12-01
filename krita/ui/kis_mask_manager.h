@@ -22,7 +22,7 @@
 #include <QPointer>
 
 #include "kis_types.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class KisViewManager;
 class KActionCollection;
@@ -47,7 +47,7 @@ public:
 
     KisMaskManager(KisViewManager * view);
     ~KisMaskManager() {}
-    void setView(QPointer<KisImageView>view);
+    void setView(QPointer<KisView>view);
 
 private:
     
@@ -129,7 +129,7 @@ private:
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 
     KisViewManager * m_view;
-    QPointer<KisImageView>m_imageView;
+    QPointer<KisView>m_imageView;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

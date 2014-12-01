@@ -56,7 +56,7 @@
 #include <QApplication>
 #include <QGraphicsProxyWidget>
 
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "KisDocument.h"
 #include "kis_factory2.h"
 #include "kis_config.h"
@@ -205,8 +205,6 @@ void KisPart::addView(KisView *view, KisDocument *document)
     }
 
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-
-    view->updateReadWrite(document->isReadWrite());
 
     if (d->views.size() == 1) {
         KisApplication *app = qobject_cast<KisApplication*>(KApplication::kApplication());
@@ -553,7 +551,7 @@ void KisPart::setComponentData(const KComponentData &componentData)
 KisView *KisPart::createViewInstance(KisDocument *document, KisMainWindow *parent)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QPointer<KisImageView>v = new KisImageView(this, document, parent->actionCollection(), parent);
+    QPointer<KisView>v = new KisView(this, document, parent->actionCollection(), parent);
 
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.

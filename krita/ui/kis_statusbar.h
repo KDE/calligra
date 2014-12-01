@@ -23,7 +23,7 @@
 #include <QPointer>
 
 #include <kis_types.h>
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class QLabel;
 class QToolButton;
@@ -42,7 +42,7 @@ public:
     KisStatusBar(KisViewManager * view);
     ~KisStatusBar();
 
-    void setView(QPointer<KisImageView> imageView);
+    void setView(QPointer<KisView> imageView);
 
     KisProgressWidget *progress();
 
@@ -62,7 +62,7 @@ private slots:
 private:
 
     KisViewManager * m_view;
-    QPointer<KisImageView> m_imageView;
+    QPointer<KisView> m_imageView;
     KisProgressWidget * m_progress;
 
     QToolButton *m_selectionStatus;

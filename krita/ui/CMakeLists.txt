@@ -317,7 +317,6 @@ set(kritaui_LIB_SRCS
     thememanager.cpp
 
 # build these last for now
-    kis_image_view.cpp
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
 )

@@ -22,25 +22,42 @@
 #define __koView_h__
 
 #include <QWidget>
+
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+
+#include <kis_types.h>
 #include "krita_export.h"
 
 class KisPart;
 class KisDocument;
 class KisMainWindow;
 class KisPrintJob;
-class KisViewPrivate;
+class KisCanvasController;
+class KisZoomManager;
+class KisCanvas2;
+class KisViewManager;
+class KisDocument;
+class KisCanvasResourceProvider;
+class KisCoordinatesConverter;
+
+class KoZoomController;
+class KoZoomManager;
 class KoZoomController;
 struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
 class KAction;
+class KActionCollection;
 
 // Qt classes
 class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;
+class QCloseEvent;
+
 
 /**
  * This class is used to display a @ref KisDocument.
@@ -53,48 +70,17 @@ class KRITAUI_EXPORT KisView : public QWidget
 
 public:
     /**
-     * Creates a new view for the document. Usually you don't create views yourself
-     * since the Calligra components come with their own view classes which inherit
-     * KisView.
-     *
-     * The standard way to create a KisView is to call @ref KisPart::createView.
-     *
-     * @param document is the document which should be displayed in this view. This pointer
-     *                 must not be zero.
-     * @param parent   parent widget for this view.
+     * Creates a new view for the document.
      */
-    KisView(KisPart *part, KisDocument *document, QWidget *parent = 0);
-
-    /**
-     * Destroys the view and unregisters at the document.
-     */
-    virtual ~KisView();
+    KisView(KisPart *part, KisDocument *document, KActionCollection *actionCollection, QWidget *parent = 0);
+virtual ~KisView();
 
     KAction *undoAction() const;
     KAction *redoAction() const;
 
-    // QWidget overrides
-protected:
-
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-
-    /**
-     * dropEvent by default calls addImages. Your KisView subclass might
-     * override dropEvent and if your app can also handle images, call this
-     * method.
-     */
-    virtual void dropEvent(QDropEvent * event);
-
-    // KisView api
-
-    /**
-     * Adds the given list of QImages as imageshapes to the view's document.
-     *
-     * @param imageList: a list of QImages that can be inserted
-     * @param insertPosition: the position in screen pixels where the images
-     * can be inserted.
-     */
-    virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+    // Temporary while teasing apart view and mainwindow
+    void setViewManager(KisViewManager *view);
+    KisViewManager *viewManager() const;
 
 public:
 
@@ -118,7 +104,7 @@ public:
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
      */
-    virtual KisPrintJob * createPrintJob() = 0;
+    virtual KisPrintJob * createPrintJob();
 
     /**
      * In order to export the document represented by this view a new print job should
@@ -168,23 +154,52 @@ public:
     void removeStatusBarItem(QWidget * widget);
 
     /**
-     * You have to implement this method and disable/enable certain functionality (actions for example) in
-     * your view to allow/disallow editing of the document.
-     */
-    virtual void updateReadWrite(bool readwrite) = 0;
-
-    /**
      * Return the zoomController for this view.
      */
-    virtual KoZoomController *zoomController() const = 0;
+    virtual KoZoomController *zoomController() const;
 
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
 
+public:
+
     /**
-     * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.
+     * The zoommanager handles everything action-related to zooming
      */
-    virtual void guiActivateEvent(bool activated);
+    KisZoomManager *zoomManager() const;
+
+    /**
+     * The CanvasController decorates the canvas with scrollbars
+     * and knows where to start painting on the canvas widget, i.e.,
+     * the document offset.
+     */
+    KisCanvasController *canvasController() const;
+    KisCanvasResourceProvider *resourceProvider() const;
+
+    /**
+     * @return the canvas object
+     */
+    KisCanvas2 *canvasBase() const;
+
+    /// @return the image this view is displaying
+    KisImageWSP image() const;
+
+
+    KisCoordinatesConverter *viewConverter() const;
+
+    void resetImageSizeAndScroll(bool changeCentering,
+                                 const QPointF oldImageStillPoint = QPointF(),
+                                 const QPointF newImageStillPoint = QPointF());
+
+    void setCurrentNode(KisNodeSP node);
+    KisNodeSP currentNode() const;
+    KisLayerSP currentLayer() const;
+    KisMaskSP currentMask() const;
+
+    /// Convenience method to get at the active selection (the
+    /// selection of the current layer, or, if that does not exist,
+    /// the global selection.
+    KisSelectionSP selection();
 
 public slots:
 
@@ -200,15 +215,35 @@ public slots:
      */
     void slotClearStatusText();
 
+
+signals:
+    // From KisImage
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+    void sigProfileChanged(const KoColorProfile *  profile);
+    void sigColorSpaceChanged(const KoColorSpace*  cs);
+
 protected:
+
+    // QWidget overrides
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+    virtual bool event( QEvent* event );
+    virtual void closeEvent(QCloseEvent *event);
 
     /**
      * Generate a name for this view.
      */
     QString newObjectName();
 
+private slots:
+    void slotLoadingFinished();
+
 private:
-    KisViewPrivate * const d;
+
+    bool queryClose();
+
+    class Private;
+    Private * const d;
 };
 
 #endif

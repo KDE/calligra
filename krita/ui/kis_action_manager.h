@@ -24,7 +24,7 @@
 
 #include <QPointer>
 
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class KActionCollection;
 class KisViewManager;
@@ -40,7 +40,7 @@ public:
     KisActionManager(KisViewManager* view);
     virtual ~KisActionManager();
 
-    void setView(QPointer<KisImageView> imageView);
+    void setView(QPointer<KisView> imageView);
     
     void addAction(const QString& name, KisAction* action, KActionCollection* actionCollection);
     void takeAction(KisAction* action, KActionCollection *actionCollection);

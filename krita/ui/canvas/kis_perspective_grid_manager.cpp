@@ -33,7 +33,7 @@
 #include "kis_perspective_grid.h"
 #include "KisViewManager.h"
 #include "kis_perspective_grid_decoration.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 
 /***************************************************************/
@@ -102,7 +102,7 @@ void KisPerspectiveGridManager::stopEdition()
     updateGUI();
 }
 
-void KisPerspectiveGridManager::setView(QPointer<KisImageView> imageView)
+void KisPerspectiveGridManager::setView(QPointer<KisView> imageView)
 {
     m_toggleGrid->disconnect();
 

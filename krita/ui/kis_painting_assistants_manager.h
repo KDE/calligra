@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class KisViewManager;
 class KToggleAction;
@@ -41,7 +41,7 @@ public:
 
     void setup(KActionCollection* collection);
 
-    void setView(QPointer<KisImageView> imageView);
+    void setView(QPointer<KisView> imageView);
 
 private slots:
     void updateAction();
@@ -49,7 +49,7 @@ private slots:
 private:
     KisPaintingAssistantsDecoration* decoration();
     
-    QPointer<KisImageView> m_imageView;
+    QPointer<KisView> m_imageView;
     KToggleAction* m_toggleAssistant;
     KToggleAction* m_togglePreview;
 };

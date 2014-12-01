@@ -66,7 +66,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -246,7 +246,7 @@ KisLayerManager::~KisLayerManager()
     delete m_commandsAdapter;
 }
 
-void KisLayerManager::setView(QPointer<KisImageView>view)
+void KisLayerManager::setView(QPointer<KisView>view)
 {
     m_imageView = view;
 }

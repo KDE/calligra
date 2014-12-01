@@ -81,7 +81,7 @@
 #include "KisViewManager.h"
 #include "kis_selection_filters.h"
 #include "kis_figure_painting_tool_helper.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 #include "actions/kis_selection_action_factories.h"
 #include "kis_action.h"
@@ -259,7 +259,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 }
 
 
-void KisSelectionManager::setView(QPointer<KisImageView>imageView)
+void KisSelectionManager::setView(QPointer<KisView>imageView)
 {
     if (m_imageView && m_imageView->canvasBase()) {
         KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();

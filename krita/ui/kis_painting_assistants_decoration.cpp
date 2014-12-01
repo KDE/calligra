@@ -36,7 +36,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool outlineVisible;
 };
 
-KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisImageView> parent) :
+KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
         KisCanvasDecoration("paintingAssistantsDecoration", parent),
         d(new Private)
 {

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOPRINTJOB_H
-#define KOPRINTJOB_H
+#ifndef KISPRINTJOB_H
+#define KISPRINTJOB_H
 
 #include <QObject>
 #include <QList>

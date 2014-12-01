@@ -120,7 +120,7 @@
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "kis_zoom_manager.h"
 
 #include <QPoint>
@@ -285,7 +285,7 @@ public:
     QMainWindow* mainWindow;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
-    QPointer<KisImageView> currentImageView;
+    QPointer<KisView> currentImageView;
     KisCanvasResourceProvider* canvasResourceProvider;
     KoCanvasResourceManager* canvasResourceManager;
     QList<StatusBarItem> statusBarItems;
@@ -448,7 +448,7 @@ void KisViewManager::setCurrentView(KisView *view)
         resourceProvider()->disconnect(d->currentImageView->canvasBase());
     }
 
-    QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
+    QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
 
@@ -867,7 +867,7 @@ void KisViewManager::createManagers()
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionCollection(), actionManager());
 
-    // XXX: KOMVC: move mirror decoration to KisImageView, create a manager for it???
+    // XXX: KOMVC: move mirror decoration to KisView, create a manager for it???
     //    m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
     //    m_d->canvas->addDecoration(m_d->mirrorAxis);
 }

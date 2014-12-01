@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include "kis_perspective_grid.h"
 #include "canvas/kis_grid_painter_configuration.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 /***************************************************************/
 /*                 Auxiliary line structures                   */
@@ -120,7 +120,7 @@ struct KisPerspectiveGridDecoration::SubdivisionLinesInfo {
     int numSubdivisions;
 };
 
-KisPerspectiveGridDecoration::KisPerspectiveGridDecoration(QPointer<KisImageView> parent)
+KisPerspectiveGridDecoration::KisPerspectiveGridDecoration(QPointer<KisView> parent)
     : KisCanvasDecoration("perspectiveGrid", parent)
 {
 }

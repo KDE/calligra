@@ -38,7 +38,7 @@
 #include <kis_paint_device.h>
 #include <kis_selection_manager.h>
 
-#include <kis_image_view.h>
+#include <KisView.h>
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
@@ -105,7 +105,7 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_progress);
 }
 
-void KisStatusBar::setView(QPointer<KisImageView> imageView)
+void KisStatusBar::setView(QPointer<KisView> imageView)
 {
     if (m_imageView == imageView) {
         return;

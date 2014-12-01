@@ -28,7 +28,7 @@ class KisViewManager;
 class KisDocument;
 class KActionCollection;
 class KisActionManager;
-class KisImageView;
+class KisView;
 
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
@@ -42,7 +42,7 @@ public:
 
     KisFilterManager(KisViewManager * parent);
     ~KisFilterManager();
-    void setView(QPointer<KisImageView>imageView);
+    void setView(QPointer<KisView>imageView);
 
     void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();

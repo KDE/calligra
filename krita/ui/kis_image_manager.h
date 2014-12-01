@@ -28,7 +28,7 @@ class KisViewManager;
 class KActionCollection;
 class KisFilterStrategy;
 class KisActionManager;
-class KisImageView;
+class KisView;
 
 class KRITAUI_EXPORT KisImageManager : public QObject
 {
@@ -41,7 +41,7 @@ public:
     KisImageManager(KisViewManager * view);
     ~KisImageManager() {}
 
-    void setView(QPointer<KisImageView>imageView);
+    void setView(QPointer<KisView>imageView);
     void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
 
 public slots:

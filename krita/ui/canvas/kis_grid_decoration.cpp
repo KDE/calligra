@@ -28,7 +28,7 @@
 #include "kis_grid_painter_configuration.h"
 #include "kis_config.h"
 
-KisGridDecoration::KisGridDecoration(KisImageView* parent) : KisCanvasDecoration("grid", parent)
+KisGridDecoration::KisGridDecoration(KisView* parent) : KisCanvasDecoration("grid", parent)
 {
 
 }

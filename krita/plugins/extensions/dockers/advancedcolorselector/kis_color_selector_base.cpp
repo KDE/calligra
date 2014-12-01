@@ -36,7 +36,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_node.h"
 #include "KisViewManager.h"
-#include <kis_image_view.h>
+#include <KisView.h>
 #include "kis_image.h"
 #include "kis_display_color_converter.h"
 

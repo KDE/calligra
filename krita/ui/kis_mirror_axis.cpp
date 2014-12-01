@@ -35,7 +35,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "kis_image.h"
 #include "canvas/kis_canvas_controller.h"
 #include "input/kis_input_manager.h"
@@ -85,7 +85,7 @@ public:
     bool verticalContainsCursor;
 };
 
-KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisImageView>parent)
+KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisView>parent)
     : KisCanvasDecoration("mirror_axis", parent)
     , d(new Private(this))
 {

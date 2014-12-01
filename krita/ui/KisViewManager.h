@@ -32,7 +32,7 @@
 #include <kis_types.h>
 
 #include "kis_floating_message.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class KisAction;
 class QPoint;

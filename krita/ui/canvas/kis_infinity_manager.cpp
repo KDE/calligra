@@ -32,10 +32,10 @@
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_canvas_controller.h>
-#include <kis_image_view.h>
+#include <KisView.h>
 #include <kis_algebra_2d.h>
 
-KisInfinityManager::KisInfinityManager(QPointer<KisImageView>view, KisCanvas2 *canvas)
+KisInfinityManager::KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas)
   : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
     m_filteringEnabled(false),
     m_cursorSwitched(false),

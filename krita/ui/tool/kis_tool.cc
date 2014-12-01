@@ -70,7 +70,7 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
 #include "kis_resources_snapshot.h"
-#include <kis_image_view.h>
+#include <KisView.h>
 
 
 struct KisTool::Private {

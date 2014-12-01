@@ -30,7 +30,7 @@
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
-#include "kis_image_view.h"
+#include "KisView.h"
 
 class QMdiArea;
 class QSignalMapper;
@@ -51,7 +51,7 @@ class KoDockFactoryBase;
 class KRecentFilesAction;
 class QDockWidget;
 class KisViewManager;
-class KisImageView;
+class KisView;
 
 
 // Calligra class but not in main module
@@ -471,7 +471,7 @@ private:
 
     KisMainWindowPrivate * const d;
 
-    QPointer<KisImageView>activeKisView();
+    QPointer<KisView>activeKisView();
 
     bool m_constructing;
 

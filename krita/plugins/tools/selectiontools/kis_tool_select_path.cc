@@ -28,7 +28,7 @@
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
-#include <kis_image_view.h>
+#include <KisView.h>
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)

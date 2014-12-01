@@ -61,7 +61,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_display_color_converter.h"
 #include "kis_exposure_gamma_correction_interface.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "kis_canvas_controller.h"
 
 #include "opengl/kis_opengl_canvas2.h"
@@ -81,7 +81,7 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisImageView> view)
+    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view)
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
@@ -100,7 +100,7 @@ public:
     }
 
     KisCoordinatesConverter *coordinatesConverter;
-    QPointer<KisImageView>view;
+    QPointer<KisView>view;
     KisAbstractCanvasWidget *canvasWidget;
     KoShapeManager *shapeManager;
     bool currentCanvasIsOpenGL;
@@ -125,7 +125,7 @@ public:
     KisDisplayColorConverter *displayColorConverter;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, QPointer<KisImageView>view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
@@ -710,7 +710,7 @@ KisViewManager* KisCanvas2::viewManager() const
     return 0;
 }
 
-QPointer<KisImageView>KisCanvas2::imageView() const
+QPointer<KisView>KisCanvas2::imageView() const
 {
     return m_d->view;
 }

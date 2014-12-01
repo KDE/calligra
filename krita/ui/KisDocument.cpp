@@ -889,12 +889,6 @@ void KisDocument::setReadWrite(bool readwrite)
     d->readwrite = readwrite;
     setAutoSave(d->autoSaveDelay);
 
-
-    // XXX: this doesn't belong in KisDocument
-    foreach(KisView *view, d->parentPart->views()) {
-        view->updateReadWrite(readwrite);
-    }
-
     foreach(KisMainWindow *mainWindow, d->parentPart->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
     }
@@ -2804,8 +2798,7 @@ vKisNodeSP KisDocument::activeNodes() const
 QList<KisPaintingAssistant*> KisDocument::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KisView *v, documentPart()->views()) {
-        KisImageView *view = qobject_cast<KisImageView*>(v);
+    foreach(KisView *view, documentPart()->views()) {
         if (view && view->document() == this) {
             KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
             assistants.append(assistantsDecoration->assistants());

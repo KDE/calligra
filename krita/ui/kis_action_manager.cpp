@@ -38,7 +38,7 @@ public:
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
-    QPointer<KisImageView> imageView;
+    QPointer<KisView> imageView;
 };
 
 KisActionManager::KisActionManager(KisViewManager* view) : d(new Private)
@@ -52,7 +52,7 @@ KisActionManager::~KisActionManager()
     delete d;
 }
 
-void KisActionManager::setView(QPointer<KisImageView> imageView)
+void KisActionManager::setView(QPointer<KisView> imageView)
 {
     d->imageView = imageView;
 }

@@ -85,7 +85,7 @@ KisFilterManager::~KisFilterManager()
     delete d;
 }
 
-void KisFilterManager::setView(QPointer<KisImageView>imageView)
+void KisFilterManager::setView(QPointer<KisView>imageView)
 {
     Q_UNUSED(imageView);
 }

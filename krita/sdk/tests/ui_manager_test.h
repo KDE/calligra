@@ -29,7 +29,7 @@
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
 #include "KisViewManager.h"
-#include "kis_image_view.h"
+#include "KisView.h"
 #include "KisPart.h"
 #include <KisDocument.h>
 #include <KisPart.h>
@@ -61,7 +61,7 @@ public:
         QVERIFY(checkLayersInitial());
 
         mainWindow = new KisMainWindow(part, doc->documentPart()->componentData());
-        imageView = new KisImageView(doc->documentPart(), doc, mainWindow->actionCollection(), mainWindow);
+        imageView = new KisView(doc->documentPart(), doc, mainWindow->actionCollection(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
@@ -161,7 +161,7 @@ public:
     KisSurrogateUndoStore *undoStore;
 
 protected:
-    KisImageView *imageView;
+    KisView *imageView;
     KisViewManager *view;
     KisDocument *doc;
     KisPart *part;
