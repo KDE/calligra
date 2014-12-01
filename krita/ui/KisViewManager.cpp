@@ -1077,7 +1077,6 @@ void KisViewManager::slotSaveIncremental()
     document()->saveAs(fileName);
     document()->setSaveInBatchMode(false);
 
-    emit sigSavingFinished();
     if (mainWindow()) {
         mainWindow()->updateCaption();
     }
@@ -1148,7 +1147,6 @@ void KisViewManager::slotSaveIncrementalBackup()
         QFile::copy(fileName, backupFileName);
         document()->saveAs(fileName);
 
-        emit sigSavingFinished();
         if (mainWindow()) mainWindow()->updateCaption();
     }
     else { // if NOT working on a backup...
@@ -1188,7 +1186,6 @@ void KisViewManager::slotSaveIncrementalBackup()
         document()->saveAs(fileName);
         document()->setSaveInBatchMode(false);
 
-        emit sigSavingFinished();
         if (mainWindow()) mainWindow()->updateCaption();
     }
 }
