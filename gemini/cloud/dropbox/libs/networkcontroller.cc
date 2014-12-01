@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QSslError>
+#include <QMessageBox>
 
 NetworkController::NetworkController(QObject *parent) :
     QObject(parent),
@@ -92,7 +93,14 @@ void NetworkController::sslErrors(QNetworkReply *reply, const QList<QSslError> &
     }
 
     if(errorDescription.length() > 0) {
-        emit network_error(QString("An error occured when attempting to make a secure connection:%1").arg(errorDescription));
+        QString error = QString("An error occured when attempting to make a secure connection:%1").arg(errorDescription);
+        QMessageBox::StandardButton result = QMessageBox::question(0, "Error establishing secure connection.", QString("%1\n Do you wish to continue?").arg(error), QMessageBox::Yes | QMessageBox::No);
+
+        if(result == QMessageBox::Yes) {
+            reply->ignoreSslErrors(errors);
+        } else {
+            emit network_error(error);
+        }
     } else {
         // This may seem weird, but apparently NoError is reported sometimes as
         // an error... so we need to ignore it.

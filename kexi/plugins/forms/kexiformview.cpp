@@ -204,6 +204,7 @@ KexiFormView::~KexiFormView()
     }
     deleteQuery();
     propertySetSwitched();
+    delete d;
 }
 
 void
