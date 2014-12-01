@@ -253,8 +253,6 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
-// XXX: KOMVC
-//    connect(m_view->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
 
 }
 
@@ -262,6 +260,8 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 void KisSelectionManager::setView(QPointer<KisView>imageView)
 {
     if (m_imageView && m_imageView->canvasBase()) {
+        disconnect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+
         KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();
         selection->disconnect(this, SLOT(shapeSelectionChanged()));
         KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
@@ -287,6 +287,8 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
         m_selectionDecoration = decoration;
         connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
         connect(m_imageView->image()->undoAdapter(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
+        connect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
+
     }
 }
 
