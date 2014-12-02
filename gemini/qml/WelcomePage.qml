@@ -26,6 +26,15 @@ Page {
     DocumentListModel { id: allDocumentsModel; }
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
+    Component.onCompleted: {
+        if(RecentFileManager.size() > 0) {
+            for(var i = 1; i < sidebarList.count; i++) {
+                sidebarList.setProperty(i, "selected", false);
+            }
+            sidebarList.setProperty(0, "selected", true);
+            welcomeStack.replace(welcomePageRecent);
+        }
+    }
     Item {
         id: welcomeToolbar;
         anchors {
