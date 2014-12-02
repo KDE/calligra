@@ -67,7 +67,23 @@ Item {
                 fillMode: Image.PreserveAspectFit;
                 smooth: true;
                 asynchronous: true;
-                source: model.is_dir ? Settings.theme.icon("layer_group-black") : Settings.theme.icon("A4portrait-black");
+                function iconFromDocumentClass(documentClass) {
+                    switch(documentClass) {
+                        case DocumentListModel.PresentationType:
+                            return Settings.theme.icon("SVG-Icon-NewPresentation-1");
+                            break;
+                        case DocumentListModel.TextDocumentType:
+                            return Settings.theme.icon("SVG-Icon-NewDocument-1");
+                            break;
+                        case DocumentListModel.SpreadsheetType:
+                            return Settings.theme.icon("SVG-Icon-NewSpreadsheet-1");
+                            break;
+                        default:
+                            return Settings.theme.icon("SVG-Icon-Cloud-1");
+                            break;
+                    }
+                }
+                source: model.is_dir ? Settings.theme.icon("layer_group-black") : iconFromDocumentClass(Settings.mimeTypeToDocumentClass(model.mime_type));
                 sourceSize.width: width;
                 sourceSize.height: height;
             }
@@ -221,9 +237,10 @@ Item {
                 height: Settings.theme.adjustedPixel(64);
                 opacity: currentDir !== "/" ? 1 : 0;
                 Behavior on opacity{ PropertyAnimation{ duration: Constants.AnimationDuration; } }
-                image: Settings.theme.icon("back");
+                image: Settings.theme.icon("SVG-Icon-MenuBack-1");
                 imageMargin: Settings.theme.adjustedPixel(8);
                 text: "Back to parent folder"
+                textColor: "#5B6573";
                 onClicked: {
                     controllerMIT.backtoRootDir()
                     controllerMIT.getlistoffolder()

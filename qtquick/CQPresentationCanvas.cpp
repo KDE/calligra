@@ -217,6 +217,30 @@ void CQPresentationCanvas::deselectEverything()
     d->canvasBase->shapeManager()->selection()->deselectAll();
 }
 
+qreal CQPresentationCanvas::shapeTransparency() const
+{
+    if (d->canvasBase && d->canvasBase->shapeManager()) {
+        KoShape* shape = d->canvasBase->shapeManager()->selection()->firstSelectedShape();
+        if (shape) {
+            return shape->transparency();
+        }
+    }
+    return CQCanvasBase::shapeTransparency();
+}
+
+void CQPresentationCanvas::setShapeTransparency(qreal newTransparency)
+{
+    if (d->canvasBase && d->canvasBase->shapeManager()) {
+        KoShape* shape = d->canvasBase->shapeManager()->selection()->firstSelectedShape();
+        if (shape) {
+            if (!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
+                shape->setTransparency(newTransparency);
+                CQCanvasBase::setShapeTransparency(newTransparency);
+            }
+        }
+    }
+}
+
 void CQPresentationCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();

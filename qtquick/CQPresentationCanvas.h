@@ -59,6 +59,9 @@ public:
     // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
 
+    virtual qreal shapeTransparency() const;
+    virtual void setShapeTransparency(qreal newTransparency);
+
 Q_SIGNALS:
     void currentSlideChanged();
     void linkTargetsChanged();
