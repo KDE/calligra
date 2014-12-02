@@ -589,6 +589,12 @@ KisDocument::KisDocument(const KisPart *parent)
 
 KisDocument::~KisDocument()
 {
+    /**
+     * Push a timebomb, which will try to release the memory after
+     * the document has been deleted
+     */
+    KisPaintDevice::createMemoryReleaseObject()->deleteLater();
+
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
 

@@ -270,7 +270,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
-    kis_mirror_axis.cpp
+    canvas/kis_mirror_axis.cpp
 
     kis_animation_frame.cpp
     kis_animation_layer.cpp
@@ -316,9 +316,9 @@ set(kritaui_LIB_SRCS
 
     thememanager.cpp
 
-# build these last for now
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
+    kis_mirror_manager.cpp
 )
 
 if(WIN32)

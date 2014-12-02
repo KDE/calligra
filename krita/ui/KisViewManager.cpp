@@ -44,101 +44,94 @@
 #include <QBuffer>
 #include <QScrollBar>
 #include <QMainWindow>
+#include <QPoint>
 
+#include <kactioncollection.h>
+#include <kaction.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
 #include <kmenubar.h>
+#include <kmenu.h>
+#include <kmessagebox.h>
+#include <KoServiceLocator.h>
+#include <kservice.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
-#include <kaction.h>
-#include <klocale.h>
-#include <kmenu.h>
-#include <kservice.h>
-#include <KoServiceLocator.h>
-#include <kstandarddirs.h>
-#include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguifactory.h>
-#include <kmessagebox.h>
-#include <kactioncollection.h>
 
-#include <KoToolRegistry.h>
-#include <KoStore.h>
-#include <KisMainWindow.h>
-#include <KoSelection.h>
-#include <KoToolBoxFactory.h>
-#include <KoZoomHandler.h>
-#include <KoToolManager.h>
-#include <KoViewConverter.h>
-#include <KisView.h>
-#include <KisDockerManager.h>
-#include <KoDockRegistry.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceItemChooserSync.h>
-#include <KoDockWidgetTitleBar.h>
-#include <KoCompositeOp.h>
-#include <KisTemplateCreateDia.h>
 #include <KoCanvasController.h>
-#include <KisDocumentEntry.h>
+#include <KoCompositeOp.h>
+#include <KoDockRegistry.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
-#include <KisPart.h>
-
-#include <kis_image.h>
-#include <kis_undo_adapter.h>
-#include "kis_composite_progress_proxy.h"
-#include <kis_layer.h>
+#include <KoResourceItemChooserSync.h>
+#include <KoResourceServerProvider.h>
+#include <KoSelection.h>
+#include <KoStore.h>
+#include <KoToolBoxFactory.h>
+#include <KoToolManager.h>
+#include <KoToolRegistry.h>
+#include <KoViewConverter.h>
+#include <KoZoomHandler.h>
 
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
+#include "input/kis_input_profile_manager.h"
+#include "kis_action_manager.h"
+#include "kis_canvas_controls_manager.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_composite_progress_proxy.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
+#include <KisDockerManager.h>
+#include <KisDocumentEntry.h>
 #include "KisDocument.h"
 #include "kis_factory2.h"
+#include "kis_favorite_resource_manager.h"
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
+#include <kis_image.h>
 #include "kis_image_manager.h"
+#include <kis_layer.h>
+#include "KisMainWindow.h"
+#include "kis_mainwindow_observer.h"
 #include "kis_mask_manager.h"
 #include "kis_mimedata.h"
+#include "kis_mirror_manager.h"
+#include "kis_node_commands_adapter.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
 #include "kis_painting_assistants_decoration.h"
+#include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
+#include <kis_paintop_preset.h>
+#include "KisPart.h"
 #include "KisPrintJob.h"
 #include "kis_progress_widget.h"
 #include "kis_resource_server_provider.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
-#include "kis_shape_layer.h"
 #include "kis_shape_controller.h"
+#include "kis_shape_layer.h"
+#include <kis_signal_compressor.h>
 #include "kis_statusbar.h"
+#include <KisTemplateCreateDia.h>
+#include <kis_tool_freehand.h>
+#include "kis_tooltip_manager.h"
+#include <kis_undo_adapter.h>
+#include "KisView.h"
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
-#include "KisView.h"
-#include "kis_zoom_manager.h"
-
-#include <QPoint>
-#include "kis_node_commands_adapter.h"
-#include <kis_paintop_preset.h>
-#include <kis_signal_compressor.h>
-#include "kis_favorite_resource_manager.h"
-#include "kis_action_manager.h"
-#include "input/kis_input_profile_manager.h"
-#include "kis_canvas_controls_manager.h"
-#include "kis_mainwindow_observer.h"
-#include "KisMainWindow.h"
-#include "kis_painting_assistants_manager.h"
-#include "KisPart.h"
-
-#include "kis_tooltip_manager.h"
-#include <kis_tool_freehand.h>
-
 
 class StatusBarItem
 {
@@ -236,6 +229,7 @@ public:
         , canvasResourceManager(0)
         , guiUpdateCompressor(0)
         , actionCollection(0)
+        , mirrorManager(0)
     {
     }
 
@@ -252,19 +246,13 @@ public:
         delete canvasControlsManager;
         delete canvasResourceProvider;
         delete canvasResourceManager;
-
-        /**
-         * Push a timebomb, which will try to release the memory after
-         * the document has been deleted
-         */
-        KisPaintDevice::createMemoryReleaseObject()->deleteLater();
+        delete mirrorManager;
     }
 
 public:
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
     KAction *totalRefresh;
-    KAction *mirrorCanvas;
     KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
@@ -291,6 +279,7 @@ public:
     QList<StatusBarItem> statusBarItems;
     KisSignalCompressor* guiUpdateCompressor;
     KActionCollection *actionCollection;
+    KisMirrorManager *mirrorManager;
 };
 
 
@@ -442,7 +431,6 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->rotateCanvasRight->disconnect();
         d->rotateCanvasLeft->disconnect();
-        d->mirrorCanvas->disconnect();
         d->wrapAroundAction->disconnect();
         d->currentImageView->canvasController()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
         resourceProvider()->disconnect(d->currentImageView->canvasBase());
@@ -467,7 +455,6 @@ void KisViewManager::setCurrentView(KisView *view)
         connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
         connect(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
         connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
-        connect(d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(mirrorCanvas(bool)));
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
@@ -483,6 +470,7 @@ void KisViewManager::setCurrentView(KisView *view)
     d->statusBar->setView(imageView);
     d->paintingAssistantsManager->setView(imageView);
     d->perspectiveGridManager->setView(imageView);
+    d->mirrorManager->setView(imageView);
 
     if (d->currentImageView) {
         d->currentImageView->canvasController()->activate();
@@ -778,11 +766,6 @@ void KisViewManager::createActions()
     actionCollection()->addAction("createTemplate", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    d->mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
-    d->mirrorCanvas->setChecked(false);
-    actionCollection()->addAction("mirror_canvas", d->mirrorCanvas);
-    d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
-
     d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
     d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
     d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
@@ -867,9 +850,9 @@ void KisViewManager::createManagers()
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionCollection(), actionManager());
 
-    // XXX: KOMVC: move mirror decoration to KisView, create a manager for it???
-    //    m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
-    //    m_d->canvas->addDecoration(m_d->mirrorAxis);
+    d->mirrorManager = new KisMirrorManager(this);
+    d->mirrorManager->setup(actionCollection());
+
 }
 
 void KisViewManager::updateGUI()
