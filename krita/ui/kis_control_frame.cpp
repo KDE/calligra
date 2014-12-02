@@ -65,13 +65,13 @@
 
 
 KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)
-        : QObject(view)
-        , m_view(view)
-        , m_patternWidget(0)
-        , m_gradientWidget(0)
-        , m_patternChooserPopup(0)
-        , m_gradientChooserPopup(0)
-        , m_paintopBox(0)
+    : QObject(view)
+    , m_viewManager(view)
+    , m_patternWidget(0)
+    , m_gradientWidget(0)
+    , m_patternChooserPopup(0)
+    , m_gradientChooserPopup(0)
+    , m_paintopBox(0)
 {
     setObjectName(name);
     KisConfig cfg;
@@ -97,22 +97,22 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
-// XXX: KOMVC we don't have a canvas here yet, needs a setImageView
-   const KoColorDisplayRendererInterface *displayRenderer = KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
-   KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer,
-                                                    view->mainWindow(), view->mainWindow());
-   dual->setPopDialog(true);
-   action  = new KAction(i18n("&Color"), this);
-   view->actionCollection()->addAction("dual", action);
-   action->setDefaultWidget(dual);
-   connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-   connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
-   connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
-   connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
-   dual->setFixedSize(26, 26);
+    // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
+    const KoColorDisplayRendererInterface *displayRenderer = KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
+    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer,
+                                                     view->mainWindow(), view->mainWindow());
+    dual->setPopDialog(true);
+    action  = new KAction(i18n("&Color"), this);
+    view->actionCollection()->addAction("dual", action);
+    action->setDefaultWidget(dual);
+    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
+    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
+    dual->setFixedSize(26, 26);
 
-    createPatternsChooser(m_view);
-    createGradientsChooser(m_view);
+    createPatternsChooser(m_viewManager);
+    createGradientsChooser(m_viewManager);
 
     m_patternWidget->setPopupWidget(m_patternChooserPopup);
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
@@ -156,7 +156,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     m_patternsTab->addTab(patternChooserPage, i18n("Patterns"));
 
     KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
-            i18n("Custom Pattern"), m_view);
+                                                            i18n("Custom Pattern"), m_viewManager);
     customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 

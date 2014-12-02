@@ -70,7 +70,7 @@ private:
 private:
 
     QFont m_font;
-    KisViewManager * m_view;
+    KisViewManager * m_viewManager;
 
     QTabWidget * m_gradientTab;
     QTabWidget * m_patternsTab;
