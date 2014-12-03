@@ -31,7 +31,7 @@ public:
     ~RecentFileManager();
 
     /// @return the size of the recent files list
-    int size();
+    Q_INVOKABLE int size();
 
     /// @return the recent file at position index or an empty string
     QString recentFile(int index) const;
