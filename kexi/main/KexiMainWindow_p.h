@@ -1453,7 +1453,6 @@ public:
 #ifndef KEXI_NO_PENDING_DIALOGS
         actionToExecuteWhenPendingJobsAreFinished = NoAction;
 #endif
-        showImportantInfoOnStartup = true;
         propEditorDockSeparatorPos = -1;
         navDockSeparatorPos = -1;
         wasAutoOpen = false;
@@ -1882,10 +1881,6 @@ public:
      can be removed from pageSetupWindows dictionary. */
     QMap<int, int> pageSetupWindowItemID2dataItemID_map;
 #endif
-
-    //! Used in several places to show info dialog at startup (only once per session)
-    //! before displaying other stuff
-    bool showImportantInfoOnStartup;
 
     //! Indicates if project is started in User Mode
     bool userMode;

@@ -6,10 +6,6 @@ ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
 ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
 ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS(
--DKEXI_NO_CTXT_HELP=1
-)
-
 set(QT_USE_QTUITOOLS true)
 
 ########### next target ###############

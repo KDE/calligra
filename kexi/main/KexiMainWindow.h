@@ -333,12 +333,6 @@ protected:
     /*! Setups main widget */
     void setupMainWidget();
 
-    /*! Setups the User Mode: constructs window according to kexi__final database
-     and loads the specified part.
-     \return true on success or false if e.g. kexi__final does not exist
-     or a fatal exception happened */
-    bool setupUserMode(KexiProjectData *projectData);
-
     /*! Creates the Project Navigator (if it's not yet created),
      lookups items for current project and fills the nav. with not-opened items */
     void setupProjectNavigator();
@@ -547,11 +541,6 @@ protected slots:
     void slotGetNewStuff();
     void slotReportBug();
     void slotTipOfTheDay();
-
-    //! Shows 'important info' dialog, is \a onStartup is false, it's always shown
-    void importantInfo(bool onStartup);
-    void slotImportantInfo(); //!< just importantInfo(false);
-    void slotStartFeedbackAgent();
     void slotImportFile();
     void slotImportServer();
 
