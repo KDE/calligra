@@ -547,7 +547,24 @@ void MainWindow::setAlternativeSaveAction(QAction* altAction)
         KToolBar* tb = d->desktopView->toolBar("mainToolBar");
         if(tb) {
             tb->removeAction(cloudSave);
-            tb->addAction(cloudSave);
+            // find the action /after/ the save action (because we want the alt save there, not before it)
+            QAction* saveAction = d->desktopView->actionCollection()->action("file_save");
+            QAction* afterSave = 0;
+            bool useNext = false;
+            Q_FOREACH(QAction* action, tb->actions()) {
+                if(useNext) {
+                    afterSave = action;
+                    break;
+                }
+                if(action == saveAction) {
+                    useNext = true;
+                }
+            }
+            if(afterSave) {
+                tb->insertAction(afterSave, cloudSave);
+            } else {
+                tb->addAction(cloudSave);
+            }
         }
     }
     if(d->alternativeSaveAction) {
