@@ -26,7 +26,6 @@
 
 #include <QLayout>
 #include <QThread>
-#include <QTreeWidget>
 #include <QHeaderView>
 
 #include <ktabwidget.h>
@@ -34,9 +33,9 @@
 #include <kguiitem.h>
 #include <kdebug.h>
 
-static DebugWindowDialog* debugWindow = 0;
+static DebugWindow* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;
-static QTreeWidget* kexiDBDebugPage = 0;
+static KexiDBDebugTreeWidget* kexiDBDebugPage = 0;
 static QTreeWidget* kexiAlterTableActionDebugPage = 0;
 
 static void addKexiDBDebug(const QString& text)
@@ -55,12 +54,16 @@ static void addKexiDBDebug(const QString& text)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
+        KPushButton *btn_copy = new KPushButton(page);
+        btn_copy->setIcon(koSmallIcon("edit-copy"));
+        hbox->addWidget(btn_copy);
         KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
 
-        kexiDBDebugPage = new QTreeWidget(page);
+        kexiDBDebugPage = new KexiDBDebugTreeWidget(page);
         kexiDBDebugPage->setObjectName("kexiDbDebugPage");
         kexiDBDebugPage->setFont(KexiUtils::smallFont(kexiDBDebugPage));
+        QObject::connect(btn_copy, SIGNAL(clicked()), kexiDBDebugPage, SLOT(copy()));
         QObject::connect(btn_clear, SIGNAL(clicked()), kexiDBDebugPage, SLOT(clear()));
         vbox->addWidget(kexiDBDebugPage);
         kexiDBDebugPage->setHeaderLabel(QString());
@@ -68,7 +71,10 @@ static void addKexiDBDebug(const QString& text)
         kexiDBDebugPage->setSortingEnabled(false);
         kexiDBDebugPage->setAllColumnsShowFocus(true);
         kexiDBDebugPage->header()->setResizeMode(0, QHeaderView::Stretch);
+        kexiDBDebugPage->header()->setStretchLastSection(true);
         kexiDBDebugPage->setRootIsDecorated(true);
+        kexiDBDebugPage->setWordWrap(true);
+        kexiDBDebugPage->setAlternatingRowColors(true);
         debugWindowTab->addTab(page, "KexiDB");
         debugWindowTab->setCurrentWidget(page);
         kexiDBDebugPage->show();
@@ -84,6 +90,7 @@ static void addKexiDBDebug(const QString& text)
         li = new QTreeWidgetItem(kexiDBDebugPage->invisibleRootItem());
     }
     li->setText(0, text);
+    li->setToolTip(0, text);
     li->setExpanded(true);
 }
 
@@ -171,12 +178,12 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
 
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 {
+    Q_UNUSED(parent);
     KexiDB::setDebugGUIHandler(addKexiDBDebug);
     KexiDB::setAlterTableActionDebugHandler(addAlterTableActionDebug);
 
     // (this is internal code - do not use i18n() here)
-    debugWindow = new DebugWindowDialog(parent);
-    debugWindow->setSizeGripEnabled(true);
+    debugWindow = new DebugWindow();
     QBoxLayout *lyr = new QVBoxLayout(debugWindow);
     debugWindowTab = new KTabWidget(debugWindow);
     debugWindowTab->setObjectName("debugWindowTab");
