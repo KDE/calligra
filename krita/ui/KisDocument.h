@@ -640,7 +640,11 @@ signals:
 
     void titleModified(const QString &caption, bool isModified);
 
-protected:
+    void sigLoadingFinished();
+
+    void sigSavingFinished();
+
+private:
 
     friend class KisPart;
     friend class KisSketchPart;

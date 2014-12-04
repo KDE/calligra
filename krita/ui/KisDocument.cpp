@@ -2063,6 +2063,8 @@ bool KisDocument::completeLoading(KoStore* store)
     }
     setAutoSave(KisConfig().autoSaveInterval());
 
+    emit sigLoadingFinished();
+
     return true;
 
 }
@@ -2080,6 +2082,8 @@ bool KisDocument::completeSaving(KoStore* store)
 
     delete d->kraSaver;
     d->kraSaver = 0;
+
+    emit sigSavingFinished();
 
     return true;
 }

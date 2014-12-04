@@ -170,10 +170,6 @@ public:  // Krita specific interfaces
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();
 
-    /// Go to all managers and enable or disable all actions and other
-    /// gui elements
-    void updateGUI();
-
     KisDocument* document() const;
 
 public:
@@ -206,11 +202,13 @@ public:
 
 public slots:
 
-    void slotLoadingFinished();
-    void slotSavingFinished();
     void showJustTheCanvas(bool toggled);
     void setShowFloatingMessage(bool show);
     void showHideScrollbars();
+
+    /// Go to all managers and enable or disable all actions and other
+    /// gui elements
+    void updateGUI();
 
 signals:
 
@@ -219,9 +217,6 @@ signals:
 private slots:
 
     void slotBlacklistCleanup();
-    void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
-    void slotImageResolutionChanged();
-    void slotNodeChanged();
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();

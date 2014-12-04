@@ -85,6 +85,10 @@
 #include "KisUndoStackAction.h"
 #include "KisViewManager.h"
 #include "kis_zoom_manager.h"
+#include "kis_composite_progress_proxy.h"
+#include "kis_statusbar.h"
+#include "kis_painting_assistants_decoration.h"
+#include "kis_progress_widget.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -108,9 +112,10 @@ public:
         , canvasController(0)
         , canvas(0)
         , zoomManager(0)
-        , parentView(0)
+        , viewManager(0)
         , mirrorAxis(0)
         , actionCollection(0)
+        , paintingAssistantsDecoration(0)
     {
         tempActiveWidget = 0;
         documentDeleted = false;
@@ -147,10 +152,11 @@ public:
     KisCanvasController *canvasController;
     KisCanvas2 *canvas;
     KisZoomManager *zoomManager;
-    KisViewManager *parentView;
+    KisViewManager *viewManager;
     KisNodeSP currentNode;
     KisMirrorAxis* mirrorAxis;
     KActionCollection* actionCollection;
+    KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -275,6 +281,11 @@ KisView::KisView(KisPart *part, KisDocument *document, KActionCollection *action
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
+
+    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
+    d->canvas->addDecoration(d->paintingAssistantsDecoration);
+
     if (!d->document->isLoading() || d->document->image()) {
         slotLoadingFinished();
     }
@@ -289,15 +300,42 @@ KisView::~KisView()
 
 void KisView::setViewManager(KisViewManager *view)
 {
-    d->parentView = view;
+    d->viewManager = view;
     KoToolManager::instance()->addController(d->canvasController);
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+
+    if (resourceProvider()) {
+        resourceProvider()->slotImageSizeChanged();
+    }
+
+    if (d->viewManager && d->viewManager->nodeManager()) {
+        d->viewManager->nodeManager()->nodesUpdated();
+    }
+
+    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), resourceProvider(), SLOT(slotImageSizeChanged()));
+    connect(image(), SIGNAL(sigResolutionChanged(double,double)), resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
+    connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
+    connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), d->viewManager, SLOT(updateGUI()));
+
+    connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
+    /*
+     * WARNING: Currently we access the global progress bar in two ways:
+     * connecting to composite progress proxy (strokes) and creating
+     * progress updaters. The latter way should be deprecated in favour
+     * of displaying the status of the global strokes queue
+     */
+    image()->compositeProgressProxy()->addProxy(d->viewManager->statusBar()->progress()->progressProxy());
+    connect(d->viewManager->statusBar()->progress(), SIGNAL(sigCancellationRequested()), image(), SLOT(requestStrokeCancellation()));
+
+    d->viewManager->updateGUI();
 }
 
 KisViewManager* KisView::viewManager() const
 {
-    return d->parentView;
+    return d->viewManager;
 }
 
 
@@ -328,8 +366,8 @@ KisCanvasController *KisView::canvasController() const
 
 KisCanvasResourceProvider *KisView::resourceProvider() const
 {
-    if (d->parentView) {
-        return d->parentView->resourceProvider();
+    if (d->viewManager) {
+        return d->viewManager->resourceProvider();
     }
     return 0;
 }
@@ -445,7 +483,7 @@ void KisView::dropEvent(QDropEvent *event)
                 foreach(const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
-                        d->parentView->imageManager()->importImage(KUrl(url));
+                        d->viewManager->imageManager()->importImage(KUrl(url));
                         activateWindow();
                     }
                     else if (action == replaceCurrentDocument) {
@@ -735,7 +773,7 @@ void KisView::closeEvent(QCloseEvent *event)
     }
 
     if (queryClose()) {
-        d->parentView->removeStatusBarItem(zoomManager()->zoomActionWidget());
+        d->viewManager->removeStatusBarItem(zoomManager()->zoomActionWidget());
         event->accept();
         return;
     }
@@ -883,6 +921,25 @@ void KisView::slotLoadingFinished()
 {
     if (!document()) return;
 
+    /**
+     * Cold-start of image size/resolution signals
+     */
+    slotImageResolutionChanged();
+
+    if (image()->locked()) {
+        // If this is the first view on the image, the image will have been locked
+        // so unlock it.
+        image()->blockSignals(false);
+        image()->unlock();
+    }
+
+    if (d->paintingAssistantsDecoration){
+        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
+            d->paintingAssistantsDecoration->addAssistant(assist);
+        }
+        d->paintingAssistantsDecoration->setVisible(true);
+    }
+
     canvasBase()->initializeImage();
 
     /**
@@ -893,12 +950,9 @@ void KisView::slotLoadingFinished()
     if (viewConverter()) {
        viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
     }
-    connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
-            this, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)));
-    connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)),
-            this, SIGNAL(sigProfileChanged(const KoColorProfile*)));
-    connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
-            this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
+    connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)));
+    connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), this, SIGNAL(sigProfileChanged(const KoColorProfile*)));
+    connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
 
     KisNodeSP activeNode = document()->preActivatedNode();
     document()->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
@@ -914,10 +968,30 @@ void KisView::slotLoadingFinished()
     setCurrentNode(activeNode);
 }
 
+void KisView::slotSavingFinished()
+{
+    if (d->viewManager && d->viewManager->mainWindow()) {
+        d->viewManager->mainWindow()->updateCaption();
+    }
+}
+
 KisPrintJob * KisView::createPrintJob()
 {
     return new KisPrintJob(image());
 }
+
+void KisView::slotImageResolutionChanged()
+{
+    resetImageSizeAndScroll(false);
+    zoomManager()->updateGUI();
+}
+
+void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
+{
+    resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
+    zoomManager()->updateGUI();
+}
+
 
 #include <KisView_p.moc>
 #include <KisView.moc>

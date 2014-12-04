@@ -109,7 +109,6 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
-#include "kis_painting_assistants_decoration.h"
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
@@ -428,6 +427,7 @@ void KisViewManager::setCurrentView(KisView *view)
         }
         d->currentImageView->canvasController()->proxyObject->disconnect(d->statusBar);
         d->nodeManager->disconnect(doc->image());
+        doc->image()->disconnect(d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
 
         d->rotateCanvasRight->disconnect();
         d->rotateCanvasLeft->disconnect();
@@ -457,7 +457,7 @@ void KisViewManager::setCurrentView(KisView *view)
         connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
-
+        connect(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
     }
 
     d->filterManager->setView(imageView);
@@ -658,88 +658,6 @@ KisUndoAdapter * KisViewManager::undoAdapter()
     return image->undoAdapter();
 }
 
-
-void KisViewManager::slotLoadingFinished()
-{
-    if (!document()) return;
-
-    /**
-     * Cold-start of image size/resolution signals
-     */
-    slotImageResolutionChanged();
-
-    if (resourceProvider()) {
-        resourceProvider()->slotImageSizeChanged();
-    }
-    if (nodeManager()) {
-        nodeManager()->nodesUpdated();
-    }
-
-    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), resourceProvider(), SLOT(slotImageSizeChanged()));
-
-    connect(image(), SIGNAL(sigResolutionChanged(double,double)),
-            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-    connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
-    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
-    connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
-    connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
-
-    /*
-     * WARNING: Currently we access the global progress bar in two ways:
-     * connecting to composite progress proxy (strokes) and creating
-     * progress updaters. The latter way should be deprecated in favour
-     * of displaying the status of the global strokes queue
-     */
-    image()->compositeProgressProxy()->addProxy(d->statusBar->progress()->progressProxy());
-    connect(d->statusBar->progress(), SIGNAL(sigCancellationRequested()),
-            image(), SLOT(requestStrokeCancellation()));
-
-    d->currentImageView->canvasBase()->initializeImage();
-
-    if (d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-    }
-
-    if (image()->locked()) {
-        // If this is the first view on the image, the image will have been locked
-        // so unlock it.
-        image()->blockSignals(false);
-        image()->unlock();
-    }
-
-
-    /**
-     * Dirty hack alert
-     */
-    if (mainWindow() && zoomManager() && zoomManager()->zoomController())
-        zoomManager()->zoomController()->setAspectMode(true);
-
-    if (d->currentImageView && d->currentImageView->viewConverter())
-        d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-
-//    QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
-//    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
-//        m_d->paintingAssistantsDecoration->addAssistant(assistant);
-//    }
-
-//    if (m_d->paintingAssistantsDecoration){
-//        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
-//            m_d->paintingAssistantsDecoration->addAssistant(assist);
-//        }
-//        m_d->paintingAssistantsDecoration->setVisible(true);
-//    }
-
-    updateGUI();
-}
-
-void KisViewManager::slotSavingFinished()
-{
-    if(mainWindow())
-        mainWindow()->updateCaption();
-}
-
 void KisViewManager::createActions()
 {
     d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
@@ -864,25 +782,6 @@ void KisViewManager::slotBlacklistCleanup()
 {
     KisDlgBlacklistCleanup dialog;
     dialog.exec();
-}
-
-void KisViewManager::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
-{
-    if (!d->currentImageView) return;
-    d->currentImageView->resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
-    zoomManager()->updateGUI();
-}
-
-void KisViewManager::slotImageResolutionChanged()
-{
-    if (!d->currentImageView) return;
-    d->currentImageView->resetImageSizeAndScroll(false);
-    zoomManager()->updateGUI();
-}
-
-void KisViewManager::slotNodeChanged()
-{
-    updateGUI();
 }
 
 void KisViewManager::loadPlugins()

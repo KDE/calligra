@@ -237,6 +237,9 @@ protected:
 
 private slots:
     void slotLoadingFinished();
+    void slotSavingFinished();
+    void slotImageResolutionChanged();
+    void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
 
 private:
 
