@@ -90,9 +90,9 @@ void KWPageTool::insertPageBreak()
     }
 }
 
-QList<QWidget *> KWPageTool::createOptionWidgets()
+QList<QPointer<QWidget> > KWPageTool::createOptionWidgets()
 {
-    QList<QWidget*> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     SimpleSetupWidget *ssw = new SimpleSetupWidget(m_canvas->view());
     ssw->setWindowTitle(i18n("Page Setup"));

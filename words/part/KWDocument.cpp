@@ -808,7 +808,13 @@ QPair<QString, QByteArray> KWDocument::coverImage()
 
 KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
+
     KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
+    if (mainwin) {
+        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+    }
+
 #ifdef SHOULD_BUILD_RDF
     KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(documentRdf()));
     dlg->addPageItem(rdfEditWidget);
