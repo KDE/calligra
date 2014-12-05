@@ -69,7 +69,7 @@ protected:
     void requestStrokeEnd();
 
     friend class __KisToolSelectPathLocalTool;
-    QList<QWidget *> createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets();
 };
 
 class KisToolSelectPathFactory : public KoToolFactoryBase

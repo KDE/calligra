@@ -30,7 +30,7 @@
 #include "CAAbstractDocumentHandler.h"
 #include "calligra_active_global.h"
 
-#include <libs/main/calligraversion.h>
+#include <calligraversion.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
