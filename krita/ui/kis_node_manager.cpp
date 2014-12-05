@@ -357,6 +357,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     actionManager->addAction("split_alpha_save_merged", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaSaveMerged()));
 
+    connect(m_d->view->image(), SIGNAL(sigIsolatedModeChanged()),
+            this, SLOT(slotUpdateIsolateModeAction()));
+
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryFinishIsolatedMode()));
 }
