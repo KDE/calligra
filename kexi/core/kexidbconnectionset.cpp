@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003,2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@ public:
             : maxid(-1) {
     }
     KexiDB::ConnectionData::List list;
-    QHash<KexiDB::ConnectionData*, QString> filenamesForData;
+    QHash<QString, QString> filenamesForData;
     QHash<QString, KexiDB::ConnectionData*> dataForFilenames;
     int maxid;
 };
@@ -80,7 +80,7 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
         filename = baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic";
     }
     addConnectionDataInternal(data, filename);
-    bool result = saveConnectionData(data, data);
+    bool result = saveConnectionData(data, *data);
     if (!result)
         removeConnectionDataInternal(data);
     return result;
@@ -88,31 +88,39 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
 
 void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename)
 {
-    d->filenamesForData.insert(data, filename);
+    d->filenamesForData.insert(key(*data), filename);
     d->dataForFilenames.insert(filename, data);
     d->list.append(data);
 }
 
 bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
-        KexiDB::ConnectionData *newData)
+        const KexiDB::ConnectionData &newData)
 {
-    if (!oldData || !newData)
+    if (!oldData)
         return false;
-    const QString filename(d->filenamesForData.value(oldData));
+    const QString oldDataKey = key(*oldData);
+    const QString filename(d->filenamesForData.value(oldDataKey));
     if (filename.isEmpty())
         return false;
     KexiDBConnShortcutFile shortcutFile(filename);
-    if (!shortcutFile.saveConnectionData(*newData, newData->savePassword)) // true/*savePassword*/))
+    if (!shortcutFile.saveConnectionData(newData, newData.savePassword)) // true/*savePassword*/))
         return false;
-    if (oldData != newData)
-        *oldData = *newData;
+    if (oldData != &newData) {
+        *oldData = newData;
+    }
+    const QString newDataKey = key(newData);
+    if (oldDataKey != newDataKey) {
+        // update file info: key changed, filename is untouched
+        d->filenamesForData.remove(oldDataKey);
+        d->filenamesForData.insert(newDataKey, filename);
+    }
     return true;
 }
 
 void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *data)
 {
-    const QString filename(d->filenamesForData.value(data));
-    d->filenamesForData.remove(data);
+    const QString filename(d->filenamesForData.value(key(*data)));
+    d->filenamesForData.remove(key(*data));
     d->dataForFilenames.remove(filename);
     d->list.removeAt(d->list.indexOf(data));
     delete data;
@@ -122,7 +130,7 @@ bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
 {
     if (!data)
         return false;
-    const QString filename(d->filenamesForData.value(data));
+    const QString filename(d->filenamesForData.value(key(*data)));
     if (filename.isEmpty())
         return false;
     QFile file(filename);
@@ -160,14 +168,24 @@ void KexiDBConnectionSet::load()
     }
 }
 
-QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *data) const
+QString KexiDBConnectionSet::fileNameForConnectionData(const KexiDB::ConnectionData &data) const
 {
-    if (!data)
-        return QString();
-    return d->filenamesForData.value(data);
+    return d->filenamesForData.value(key(data));
 }
 
 KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
 {
     return d->dataForFilenames.value(fileName);
+}
+
+// static
+QString KexiDBConnectionSet::key(const KexiDB::ConnectionData &data)
+{
+    return data.driverName.toLower() + ','
+        + data.userName.toLower() + ','
+        + data.hostName.toLower() + ','
+        + QString::number(data.port) + ','
+        + QString::number(data.useLocalSocketFile) + ','
+        + data.localSocketFileName + ','
+        + data.fileName();
 }

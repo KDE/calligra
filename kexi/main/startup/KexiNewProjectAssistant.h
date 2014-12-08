@@ -172,7 +172,7 @@ public slots:
     void cancelActionTriggered();
 
 signals:
-    void createProject(KexiProjectData* data);
+    void createProject(const KexiProjectData &data);
 
 protected:
     virtual QWidget* calloutWidget() const;

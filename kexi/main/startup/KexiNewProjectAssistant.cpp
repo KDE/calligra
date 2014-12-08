@@ -661,7 +661,7 @@ void KexiNewProjectAssistant::createProject(
     const KexiDB::ConnectionData& cdata, const QString& databaseName,
     const QString& caption)
 {
-    KexiProjectData *new_data = new KexiProjectData(cdata, databaseName, caption);
+    KexiProjectData new_data(cdata, databaseName, caption);
     setCurrentPage(d->projectCreationPage());
     emit createProject(new_data);
 }
