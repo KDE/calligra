@@ -102,7 +102,8 @@ CellEditorDocker::~CellEditorDocker()
 
 void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 {
-    kDebug() << "setting canvas to" << canvas;
+    setEnabled(canvas != 0);
+
     d->canvasResetBugWorkaround = !!d->canvas;
     if (d->toolProxy) {
         disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
