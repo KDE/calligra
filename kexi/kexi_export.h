@@ -131,7 +131,6 @@
 # define KEXI_STARTUP_SHOW_TEMPLATES 
 # define KEXI_STARTUP_SHOW_RECENT
 */
-//# define KEXI_NO_FEEDBACK_AGENT
 #endif
 
 #endif //KEXI_EXPORT_H
