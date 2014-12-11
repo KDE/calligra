@@ -456,22 +456,6 @@ QSize KexiTableView::minimumSizeHint() const
            );
 }
 
-#if 0
-void KexiTableView::createBuffer(int width, int height)
-{
-#ifdef __GNUC__
-#warning TODO KexiTableView::createBuffer(): remove buffering a Qt4 has internal buffers
-#else
-#pragma WARNING( TODO KexiTableView::createBuffer(): remove buffering a Qt4 has internal buffers )
-#endif
-    if (!d->pBufferPm)
-        d->pBufferPm = new QPixmap(width, height);
-    else
-        if (d->pBufferPm->width() < width || d->pBufferPm->height() < height)
-            *d->pBufferPm = QPixmap(width, height);
-}
-#endif
-
 //internal
 inline void KexiTableView::paintRow(KexiDB::RecordData *record,
                                     QPainter *pb, int r, int rowp, int cx, int cy,
@@ -1693,7 +1677,7 @@ void KexiTableView::updateGeometries()
 
     int frameLeftMargin = style()->pixelMetric(QStyle::PM_FocusFrameVMargin, 0, this);
     int frameTopMargin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this);
-    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, /*Qt4: viewport()->width()*/ visibleWidth(), topMargin());
+    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, visibleWidth(), topMargin());
     m_verticalHeader->setGeometry(frameLeftMargin, topMargin() + frameTopMargin, leftMargin(), visibleHeight());
 }
 

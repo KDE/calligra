@@ -530,7 +530,6 @@ protected:
 
     //! painting and layout
     void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-    void createBuffer(int width, int height);
     void paintCell(QPainter* p, KexiDB::RecordData *record, int col, int row, const QRect &cr, bool print = false);
     void paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
     void updateGeometries();
