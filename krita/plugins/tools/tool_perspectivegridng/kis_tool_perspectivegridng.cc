@@ -437,9 +437,13 @@ void KisPerspectiveGridNgTool::paint(QPainter& _gc, const KoViewConverter &_conv
 
     foreach(KisPerspectiveGridNg* assistant, m_canvas->view()->perspectiveGridNgManager()->assistants()) {
         QPointF vanishingPointX, vanishingPointY, vanishingPointZ;
-        vanishingPointZ = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight())-QPointF(0,32))*0.5 ;
-        vanishingPointY = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight())+ QPointF(32,0))*0.5 ;
-        vanishingPointX = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft())-QPointF(32,0))*0.5 ;
+        vanishingPointZ = _converter.documentToView(*assistant->vanishingPointZ()) ;
+        vanishingPointY = _converter.documentToView(*assistant->vanishingPointY());
+        vanishingPointX = _converter.documentToView(*assistant->vanishingPointX());
+
+//        vanishingPointZ = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight())-QPointF(0,32))*0.5 ;
+//        vanishingPointY = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight())+ QPointF(32,0))*0.5 ;
+//        vanishingPointX = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft())-QPointF(32,0))*0.5 ;
         QPainterPath path;
         path.addEllipse(QRectF(vanishingPointX-QPointF(6,6),QSizeF(12,12)));
         path.addEllipse(QRectF(vanishingPointY-QPointF(6,6),QSizeF(12,12)));

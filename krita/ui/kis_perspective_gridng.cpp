@@ -633,7 +633,7 @@ void KisPerspectiveGridNg::findHandleLocation() {
                                                                 (d->topLeft.data()->y() + d->topRight.data()->y())*0.5 - 16);
             d->vanishingPointY= new KisPerspectiveGridNgHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5 + 16,
                                                                 (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
-            d->vanishingPointX= new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5 - 16,
+            d->vanishingPointX= new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
                                                                 (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
             d->vanishingPointX.data()->setType('v');
             d->vanishingPointY.data()->setType('v');
