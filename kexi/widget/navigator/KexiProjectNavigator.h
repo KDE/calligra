@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -22,20 +22,13 @@
 #ifndef KEXIPROJECTNAVIGATOR_H
 #define KEXIPROJECTNAVIGATOR_H
 
-#include <QHash>
-#include <QEvent>
 #include <QPointer>
-#include <kmenu.h>
-#include <kexi_export.h>
+#include <KMenu>
 #include <kexi.h>
 
 class KIcon;
 class KAction;
 class KActionCollection;
-class KexiProjectModelItem;
-class KexiSmallToolButton;
-class KexiProjectTreeView;
-class QTreeView;
 class QModelIndex;
 class KexiProjectModel;
 
@@ -43,7 +36,6 @@ namespace KexiPart
 {
     class Info;
     class Item;
-    class Part;
 }
 class KexiProject;
 
@@ -84,21 +76,22 @@ public:
 };
 
 
-//! @short The Main Kexi navigator widget
+//! @short Project navigator widget
+//! It is also used to display list of objects for given database project in other places of Kexi.
 class KEXIEXTWIDGETS_EXPORT KexiProjectNavigator : public QWidget
 {
     Q_OBJECT
 
 public:
     enum Feature {
-        NoFeatures = 0,
-        Writable = 1,     //!< the browser supports actions that modify the project (e.g. delete, rename)
-        ContextMenus = 2, //!< the browser supports context menu
-        Toolbar = 4,      //!< the browser displays
-        SingleClickOpensItemOptionEnabled = 8, //!< enables "SingleClickOpensItem" option
-        DefaultFeatures = Writable | ContextMenus | Toolbar
-        | SingleClickOpensItemOptionEnabled    //!< the default
+        NoFeatures   = 0,
+        Writable     = 1,                          //!< Support actions that modify
+                                                   //!< the project (e.g. delete, rename).
+        ContextMenus = 2,                          //!< Supports context menus
+        Borders      = 4,                          //!< Show borders like in a list view
+        DefaultFeatures = Writable | ContextMenus  //!< The default
     };
+    //! Specifies features of a navigator
     Q_DECLARE_FLAGS(Features, Feature)
 
     explicit KexiProjectNavigator(QWidget* parent, Features features = DefaultFeatures);
@@ -181,6 +174,8 @@ protected slots:
     void slotExportToFileAsDataTable();
     void slotPrintObject();
     void slotPageSetupForObject();
+
+    void slotUpdateEmptyStateLabel();
 
 protected:
     void itemRenameDone();

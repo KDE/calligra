@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -220,11 +220,12 @@ KEXIUTILS_EXPORT QColor contrastColor(const QColor& c);
  For black color the result is dark gray rather than black. */
 KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
 
-/*! \return icon set computed as a result of colorizing \a icon pixmap with "buttonText"
+/*! \return icon set computed as a result of colorizing \a icon pixmap with \a role
  color of \a palette palette. This function is useful for displaying monochromed icons
  on the list view or table view header, to avoid bloat, but still have the color compatible
  with accessibility settings. */
-KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
+KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette,
+                                               QPalette::ColorRole role = QPalette::ButtonText);
 
 /*! Replaces colors in pixmap @a original using @a color color. Used for coloring bitmaps 
  that have to reflect the foreground color. */
@@ -237,6 +238,18 @@ KEXIUTILS_EXPORT void replaceColors(QImage* original, const QColor& color);
 /*! @return true if curent color scheme is light.
  Lightness of window background is checked to measure this. */
 KEXIUTILS_EXPORT bool isLightColorScheme();
+
+/*! @return alpha value for dimmed color (150). */
+KEXIUTILS_EXPORT int dimmedAlpha();
+
+/*! @return palette @a pal with dimmed color @a role. @see dimmedAlpha() */
+KEXIUTILS_EXPORT QPalette paletteWithDimmedColor(const QPalette &pal,
+                                                 QPalette::ColorGroup group,
+                                                 QPalette::ColorRole role);
+
+/*! @overload paletteWithDimmedColor(const QPalette &, QPalette::ColorGroup, QPalette::ColorRole) */
+KEXIUTILS_EXPORT QPalette paletteWithDimmedColor(const QPalette &pal,
+                                                 QPalette::ColorRole role);
 
 /*! @return palette altered for indicating "read only" flag. */
 KEXIUTILS_EXPORT QPalette paletteForReadOnly(const QPalette &palette);

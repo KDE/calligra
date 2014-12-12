@@ -699,7 +699,7 @@ void KexiCSVImportDialog::createTableNamePage()
 
     QSplitter *page2 = new QSplitter(m_tableNameWidget);
     QWidget *tableDetailsWidget = new QWidget(page2);
-    m_tablesList = new KexiProjectNavigator(page2, KexiProjectNavigator::NoFeatures);
+    m_tablesList = new KexiProjectNavigator(page2, KexiProjectNavigator::Borders);
     QString errorString;
     m_tablesList->setProject(KexiMainWindowIface::global()->project(), "org.kexi-project.table", &errorString, false);
     connect (m_tablesList, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)),

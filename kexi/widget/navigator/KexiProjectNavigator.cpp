@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -27,12 +27,11 @@
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 
-#include <QHeaderView>
 #include <QPoint>
 #include <QPixmapCache>
-#include <QToolButton>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QLabel>
 
 #include <kglobalsettings.h>
 #include <kdebug.h>
@@ -53,8 +52,8 @@
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/identifier.h>
+#include <kexiutils/utils.h>
 #include <kexiutils/FlowLayout.h>
-#include <kexiutils/SmallToolButton.h>
 #include <db/utils.h>
 #include <kexidb/dbobjectnamevalidator.h>
 #include <kexi_global.h>
@@ -64,8 +63,10 @@ class KexiProjectNavigator::Private
 {
 public:
 
-    Private(Features features_)
+    Private(Features features_, KexiProjectNavigator *qq)
       : features(features_)
+      , q(qq)
+      , emptyStateLabel(0)
       , prevSelectedPartInfo(0)
       , singleClick(false)
       , readOnly(false)
@@ -77,9 +78,11 @@ public:
         delete model;
     }
 
-
     Features features;
+    KexiProjectNavigator *q;
+    QVBoxLayout *lyr;
     KexiProjectTreeView *list;
+    QLabel *emptyStateLabel;
     KActionCollection *actions;
 
     KexiItemMenu *itemMenu;
@@ -98,8 +101,6 @@ public:
     *exportActionMenu_sep, *pageSetupAction_sep;
 
     KexiPart::Info *prevSelectedPartInfo;
-    KToolBar *toolbar;
-    KexiSmallToolButton *deleteObjectToolButton;
 
     bool singleClick;
     bool readOnly;
@@ -109,7 +110,7 @@ public:
 
 KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         : QWidget(parent)
-        , d(new Private(features))
+        , d(new Private(features, this))
 {
     d->actions = new KActionCollection(this);
 
@@ -117,34 +118,38 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     setWindowTitle(i18nc("@title:window", "Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
-    QVBoxLayout *lyr = new QVBoxLayout(this);
-    lyr->setContentsMargins(
-        KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2);
-    lyr->setSpacing(KDialog::marginHint() / 2);
-
-    KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
+    d->lyr = new QVBoxLayout(this);
+    d->lyr->setContentsMargins(0, 0, 0, 0);
 
     d->list = new KexiProjectTreeView(this);
+    if (d->features & Borders) {
+        d->list->setAlternatingRowColors(true);
+    }
+    else {
+        d->list->setFrameStyle(QFrame::NoFrame);
+        QPalette pal(d->list->palette());
+        pal.setColor(QPalette::Base, Qt::transparent);
+        d->list->setPalette(pal);
+        d->list->setIndentation(0);
+    }
     d->model = new KexiProjectModel();
+    connect(d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(slotUpdateEmptyStateLabel()));
+    connect(d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(slotUpdateEmptyStateLabel()));
     d->list->setModel(d->model);
+
     KexiProjectItemDelegate *delegate = new KexiProjectItemDelegate(d->list);
     d->list->setItemDelegate(delegate);
 
-    lyr->addWidget(d->list);
+    d->lyr->addWidget(d->list);
 
     connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(slotSettingsChanged(int)));
     slotSettingsChanged(0);
-    
 
-    d->list->header()->hide();
-    d->list->setAllColumnsShowFocus(true);
-    d->list->setAlternatingRowColors(true);
-    
     connect(d->list, SIGNAL(pressed(QModelIndex)), this,SLOT(slotSelectionChanged(QModelIndex)));
 
     KConfigGroup mainWindowGroup = KGlobal::config()->group("MainWindow");
-    if ((d->features & SingleClickOpensItemOptionEnabled) && mainWindowGroup.readEntry("SingleClickOpensItem", false)) {
-        connect(d->list, SIGNAL(activate(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
+    if (mainWindowGroup.readEntry("SingleClickOpensItem", true)) {
+        connect(d->list, SIGNAL(activated(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
     } else {
         connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
     }
@@ -153,12 +158,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     d->openAction = addAction("open_object", koIcon("document-open"), i18n("&Open"),
                              i18n("Open object"), i18n("Opens object selected in the list."),
                              SLOT(slotOpenObject()));
-
-    KexiSmallToolButton *btn;
-    if (d->features & Toolbar) {
-        btn = new KexiSmallToolButton(d->openAction, this);
-        buttons_flyr->addWidget(btn);
-    }
 
     if (KexiMainWindowIface::global() && KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
@@ -188,10 +187,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    i18n("Design object"),
                                    i18n("Starts designing of the object selected in the list."),
                                    SLOT(slotDesignObject()));
-        if (d->features & Toolbar) {
-            btn = new KexiSmallToolButton(d->designAction, this);
-            buttons_flyr->addWidget(btn);
-        }
 
         d->editTextAction = addAction("editText_object", KIcon(), i18n("Design in &Text View"),
                                      i18n("Design object in text view"),
@@ -199,11 +194,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                      SLOT(slotEditTextObject()));
 
         d->newObjectAction = addAction("new_object", koIcon("document-new"), QString(),QString(), QString(), SLOT(slotNewObject()));
-
-        if (d->features & Toolbar) {
-            d->deleteObjectToolButton = new KexiSmallToolButton(d->deleteAction, this);
-            buttons_flyr->addWidget(d->deleteObjectToolButton);
-        }
     }
 
     d->executeAction = addAction("data_execute", koIcon("system-run"), i18n("Execute"),
@@ -258,7 +248,8 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     slotSelectionChanged(QModelIndex());
 }
 
-void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages, bool addAsSearchableModel)
+void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass,
+                                      QString* partManagerErrorMessages, bool addAsSearchableModel)
 {
     d->itemsPartClass = itemsPartClass;
 
@@ -269,11 +260,8 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
     }
     
     d->list->expandAll();
-    if (itemsPartClass.isEmpty()) {
-        d->list->setRootIsDecorated(true);
-    } else {
-        d->list->setRootIsDecorated(false);
-    }
+    d->list->setRootIsDecorated(false);
+    slotUpdateEmptyStateLabel();
 }
 
 QString KexiProjectNavigator::itemsPartClass() const
@@ -302,19 +290,21 @@ void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
     if (!d->list->currentIndex().isValid() || !(d->features & ContextMenus))
         return;
     
-    KexiProjectModelItem *bit = static_cast<KexiProjectModelItem*>(d->list->currentIndex().internalPointer());
+    QModelIndex pointedIndex = d->list->indexAt(d->list->mapFromGlobal(event->globalPos()));
+
+    KexiProjectModelItem *bit = static_cast<KexiProjectModelItem*>(pointedIndex.internalPointer());
+    if (!bit || !bit->partItem() /*no menu for group*/) {
+        return;
+    }
     KMenu *pm = 0;
     if (bit->partItem()) {
         pm = d->itemMenu;
         KexiProjectModelItem *par_it = static_cast<KexiProjectModelItem*>(bit->parent());
         d->itemMenu->update(par_it->partInfo(), bit->partItem());
-    } else if (d->partMenu) {
-        pm = d->partMenu;
-        d->partMenu->update(bit->partInfo());
     }
-    if (pm)
+    if (pm) {
         pm->exec(event->globalPos());
-
+    }
     event->setAccepted(true);
 }
 
@@ -354,9 +344,6 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
 //! @todo also check if the item is not read only
     if (d->deleteAction) {
         d->deleteAction->setEnabled(gotitem && !d->readOnly);
-        if (d->features & Toolbar) {
-            d->deleteObjectToolButton->setEnabled(gotitem && !d->readOnly);
-        }
     }
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 //! @todo setAvailable("edit_cut",gotitem);
@@ -618,8 +605,6 @@ void KexiProjectNavigator::setReadOnly(bool set)
         d->renameAction->setEnabled(!d->readOnly);
       if (d->newObjectAction) {
         d->newObjectAction->setEnabled(!d->readOnly);
-        if (d->features & Toolbar) {
-        }
       }
 }
 
@@ -636,6 +621,41 @@ void KexiProjectNavigator::clear()
 KexiProjectModel* KexiProjectNavigator::model() const
 {
     return d->model;
+}
+
+void KexiProjectNavigator::slotUpdateEmptyStateLabel()
+{
+    if (d->model->objectsCount() == 0) {
+        // handle the empty state with care... http://www.pinterest.com/romanyakimovich/ui-empty-states/
+        if (!d->emptyStateLabel) {
+            QString imgPath = KIconLoader::global()->iconPath("empty", - KIconLoader::SizeMedium);
+            kDebug() << imgPath;
+            d->emptyStateLabel = new QLabel(
+                i18nc("@info Message for empty state in project navigator",
+                      "<nl/>"
+                      "<nl/>"
+                      "<img src=\"%1\" width=\"48\"/><nl/>"
+                      "Your project is empty..."
+                      "<nl/>"
+                      "Why not <b>create</b> something?", imgPath), this);
+            d->emptyStateLabel->setPalette(
+                KexiUtils::paletteWithDimmedColor(d->emptyStateLabel->palette(), QPalette::WindowText));
+            d->emptyStateLabel->setAlignment(Qt::AlignCenter);
+            d->emptyStateLabel->setTextFormat(Qt::RichText);
+            d->emptyStateLabel->setWordWrap(true);
+            QFont f(d->emptyStateLabel->font());
+            f.setItalic(true);
+            f.setFamily("Times");
+            f.setPointSize(f.pointSize() * 4 / 3);
+            //d->emptyStateLabel->setFont(f);
+            d->lyr->insertWidget(0, d->emptyStateLabel);
+        }
+        d->emptyStateLabel->show();
+    }
+    else {
+        delete d->emptyStateLabel;
+        d->emptyStateLabel = 0;
+    }
 }
 
 //--------------------------------------------

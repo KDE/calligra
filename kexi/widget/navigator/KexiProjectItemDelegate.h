@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +38,8 @@ public:
                        const QModelIndex &index) const;
     virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                                   const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const;
 
 private:
     class Private;
