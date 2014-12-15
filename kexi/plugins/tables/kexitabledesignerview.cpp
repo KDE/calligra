@@ -1131,14 +1131,16 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             kDebug() << "no primay key defined...";
         } else {
             const int questionRes = KMessageBox::questionYesNoCancel(this,
-                i18n("<para>Table <resource>%1</resource> has no <b>primary key</b> defined.</para>"
-                     "<para>Although a primary key is not required, it is needed "
+                i18nc("@info",
+                     "Table <resource>%1</resource> has no primary key defined."
+                     "<para><note>Although a primary key is not required, it is needed "
                      "for creating relations between database tables. "
-                     "Do you want a primary key to be automatically added now?</para>"
+                     "Do you want a primary key to be automatically added now?</note></para>"
                      "<para>If you want to add a primary key by hand, press <interface>Cancel</interface> "
-                     "to cancel saving table design.</para>", schema.name()),
+                     "to cancel saving table design.</para></note>", schema.name()),
                 QString(),
-                KGuiItem(i18n("&Add Primary Key"), koIconName("key")), KStandardGuiItem::no(),
+                KGuiItem(i18nc("Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
+                KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()),
                 KStandardGuiItem::cancel(),
                 "autogeneratePrimaryKeysOnTableDesignSaving");
             if (questionRes == KMessageBox::Cancel) {
