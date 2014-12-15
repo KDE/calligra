@@ -763,7 +763,7 @@ void KexiDBDebugTreeWidget::copy()
 // ----
 
 DebugWindow::DebugWindow(QWidget * parent)
-    : QWidget(parent)
+    : QWidget(parent, Qt::Window)
 {
 }
 
