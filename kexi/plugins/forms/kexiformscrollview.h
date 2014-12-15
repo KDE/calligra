@@ -298,7 +298,7 @@ protected:
 
     /*! Reimplemented from KexiFormDataProvider.
      \return information whether we're currently at new record or not.
-     This can be used e.g. by data-aware widgets to determine if "(autonumber)"
+     This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
 
