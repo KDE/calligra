@@ -1185,6 +1185,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
     return widgets;
 }
 
+// TODO: while this event sends the offset-adjusted position, the subsequent handleMouseMove calls do not. This means that they all contain the offset adjustment themselves, which is a needless duplication. Should be improved.
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 {
     // Get info about where the event occurred.
