@@ -1559,13 +1559,13 @@ void CellToolBase::focusEditorRequested()
     // This screws up <Tab> though (David)
     if (selection()->originSheet() != selection()->activeSheet()) {
         // Always focus the external editor, if not on the origin sheet.
-        d->externalEditor->setFocus();
+        if (d->externalEditor) d->externalEditor->setFocus();
     } else {
         // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->widget()->setFocus();
         } else {
-            d->externalEditor->setFocus();
+            if (d->externalEditor) d->externalEditor->setFocus();
         }
     }
 }
@@ -1603,17 +1603,11 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
-    if (!d->externalEditor) {
-        return;
-    }
     d->setProtectedActionsEnabled(readWrite);
 }
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
-    if (!d->externalEditor) {
-        return;
-    }
     d->setProtectedActionsEnabled(!protect);
 }
 
@@ -2937,7 +2931,7 @@ void CellToolBase::edit()
     } else {
         // Switch focus.
         if (editor()->widget()->hasFocus()) {
-            d->externalEditor->setFocus();
+            if (d->externalEditor) d->externalEditor->setFocus();
         } else {
             editor()->widget()->setFocus();
         }

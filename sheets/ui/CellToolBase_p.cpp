@@ -84,6 +84,7 @@ using namespace Calligra::Sheets;
 
 void CellToolBase::Private::updateEditor(const Cell& cell)
 {
+    if (!externalEditor) return;
     const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
     const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
@@ -184,7 +185,7 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
     q->action("insertFormula")->setEnabled(enable);
-    externalEditor->setEnabled(enable);
+    if (externalEditor) externalEditor->setEnabled(enable);
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
