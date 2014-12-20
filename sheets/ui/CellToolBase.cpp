@@ -1193,14 +1193,14 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     // Autofilling or merging, if the selection handle was hit.
     if (SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
         if (event->button() == Qt::LeftButton)
-            return new AutoFillStrategy(this, event->point, event->modifiers());
+            return new AutoFillStrategy(this, position, event->modifiers());
         else if (event->button() == Qt::MidButton)
-            return new MergeStrategy(this, event->point, event->modifiers());
+            return new MergeStrategy(this, position, event->modifiers());
     }
 
     // Pasting with the middle mouse button.
     if (event->button() == Qt::MidButton) {
-        return new PasteStrategy(this, event->point, event->modifiers());
+        return new PasteStrategy(this, position, event->modifiers());
     }
 
     // Check, if the selected area was hit.
@@ -1263,7 +1263,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
                 url = cellView.testAnchor(sheetView, cell, position.x() - xpos, position.y() - ypos);
             }
             if (!url.isEmpty()) {
-                return new HyperlinkStrategy(this, event->point,
+                return new HyperlinkStrategy(this, position,
                                              event->modifiers(), url, cellView.textRect());
             }
         }
@@ -1272,10 +1272,10 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     // Drag & drop, if the selected area was hit.
     const bool controlPressed = event->modifiers() & Qt::ControlModifier;
     if (hitSelection && !controlPressed && !selection()->referenceSelectionMode()) {
-        return new DragAndDropStrategy(this, event->point, event->modifiers());
+        return new DragAndDropStrategy(this, position, event->modifiers());
     }
 
-    return new SelectionStrategy(this, event->point, event->modifiers());
+    return new SelectionStrategy(this, position, event->modifiers());
 }
 
 void CellToolBase::selectionChanged(const Region& region)

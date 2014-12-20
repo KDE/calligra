@@ -98,6 +98,13 @@ public:
      * Sets an external editor to be associated with the internal editor of this tool.
      */
     void setExternalEditor(Calligra::Sheets::ExternalEditor* editor);
+
+    /**
+     * The shape offset in document coordinates.
+     */
+    virtual QPointF offset() const = 0;
+    virtual QSizeF size() const = 0;
+
 public Q_SLOTS:
     /**
      * Scrolls to the cell located at \p location.
@@ -114,12 +121,6 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
     void applyUserInput(const QString &userInput, bool expandMatrix = false);
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
-
-    /**
-     * The shape offset in document coordinates.
-     */
-    virtual QPointF offset() const = 0;
-    virtual QSizeF size() const = 0;
 
     /**
      * The canvas scrolling offset in document coordinates.
