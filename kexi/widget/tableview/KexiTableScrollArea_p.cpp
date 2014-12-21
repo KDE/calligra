@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -24,13 +24,12 @@
    Original Project: buX (www.bux.at)
 */
 
-#include "kexitableview_p.h"
+#include "KexiTableScrollArea_p.h"
 #include "kexitableedit.h"
 
-#include <QLabel>
+#include <QScrollBar>
 
-
-KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
+KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
         : appearance(t)
 {
     clearVariables();
@@ -42,7 +41,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     skipKeyPress = false;
     ensureCellVisibleOnShow = QPoint(-1, -1);
     internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height() / 2;
-    highlightedRecord = -1;
+    highlightedRow = -1;
     moveCursorOnMouseRelease = false;
     horizontalHeaderVisible = true;
     recentCellWithToolTip = QPoint(-1, -1);
@@ -50,13 +49,19 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     firstTimeEnsureCellVisible = true;
     insideResizeEvent = false;
     firstShowEvent = true;
+    scrollAreaWidget = 0;
 }
 
-KexiTableViewPrivate::~KexiTableViewPrivate()
+KexiTableScrollArea::Private::~Private()
 {
+    delete horizontalHeader;
+    horizontalHeader = 0; //!< set because there may be pending events
+    delete verticalHeader;
+    verticalHeader = 0; //!< set because there may be pending events
+    delete headerModel;
 }
 
-void KexiTableViewPrivate::clearVariables()
+void KexiTableScrollArea::Private::clearVariables()
 {
     // Initialize variables
 }

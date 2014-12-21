@@ -62,6 +62,13 @@ public:
         ButtonNew
     };
 
+    //! Position related to scroll area's horizontal scroll bar
+    //! @see setPositionRelativeToHorizontalScrollBar
+    enum Position {
+        AsideOfHorizontalScrollBar, //!< The navigator is placed aside of the horizontal scroll bar
+        BelowHorizontalScrollBar    //!< The navigator is placed below the horizontal scroll bar
+    };
+
     KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView);
     virtual ~KexiRecordNavigator();
 
@@ -108,6 +115,21 @@ public:
         static const KGuiItem& moveToNewRecord();
     };
 
+    /*! @return pixmap with a "pen" icon appropriate to indicate "editing" state for a row.
+     Can be reused elsewhere for consistency.
+     Foreground color from @a palette palette is used to colorize the icon. */
+    static QPixmap penPixmap(const QPalette &palette);
+
+    /*! @return pixmap with a "plus" icon appropriate to indicate "adding" state for a row
+     Can be reused elsewhere for consistency.
+     Foreground color from @a palette palette is used to colorize the icon. */
+    static QPixmap plusPixmap(const QPalette &palette);
+
+    /*! @return pixmap with a "pointer" icon appropriate to indicate "current" state for a row
+     Can be reused elsewhere for consistency.
+     Foreground color from @a palette palette is used to colorize the icon. */
+    static QPixmap pointerPixmap(const QPalette &palette);
+
 public slots:
     /*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
     void setInsertingEnabled(bool set);
@@ -148,9 +170,10 @@ public slots:
     void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
     void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
 
-    /*! Inserts the record navigator aside of the horizontal scroll bar of the @a area scroll area.
-     Once the navigator is inserted, subsequent calls of this method will do nothing. */
-    void insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area);
+    /*! Sets position relative to scroll area's @a area horizontal scrollbar.
+     Once the position is set, subsequent calls of this method with the same value
+     of @a position do nothing. */
+    void setPositionRelativeToHorizontalScrollBar(QAbstractScrollArea *area, Position position);
 
 signals:
     void prevButtonClicked();
@@ -172,6 +195,8 @@ protected:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
     virtual void wheelEvent(QWheelEvent *e);
+
+    virtual void resizeEvent(QResizeEvent *e);
 
     QToolButton* createAction(const KGuiItem& item);
     virtual void paintEvent(QPaintEvent* pe);

@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,9 @@
 #ifndef KEXITABLEVIEW_P_H
 #define KEXITABLEVIEW_P_H
 
-#include "kexitableview.h"
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaHeader.h"
+#include "KexiTableScrollAreaHeaderModel.h"
 
 #include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
@@ -41,6 +43,7 @@
 #include <QHash>
 #include <QRubberBand>
 
+class KexiTableScrollAreaWidget;
 class KexiTableEdit;
 class QLabel;
 
@@ -49,25 +52,26 @@ class QLabel;
 class KexiTableViewCellToolTip : public QToolTip
 {
 public:
-    explicit KexiTableViewCellToolTip(KexiTableView * tableView);
+    explicit KexiTableViewCellToolTip(KexiTableScrollArea * tableView);
     virtual ~KexiTableViewCellToolTip();
 protected:
     virtual void maybeTip(const QPoint & p);
 
-    KexiTableView *m_tableView;
+    KexiTableScrollArea *m_tableView;
 };
 
 /*! KexiTableView's internal structures
  @internal */
-class KexiTableViewPrivate
+class KexiTableScrollArea::Private
 {
 public:
-    explicit KexiTableViewPrivate(KexiTableView* t);
-    ~KexiTableViewPrivate();
+    explicit Private(KexiTableScrollArea* t);
+    ~Private();
 
     void clearVariables();
 
-    KexiTableView *tv;
+    KexiTableScrollArea *tv;
+    KexiTableScrollAreaWidget *scrollAreaWidget;
 
     //! editors: one for each column (indexed by KexiDB::TableViewColumn)
     QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
@@ -75,7 +79,7 @@ public:
     QTimer *pUpdateTimer;
     int menu_id_addRecord;
     int menu_id_removeRecord;
-    KexiTableView::ScrollDirection scrollDirection;
+    KexiTableScrollArea::ScrollDirection scrollDirection;
     bool editOnDoubleClick;
     bool needAutoScroll;
     bool disableDrawContents;
@@ -91,8 +95,19 @@ public:
     /*! used to force single skip keyPress event. */
     bool skipKeyPress;
 
-    /*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
+    KexiTableScrollAreaHeaderModel *headerModel;
+
+    KexiTableScrollAreaHeader *horizontalHeader;
+
+    /*! Needed because horizontalHeader->isVisible() is not always accurate. True by default.  */
     bool horizontalHeaderVisible;
+
+    KexiTableScrollAreaHeader *verticalHeader;
+
+    /*! true, if certical header shouldn't be increased in
+     KexiTableView::slotRowInserted() because it was already done
+     in KexiTableView::createEditor(). */
+    bool verticalHeaderAlreadyAdded;
 
     /*! true if cursor should be moved on mouse release evenr rather than mouse press
      in handleContentsMousePressOrRelease().
@@ -103,7 +118,7 @@ public:
 
     bool insideResizeEvent;
 
-    KexiTableView::Appearance appearance;
+    KexiTableScrollArea::Appearance appearance;
 
     //! brushes, fonts
     QBrush diagonalGrayPattern;
@@ -125,8 +140,10 @@ public:
      At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
     int internal_bottomMargin;
 
-    /*! Helper for "highlighted record" effect. */
-    int highlightedRecord;
+    QMargins viewportMargins;
+
+    /*! Helper for "highlighted row" effect. */
+    int highlightedRow;
 
     /*! Id of context menu key (cached). */
     int contextMenuKey;

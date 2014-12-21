@@ -21,7 +21,6 @@
 #include <QLabel>
 #include <QIntValidator>
 #include <QAbstractScrollArea>
-#include <Q3ScrollView> //tmp
 #include <QScrollBar>
 #include <QPixmap>
 #include <QFocusEvent>
@@ -38,10 +37,36 @@
 #include <kdebug.h>
 
 #include "kexirecordnavigator.h"
-#include "kexirecordmarker.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/utils.h>
 #include <core/KexiRecordNavigatorHandler.h>
+
+#include "../../pics/tableview_pen.xpm"
+#include "../../pics/tableview_plus.xpm"
+#include "../../pics/tableview_pointer.xpm"
+
+//! @internal
+/*! @warning not reentrant! */
+struct KexiRecordNavigatorStatic {
+    KexiRecordNavigatorStatic()
+     : pen(tableview_pen_xpm)
+     , plus(tableview_plus_xpm)
+     , pointer(tableview_pointer_xpm)
+    {
+    }
+    static QPixmap replaceColors(const QPixmap &pixmap, const QPalette &palette)
+    {
+        QColor fc(palette.color(QPalette::Foreground));
+        QPixmap p(pixmap);
+        KexiUtils::replaceColors(&p, fc);
+        return p;
+    }
+    QPixmap pen, plus, pointer;
+};
+
+K_GLOBAL_STATIC(KexiRecordNavigatorStatic, KexiRecordNavigator_static)
+
+// ----
 
 //! @internal
 class KexiRecordNavigator::Private
@@ -54,6 +79,7 @@ public:
             , editingIndicatorEnabled(false)
             , editingIndicatorVisible(false)
             , isInsertingEnabled(true)
+            , positionToHorizontalScrollBar(KexiRecordNavigator::BelowHorizontalScrollBar)
     {
     }
     KexiRecordNavigatorHandler *handler;
@@ -74,6 +100,9 @@ public:
     bool editingIndicatorEnabled;
     bool editingIndicatorVisible;
     bool isInsertingEnabled;
+    KexiRecordNavigator::Position positionToHorizontalScrollBar;
+    QPointer<QWidget> originalParentWidget;
+    QSizePolicy originalSizePolicy;
 };
 
 //--------------------------------------------------
@@ -82,9 +111,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* p
         : QWidget(parent)
         , d(new Private)
 {
-    if (!parentView) { //tmp
-        setAutoFillBackground(true);
-    }
+    Q_ASSERT(parentView);
     setFocusPolicy(Qt::NoFocus);
     setParentView(parentView);
     d->lyr = new QHBoxLayout(this);
@@ -110,15 +137,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* p
     KexiUtils::WidgetMargins margins;
     margins.copyToWidget(d->navRecordNumber);
     d->navRecordNumber->setFrame(false);
-    if (parentView) {
-        kDebug() << parentView->horizontalScrollBar()->height();
-        if (parentView) {
-            d->navRecordNumber->setFixedHeight( qMax(0 /*parentView->bottomMargin()*/, fm.height() + 2) );
-        }
-    }
-    else { // tmp
-        d->navRecordNumber->setFixedHeight( qMax(qobject_cast<Q3ScrollView*>(parent)->bottomMargin(), fm.height() + 2) );
-    }
+
+    kDebug() << parentView->horizontalScrollBar()->height();
+    d->navRecordNumber->setFixedHeight( qMax(0 /*parentView->bottomMargin()*/, fm.height() + 2) );
     d->navRecordNumber->setAlignment(Qt::AlignRight | (/*winStyle ? Qt::AlignBottom :*/ Qt::AlignVCenter));
     d->navRecordNumber->setFocusPolicy(Qt::ClickFocus);
     d->navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
@@ -139,12 +160,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* p
     QPalette navRecordCountPalette(d->navRecordCount->palette());
     navRecordCountPalette.setBrush( QPalette::Base, QBrush(Qt::transparent) );
     d->navRecordCount->setPalette(navRecordCountPalette);
-    if (parentView) {
-        d->navRecordCount->setFixedHeight( qMax(0/*parentView->bottomMargin()*/, fm.height() + 2) );
-    }
-    else { // tmp
-        d->navRecordCount->setFixedHeight( qMax(qobject_cast<Q3ScrollView*>(parent)->bottomMargin(), fm.height() + 2) );
-    }
+    d->navRecordCount->setFixedHeight( qMax(0/*parentView->bottomMargin()*/, fm.height() + 2) );
     d->navRecordCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->navRecordCount->setFocusPolicy(Qt::NoFocus);
@@ -180,10 +196,13 @@ KexiRecordNavigator::~KexiRecordNavigator()
 
 QToolButton* KexiRecordNavigator::createAction(const KGuiItem& item)
 {
-    QToolButton *toolButton;
-    d->lyr->addWidget(toolButton = new KexiSmallToolButton(item.icon(), QString(), this), 0, Qt::AlignVCenter);
+    // add the button outside of the layout: needed because oxygen, and especially qtcurve draw strange margins
+    QWidget *par = new QWidget(this);
+    d->lyr->addWidget(par, 0, Qt::AlignVCenter);
+    QToolButton *toolButton = new KexiSmallToolButton(item.icon(), QString(), par);
     toolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     toolButton->setMinimumWidth(toolButton->sizeHint().width() + 2*3);
+    par->setMinimumWidth(toolButton->minimumWidth());
     toolButton->setFocusPolicy(Qt::NoFocus);
     toolButton->setToolTip(item.toolTip());
     toolButton->setWhatsThis(item.whatsThis());
@@ -221,8 +240,7 @@ bool KexiRecordNavigator::eventFilter(QObject *o, QEvent *e)
             case Qt::Key_Escape: {
                 ke->accept();
                 d->navRecordNumber->undo();
-                if (d->view)
-                    d->view->setFocus();
+                d->view->setFocus();
                 return true;
             }
             case Qt::Key_Enter:
@@ -250,8 +268,9 @@ bool KexiRecordNavigator::eventFilter(QObject *o, QEvent *e)
             uint r = d->navRecordNumber->text().toUInt(&ok);
             if (!ok || r < 1)
                 r = (recordCount() > 0) ? 1 : 0;
-            if (d->view && (hasFocus() || e->type() == QEvent::KeyPress))
+            if (hasFocus() || e->type() == QEvent::KeyPress) {
                 d->view->setFocus();
+            }
             setCurrentRecordNumber(r);
             emit recordNumberEntered(r);
             if (d->handler)
@@ -286,6 +305,17 @@ void KexiRecordNavigator::wheelEvent(QWheelEvent* wheelEvent)
     }
 }
 
+void KexiRecordNavigator::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    // update height of buttons: they are not in the layout
+    foreach (KexiSmallToolButton *btn, findChildren<KexiSmallToolButton*>()) {
+        const int h = height();
+        btn->setFixedHeight(h + 2);
+        btn->parentWidget()->setFixedHeight(h);
+        btn->move(0, (btn->parentWidget()->height() - btn->height()) / 2);
+    }
+}
 
 void KexiRecordNavigator::setCurrentRecordNumber(uint r)
 {
@@ -323,7 +353,7 @@ void KexiRecordNavigator::setRecordCount(uint count)
     if (d->navRecordCount->text().length() != n.length()) {//resize
         d->navRecordCount->setFixedWidth(d->nav1DigitWidth * (n.length() + 1));
 
-        if (d->view && d->view->horizontalScrollBar()->isVisible()) {
+        if (d->view->horizontalScrollBar()->isVisible()) {
             //+width of the delta
             resize(width() + (n.length() - d->navRecordCount->text().length())*d->nav1DigitWidth, height());
         }
@@ -334,9 +364,6 @@ void KexiRecordNavigator::setRecordCount(uint count)
         d->navRecordNumber->setFixedWidth(w);
 
     d->navRecordCount->setText(n);
-    if (!d->view) { // tmp
-        qobject_cast<Q3ScrollView*>(parentWidget())->updateScrollBars();
-    }
     updateButtons(recordCount());
 }
 
@@ -367,44 +394,28 @@ void KexiRecordNavigator::setLeftMargin(int leftMargin)
 {
     QWidget::updateGeometry();
 // kDebug() <<"view "<<d->view;
-    if (d->view) {
-        int navWidth;
-        if (d->view->horizontalScrollBar()->isVisible()) {
-            navWidth = sizeHint().width();
-        } else {
-            navWidth = leftMargin + d->view->viewport()->width(); // TODO
-        }
+    int navWidth;
+    if (d->view->horizontalScrollBar()->isVisible()) {
+        navWidth = sizeHint().width();
+    } else {
+        navWidth = leftMargin + d->view->viewport()->width(); // TODO
+    }
 
-        /*  kDebug() << "setGeometry("<<QRect(
-              d->view->frameWidth(),
-              d->view->height() - d->view->horizontalScrollBar()->sizeHint().height()-d->view->frameWidth(),
-              navWidth,
-              d->view->horizontalScrollBar()->sizeHint().height())<<")";*/
-        setGeometry(
-            d->view->frameWidth(),
-            d->view->height() - d->view->horizontalScrollBar()->sizeHint().height() - d->view->frameWidth(),
-            navWidth,
-            d->view->horizontalScrollBar()->sizeHint().height()
-        );
-    }
-    else { // !d->view - tmp
-        qobject_cast<Q3ScrollView*>(parentWidget())->updateScrollBars();
-        int navWidth;
-        if (qobject_cast<Q3ScrollView*>(parentWidget())->horizontalScrollBar()->isVisible()) {
-            navWidth = sizeHint().width();
-        }
-        else {
-            navWidth = leftMargin + qobject_cast<Q3ScrollView*>(parentWidget())->clipper()->width();
-        }
-        setGeometry(
-            qobject_cast<Q3ScrollView*>(parentWidget())->frameWidth(),
-            qobject_cast<Q3ScrollView*>(parentWidget())->height()
-                - qobject_cast<Q3ScrollView*>(parentWidget())->horizontalScrollBar()->sizeHint().height()
-                - qobject_cast<Q3ScrollView*>(parentWidget())->frameWidth(),
-            navWidth,
-            qobject_cast<Q3ScrollView*>(parentWidget())->horizontalScrollBar()->sizeHint().height()
-        );
-    }
+    /*  kDebug() << "setGeometry("<<QRect(
+          d->view->frameWidth(),
+          d->view->height() - d->view->horizontalScrollBar()->sizeHint().height()-d->view->frameWidth(),
+          navWidth,
+          d->view->horizontalScrollBar()->sizeHint().height())<<")";*/
+    // avoid making height too small: especially qtcurve style can have tiny scrollbars (9 pixels),
+    // so use fontmetrics as a sane reference
+    const int h = qMax(d->view->horizontalScrollBar()->sizeHint().height(),
+                       fontMetrics().lineSpacing() + 4);
+    setGeometry(
+        d->view->frameWidth(),
+        d->view->height() - h - d->view->frameWidth(),
+        navWidth,
+        h
+    );
 }
 
 void KexiRecordNavigator::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
@@ -532,8 +543,7 @@ void KexiRecordNavigator::setEditingIndicatorEnabled(bool set)
         if (!d->editingIndicatorLabel) {
             d->editingIndicatorLabel = new QLabel(this);
             d->editingIndicatorLabel->setAlignment(Qt::AlignCenter);
-            QPixmap pix( *KexiRecordMarker::penPixmap() );
-            d->editingIndicatorLabel->setFixedWidth(pix.width() + 2*2);
+            d->editingIndicatorLabel->setFixedWidth(KexiRecordNavigator::penPixmap(palette()).width() + 2*2);
             d->lyr->insertWidget(0, d->editingIndicatorLabel);
         }
         d->editingIndicatorLabel->show();
@@ -551,8 +561,7 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
     if (!d->editingIndicatorEnabled)
         return;
     if (d->editingIndicatorVisible) {
-        QPixmap pix( *KexiRecordMarker::penPixmap() );
-        d->editingIndicatorLabel->setPixmap(pix);
+        d->editingIndicatorLabel->setPixmap(KexiRecordNavigator::penPixmap(palette()));
         d->editingIndicatorLabel->setToolTip(i18n("Editing indicator"));
     } else {
         d->editingIndicatorLabel->setPixmap(QPixmap());
@@ -573,14 +582,26 @@ void KexiRecordNavigator::paintEvent(QPaintEvent* pe)
     style()->drawPrimitive(QStyle::PE_Frame, &option, &p, this);
 }
 
-void KexiRecordNavigator::insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area)
+void KexiRecordNavigator::setPositionRelativeToHorizontalScrollBar(QAbstractScrollArea *area, Position position)
 {
-    if (parentWidget() != area->horizontalScrollBar()->parentWidget()) {
-        setParent(area->horizontalScrollBar()->parentWidget());
-        qobject_cast<QBoxLayout*>(area->horizontalScrollBar()->parentWidget()->layout())
-                ->insertWidget(0, this);
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    if (d->positionToHorizontalScrollBar == position) {
+        return;
     }
+    if (position == AsideOfHorizontalScrollBar) {
+        d->originalParentWidget = parentWidget();
+        d->originalSizePolicy = sizePolicy();
+        if (parentWidget() != area->horizontalScrollBar()->parentWidget()) {
+            setParent(area->horizontalScrollBar()->parentWidget());
+            qobject_cast<QBoxLayout*>(area->horizontalScrollBar()->parentWidget()->layout())
+                    ->insertWidget(0, this);
+            setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        }
+    }
+    else {
+        setParent(d->originalParentWidget);
+        setSizePolicy(d->originalSizePolicy);
+    }
+    d->positionToHorizontalScrollBar = position;
 }
 
 //------------------------------------------------
@@ -633,6 +654,27 @@ const KGuiItem& KexiRecordNavigator::Actions::moveToLastRecord()
 const KGuiItem& KexiRecordNavigator::Actions::moveToNewRecord()
 {
     return KexiRecordNavigatorActions_internal->moveToNewRecord;
+}
+
+//static
+QPixmap KexiRecordNavigator::penPixmap(const QPalette &palette)
+{
+    return KexiRecordNavigatorStatic::replaceColors(
+                KexiRecordNavigator_static->pen, palette);
+}
+
+//static
+QPixmap KexiRecordNavigator::plusPixmap(const QPalette &palette)
+{
+    return KexiRecordNavigatorStatic::replaceColors(
+                KexiRecordNavigator_static->plus, palette);
+}
+
+//static
+QPixmap KexiRecordNavigator::pointerPixmap(const QPalette &palette)
+{
+    return KexiRecordNavigatorStatic::replaceColors(
+                KexiRecordNavigator_static->pointer, palette);
 }
 
 #include "kexirecordnavigator.moc"

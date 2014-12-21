@@ -52,9 +52,9 @@
 #include <KexiMainWindowIface.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
+#include <widget/tableview/KexiTableScrollArea.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
-#include <kexitableview.h>
 
 #include <kexi_global.h>
 
@@ -107,7 +107,7 @@ static QVariant tryCastQVariant(const QVariant& fromVal, QVariant::Type toType)
 
 
 KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
-        : KexiDataTable(parent, false/*not db-aware*/)
+        : KexiDataTableView(parent, false/*not db-aware*/)
         , KexiTableDesignerInterface()
         , d(new KexiTableDesignerViewPrivate(this))
 {
@@ -116,7 +116,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     KexiCustomPropertyFactory::init();
 
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    d->view = dynamic_cast<KexiTableView*>(mainWidget());
+    d->view = dynamic_cast<KexiTableScrollArea*>(mainWidget());
 
     d->data = new KexiDB::TableViewData();
     if (conn->isReadOnly())
@@ -274,9 +274,10 @@ void KexiTableDesignerView::initData()
 
     //column widths
     d->view->setColumnWidth(COLUMN_ID_ICON, IconSize(KIconLoader::Small) + 10);
+    d->view->setColumnResizeEnabled(COLUMN_ID_ICON, false);
     d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
     d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
-    d->view->setColumnStretchEnabled(true, COLUMN_ID_DESC);   //last column occupies the rest of the area
+    d->view->setColumnResizeEnabled(COLUMN_ID_DESC, true);   //last column occupies the rest of the area
     const int minCaptionColumnWidth = d->view->fontMetrics().width("wwwwwwwwwww");
     if (minCaptionColumnWidth > d->view->columnWidth(COLUMN_ID_CAPTION))
         d->view->setColumnWidth(COLUMN_ID_CAPTION, minCaptionColumnWidth);
@@ -484,7 +485,7 @@ void KexiTableDesignerView::updateActions(bool activated)
 
 void KexiTableDesignerView::slotUpdateRowActions(int row)
 {
-    KexiDataTable::slotUpdateRowActions(row);
+    KexiDataTableView::slotUpdateRowActions(row);
     updateActions();
 }
 
@@ -1841,7 +1842,7 @@ void KexiTableDesignerView::changePropertyVisibility(
 
 void KexiTableDesignerView::propertySetSwitched()
 {
-    KexiDataTable::propertySetSwitched();
+    KexiDataTableView::propertySetSwitched();
     KexiLookupColumnPage *page = qobject_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
     if (page)
         page->assignPropertySet(propertySet());

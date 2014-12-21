@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003   Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIDATATABLEVIEW_H
-#define KEXIDATATABLEVIEW_H
+#ifndef KEXIDATATABLESCROLLAREA_H
+#define KEXIDATATABLESCROLLAREA_H
 
-#include "kexitableview.h"
+#include "KexiTableScrollArea.h"
 
 namespace KexiDB
 {
@@ -30,17 +30,17 @@ class Cursor;
 }
 
 /**
- * Database aware table widget.
+ * Database-aware table widget.
  */
-class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
+class KEXIDATATABLE_EXPORT KexiDataTableScrollArea : public KexiTableScrollArea
 {
     Q_OBJECT
 
 public:
     /**
-     * creates a blank widget
+     * Creates a blank widget
      */
-    explicit KexiDataTableView(QWidget *parent);
+    explicit KexiDataTableScrollArea(QWidget *parent);
 
     /*! Creates a table widget and fills it using data from \a cursor.
      Cursor will be opened (with open()) if it is not yet opened.
@@ -48,11 +48,11 @@ public:
      and Connection::executeQuery()), otherwise the table view remain not filled with data.
      Cursor \a cursor will not be owned by this object.
      */
-    KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor);
+    KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor);
 
-    ~KexiDataTableView();
+    ~KexiDataTableScrollArea();
 
-    using KexiTableView::setData;
+    using KexiTableScrollArea::setData;
 
     /*! Fills table view with data using \a cursor. \return true on success.
      Cursor \a cursor will not be owned by this object. */

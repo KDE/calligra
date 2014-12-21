@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003   Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QTimer>
-#include <QApplication>
+#include "KexiDataTableScrollArea.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,34 +27,34 @@
 #include <db/connection.h>
 #include <db/cursor.h>
 
-#include "kexidatatableview.h"
-#include "kexidatatable.h"
+#include "KexiDataTableScrollArea.h"
+#include "KexiDataTableView.h"
 
 
-KexiDataTableView::KexiDataTableView(QWidget *parent)
-        : KexiTableView(0, parent)
+KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent)
+        : KexiTableScrollArea(0, parent)
 {
     init();
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor)
-        : KexiTableView(0, parent)
+KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor)
+        : KexiTableScrollArea(0, parent)
 {
     init();
     setData(cursor);
 }
 
-KexiDataTableView::~KexiDataTableView()
+KexiDataTableScrollArea::~KexiDataTableScrollArea()
 {
 }
 
 void
-KexiDataTableView::init()
+KexiDataTableScrollArea::init()
 {
     m_cursor = 0;
 }
 
-bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
+bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
 {
     if (!cursor) {
         clearColumns();
@@ -68,7 +67,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
     m_cursor = cursor;
 
     if (!m_cursor->query()) {
-        kDebug() << "WARNING: cursor should have query schema defined!\n--aborting setData().";
+        kWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
         m_cursor->debug();
         clearColumns();
         return false;
@@ -80,14 +79,14 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
     }
 
     if (!m_cursor->isOpened() && !m_cursor->open()) {
-        kWarning() << "cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
+        kWarning() << "Cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
         m_cursor->debug();
         clearColumns();
         return false;
     }
 
     KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
-    KexiDataTable* dataTable = qobject_cast<KexiDataTable*>(parentWidget());
+    KexiDataTableView* dataTable = qobject_cast<KexiDataTableView*>(parentWidget());
     if (dataTable) {
         dataTable->loadTableViewSettings(tv_data);
     }
@@ -101,8 +100,8 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
     //PRIMITIVE!! data setting:
     tv_data->preloadAllRows();
 
-    KexiTableView::setData(tv_data);
+    KexiTableScrollArea::setData(tv_data);
     return true;
 }
 
-#include "kexidatatableview.moc"
+#include "KexiDataTableScrollArea.moc"

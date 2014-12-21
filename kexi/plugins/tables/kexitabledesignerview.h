@@ -24,7 +24,7 @@
 #include <kexidb/alter.h>
 #include <core/kexitabledesignerinterface.h>
 
-#include <kexidatatable.h>
+#include <widget/tableview/KexiDataTableView.h>
 #include "kexitablepart.h"
 
 namespace KexiDB
@@ -61,7 +61,7 @@ class Command;
  Saving changes made to table containing data requires use of the AlterTableHandler
  functionality.
 */
-class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInterface
+class KexiTableDesignerView : public KexiDataTableView, public KexiTableDesignerInterface
 {
     Q_OBJECT
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,8 +24,8 @@
 
 #include <widget/dataviewcommon/kexidataawareview.h>
 
-class KexiDataTableView;
-class KexiTableView;
+class KexiDataTableScrollArea;
+class KexiTableScrollArea;
 
 namespace KexiDB
 {
@@ -35,11 +35,11 @@ class TableViewData;
 
 /*! @short Provides a data-driven (record-based) tabular view.
 
- The KexiDataTable can display data provided "by hand"
+ The KexiDataTableView can display data provided "by hand"
  or from KexiDB-compatible database source.
  @see KexiFormView
 */
-class KEXIDATATABLE_EXPORT KexiDataTable : public KexiDataAwareView
+class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiDataAwareView
 {
     Q_OBJECT
 
@@ -51,15 +51,15 @@ public:
      Otherwise, table will be not-db-aware,
       and KexiTableView is used internally. In the latter case,
       data can be set by calling tableView()->setData(KexiDB::TableViewData* data). */
-    KexiDataTable(QWidget *parent, bool dbAware = true);
+    explicit KexiDataTableView(QWidget *parent, bool dbAware = true);
 
     /*! CTOR2: Creates db-aware, table view initialized with \a cursor.
      KexiDataTableView is used internally. */
-    KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor);
+    KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor);
 
-    virtual ~KexiDataTable();
+    virtual ~KexiDataTableView();
 
-    KexiTableView* tableView() const;
+    KexiTableScrollArea* tableView() const;
 
     //! Loads settings for table into @a data model.
     //! Used after loading data model in KexiDataTableView::setData(KexiDB::Cursor*), before calling KexiTableView::setData().
@@ -80,9 +80,7 @@ protected slots:
 protected:
     void init();
 
-    
-
-class Private;
+    class Private;
     Private * const d;
 };
 

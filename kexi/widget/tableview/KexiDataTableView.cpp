@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include <QLayout>
 #include <QLabel>
 
@@ -29,13 +28,13 @@
 #include <db/utils.h>
 #include <db/tableviewdata.h>
 
-#include "kexidatatableview.h"
-#include "kexidatatable.h"
+#include "KexiDataTableScrollArea.h"
+#include "KexiDataTableView.h"
 #include <core/KexiWindow.h>
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
 
-class KexiDataTable::Private
+class KexiDataTableView::Private
 {
 public:
     bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString,
@@ -52,34 +51,34 @@ public:
     KexiDB::Transaction transaction;
 };
 
-KexiDataTable::KexiDataTable(QWidget *parent, bool dbAware)
+KexiDataTableView::KexiDataTableView(QWidget *parent, bool dbAware)
         : KexiDataAwareView(parent)
         , d(new Private)
 {
-    KexiTableView *view;
+    KexiTableScrollArea *view;
     if (dbAware)
-        view = new KexiDataTableView(this);
+        view = new KexiDataTableScrollArea(this);
     else
-        view = new KexiTableView(0, this);
+        view = new KexiTableScrollArea(0, this);
     view->setObjectName("datatableview");
 
     KexiDataAwareView::init(view, view, view);
 }
 
-KexiDataTable::KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor)
+KexiDataTableView::KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor)
         : KexiDataAwareView(parent)
         , d(new Private)
 {
-    KexiTableView *view = new KexiDataTableView(this, cursor);
+    KexiTableScrollArea *view = new KexiDataTableScrollArea(this, cursor);
     KexiDataAwareView::init(view, view, view);
 }
 
-KexiDataTable::~KexiDataTable()
+KexiDataTableView::~KexiDataTableView()
 {
     delete d;
 }
 
-bool KexiDataTable::loadTableViewSettings(KexiDB::TableViewData* data)
+bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
 {
     Q_ASSERT(data);
     const int id = window()->id();
@@ -112,23 +111,23 @@ bool KexiDataTable::loadTableViewSettings(KexiDB::TableViewData* data)
 }
 
 void
-KexiDataTable::setData(KexiDB::Cursor *c)
+KexiDataTableView::setData(KexiDB::Cursor *c)
 {
-    if (!dynamic_cast<KexiDataTableView*>(mainWidget()))
+    if (!dynamic_cast<KexiDataTableScrollArea*>(mainWidget()))
         return;
-    dynamic_cast<KexiDataTableView*>(mainWidget())->setData(c);
+    dynamic_cast<KexiDataTableScrollArea*>(mainWidget())->setData(c);
 }
 
-void KexiDataTable::filter()
+void KexiDataTableView::filter()
 {
 }
 
-KexiTableView* KexiDataTable::tableView() const
+KexiTableScrollArea* KexiDataTableView::tableView() const
 {
-  return dynamic_cast<KexiTableView*>(internalView());
+  return dynamic_cast<KexiTableScrollArea*>(internalView());
 }
 
-bool KexiDataTable::saveSettings()
+bool KexiDataTableView::saveSettings()
 {
 #ifdef __GNUC__
 #warning TODO save only if changed
@@ -137,8 +136,8 @@ bool KexiDataTable::saveSettings()
 #endif
     bool ok = true;
     KexiDB::TransactionGuard tg;
-    if (dynamic_cast<KexiDataTableView*>(mainWidget())) { // db-aware
-        KexiTableView* tv = tableView();
+    if (dynamic_cast<KexiDataTableScrollArea*>(mainWidget())) { // db-aware
+        KexiTableScrollArea* tv = tableView();
         const int id = window()->id();
         if (id > 0 && tv->data()->columnsCount() > 0) {
             QStringList widths;
@@ -160,4 +159,4 @@ bool KexiDataTable::saveSettings()
     return ok;
 }
 
-#include "kexidatatable.moc"
+#include "KexiDataTableView.moc"

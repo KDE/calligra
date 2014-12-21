@@ -20,7 +20,7 @@
 #ifndef TABLEVIEW_TEST_H
 #define TABLEVIEW_TEST_H
 
-#include <widget/tableview/kexidatatableview.h>
+#include <widget/tableview/KexiDataTableScrollArea.h>
 #include <db/cursor.h>
 
 #include <QDesktopWidget>
@@ -48,7 +48,7 @@ int tableViewTest()
         return 1;
     }
 
-    KexiDataTableView *tv = new KexiDataTableView(0, cursor);
+    KexiDataTableScrollArea *tv = new KexiDataTableScrollArea(0, cursor);
 
     tv->move((qApp->desktop()->width() - tv->width()) / 2, (qApp->desktop()->height() - tv->height()) / 2);
     tv->setWindowTitle(QString("%1: %2").arg(KGlobal::mainComponent().aboutData()->programName()).arg(tv->windowTitle()));

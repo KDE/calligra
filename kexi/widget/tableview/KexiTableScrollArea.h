@@ -24,13 +24,12 @@
    Original Project: buX (www.bux.at)
 */
 
-#ifndef KEXITABLEVIEW_H
-#define KEXITABLEVIEW_H
+#ifndef KEXITABLESCROLLAREA_H
+#define KEXITABLESCROLLAREA_H
 
-#include <Q3ScrollView>
+#include <QScrollArea>
 #include <QVariant>
 #include <QToolTip>
-#include <q3header.h>
 #include <QFocusEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
@@ -40,9 +39,6 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <kdebug.h>
-
-#include "kexitableedit.h"
 #include <db/tristate.h>
 #include <db/tableviewdata.h>
 #include <widget/utils/kexirecordnavigator.h>
@@ -53,20 +49,16 @@
 class QPrinter;
 class QPrintDialog;
 class QHelpEvent;
-
-class KexiTableView;
+class QAbstractItemModel;
 class KexiTableEdit;
-class KexiTableViewPrivate;
-
 
 //! minimum column width in pixels
 #define KEXITV_MINIMUM_COLUMN_WIDTH 10
 
-//! @short KexiTableView class provides a widget for displaying data in a tabular view.
-/*! @see KexiFormScrollView
-*/
-class KEXIDATATABLE_EXPORT KexiTableView :
-            public Q3ScrollView,
+//! @short KexiTableScrollArea class provides a widget for displaying data in a tabular view.
+/*! @see KexiFormScrollView */
+class KEXIDATATABLE_EXPORT KexiTableScrollArea :
+            public QScrollArea,
             public KexiRecordNavigatorHandler,
             public KexiSharedActionClient,
             public KexiDataAwareObjectInterface,
@@ -82,78 +74,87 @@ public:
     public:
         explicit Appearance(QWidget *widget = 0);
 
-        /*! base color for cells, default is "Base" color for application's
-         current active palette */
+        /*! Base color for cells, default is "Base" color for application's
+         current palette */
         QColor baseColor;
 
-        /*! text color for cells, default is "Text" color for application's
-         current active palette */
+        /*! Text color for cells, default is "Text" color for application's
+         current palette */
         QColor textColor;
 
-        /*! border color for cells, default is QColor(200,200,200) */
-        QColor borderColor;
+        /*! Grid color for cells, default is the same as default grid color of QTableView
+         for application's current palette. */
+        QColor gridColor;
 
         /*! empty area color, default is "Base" color for application's
-         current active palette */
+         current palette. */
         QColor emptyAreaColor;
 
-        /*! alternate background color, default is KGlobalSettings::alternateBackgroundColor() */
-        QColor alternateBackgroundColor;
+        /*! Alternate base color for cells, default is "AlternateBase" color for application's
+         current palette. */
+        QColor alternateBaseColor;
 
-        /*! true if background altering should be enabled, true by default */
+        /*! True if background alternate color should be used, true by default. */
         bool backgroundAltering;
 
-        /*! true if full-record-selection mode is set,
-         what means that all cells of the current record are always selected, instead of single cell.
+        /*! True if full-row-selection mode is set,
+         what means that all cells of the current row are always selected, instead of single cell.
          This mode is usable for read-only table views, when we're interested only in navigating
-         by records. False by default, even for read-only table views.
+         by rows. False by default, even for read-only table views.
         */
-        bool fullRecordSelection;
+        bool fullRowSelection;
 
-        /*! true if fullgrid is enabled. True by default.
+        /*! True if full grid is enabled. By default true if backgroundAltering is false
+         or if baseColor == alternateBaseColor.
          It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
-        bool gridEnabled;
+        bool horizontalGridEnabled;
+
+        /*! True if full grid is enabled. True by default.
+         It is set to false for comboboxpopup table, to mimic original
+         combobox look and feel. */
+        bool verticalGridEnabled;
 
         /*! \if the navigation panel is enabled (visible) for the view.
          True by default. */
         bool navigatorEnabled;
 
-        /*! true if "record highlight" behaviour is enabled. False by default. */
-        bool recordHighlightingEnabled;
+        /*! True if "row highlight" behaviour is enabled. False by default. */
+        bool rowHighlightingEnabled;
 
-        /*! true if "record highlight over " behaviour is enabled. False by default. */
-        bool recordMouseOverHighlightingEnabled;
+        /*! True if "row highlight over " behaviour is enabled. False by default. */
+        bool rowMouseOverHighlightingEnabled;
 
-        /*! true if selection of a record should be kept when a user moved mouse
-         pointer over other records. Makes only sense when recordMouseOverHighlightingEnabled is true.
+        /*! True if selection of a row should be kept when a user moved mouse
+         pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true.
          True by default. It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
         bool persistentSelections;
 
-        /*! color for record highlight, default is intermediate (33%/60%) between
+        /*! Color for row highlight, default is intermediate (33%/60%) between
          active highlight and base color. */
-        QColor recordHighlightingColor;
+        QColor rowHighlightingColor;
 
-        /*! color for text under record highlight, default is the same as textColor.
-         Used when recordHighlightingEnabled is true; */
-        QColor recordHighlightingTextColor;
+        /*! Color for text under row highlight, default is the same as textColor.
+         Used when rowHighlightingEnabled is true. */
+        QColor rowHighlightingTextColor;
 
-        /*! color for record highlight for mouseover, default is intermediate (20%/80%) between
-         active highlight and base color. Used when recordMouseOverHighlightingEnabled is true. */
-        QColor recordMouseOverHighlightingColor;
+        /*! Color for row highlight for mouseover, default is intermediate (20%/80%) between
+         active highlight and base color. Used when rowMouseOverHighlightingEnabled is true. */
+        QColor rowMouseOverHighlightingColor;
 
-        /*! color for text under record highlight for mouseover, default is the same as textColor.
-         Used when recordMouseOverHighlightingEnabled is true; */
-        QColor recordMouseOverHighlightingTextColor;
+        /*! Color for text under row highlight for mouseover, default is the same as textColor.
+         Used when rowMouseOverHighlightingEnabled is true. */
+        QColor rowMouseOverHighlightingTextColor;
 
-        /*! Like recordMouseOverHighlightingColor but for areas painted with alternate color.
-         This is computed using active highlight color and alternateBackgroundColor. */
-        QColor recordMouseOverAlternateHighlightingColor;
+        /*! Like rowMouseOverHighlightingColor but for areas painted with alternate color.
+         This is computed using active highlight color and alternateBaseColor. */
+        QColor rowMouseOverAlternateHighlightingColor;
     };
 
-    explicit KexiTableView(KexiDB::TableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
-    virtual ~KexiTableView();
+    explicit KexiTableScrollArea(KexiDB::TableViewData* data = 0, QWidget* parent = 0);
+
+    virtual ~KexiTableScrollArea();
 
     //! redeclared to avoid conflict with private QWidget::data
     inline KexiDB::TableViewData *data() const {
@@ -166,17 +167,14 @@ public:
     /*! Sets appearance settings. Table view is updated automatically. */
     void setAppearance(const Appearance& a);
 
-    /*! \return string displayed for column's header \a colNum */
-    QString columnCaption(int colNum) const;
-
     /*! Convenience function.
-     \return field object that define column \a colNum or NULL if there is no such column */
-    KexiDB::Field* field(int colNum) const;
+     \return field object that define column \a column or NULL if there is no such column */
+    KexiDB::Field* field(int column) const;
 
     /*! Reimplementation for KexiDataAwareObjectInterface */
     virtual void setSpreadSheetMode();
 
-    /*! \return maximum number of records that can be displayed per one "page"
+    /*! \return maximum number of rows that can be displayed per one "page"
      for current table view's size. */
     virtual int rowsPerPage() const;
 
@@ -205,6 +203,12 @@ public:
     bool editableOnDoubleClick() const;
     void setEditableOnDoubleClick(bool set);
 
+    //! @return horizontal header
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return vertical header
+    virtual QHeaderView* verticalHeader() const;
+
     //! \return true if the vertical header is visible
     bool verticalHeaderVisible() const;
 
@@ -217,6 +221,8 @@ public:
     //! Sets horizontal header's visibility
     void setHorizontalHeaderVisible(bool set);
 
+    void updateViewportMargins();
+
 #ifndef KEXI_NO_PRINT
     // printing
     // void  setupPrinter(KPrinter &printer, QPrintDialog &printDialog);
@@ -227,6 +233,10 @@ public:
     virtual QSizePolicy sizePolicy() const;
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
+
+    /*! @return geometry of the viewport, i.e. the scrollable area, minus any scrollbars, etc.
+     Implementation for KexiDataAwareObjectInterface. */
+    virtual QRect viewportGeometry() const;
 
     /*! Reimplemented to update cached fonts and row sizes for the painter. */
     void setFont(const QFont &f);
@@ -248,17 +258,15 @@ public:
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
-    /*! \return highlighted record number or -1 if no record is highlighted.
-     Makes sense if record highlighting is enabled.
-     @see Appearance::recordHighlightingEnabled setHighlightedRecord() */
-    int highlightedRecord() const;
+    /*! \return highlighted row number or -1 if no row is highlighted.
+     Makes sense if row highlighting is enabled.
+     @see Appearance::rowHighlightingEnabled setHighlightedRow() */
+    int highlightedRow() const;
 
     KexiDB::RecordData *highlightedItem() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
-    virtual QScrollBar* verticalScrollBar() const {
-        return Q3ScrollView::verticalScrollBar();
-    }
+    virtual QScrollBar* verticalScrollBar() const;
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -269,18 +277,30 @@ public slots:
 
     virtual void clearColumnsInternal(bool repaint);
 
-    /*! Adjusts \a colNum column's width to its (current) contents.
-     If \a colNum == -1, all columns' width is adjusted. */
-    void adjustColumnWidthToContents(int colNum = -1);
+    /*! Adjusts \a column column's width to its (current) contents.
+     If \a column == -1, all columns' width is adjusted. */
+    void adjustColumnWidthToContents(int column = -1);
 
-    //! Sets width of column width to \a width.
-    void setColumnWidth(int col, int width);
+    //! Sets column width to \a width.
+    void setColumnWidth(int column, int width);
 
-    /*! If \a set is true, \a colNum column is resized to take full possible width.
-     If \a set is false, no automatic resize will be performed.
-     If \a colNum is -1, all columns are equally resized, when needed, to take full possible width.
-     This method behaves like QHeader::setStretchEnabled ( bool b, int section ). */
-    void setColumnStretchEnabled(bool set, int colNum);
+    /*! If \a set is true, \a column column can be interactively resized by user.
+     This is equivalent of QHeaderView::setResizeMode(column, QHeaderView::Interactive).
+     If \a set is false, user cannot resize the column.
+     This is equivalent of QHeaderView::setResizeMode(column, QHeaderView::Fixed).
+     In both cases the column is initially resized to its default size and can be resized
+     programatically afterwards using setColumnWidth(int, int).
+      */
+    void setColumnResizeEnabled(int column, bool set);
+
+    /*! If \a set is true, all columns in this table view can be interactively
+     resized by user.
+     This is equivalent of QHeaderView::setResizeMode(QHeaderView::Interactive).
+     If \a set is false, user cannot resize the columns.
+     This is equivalent of QHeaderView::setResizeMode(QHeaderView::Fixed).
+     In both cases columns are initially resized to their default sizes and can be resized
+     programatically afterwards using setColumnWidth(int, int). */
+    void setColumnsResizeEnabled(bool set);
 
     /*! Maximizes widths of columns selected by \a columnList, so the horizontal
      header has maximum overall width. Each selected column's width will be increased
@@ -290,26 +310,21 @@ public slots:
 
     /*! Adjusts the size of the sections to fit the size of the horizontal header
      as completely as possible. Only sections for which column stretch is enabled will be resized.
-     \sa setColumnStretchEnabled() QHeader::adjustHeaderSize() */
+     \sa setColumnStretchEnabled() QHeaderView::resizeSections() */
     void adjustHorizontalHeaderSize();
 
-    /*! Sets highlighted record number or -1 if no record has to be highlighted.
-     Makes sense if record highlighting is enabled.
-     @see Appearance::recordHighlightingEnabled */
-    void setHighlightedRecord(int record);
-
-    /*! Sets no record that will be highlighted. Equivalent to setHighlightedRecord(-1). */
-    inline void clearHighlightedRecord() {
-        setHighlightedRecord(-1);
-    }
+    /*! Sets highlighted row number or -1 if no row has to be highlighted.
+     Makes sense if row highlighting is enabled.
+     @see Appearance::rowHighlightingEnabled */
+    void setHighlightedRow(int row);
 
     /*! Ensures that cell at \a row and \a col is visible.
      If \a col is -1, current column number is used. \a row and \a col (if not -1) must
      be between 0 and rows() (or cols() accordingly). */
-    virtual void ensureCellVisible(int row, int col/*=-1*/);
+    virtual void ensureCellVisible(int row, int col);
 
-    /*! Deletes currently selected record; does nothing if no record
-     is currently selected. If record is in edit mode, editing
+    /*! Deletes currently selected row; does nothing if no row
+     is currently selected. If row is in edit mode, editing
      is cancelled before deleting.  */
     virtual void deleteCurrentRow() {
         KexiDataAwareObjectInterface::deleteCurrentRow();
@@ -337,7 +352,7 @@ public slots:
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
-     In most cases delete is not accepted immediately but "record editing" mode is just started. */
+     In most cases delete is not accepted immediately but "row editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell() {
         KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell();
     }
@@ -381,11 +396,15 @@ public slots:
         return KexiDataAwareObjectInterface::acceptEditor();
     }
 
+    /*! Reimplementation for KexiDataAwareObjectInterface, to react on changes
+     of the sorting flag. */
+    virtual void setSortingEnabled(bool set);
+
 signals:
     void dataSet(KexiDB::TableViewData *data);
 
     void itemSelected(KexiDB::RecordData *);
-    void cellSelected(int col, int row);
+    void cellSelected(int row, int column);
 
     void itemReturnPressed(KexiDB::RecordData *, int row, int col);
     void itemDblClicked(KexiDB::RecordData *, int row, int col);
@@ -427,18 +446,14 @@ protected slots:
     virtual void slotRowsDeleted(const QList<int> &);
 
     //! updates display after many rows deletion
-    void slotColumnWidthChanged(int col, int os, int ns);
+    void slotColumnWidthChanged(int column, int oldSize, int newSize);
 
     void slotSectionHandleDoubleClicked(int section);
 
     void slotUpdate();
-    //! implemented because we needed this as slot
-    virtual void sortColumnInternal(int col, int order = 0) {
-        KexiDataAwareObjectInterface::sortColumnInternal(col, order);
-    }
 
-    //! internal, used when top header's size changed
-    void slotTopHeaderSizeChange(int section, int oldSize, int newSize);
+    //! implemented because we needed this as slot
+    virtual void sortColumnInternal(int col, int order = 0);
 
     //! receives a signal from cell editors
     void slotEditRequested();
@@ -477,7 +492,7 @@ protected slots:
     }
 
     //! for navigator
-    virtual void moveToRecordRequested(uint r);
+    virtual void moveToRecordRequested(uint row);
     virtual void moveToLastRecordRequested();
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();
@@ -502,26 +517,31 @@ protected:
     virtual void clearVariables();
 
     /*! Implementation for KexiDataAwareObjectInterface */
-    virtual int currentLocalSortingOrder() const;
+    virtual Qt::SortOrder currentLocalSortOrder() const;
 
     /*! Implementation for KexiDataAwareObjectInterface */
     virtual int currentLocalSortColumn() const;
 
     /*! Implementation for KexiDataAwareObjectInterface */
-    virtual void setLocalSortingOrder(int col, int order);
+    virtual void setLocalSortOrder(int column, Qt::SortOrder order);
 
     /*! Implementation for KexiDataAwareObjectInterface */
-    virtual void updateGUIAfterSorting();
+    virtual void updateGUIAfterSorting(int previousRow);
 
     /*! Implementation for KexiDataAwareObjectInterface */
     virtual void updateWidgetScrollBars() {
         updateScrollBars();
     }
 
-    /*! Implementation for KexiDataAwareObjectInterface.
-     Adds another section within the horizontal header. */
-    virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIcon& icon, int size);
+    //! temporary
+    void updateScrollBars() {}
+
+    int leftMargin() const;
+
+    int topMargin() const;
+
+    //! temporary
+    int bottomMargin() const { return 0; }
 
     /*! @internal \return true if the row defined by \a record has default
      value at column \a col. If this is the case and \a value is not NULL,
@@ -529,8 +549,8 @@ protected:
     bool isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value = 0);
 
     //! painting and layout
-    void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-    void paintCell(QPainter* p, KexiDB::RecordData *record, int col, int row, const QRect &cr, bool print = false);
+    void drawContents(QPainter *p);
+    void paintCell(QPainter* p, KexiDB::RecordData *record, int row, int col, const QRect &cr, bool print = false);
     void paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
     void updateGeometries();
 
@@ -539,30 +559,29 @@ protected:
     QPoint viewportToContents2(const QPoint& vp);
 
     // event handling
-    virtual void contentsMousePressEvent(QMouseEvent* e);
-    virtual void contentsMouseReleaseEvent(QMouseEvent* e);
+    void contentsMousePressEvent(QMouseEvent* e);
+    void contentsMouseReleaseEvent(QMouseEvent* e);
     //! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
     bool handleContentsMousePressOrRelease(QMouseEvent* e, bool release);
-    virtual void contentsMouseMoveEvent(QMouseEvent* e);
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent* e);
-    virtual void keyPressEvent(QKeyEvent* e);
-    virtual void contextMenuEvent(QContextMenuEvent* e);
-    virtual void focusInEvent(QFocusEvent* e);
+    void contentsMouseMoveEvent(QMouseEvent* e);
+    void contentsMouseDoubleClickEvent(QMouseEvent* e);
+    void contentsContextMenuEvent(QContextMenuEvent* e);
+    virtual void keyPressEvent(QKeyEvent *e);
+    //virtual void focusInEvent(QFocusEvent* e);
     virtual void focusOutEvent(QFocusEvent* e);
     virtual void resizeEvent(QResizeEvent* e);
-    virtual void viewportResizeEvent(QResizeEvent *e);
+    //virtual void viewportResizeEvent(QResizeEvent *e);
     virtual void showEvent(QShowEvent *e);
-    virtual void contentsDragMoveEvent(QDragMoveEvent *e);
-    virtual void contentsDropEvent(QDropEvent *e);
-    virtual void viewportDragLeaveEvent(QDragLeaveEvent *e);
-    virtual void paletteChange(const QPalette &oldPalette);
+    virtual void dragMoveEvent(QDragMoveEvent *e);
+    virtual void dropEvent(QDropEvent *e);
+    virtual void dragLeaveEvent(QDragLeaveEvent *e);
+    //! For handling changes of palette
+    virtual void changeEvent(QEvent *e);
 
     /*! Implementation for KexiDataAwareObjectInterface */
     virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false);
 
-    inline KexiTableEdit *tableEditorWidget(int col, bool ignoreMissingEditor = false) {
-        return dynamic_cast<KexiTableEdit*>(editor(col, ignoreMissingEditor));
-    }
+    KexiTableEdit *tableEditorWidget(int col, bool ignoreMissingEditor = false);
 
     /*! Implementation for KexiDataAwareObjectInterface */
     virtual void editorShowFocus(int row, int col);
@@ -606,9 +625,6 @@ protected:
      (viewport()->setFocus() is just added) */
     virtual void removeEditor();
 
-    //! Internal: updated sched fonts for painting.
-    void updateFonts(bool repaint = false);
-
     /*! @internal Changes bottom margin settings, in pixels.
      At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
     void setBottomMarginInternal(int pixels);
@@ -634,7 +650,7 @@ protected:
     void updateAfterAcceptRowEdit();
 
     /*! Sets \a cellValue if there is a lookup value for the cell \a record.
-     Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
+     Used in paintCell() and KexiTableCellToolTip::maybeTip()
      \return true is \a cellValue has been found. */
     bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
                                KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const;
@@ -658,11 +674,24 @@ protected:
 
     virtual bool event(QEvent *e);
 
+    //! @internal @return text information about a given column or other specific areas of the table view.
     QString whatsThisText(const QPoint &pos) const;
 
-    KexiTableViewPrivate * const d;
+    /*! Called by KexiDataAwareObjectInterface::setCursorPosition()
+      if cursor's position is really changed. */
+    virtual void selectCellInternal(int previousRow, int previousColumn);
 
-    friend class KexiTableViewCellToolTip;
+    //! @return common model for header views of this area. @see KexiTableScrollAreaHeader
+    QAbstractItemModel* headerModel() const;
+
+    void updateScrollAreaWidgetSize();
+
+    class Private;
+    Private * const d;
+
+    friend class KexiTableScrollAreaWidget;
+    friend class KexiTableCellToolTip;
+    friend class KexiTableScrollAreaHeader;
 };
 
 #endif
