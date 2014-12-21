@@ -35,7 +35,7 @@ class TjMessageHandler : public QObject
 {
     Q_OBJECT
 public:
-    TjMessageHandler(bool cm = true) :
+    explicit TjMessageHandler(bool cm = true) :
         QObject(),
         consoleMode(cm),
         warnings(0),

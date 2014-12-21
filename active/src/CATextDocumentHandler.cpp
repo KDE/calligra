@@ -34,13 +34,11 @@
 #include <KoZoomController.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoPart.h>
 
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kdebug.h>
-#include <kactioncollection.h>
 #include <KoSelection.h>
 
 #include <QTextDocument>

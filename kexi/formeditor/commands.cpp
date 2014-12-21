@@ -27,7 +27,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kacceleratormanager.h>
 
@@ -1906,6 +1905,7 @@ class RemovePageCommand::Private
 {
 public:
     Private()
+     : pageIndex(-1)
     {
     }
     Form *form;

@@ -27,8 +27,6 @@
 #include <QEvent>
 #include <klocale.h>
 
-#include <kfiledialog.h>
-
 #include <KoPACanvas.h>
 #include <KPrDocument.h>
 #include <KoCanvasBase.h>

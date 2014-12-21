@@ -32,7 +32,6 @@
 
 #include <kaction.h>
 #include <kdebug.h>
-#include <kstandardguiitem.h>
 #include <kpushbutton.h>
 
 #include <QBitmap>
@@ -114,7 +113,7 @@ QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, Q
             return itm;
         ++it;
     }
-    
+
     return 0;
 }
 
@@ -154,8 +153,14 @@ void KActionsListViewBase::init()
         }
         if (!isActionVisible(action->objectName().toLatin1(), actionCategories))
             continue;
+        QString actionName;
+        if (!action->toolTip().isEmpty()) {
+            actionName = action->toolTip().remove("<html>").remove("</html>");
+        } else {
+            actionName = action->text().remove('&');
+        }
         ActionSelectorDialogTreeItem *pitem = new ActionSelectorDialogTreeItem(
-            action->toolTip().isEmpty() ? action->text().remove('&') : action->toolTip(), this);
+            actionName, this);
 
         pitem->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "kaction");
         pitem->setData(ActionSelectorDialogTreeItem::ActionDataRole, action->objectName());
@@ -355,25 +360,25 @@ public:
 
     void raiseWidget(QWidget *w) {
         secondAnd3rdColumnStack->setCurrentWidget(w);
-        selectActionToBeExecutedLbl->setBuddy(w);
     }
 
-    void updateSelectActionToBeExecutedMessage(const QString& actionType) {
+    QString selectActionToBeExecutedMessage(const QString& actionType) const {
         QString msg;
         if (actionType == "noaction")
-            msg = QString();
+            return QString();
+        if (actionType == "kaction" || actionType == "currentForm")
+            return i18n("&Select action to be executed after clicking <interface>%1</interface> button:",
+                        actionWidgetName);
         // hardcoded, but it's not that bad
-        else if (actionType == "macro")
-            msg = i18n(
-                      "&Select macro to be executed after clicking <interface>%1</interface> button:", actionWidgetName);
-        else if (actionType == "script")
-            msg = i18n(
-                      "&Select script to be executed after clicking <interface>%1</interface> button:", actionWidgetName);
-        //default: table/query/form/report...
-        else
-            msg = i18n(
-                      "&Select object to be opened after clicking <interface>%1</interface> button:", actionWidgetName);
-        selectActionToBeExecutedLbl->setText(msg);
+        if (actionType == "org.kexi-project.macro")
+            return i18n("&Select macro to be executed after clicking <interface>%1</interface> button:",
+                        actionWidgetName);
+        if (actionType == "org.kexi-project.script")
+            return i18n("&Select script to be executed after clicking <interface>%1</interface> button:",
+                        actionWidgetName);
+        //default: org.kexi-project.table/query/form/report...
+        return i18n("&Select object to be opened after clicking <interface>%1</interface> button:",
+                    actionWidgetName);
     }
 
     // changes 3rd column visibility
@@ -390,7 +395,9 @@ public:
     QWidget *currentFormActionsPageWidget; //!< for column #2
     CurrentFormActionsListView* currentFormActionsListView; //!< for column #2
     QWidget *emptyWidget;
-    QLabel* selectActionToBeExecutedLbl;
+    QLabel *selectActionToBeExecutedLabel;
+    QLabel *kactionPageLabel;
+    QLabel *currentFormActionsPageLabel;
     ActionToExecuteListView* actionToExecuteListView;
     QLabel *actionToExecuteLbl;
     QWidget *secondAnd3rdColumnMainWidget;
@@ -399,6 +406,19 @@ public:
     QStackedWidget *secondAnd3rdColumnStack; //, *secondColumnStack;
     bool hideActionToExecuteListView;
 };
+
+//-------------------------------------
+
+static QLabel *createSelectActionLabel(QWidget *parent, QWidget *buddy)
+{
+    QLabel *lbl = new QLabel(parent);
+    lbl->setBuddy(buddy);
+    lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    lbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    lbl->setWordWrap(true);
+    lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
+    return lbl;
+}
 
 //-------------------------------------
 
@@ -476,14 +496,9 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
             this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
 
-    d->selectActionToBeExecutedLbl = new QLabel(d->secondAnd3rdColumnMainWidget);
-    d->selectActionToBeExecutedLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    d->selectActionToBeExecutedLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    d->selectActionToBeExecutedLbl->setWordWrap(true);
-    d->selectActionToBeExecutedLbl->setMinimumHeight(
-        d->selectActionToBeExecutedLbl->fontMetrics().height()*2);
+    d->selectActionToBeExecutedLabel = createSelectActionLabel(d->secondAnd3rdColumnMainWidget, 0);
     d->secondAnd3rdColumnGrLyr->addWidget(
-        d->selectActionToBeExecutedLbl, 0, 0, Qt::AlignTop | Qt::AlignLeft);
+        d->selectActionToBeExecutedLabel, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 
     d->emptyWidget = new QWidget(d->secondAnd3rdColumnStack);
     d->secondAnd3rdColumnStack->addWidget(d->emptyWidget);
@@ -499,12 +514,9 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     
     d->secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteListView, 1, 1);
 
-    d->actionToExecuteLbl = new QLabel(
-        i18n("Action to execute:"), d->secondAnd3rdColumnMainWidget);
-    d->actionToExecuteLbl->setBuddy(d->actionToExecuteListView);
-    d->actionToExecuteLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    d->actionToExecuteLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    d->actionToExecuteLbl->setWordWrap(true);
+    d->actionToExecuteLbl = createSelectActionLabel(d->secondAnd3rdColumnMainWidget,
+                                                    d->actionToExecuteListView);
+    d->actionToExecuteLbl->setText(i18n("Action to execute:"));
     d->secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteLbl, 0, 1, Qt::AlignTop | Qt::AlignLeft);
 
     // temporary show all sections to avoid resizing the dialog in the future
@@ -601,9 +613,6 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
     ActionSelectorDialogTreeItem *categoryItm = dynamic_cast<ActionSelectorDialogTreeItem*>(item);
     // simple case: part-less item, e.g. kaction:
     if (categoryItm) {
-        d->updateSelectActionToBeExecutedMessage(categoryItm->data(ActionSelectorDialogTreeItem::ActionDataRole).toString());
-        QString selectActionToBeExecutedMsg(
-            I18N_NOOP("&Select action to be executed after clicking <interface>%1</interface> button:")); // msg for a label
         if (categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "kaction") {
             if (!d->kactionPageWidget) {
                 //create lbl+list view with a vlayout
@@ -614,13 +623,8 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                 vlyr->setSpacing(KDialog::spacingHint());
                 d->kactionListView = new KActionsListView(d->kactionPageWidget);
                 d->kactionListView->init();
-                QLabel *lbl = new QLabel(
-                    selectActionToBeExecutedMsg.arg(d->actionWidgetName), d->kactionPageWidget);
-                lbl->setBuddy(d->kactionListView);
-                lbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-                lbl->setWordWrap(true);
-                lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
-                vlyr->addWidget(lbl);
+                d->kactionPageLabel  = createSelectActionLabel(d->kactionPageWidget, d->kactionListView);
+                vlyr->addWidget(d->kactionPageLabel);
                 vlyr->addWidget(d->kactionListView);
                 d->secondAnd3rdColumnStack->addWidget(d->kactionPageWidget);
                 connect(d->kactionListView, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
@@ -628,6 +632,8 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                 connect(d->kactionListView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
                         this, SLOT(slotKActionItemSelected(QTreeWidgetItem*)));
             }
+            d->kactionPageLabel->setText(
+                d->selectActionToBeExecutedMessage(categoryItm->data(ActionSelectorDialogTreeItem::ActionDataRole).toString()));
             d->setActionToExecuteSectionVisible(false);
             d->raiseWidget(d->kactionPageWidget);
             slotKActionItemSelected(d->kactionListView->currentItem()); //to refresh column #3
@@ -643,14 +649,9 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                 d->currentFormActionsListView = new CurrentFormActionsListView(
                     d->currentFormActionsPageWidget);
                 d->currentFormActionsListView->init();
-                QLabel *lbl = new QLabel(
-                    selectActionToBeExecutedMsg.arg(d->actionWidgetName),
-                    d->currentFormActionsPageWidget);
-                lbl->setBuddy(d->currentFormActionsListView);
-                lbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-                lbl->setWordWrap(true);
-                lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
-                vlyr->addWidget(lbl);
+                d->currentFormActionsPageLabel = createSelectActionLabel(
+                            d->currentFormActionsPageWidget, d->currentFormActionsListView);
+                vlyr->addWidget(d->currentFormActionsPageLabel);
                 vlyr->addWidget(d->currentFormActionsListView);
                 d->secondAnd3rdColumnStack->addWidget(d->currentFormActionsPageWidget);
                 connect(d->currentFormActionsListView, SIGNAL(itemActivated(QTreeWidgetItem*)),
@@ -658,6 +659,8 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                 connect(d->currentFormActionsListView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
                         this, SLOT(slotCurrentFormActionItemSelected(QTreeWidgetItem*)));
             }
+            d->currentFormActionsPageLabel->setText(
+                d->selectActionToBeExecutedMessage(categoryItm->data(ActionSelectorDialogTreeItem::ActionDataRole).toString()));
             d->setActionToExecuteSectionVisible(false);
             d->raiseWidget(d->currentFormActionsPageWidget);
             slotCurrentFormActionItemSelected(d->currentFormActionsListView->currentItem()); //to refresh column #3
@@ -668,7 +671,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
             d->setActionToExecuteSectionVisible(false);
         } else if (categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "navObject") {
             QString partClass = categoryItm->data(ActionSelectorDialogTreeItem::ActionPartClassRole).toString();
-            d->updateSelectActionToBeExecutedMessage(partClass);
+            d->selectActionToBeExecutedLabel->setText(d->selectActionToBeExecutedMessage(partClass));
             if (d->objectsListView->itemsPartClass() != partClass) {
                 QString errorString;
                 d->objectsListView->setProject(KexiMainWindowIface::global()->project(), partClass, &errorString, false);
@@ -682,13 +685,13 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
             } else {
                 d->raiseWidget(d->secondAnd3rdColumnMainWidget);
             }
+            d->selectActionToBeExecutedLabel->setBuddy(d->secondAnd3rdColumnMainWidget);
         }
 
         d->actionCategoriesListView->update();
         updateOKButtonStatus();
         return;
     }
-          
     d->actionCategoriesListView->update();
     d->actionToExecuteListView->update();
     updateOKButtonStatus();

@@ -23,10 +23,8 @@
 
 #include "kplatokernel_export.h"
 
-#include <QDateTime>
 #include <QMap>
 #include <QList>
-#include <QStringList>
 
 #include "kptglobal.h"
 #include "kpteffortcostmap.h"
@@ -39,6 +37,7 @@
 
 class QDomElement;
 class QString;
+class QStringList;
 
 namespace KPlato
 {

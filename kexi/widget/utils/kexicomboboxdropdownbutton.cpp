@@ -20,7 +20,6 @@
 #include "kexicomboboxdropdownbutton.h"
 
 #include <kdebug.h>
-#include <kcombobox.h>
 
 #include <QStyle>
 #include <QStyleOptionToolButton>

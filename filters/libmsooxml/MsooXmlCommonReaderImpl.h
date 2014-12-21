@@ -24,6 +24,8 @@
 #ifndef MSOOXMLCOMMONREADER_IMPL_H
 #define MSOOXMLCOMMONREADER_IMPL_H
 
+#include <KoXmlWriter.h>
+
 void MSOOXML_CURRENT_CLASS::initInternal()
 {
     m_insideHdr = false;
@@ -196,7 +198,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
 #ifdef PPTXXMLSLIDEREADER_CPP
             TRY_READ_IF_NS(p, sp)
 #endif
-#ifdef DOCXXMLDOCREADER_H
+#ifdef DOCXXMLDOCUMENTREADER_H
             TRY_READ_IF_NS(w, pict)
 #endif
 #ifdef XLSXXMLWORKSHEETREADER_CPP

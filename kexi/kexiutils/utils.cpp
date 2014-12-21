@@ -33,17 +33,15 @@
 #include <QLayout>
 #include <KMessageBox>
 #include <QFileInfo>
+#include <QClipboard>
+
 #include <KUrl>
 #include <KRun>
 #include <KToolInvocation>
 #include <KLocalizedString>
-
 #include <kdebug.h>
-#include <kcursor.h>
-#include <kapplication.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
-#include <kaction.h>
 #include <kdialog.h>
 #include <kcolorscheme.h>
 
@@ -746,6 +744,27 @@ void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperl
             KToolInvocation::invokeMailer(url);
             break;
     }
+}
+
+// ----
+
+KexiDBDebugTreeWidget::KexiDBDebugTreeWidget(QWidget *parent)
+ : QTreeWidget(parent)
+{
+}
+
+void KexiDBDebugTreeWidget::copy()
+{
+    if (currentItem()) {
+        qApp->clipboard()->setText(currentItem()->text(0));
+    }
+}
+
+// ----
+
+DebugWindow::DebugWindow(QWidget * parent)
+    : QWidget(parent)
+{
 }
 
 #include "moc_utils.cpp"

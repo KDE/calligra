@@ -26,6 +26,7 @@
 #include <QMap>
 
 class KoPathShape;
+class KoShapeManager;
 class KoSelection;
 class KPrAnimateMotion;
 class KPrShapeAnimationDocker;
@@ -70,7 +71,7 @@ private slots:
 protected:
     QRectF handlesSize();
 
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /**
       * @brief Load motion path shapes (For all shapes with motion paths on current page)

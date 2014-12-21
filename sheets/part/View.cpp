@@ -50,7 +50,6 @@
 #include <QMenu>
 #include <QPixmap>
 #include <QResizeEvent>
-#include <QTimer>
 #include <QToolButton>
 #ifndef QT_NO_SQL
 #include <QSqlDatabase>
@@ -62,38 +61,30 @@
 // KDE includes
 #include <kactioncollection.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <kfontchooser.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <ktoolinvocation.h>
-#include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 
 // Calligra includes
 #include <KoGlobal.h>
-#include <KoDpi.h>
+#include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoStore.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
-#include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoXmlNS.h>
 #include <KoZoomAction.h>
@@ -162,7 +153,6 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
 #include <knotifyconfigwidget.h>
-#include <QtDBus>
 #endif
 
 using namespace Calligra::Sheets;
@@ -754,8 +744,8 @@ void View::initView()
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
-        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();

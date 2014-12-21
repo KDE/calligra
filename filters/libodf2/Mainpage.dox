@@ -15,3 +15,4 @@ of text contents.
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoOdf2
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

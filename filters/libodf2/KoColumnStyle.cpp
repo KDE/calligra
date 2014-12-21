@@ -33,7 +33,7 @@ namespace {
     } breakStyleMap;
 
     const QString prefix = "col";
-    const char* familyName = "table-column";
+    const char familyName[] = "table-column";
 }
 
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoColumnStyle)

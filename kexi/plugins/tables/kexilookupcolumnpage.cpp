@@ -23,11 +23,11 @@
 #include <QToolTip>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <klineedit.h>
 
 #include <KoIcon.h>
 

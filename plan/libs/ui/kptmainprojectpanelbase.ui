@@ -239,14 +239,6 @@
   <tabstop>endDate</tabstop>
   <tabstop>endTime</tabstop>
  </tabstops>
- <includes>
-  <include location="local">klineedit.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">kdatewidget.h</include>
-  <include location="local">kdatewidget.h</include>
-  <include location="local">ktextedit.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

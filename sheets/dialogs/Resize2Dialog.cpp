@@ -32,9 +32,6 @@
 #include <QGridLayout>
 #include <QLabel>
 
-// KDE
-#include <knuminput.h>
-
 // Calligra
 #include <KoCanvasBase.h>
 #include <KoUnit.h>

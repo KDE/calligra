@@ -82,7 +82,7 @@ namespace {
     } writingModeMap;
 
     QString prefix = "table";
-    const char* familyName = "table";
+    const char familyName[] = "table";
 }
 
 KoTblStyle::KoTblStyle()

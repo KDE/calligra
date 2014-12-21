@@ -50,7 +50,7 @@ public:
     class KPLATOKERNEL_EXPORT CodeDef {
         public:
             CodeDef() {}
-            CodeDef(QString c, QString s) { code = c; separator = s; }
+            CodeDef(const QString &c, const QString &s) { code = c; separator = s; }
             ~CodeDef() {}
             void clear() { code.clear(); separator.clear(); }
             bool isEmpty() { return code.isEmpty(); }
@@ -70,16 +70,16 @@ public:
     QString separator(int level) const;
     
     CodeDef &defaultDef() { return m_defaultDef; }
-    void setDefaultDef(CodeDef def) { m_defaultDef = def; }
+    void setDefaultDef(const CodeDef &def) { m_defaultDef = def; }
     
     bool isLevelsDefEnabled() const { return m_levelsEnabled; }
     bool level0Enabled() const;
     void setLevelsDefEnabled(bool on) { m_levelsEnabled = on; }
     void clearLevelsDef() { m_levelsDef.clear(); }
     QMap<int, CodeDef> levelsDef() const { return m_levelsDef; }
-    void setLevelsDef(QMap<int, CodeDef> def);
+    void setLevelsDef(const QMap<int, CodeDef> &def);
     CodeDef levelsDef(int level) const;
-    void setLevelsDef(int level, CodeDef def);
+    void setLevelsDef(int level, const CodeDef &def);
     void setLevelsDef(int level, const QString& c, const QString& s);
     
     QStringList codeList() const;

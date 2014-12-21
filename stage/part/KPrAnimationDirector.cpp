@@ -24,7 +24,7 @@
 #include <QPaintEvent>
 #include <QWidget>
 #include <QVariant>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <KoPageLayout.h>
 #include <KoShapeManager.h>
@@ -140,7 +140,7 @@ void KPrAnimationDirector::paint(QPainter& painter, const QRectF &paintRect)
     // events still get through so that it is possible to cancel the
     // events. It looks like this is not a problem with nvidia graphic
     // cards.
-    KApplication::kApplication()->syncX();
+    qApp->syncX();
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )

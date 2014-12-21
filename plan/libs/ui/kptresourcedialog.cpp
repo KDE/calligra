@@ -31,17 +31,13 @@
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 
-#include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
 
-#include <kdatetimewidget.h>
-#include <kmessagebox.h>
 #include <klocale.h>
-#include <kglobal.h>
 
 
 namespace KPlato

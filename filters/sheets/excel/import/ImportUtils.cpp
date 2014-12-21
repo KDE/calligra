@@ -51,7 +51,7 @@ QString extractLocale(QString &time)
         int pos = time.indexOf(']');
         if (pos > 3) {
             locale = time.mid(3, pos - 3);
-            time = time.mid(pos + 1);
+            time.remove(0, pos + 1);
             pos = time.lastIndexOf(';');
             if (pos >= 0) {
                 time = time.left(pos);

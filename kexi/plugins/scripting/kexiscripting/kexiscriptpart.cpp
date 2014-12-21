@@ -35,7 +35,6 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <KoIcon.h>
-#include <kxmlguiclient.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
@@ -230,10 +229,10 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
 KLocalizedString KexiScriptPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of script \"%1\" has been modified."));
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Script \"%1\" already exists."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of script <resource>%1</resource> has been modified."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Script <resource>%1</resource> already exists."));
     return Part::i18nMessage(englishMessage, window);
 }
 

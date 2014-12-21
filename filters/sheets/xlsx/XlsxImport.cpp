@@ -43,11 +43,8 @@
 #include <QRegExp>
 #include <QImage>
 
-#include <kdeversion.h>
 #include <kdebug.h>
-#include <kzip.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>

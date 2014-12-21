@@ -250,6 +250,11 @@ KexiCommandLinkButton::KexiCommandLinkButton(const QString &text, const QString 
     d->init();
 }
 
+KexiCommandLinkButton::~KexiCommandLinkButton()
+{
+    delete d;
+}
+
 /*! \reimp */
 bool KexiCommandLinkButton::event(QEvent *e)
 {

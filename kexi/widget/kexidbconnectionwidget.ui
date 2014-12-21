@@ -6,12 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>358</width>
-    <height>393</height>
+    <width>365</width>
+    <height>431</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout1">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0" rowspan="4">
@@ -94,8 +103,12 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="KLineEdit" name="userEdit"/>
+      <item row="1" column="1">
+       <widget class="KLineEdit" name="passwordEdit">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="passwordLbl">
@@ -113,19 +126,32 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="KLineEdit" name="passwordEdit">
-        <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
-        </property>
-       </widget>
+      <item row="0" column="1">
+       <widget class="KLineEdit" name="userEdit"/>
       </item>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="chkSavePassword">
-        <property name="text">
-         <string>Save password in the shortcut file</string>
-        </property>
-       </widget>
+      <item row="4" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayoutSavePassword">
+        <item>
+         <widget class="QCheckBox" name="chkSavePassword">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Saves password in a &lt;span style=&quot; font-style:italic;&quot;&gt;.kexic&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;.kexis&lt;/span&gt; connection shortcut file using a simple ROT-47 encryption. It does not guarantee security, but simply makes it difficult for anyone to read, so generally it is not safe to make such files publicly accessible.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Save password</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnSavePasswordHelp">
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -213,7 +239,7 @@
         <property name="autoCompletion">
          <bool>false</bool>
         </property>
-        <property name="trapReturnKey">
+        <property name="trapReturnKey" stdset="0">
          <bool>false</bool>
         </property>
        </widget>
@@ -367,7 +393,7 @@
       <item row="3" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="KIntNumInput" name="customPortEdit">
+         <widget class="KIntNumInput" name="customPortEdit" native="true">
           <property name="minValue" stdset="0">
            <number>0</number>
           </property>
@@ -434,17 +460,11 @@
   <tabstop>userEdit</tabstop>
   <tabstop>passwordEdit</tabstop>
   <tabstop>chkSavePassword</tabstop>
+  <tabstop>btnSavePasswordHelp</tabstop>
   <tabstop>nameCombo</tabstop>
   <tabstop>btnLoadDBList</tabstop>
   <tabstop>titleEdit</tabstop>
  </tabstops>
- <includes>
-  <include location="local">knuminput.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">klineedit.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

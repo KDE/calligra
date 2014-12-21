@@ -634,7 +634,6 @@ void Form::emitWidgetSelected(bool multiple)
 
     // If the widgets selected is a container, we enable layout actions
     if (!multiple) {
-        KFormDesigner::ObjectTreeItem *item = 0;
         if (!wlist->isEmpty()) {
             objectTree()->lookup(wlist->first()->objectName());
         }
@@ -1487,8 +1486,8 @@ void Form::createPropertiesForWidget(QWidget *w)
     WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
     if (subpropIface) {
-        const QSet<QByteArray> subproperies(subpropIface->subproperies());
-        foreach(const QByteArray& propName, subproperies) {
+        const QSet<QByteArray> subproperties(subpropIface->subproperties());
+        foreach(const QByteArray& propName, subproperties) {
             propNames.insert(propName);
             //kDebug() << "Added subproperty: " << propName;
         }
@@ -1573,12 +1572,19 @@ void Form::createPropertiesForWidget(QWidget *w)
         // update the Property.oldValue() and isModified() using the value stored in the ObjectTreeItem
         updatePropertyValue(tree, propertyName, meta);
     }
-    
+
+    const QString paletteBackgroundColorDesc(d->propCaption.value("paletteBackgroundColor"));
     newProp = new KoProperty::Property("paletteBackgroundColor",
-                                       w->palette().color(w->backgroundRole()));
+                                       w->palette().color(w->backgroundRole()),
+                                       paletteBackgroundColorDesc,
+                                       paletteBackgroundColorDesc);
+
+    const QString paletteForegroundColorDesc(d->propCaption.value("paletteForegroundColor"));
     d->propertySet.addProperty(newProp);
     newProp = new KoProperty::Property("paletteForegroundColor",
-                                       w->palette().color(w->foregroundRole()));
+                                       w->palette().color(w->foregroundRole()),
+                                       paletteForegroundColorDesc,
+                                       paletteForegroundColorDesc);
     d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter

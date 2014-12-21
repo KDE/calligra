@@ -21,6 +21,7 @@
 #define _WEB_TOOL_H_
 
 #include <KoToolBase.h>
+#include <QPointF>
 
 class WebShape;
 class KoShape;
@@ -47,7 +48,7 @@ public:
 signals:
     void shapeChanged(WebShape*);
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     WebShape* m_currentShape;

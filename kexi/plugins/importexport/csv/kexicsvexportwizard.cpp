@@ -40,11 +40,9 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <ksavefile.h>
 #include <kglobal.h>
 #include <kdialog.h>
 
@@ -57,6 +55,8 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         , m_importExportGroup(KGlobal::config()->group("ImportExport"))
         , m_cancelled(false)
 {
+    KexiMainWindowIface::global()->setReasonableDialogSize(this);
+
     if (m_options.mode == KexiCSVExport::Clipboard) {
         button(KDialog::User1)->setText(i18n("Copy"));
     } else {

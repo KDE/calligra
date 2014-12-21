@@ -52,7 +52,7 @@ public slots:
     virtual void documentResourceChanged(int key, const QVariant & res);
 
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private slots:
     void patternSelected(KoResource * resource);

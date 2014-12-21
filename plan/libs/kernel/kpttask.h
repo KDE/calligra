@@ -54,7 +54,7 @@ public:
             class KPLATOKERNEL_EXPORT ActualEffort : public QPair<Duration, Duration>
             {
                 public:
-                    explicit ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration oe = Duration::zeroDuration )
+                    explicit ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration &oe = Duration::zeroDuration )
                         : QPair<Duration, Duration>( ne, oe )
                     {}
                     ActualEffort( const ActualEffort &e )

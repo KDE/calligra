@@ -50,13 +50,12 @@
 #include <QPixmap>
 #include <QDesktopWidget>
 #include <QScrollArea>
+#include <QApplication>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
 #include <kaction.h>
+#include <kmenu.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
@@ -367,10 +366,10 @@ void KexiTableView::updateFonts(bool repaint)
 void KexiTableView::updateAllVisibleRowsBelow(int row)
 {
     //get last visible row
-    int r = rowAt(clipper()->height() + contentsY());
-    if (r == -1) {
-        r = rows() + 1 + (isInsertingEnabled() ? 1 : 0);
-    }
+//    int r = rowAt(clipper()->height() + contentsY());
+//    if (r == -1) {
+//        r = rows() + 1 + (isInsertingEnabled() ? 1 : 0);
+//    }
     //update all visible rows below
     int leftcol = m_horizontalHeader->sectionAt(m_horizontalHeader->offset());
     updateContents(columnPos(leftcol), rowPos(row),

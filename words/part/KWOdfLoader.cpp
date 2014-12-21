@@ -34,7 +34,6 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocument.h>

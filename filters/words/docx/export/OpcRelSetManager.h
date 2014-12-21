@@ -28,7 +28,6 @@
 class QString;
 class KoStore;
 class KoXmlStreamReader;
-class KoXmlWriter;
 class OpcRelSet;
 
 

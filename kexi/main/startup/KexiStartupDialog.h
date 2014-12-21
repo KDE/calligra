@@ -22,6 +22,7 @@
 
 #include <kpagedialog.h>
 
+#include <kexi_global.h>
 #include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
 
@@ -106,7 +107,7 @@ public:
 #ifdef KEXI_PROJECT_TEMPLATES
     /*! \return "autoopen" objects defined for selected template.
     Only makes sense if template was used. */
-    const KexiProjectData::AutoOpenObjects& autoopenObjects() const;
+    KexiProjectData::AutoOpenObjects autoopenObjects() const;
 #endif
 
     /*! \return a pointer to selected Kexi connection data.

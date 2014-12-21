@@ -24,8 +24,8 @@
 #include <QFile>
 #include <QRegExp>
 #include <QVector>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>

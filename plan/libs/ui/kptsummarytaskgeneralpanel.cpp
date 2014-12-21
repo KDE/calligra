@@ -23,14 +23,8 @@
 #include "kptcommand.h"
 #include "kpttaskdescriptiondialog.h"
 
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <ktextedit.h>
-#include <kcombobox.h>
-#include <kdatetimewidget.h>
 #include <klocale.h>
 
-#include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>

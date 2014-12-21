@@ -21,6 +21,7 @@
 #define IMAGEEFFECT_H
 
 #include "KoFilterEffect.h"
+#include <QImage>
 
 #define ImageEffectId "feImage"
 

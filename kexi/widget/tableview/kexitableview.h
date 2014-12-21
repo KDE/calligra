@@ -54,8 +54,6 @@ class QPrinter;
 class QPrintDialog;
 class QHelpEvent;
 
-class KAction;
-
 class KexiTableView;
 class KexiTableEdit;
 class KexiTableViewPrivate;

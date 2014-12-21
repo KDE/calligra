@@ -41,9 +41,6 @@
 #include <QCloseEvent>
 
 #include <kdebug.h>
-#include <kapplication.h>
-#include <ktoolbar.h>
-#include <kactioncollection.h>
 #include <kdialog.h>
 
 //----------------------------------------------------------
@@ -92,7 +89,7 @@ public:
         if (existingItem && !(options & KexiView::OverwriteExistingData)) {
             KMessageBox::information(win,
                                      i18n("Could not create new object.")
-                                     + win->part()->i18nMessage("Object \"%1\" already exists.", win)
+                                     + win->part()->i18nMessage("Object <resource>%1</resource> already exists.", win)
                                        .subs(sdata->name()).toString());
             return false;
         }
@@ -625,7 +622,7 @@ KexiWindowData *KexiWindow::data() const
 void KexiWindow::setData(KexiWindowData* data)
 {
     if (data != d->data)
-        delete(KexiWindowData*)d->data;
+        delete d->data;
     d->data = data;
 }
 

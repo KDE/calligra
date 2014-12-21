@@ -48,7 +48,6 @@
 #include <KoAnnotation.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
-#include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
 #include <KoShapeController.h>
 #include <KoShapeRegistry.h>
@@ -84,8 +83,6 @@
 
 // KDE + Qt includes
 #include <klocale.h>
-#include <kstandardaction.h>
-#include <kaction.h>
 #include <kdebug.h>
 #include <QIODevice>
 #include <QTimer>
@@ -269,7 +266,7 @@ QPixmap KWDocument::generatePreview(const QSize &size)
     // that the view, its canvas and the shapemanager is not destroyed in between
     KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem(this))->shapeManager();
 
-    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager, true));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
@@ -289,7 +286,7 @@ KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
     // Set the y-offset of the new page.
     KWPage prevPage = page.previous();
     if (prevPage.isValid()) {
-        KoInsets padding = pageManager()->padding();
+        KoInsets padding = pageManager()->padding();    //TODO Shouldn't this be style dependent ?
         page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height() + padding.top + padding.bottom);
     } else {
         page.setOffsetInDocument(0.0);
@@ -811,7 +808,13 @@ QPair<QString, QByteArray> KWDocument::coverImage()
 
 KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
+
     KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
+    if (mainwin) {
+        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+    }
+
 #ifdef SHOULD_BUILD_RDF
     KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(documentRdf()));
     dlg->addPageItem(rdfEditWidget);

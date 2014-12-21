@@ -57,8 +57,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
-#include <kaction.h>
 #include <ktoggleaction.h>
 
 #include "kdganttglobal.h"

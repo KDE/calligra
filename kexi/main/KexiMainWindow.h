@@ -98,25 +98,6 @@ public:
         return KexiMainWindowSuper::focusWidget();
     }
 
-//! @todo virtual void plugActionList(const QString& name,
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) {
-        Q_UNUSED(name)
-        Q_UNUSED(actionList)
-    }
-
-//! @todo KXMLGUIClient* guiClient() const;
-    virtual KXMLGUIClient* guiClient() const;
-
-//! @todo virtual void unplugActionList (const QString &name);
-    virtual void unplugActionList(const QString &name) {
-        Q_UNUSED(name)
-    }
-
-    //! Implemented by KMainWindow
-//! @todo virtual KXMLGUIFactory * KMainWindow::guiFactory();
-    virtual KXMLGUIFactory* guiFactory();
-
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
@@ -329,6 +310,10 @@ public slots:
 
     void toggleFullScreen(bool isFullScreen);
 
+    /*! Implemented for KexiMainWindowIface.
+     Sets reasonable dialog size based on main window size, that is 80% of its size. */
+    virtual void setReasonableDialogSize(QDialog *dialog);
+
 signals:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
@@ -347,12 +332,6 @@ signals:
 protected:
     /*! Setups main widget */
     void setupMainWidget();
-
-    /*! Setups the User Mode: constructs window according to kexi__final database
-     and loads the specified part.
-     \return true on success or false if e.g. kexi__final does not exist
-     or a fatal exception happened */
-    bool setupUserMode(KexiProjectData *projectData);
 
     /*! Creates the Project Navigator (if it's not yet created),
      lookups items for current project and fills the nav. with not-opened items */
@@ -422,11 +401,6 @@ protected:
     /*! Implemented for KexiMainWindowIface.
      Switches \a window to view \a mode. Activates the window if it is not the current window. */
     virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode);
-
-    /*! Helper. Removes and/or adds GUI client for current window's view;
-     on switching to other window (activeWindowChanged())
-     or on switching to other view within the same window (switchToViewMode()). */
-    void updateWindowViewGUIClient(KXMLGUIClient *viewClient);
 
     /*! Helper. Updates setup of property panel's tabs. Used when switching
      from \a prevWindow window to a current window. */
@@ -565,13 +539,8 @@ protected slots:
 
     /// TMP: Display a dialog to download db examples from Internet
     void slotGetNewStuff();
-
+    void slotReportBug();
     void slotTipOfTheDay();
-
-    //! Shows 'important info' dialog, is \a onStartup is false, it's always shown
-    void importantInfo(bool onStartup);
-    void slotImportantInfo(); //!< just importantInfo(false);
-    void slotStartFeedbackAgent();
     void slotImportFile();
     void slotImportServer();
 

@@ -23,14 +23,9 @@
 #include <QDomDocument>
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <ktabwidget.h>
-#include <kcombobox.h>
-#include <kapplication.h>
-#include <kconfig.h>
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 
@@ -328,10 +323,10 @@ KLocalizedString KexiFormPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
     Q_UNUSED(window);
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of form \"%1\" has been modified."));
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Form \"%1\" already exists."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of form <resource>%1</resource> has been modified."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Form <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }

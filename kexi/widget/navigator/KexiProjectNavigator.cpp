@@ -35,12 +35,9 @@
 #include <QEvent>
 
 #include <kglobalsettings.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
-#include <klineedit.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kactioncollection.h>
@@ -481,6 +478,7 @@ void KexiProjectNavigator::slotRename()
     KexiNameDialog dialog(
         i18nc("@info Rename object %1:", "Rename <resource>%1</resource>:", partItem->name()),
         this);
+    dialog.setButtonText(KexiNameDialog::Ok, i18nc("@action:button Rename object", "Rename"));
     if (!d->model->project()) {
         kWarning() << "No KexiProject assigned!";
         return;

@@ -32,7 +32,6 @@
 #include <kdebug.h>
 
 // Calligra
-#include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
@@ -157,7 +156,7 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
         // Zip contents do not work with absolute value for lo/msoff
         QString fileName = file->fileName;
         if (fileName.at(0) == '/') {
-            fileName = fileName.mid(1);
+            fileName.remove(0, 1);
         }
         if (!store->open(fileName)) {
             kDebug(30503) << "Can not create" << file->fileName;

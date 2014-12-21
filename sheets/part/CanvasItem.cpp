@@ -76,21 +76,13 @@
 #include <QGraphicsSceneDragDropEvent>
 
 // KDE
-#include <kcursor.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
-#include <krun.h>
-#include <kmimetype.h>
-#include <ksharedptr.h>
-#include <kwordwrap.h>
 
 // Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
-#include <KoStore.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 #include <KoShapeController.h>
@@ -121,7 +113,7 @@
 // ui
 #include "ui/CellView.h"
 #include "ui/Selection.h"
-#include "ui/PixmapCachingSheetView.h"
+#include "ui/SheetView.h"
 #include "ui/RightToLeftPaintingStrategy.h"
 
 #define MIN_SIZE 10
@@ -269,7 +261,7 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
 {
     if (!d->sheetViews.contains(sheet)) {
         kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
-        d->sheetViews.insert(sheet, new PixmapCachingSheetView(sheet));
+        d->sheetViews.insert(sheet, new SheetView(sheet));
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
         connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
                 this, SLOT(setDocumentSize(QSizeF)));

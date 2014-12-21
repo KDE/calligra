@@ -56,7 +56,6 @@ KexiNameWidget::KexiNameWidget(const QString& message, QWidget* parent)
         : QWidget(parent)
         , d(new Private)
 {
-    setObjectName("KexiNameWidget");
     init(message, QString(), QString(), QString(), QString());
 }
 
@@ -67,7 +66,6 @@ KexiNameWidget::KexiNameWidget(const QString& message,
         : QWidget(parent)
         , d(new Private)
 {
-    setObjectName("KexiNameWidget");
     init(message, nameLabel, nameText, captionLabel, captionText);
 }
 
@@ -77,16 +75,15 @@ void KexiNameWidget::init(
     const QString& captionLabel, const QString& captionText)
 {
     Q_UNUSED(captionText);
+    setObjectName("KexiNameWidget");
 
     d->le_name_txtchanged_disable = false;
     d->le_name_autofill = true;
     d->caption_required = false;
 
     d->lyr = new QGridLayout(this);
-    d->lyr->setObjectName("lyr");
 
     d->lbl_message = new QLabel(this);
-    d->lbl_message->setObjectName("message");
     setMessageText(message);
     d->lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->lbl_message->setAlignment(Qt::AlignTop|Qt::AlignLeft);
@@ -96,16 +93,15 @@ void KexiNameWidget::init(
 
     d->lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,
                              this);
-    d->lbl_caption->setObjectName("lbl_caption");
+    d->lbl_caption->setAlignment(Qt::AlignVCenter|Qt::AlignRight);
     d->lyr->addWidget(d->lbl_caption, 1, 0);
 
     d->lbl_name = new QLabel(nameLabel.isEmpty() ? i18n("Name:") : nameLabel,
                           this);
-    d->lbl_name->setObjectName("lbl_name");
+    d->lbl_name->setAlignment(Qt::AlignVCenter|Qt::AlignRight);
     d->lyr->addWidget(d->lbl_name, 2, 0);
 
     d->le_caption = new KLineEdit(this);
-    d->le_caption->setObjectName("le_caption");
     setCaptionText(nameText);
     QSizePolicy le_captionSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
@@ -113,7 +109,6 @@ void KexiNameWidget::init(
     d->lyr->addWidget(d->le_caption, 1, 1);
 
     d->le_name = new KLineEdit(this);
-    d->le_name->setObjectName("le_name");
     setNameText(nameText);
     QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
@@ -130,9 +125,9 @@ void KexiNameWidget::init(
     d->captionWarning = i18n("Please enter the caption.");
 
     connect(d->le_caption, SIGNAL(textChanged(QString)),
-            this, SLOT(slotCaptionTxtChanged(QString)));
+            this, SLOT(slotCaptionTextChanged(QString)));
     connect(d->le_name, SIGNAL(textChanged(QString)),
-            this, SLOT(slotNameTxtChanged(QString)));
+            this, SLOT(slotNameTextChanged(QString)));
     connect(d->le_caption, SIGNAL(returnPressed()),
             this, SIGNAL(returnPressed()));
     connect(d->le_name, SIGNAL(returnPressed()),
@@ -176,7 +171,7 @@ QString KexiNameWidget::messageText() const
 
 
 
-void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
+void KexiNameWidget::slotCaptionTextChanged(const QString &capt)
 {
     emit textChanged();
     if (d->le_name->text().isEmpty())
@@ -188,7 +183,7 @@ void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
     }
 }
 
-void KexiNameWidget::slotNameTxtChanged(const QString &)
+void KexiNameWidget::slotNameTextChanged(const QString &)
 {
     emit textChanged();
     if (d->le_name_txtchanged_disable)

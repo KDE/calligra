@@ -24,7 +24,6 @@
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
 #include <db/utils.h>
-#include <kexi_global.h>
 
 #include <KoIcon.h>
 
@@ -46,16 +45,8 @@
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kpushbutton.h>
-#include <kglobalsettings.h>
-#include <ktextedit.h>
-#include <kmessagebox.h>
-#include <kapplication.h>
 #include <kmimetype.h>
-#include <ktextbrowser.h>
 #include <kconfig.h>
-#include <kiconloader.h>
-#include <kurl.h>
 
 //! @internal
 class KexiStartupDialog::Private
@@ -342,7 +333,7 @@ void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* curre
     }
 #ifdef KEXI_PROJECT_TEMPLATES
     else if (current == d->templPageWidgetItem_CreateFromTemplate) {
-        d->viewTemplates->populate();
+        //! @todo d->viewTemplates->populate();
     }
 #endif
     updateDialogOKButton(d->pageTemplates);
@@ -363,7 +354,8 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
         enable =
             currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
             || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting
-            || (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate && !d->viewTemplates->selectedFileName().isEmpty());
+            || (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate
+                /*! @todo && !d->viewTemplates->selectedFileName().isEmpty()*/);
 #else
         enable = currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
                  || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting;
@@ -445,8 +437,9 @@ QString KexiStartupDialog::selectedFileName() const
     if (d->result == OpenExistingResult)
         return d->openExistingFileWidget->highlightedFile();
 #ifdef KEXI_PROJECT_TEMPLATES
+    /*! @todo
     else if (d->result == CreateFromTemplateResult && d->viewTemplates)
-        return d->viewTemplates->selectedFileName();
+        return d->viewTemplates->selectedFileName();*/
 #endif
     else
         return QString();
@@ -503,12 +496,14 @@ void KexiStartupDialog::templateSelected(const QString& fileName)
 }
 
 #ifdef KEXI_PROJECT_TEMPLATES
-const KexiProjectData::AutoOpenObjects& KexiStartupDialog::autoopenObjects() const
+KexiProjectData::AutoOpenObjects KexiStartupDialog::autoopenObjects() const
 {
-    if (d->result != CreateFromTemplateResult || !d->viewTemplates)
-        KexiProjectData::AutoOpenObjects();
+    /*! @todo if (d->result != CreateFromTemplateResult || !d->viewTemplates)
+                  KexiProjectData::AutoOpenObjects();
 
-    return d->viewTemplates->autoopenObjectsForSelectedTemplate();
+              return d->viewTemplates->autoopenObjectsForSelectedTemplate();
+    */
+    return KexiProjectData::AutoOpenObjects();
 }
 #endif
 

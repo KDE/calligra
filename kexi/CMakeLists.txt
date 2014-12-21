@@ -4,17 +4,17 @@ INCLUDE(CheckFunctionExists)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
-option(KEXI_MOBILE "compile a mobile Kexi" OFF)
+option(KEXI_MOBILE "Compile a mobile version of Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
 option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
-option(KEXI_SHOW_UNFINISHED, "Show unfinnished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
+option(KEXI_SHOW_UNFINISHED, "Show unfinished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
 
 # Experimental:
 option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
-option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" ON)
+option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF)
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
 ADD_DEFINITIONS(
@@ -22,7 +22,6 @@ ADD_DEFINITIONS(
   -DKEXI_NO_CTXT_HELP
   -DKEXI_NO_SUBFORM
   -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
-# temporary for 2.x:
   -DKEXI_NO_AUTOFIELD_WIDGET
 )
 
@@ -40,49 +39,19 @@ include_directories(
 )
 
 IF(KEXI_MOBILE)
-  add_definitions(-DKEXI_MOBILE)
 ELSE(KEXI_MOBILE)
   add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 ENDIF(KEXI_MOBILE)
-
-if(FALSE) #TODO ENABLE WEBFORMS
-if(WITH_WEBFORMS)
-  macro_optional_find_package(PionNet)
-  macro_log_feature(PionNet_FOUND "Pion Network Library" "C++ development library for implementing lightweight HTTP interfaces" "http://www.pion.org/projects/pion-network-library" FALSE "" "Required by Kexi Web Forms")
-
-  macro_optional_find_package(GoogleCtemplate)
-  macro_log_feature(GOOGLE_CTEMPLATE_FOUND "Google Ctemplate" "Simple but powerful template language for C++" "http://code.google.com/p/google-ctemplate/" FALSE "" "Required by Kexi Web Forms")
-
-  macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Kexi Web Forms")
-
-  if(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
-    set(WITH_WEBFORMS TRUE CACHE STRING "Build with Kexi Web Forms support")
-    add_definitions(-DKEXIWEBFORMS_SUPPORTED)
-    message(STATUS "Kexi Web Forms support enabled.")
-    add_subdirectory(webforms)
-  else(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
-    set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
-    message(STATUS "Kexi Web Forms support DISABLED, one of the following libraries is missing:")
-    message(STATUS "- Google CTemplate")
-    message(STATUS "- Boost")
-    message(STATUS "- Pion Network Library")
-  endif(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
-else(WITH_WEBFORMS)
-  set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
-endif(WITH_WEBFORMS)
-endif(FALSE)
 
 add_subdirectory( kexiutils )
 
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL driver")
 
-INCLUDE (FindPostgreSQL)
-
 set (PQXX_MIN_VERSION "3.0.0")
 set (PQXX_MAX_VERSION "5.0.0")
 
-macro_optional_find_package(PostgreSQL)
+macro_optional_find_package(CalligraPostgreSQL)
 macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface to PostgreSQL" "http://www.postgresql.org" FALSE "" "Required by Kexi PostgreSQL driver")
 
 pkg_check_modules (PQXX libpqxx)

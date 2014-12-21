@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef MSOOXMLNS_H
-#define MSOOXMLNS_H
+#ifndef MSOOXMLSCHEMAS_H
+#define MSOOXMLSCHEMAS_H
 
 #include "komsooxml_export.h"
 
@@ -34,43 +34,43 @@ class KOMSOOXML_EXPORT Schemas
 {
 public:
     //! Content types
-    static const char* const contentTypes;
+    static const char contentTypes[];
 
     //! Relationships
-    static const char* const relationships;
+    static const char relationships[];
 
     //! Core properties (document properties)
-    static const char* const core_properties;
+    static const char core_properties[];
 
     //! Dublin Core vocabulary
     //@todo generic, move somewhere else?
-    static const char* const dublin_core;
+    static const char dublin_core[];
 
     //! A.1 WordprocessingML
-    static const char* const wordprocessingml;
+    static const char wordprocessingml[];
 
     //! A.2 SpreadsheetML
-    static const char* const spreadsheetml;
+    static const char spreadsheetml[];
 
     //! A.3 PresentationML
-    static const char* const presentationml;
+    static const char presentationml[];
 
     //! DrawingML
     class KOMSOOXML_EXPORT drawingml
     {
     public:
         //! A.4 DrawingML - Framework
-        static const char* const main;
-        static const char* const wordprocessingDrawing;
-        static const char* const spreadsheetDrawing;
-        static const char* const compatibility;
-        static const char* const lockedCanvas;
-        static const char* const picture;
+        static const char main[];
+        static const char wordprocessingDrawing[];
+        static const char spreadsheetDrawing[];
+        static const char compatibility[];
+        static const char lockedCanvas[];
+        static const char picture[];
 
         //! A.5 DrawingML - Components
-        static const char* const chart;
-        static const char* const chartDrawing;
-        static const char* const diagram;
+        static const char chart[];
+        static const char chartDrawing[];
+        static const char diagram[];
     };
 
 
@@ -78,21 +78,21 @@ public:
     class KOMSOOXML_EXPORT officeDocument
     {
     public:
-        static const char* const math;
-        static const char* const bibliography;
-        static const char* const characteristics;
-        static const char* const customXml;
-        static const char* const custom_properties;
-        static const char* const docPropsVTypes;
-        static const char* const extended_properties;
-        static const char* const relationships;
-        static const char* const sharedTypes;
+        static const char math[];
+        static const char bibliography[];
+        static const char characteristics[];
+        static const char customXml[];
+        static const char custom_properties[];
+        static const char docPropsVTypes[];
+        static const char extended_properties[];
+        static const char relationships[];
+        static const char sharedTypes[];
     };
 
     //! A.7 Custom XML Schema References
-    static const char* const schemaLibrary;
+    static const char schemaLibrary[];
 }; // Schemas
 
 } // MSOOXML namespace
 
-#endif /* MSOOXMLNS_H */
+#endif /* MSOOXMLSCHEMAS_H */

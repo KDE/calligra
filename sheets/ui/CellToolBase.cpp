@@ -117,7 +117,6 @@
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
@@ -137,7 +136,6 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <ktoggleaction.h>
-#include <kdeversion.h>
 
 // Qt
 #include <QBuffer>
@@ -1151,9 +1149,9 @@ void CellToolBase::init()
 {
 }
 
-QList <QWidget*> CellToolBase::createOptionWidgets()
+QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     QString xmlName = KStandardDirs::locate("appdata", "CellToolOptionWidgets.xml");
     kDebug() << xmlName;

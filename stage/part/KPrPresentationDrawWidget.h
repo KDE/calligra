@@ -29,7 +29,6 @@
 #include <QVarLengthArray>
 
 class QAction;
-class KoPACanvas;
 
 struct Path
 {

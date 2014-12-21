@@ -34,11 +34,6 @@ class KarbonLayerSortingModel;
 class KarbonDocument;
 class QModelIndex;
 
-namespace KParts
-{
-class Part;
-}
-
 class KarbonLayerDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -58,6 +53,8 @@ class KarbonLayerDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
+    QString observerName() { return "KarbonLayerDocker"; }
+
 public slots:
     void updateView();
     virtual void setCanvas(KoCanvasBase* canvas);

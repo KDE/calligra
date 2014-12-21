@@ -204,6 +204,7 @@ KexiFormView::~KexiFormView()
     }
     deleteQuery();
     propertySetSwitched();
+    delete d;
 }
 
 void
@@ -667,10 +668,10 @@ void KexiFormView::initDataSource()
             QString fieldName((*it).toLower());
             //remove "tablename." if it was prepended
             if (tableSchema && fieldName.startsWith(tableSchema->name().toLower() + "."))
-                fieldName = fieldName.mid(tableSchema->name().length() + 1);
+                fieldName.remove(0, tableSchema->name().length() + 1);
             //remove "queryname." if it was prepended
             if (!tableSchema && fieldName.startsWith(d->query->name().toLower() + "."))
-                fieldName = fieldName.mid(d->query->name().length() + 1);
+                fieldName.remove(0, d->query->name().length() + 1);
             KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : d->query->field(fieldName);
             if (!f) {
                 /*! @todo show error */
@@ -1068,7 +1069,9 @@ KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 void
 KexiFormView::slotHandleDropEvent(QDropEvent* e)
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    Q_UNUSED(e);
+#else
     const QWidget *targetContainerWidget = dynamic_cast<const QWidget*>(sender());
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
@@ -1090,7 +1093,13 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
                                const QStringList& fields, KFormDesigner::Container* targetContainer,
                                const QPoint& _pos)
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    Q_UNUSED(sourcePartClass);
+    Q_UNUSED(sourceName);
+    Q_UNUSED(fields);
+    Q_UNUSED(targetContainer);
+    Q_UNUSED(_pos);
+#else
     if (fields.isEmpty())
         return;
 

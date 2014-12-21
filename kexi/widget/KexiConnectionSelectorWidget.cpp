@@ -33,14 +33,10 @@
 
 #include <KoIcon.h>
 
-#include <kapplication.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kurlcombobox.h>
-#include <ktoolbar.h>
-#include <kmenu.h>
+#include <kdialog.h>
 
 #include <QLabel>
 #include <QPushButton>
@@ -432,7 +428,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
                 "Do you want to remove database connection \"%1\" from the list of available connections?",
                 item->data()->serverInfoString(true)),
             QString(), //caption
-            KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+            KStandardGuiItem::remove(), KStandardGuiItem::cancel(),
             QString(), //dont'ask name
             KMessageBox::Notify | KMessageBox::Dangerous)) {
         return;

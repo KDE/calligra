@@ -33,14 +33,10 @@
 #include <QPainter>
 
 #include <kdebug.h>
-#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
-#include <kstdaccel.h>
-#include <kmessagebox.h>
-#include <kguiitem.h>
 #include <kiconeffect.h>
 
 #include <KoIcon.h>

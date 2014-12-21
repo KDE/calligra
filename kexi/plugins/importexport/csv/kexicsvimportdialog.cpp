@@ -54,16 +54,15 @@
 #include <QStackedWidget>
 #include <QSplitter>
 #include <QTreeView>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
 #include <kcharsets.h>
 #include <knuminput.h>
+#include <klineedit.h>
 #include <KProgressDialog>
 
 #include <KoIcon.h>
@@ -253,7 +252,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 //! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
     setObjectName("KexiCSVImportDialog");
     setSizeGripEnabled(true);
-    adjustSize();
+    KexiMainWindowIface::global()->setReasonableDialogSize(this);
     KDialog::centerOnScreen(this);
 
     setButtonGuiItem(ConfigureButton, KStandardGuiItem::configure());
@@ -415,7 +414,7 @@ void KexiCSVImportDialog::next()
             if (res == true) {
                 KMessageBox::information(this,
                         "<p>"
-                        + part->i18nMessage("Object \"%1\" already exists.", 0)
+                        + part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                         .subs(m_newTableWidget->nameText()).toString()
                         + "</p><p>" + i18n("Please choose other name.") + "</p>"
                         );
@@ -793,8 +792,6 @@ void KexiCSVImportDialog::initLater()
     }
 
     currentCellChanged(m_table->index(0,0), QModelIndex());
-    adjustSize();
-    KDialog::centerOnScreen(this);
 
     if (m_loadingProgressDlg)
         m_loadingProgressDlg->hide();

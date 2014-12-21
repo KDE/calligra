@@ -19,7 +19,6 @@
 
 #include "KarbonFilterEffectsTool.h"
 
-#include "KoGenericRegistryModel.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectFactoryBase.h"
@@ -28,6 +27,7 @@
 #include "KoCanvasBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeManager.h"
+#include "KoViewConverter.h"
 #include "KoSelection.h"
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectResource.h"
@@ -416,9 +416,9 @@ void KarbonFilterEffectsTool::regionHeightChanged(double height)
     canvas()->addCommand(new FilterRegionChangeCommand(d->currentEffect, region, d->currentShape));
 }
 
-QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
+QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 {
-    QList<QWidget*> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();

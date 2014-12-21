@@ -35,7 +35,6 @@
 #include <KoShapeManager.h>
 #include <KoDocumentInfoDlg.h>
 
-#include <kglobal.h>
 #include <kmessagebox.h>
 
 KWPart::KWPart(QObject *parent)

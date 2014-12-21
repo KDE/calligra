@@ -49,10 +49,6 @@
    </item>
   </layout>
  </widget>
-  <includes>
-  <include location="local" >kdatetimewidget.h</include>
-  <include location="local" >kdatewidget.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

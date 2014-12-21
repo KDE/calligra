@@ -28,9 +28,8 @@
 #include <KoPACanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoPAViewBase.h>
-#include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoPAUtil.h>
+#include <KoPageLayout.h>
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 #include <KoShapePaintingContext.h>

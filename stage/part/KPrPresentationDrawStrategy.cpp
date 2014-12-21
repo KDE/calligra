@@ -26,7 +26,7 @@
 #include <kiconloader.h>
 
 #include <KoIcon.h>
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 
 #include "KPrPresentationTool.h"
 #include "KPrPresentationDrawWidget.h"

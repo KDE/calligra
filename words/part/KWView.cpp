@@ -40,6 +40,7 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
+#include "gemini/ViewModeSwitchEvent.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
@@ -62,11 +63,11 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointedAt.h>
-#include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
 #include <KoAnnotation.h>
 #include <KoTextEditor.h>
+#include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
@@ -693,13 +694,24 @@ void KWView::setDistractionFreeMode(bool status)
     m_dfmExitButton->setVisible(status);
 
     //Hide cursor.
-    if(status) {
+    if (status) {
         m_hideCursorTimer->start(4000);
     }
     else {
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
+
+    // From time to time you can end up in a situation where the shape manager suddenly
+    // looses track of the current shape selection. So, we trick it here. Logically,
+    // it also makes sense to just make sure the text tool is active anyway when
+    // switching to/from distraction free (since that's explicitly for typing things
+    // out, not layouting)
+    const QList<KoShape*> selection = m_canvas->shapeManager()->selection()->selectedShapes();
+    m_canvas->shapeManager()->selection()->deselectAll();
+    if (selection.count() > 0)
+        m_canvas->shapeManager()->selection()->select(selection.at(0));
+    KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }
 
 void KWView::hideUI()
@@ -926,6 +938,50 @@ void KWView::showEvent(QShowEvent *e)
 {
     KoView::showEvent(e);
     QTimer::singleShot(0, this, SLOT(updateStatusBarAction()));
+}
+
+bool KWView::event(QEvent* event)
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (m_canvas) {
+                syncObject->documentOffset = m_canvas->documentOffset();
+                syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->shapes = m_canvas->shapeManager()->shapes();
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (m_canvas && syncObject->initialized) {
+                m_canvas->canvasWidget()->setFocus();
+                qApp->processEvents();
+
+                m_canvas->shapeManager()->setShapes(syncObject->shapes);
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+
+                qApp->processEvents();
+                m_canvas->canvasController()->setScrollBarValue(syncObject->documentOffset);
+
+                qApp->processEvents();
+                foreach(KoShape* const &shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
+                    if (qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                        m_canvas->shapeManager()->selection()->select(shape);
+                        break;
+                    }
+                }
+                KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
+            }
+
+            return true;
+        }
+    }
+    return QWidget::event(event);
 }
 
 void KWView::updateStatusBarAction()

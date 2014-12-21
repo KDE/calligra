@@ -27,7 +27,6 @@
 #include <QListWidgetItem>
 #include <QWidget>
 
-#include <kdialog.h>
 #include <kpagedialog.h>
 
 class KoPageLayoutWidget;

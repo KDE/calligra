@@ -51,6 +51,7 @@ typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
 #endif
 
 class KToggleAction;
+class KAction;
 /**
  * Words' view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
@@ -153,6 +154,7 @@ public slots:
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
+    virtual bool event(QEvent* event);
 
 private:
     void setupActions();

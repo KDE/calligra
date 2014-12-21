@@ -28,12 +28,9 @@
 #include <QCheckBox>
 #include <QGridLayout>
 
-#include <kapplication.h>
 #include <kconfig.h>
-#include <kcombobox.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kcharsets.h>
 
 using namespace KexiMigration;
 

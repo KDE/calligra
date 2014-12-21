@@ -26,3 +26,8 @@ install( FILES calligra_filter_wpd2odt.desktop DESTINATION ${SERVICES_INSTALL_DI
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_wpd_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+
+if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
+    install( FILES libokularGenerator_wpd_calligra.desktop okularWpd_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+    install( PROGRAMS okularApplication_wpd_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
+endif(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)

@@ -35,7 +35,6 @@
 
 //#define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <kross/core/manager.h>
-#include <kross/core/actioncollection.h>
 
 /***************************************************************************
  * ScriptingFunctionImpl

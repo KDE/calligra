@@ -42,8 +42,6 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoUnit.h>
 
-#include <kde_file.h> // for WARNING
-
 #include <QBrush>
 
 #define MSOOXML_CURRENT_NS "p"
@@ -330,7 +328,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("p", MSOOXML::Schemas::presentationml))) {
-        raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::presentationml));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::presentationml)));
         return KoFilter::WrongFormat;
     }
 //! @todo expect other namespaces too...

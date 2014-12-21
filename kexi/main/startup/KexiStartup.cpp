@@ -30,8 +30,10 @@
 #include <db/driver.h>
 #include <db/drivermanager.h>
 #include <core/kexipartmanager.h>
+#include <kexiutils/utils.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 
@@ -43,8 +45,6 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 
-#include <ktextedit.h>
-#include <kuser.h>
 #include <KProgressDialog>
 
 #include <unistd.h>
@@ -137,103 +137,6 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
     }
 }
 
-//---------------------------------
-
-class KexiDBPasswordDialog::Private
-{
- public:
-    Private(KexiDB::ConnectionData* data);
-    ~Private();
-
-    KexiDB::ConnectionData *cdata;
-    bool showConnectionDetailsRequested;
-};
-
-KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
-    : cdata(data)
-    , showConnectionDetailsRequested(false)
-{
-}
-
-KexiDBPasswordDialog::Private::~Private()
-{
-
-}
-#include <kexiutils/utils.h>
-
-KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
-        : KPasswordDialog(parent, ShowUsernameLine | ShowDomainLine,
-                          showDetailsButton ? KDialog::User1 : KDialog::None)
-        , d(new Private(&cdata))
-{
-    setCaption(i18nc("@title:window", "Opening Database"));
-    setPrompt(i18nc("@info", "Supply a password below."));
-
-    QString srv = cdata.serverInfoString(false);
-    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, "QLabel", "domainLabel");
-    if (domainLabel) {
-        domainLabel->setText(i18n("Database server:"));
-    }
-    setDomain(srv);
-
-    QString usr;
-    if (cdata.userName.isEmpty())
-        usr = i18nc("unspecified user", "(unspecified)");
-    else
-        usr = cdata.userName;
-    setUsernameReadOnly(true);
-    setUsername(usr);
-
-    if (showDetailsButton) {
-        connect(this, SIGNAL(user1Clicked()),
-                this, SLOT(slotShowConnectionDetails()));
-        setButtonText(KDialog::User1, i18n("&Details") + " >>");
-    }
-    setButtonText(KDialog::Ok, i18n("&Open"));
-    setButtonIcon(KDialog::Ok, koIcon("document-open"));
-}
-
-KexiDBPasswordDialog::~KexiDBPasswordDialog()
-{
-    delete d;
-}
-
-bool KexiDBPasswordDialog::showConnectionDetailsRequested() const
-{
-    return d->showConnectionDetailsRequested;
-}
-
-void KexiDBPasswordDialog::slotButtonClicked(int button)
-{
-    if (button == KDialog::Ok || button == KDialog::User1) {
-        d->cdata->password = password();
-        QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
-        if (!userEdit->isReadOnly()) {
-            d->cdata->userName = userEdit->text();
-        }
-    }
-    KPasswordDialog::slotButtonClicked(button);
-}
-
-void KexiDBPasswordDialog::slotShowConnectionDetails()
-{
-    d->showConnectionDetailsRequested = true;
-    close();
-}
-
-//static
-bool KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent)
-{
-    if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
-        //ask for password
-        KexiDBPasswordDialog pwdDlg(parent, *data, false /*!showDetailsButton*/);
-        if (QDialog::Accepted != pwdDlg.exec()) {
-            return false;
-        }
-    }
-    return true;
-}
-
 
 //---------------------------------
 KexiStartupHandler::KexiStartupHandler()
@@ -286,8 +189,10 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
                 type_name = item.left(idx).toLower();
                 obj_name = item.mid(idx + 1);
                 //optional: remove ""
-                if (obj_name.left(1) == "\"" && obj_name.right(1) == "\"")
-                    obj_name = obj_name.mid(1, obj_name.length() - 2);
+                if (obj_name.startsWith(QLatin1Char('\"')) && obj_name.endsWith(QLatin1Char('\"'))) {
+                    obj_name.chop(1);
+                    obj_name.remove(0, 1);
+                }
             } else {
                 //just obj. name: set default type name
                 obj_name = item;
@@ -437,7 +342,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
         if (cdata.password.isEmpty()) {
             delete d->passwordDialog;
-            d->passwordDialog = new KexiDBPasswordDialog(0, cdata, true);
+            d->passwordDialog = new KexiDBPasswordDialog(0, cdata, KexiDBPasswordDialog::ShowDetailsButton);
             if (connDataOptionsSpecified) {
                 if (cdata.userName.isEmpty()) {
                     d->passwordDialog->setUsername(QString());
@@ -986,7 +891,7 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
         return 0;
     if (!cdata->savePassword && cdata->password.isEmpty()) {
         if (!d->passwordDialog)
-            d->passwordDialog = new KexiDBPasswordDialog(0, *cdata, false);
+            d->passwordDialog = new KexiDBPasswordDialog(0, *cdata);
         const int ret = d->passwordDialog->exec();
         if (d->passwordDialog->showConnectionDetailsRequested() || ret == QDialog::Accepted) {
 
