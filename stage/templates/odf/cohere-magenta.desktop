@@ -2,6 +2,7 @@
 Icon=cohere-magenta
 Name=Cohere
 Name[ca]=Cohere
+Name[da]=Cohere
 Name[de]=Cohere
 Name[en_GB]=Cohere
 Name[it]=Cohere
@@ -14,6 +15,7 @@ Name[uk]=Cohere
 Name[x-test]=xxCoherexx
 Comment=Cohere designed presentation template
 Comment[ca]=Plantilles de presentacions dissenyades pel Cohere
+Comment[da]=Cohere-designet præsentationsskabelon
 Comment[en_GB]=Cohere designed presentation template
 Comment[it]=Modello di presentazione progettato da Cohere
 Comment[nl]=Met Cohere ontworpen presentatiesjabloon
