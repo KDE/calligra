@@ -2795,8 +2795,8 @@ void CellToolBase::insertFromDatabase()
 
     QStringList str = QSqlDatabase::drivers();
     if (str.isEmpty()) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("No database drivers available.  To use this feature you need "
-                           "to install the necessary Qt 3 database drivers."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("No database drivers available. To use this feature you need "
+                           "to install the necessary Qt database drivers."));
         return;
     }
 
