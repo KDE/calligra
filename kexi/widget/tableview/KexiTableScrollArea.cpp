@@ -281,7 +281,6 @@ void KexiTableScrollArea::setupNavigator()
     m_navPanel = new KexiRecordNavigator(this, this);
     //m_navPanel->setLeftMargin(leftMargin());
     navPanelWidget()->setObjectName("navPanel");
-    navPanelWidget()->setAutoFillBackground(true); // avoid showing ver header beneath
     m_navPanel->setRecordHandler(this);
     navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 }
