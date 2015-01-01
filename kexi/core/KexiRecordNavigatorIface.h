@@ -34,7 +34,7 @@ public:
     /*! Sets current record number for this navigator,
      *   i .e. a value that will be displ*ayed in the 'record number' text box.
      *   This can also affect button's enabling and disabling.
-     *   If @p r is 0, 'record number' text box's content is cleared. */
+     *   @p r is counted from 1; if it is 0 'record number' text box's content is cleared. */
     virtual void setCurrentRecordNumber(uint r) = 0;
     
     /*! Sets record count for this navigator.
