@@ -317,10 +317,21 @@ public:
      currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
     virtual void clearSelection();
 
+    //! Flags for setCursorPosition()
+    enum CursorPositionFlags {
+        NoCursorPositionFlags = 0,  //!< Default flag
+        ForceSetCursorPosition = 1, //!< Update cursor position even if row and col doesn't
+                                    //!< differ from actual position.
+        DontEnsureCursorVisibleIfPositionUnchanged = 2 //!< Don't call ensureCellVisible()
+                                                       //!< when position is unchanged and
+                                                       //!< ForceSetCursorPosition is off.
+    };
+
     /*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
      If forceSet is true, cursor position is updated even if \a row and \a col doesn't
      differ from actual position. */
-    virtual void setCursorPosition(int row, int col = -1, bool forceSet = false);
+    virtual void setCursorPosition(int row, int col = -1,
+                                   CursorPositionFlags flags = NoCursorPositionFlags);
 
     /*! Ensures that cell at \a row and \a col is visible.
      If \a col is -1, current column number is used. \a row and \a col (if not -1) must

@@ -315,7 +315,7 @@ void KexiTableScrollArea::slotRowsDeleted(const QList<int> &rows)
 {
     viewport()->repaint();
     updateWidgetContentsSize();
-    setCursorPosition(qMax(0, (int)m_curRow - (int)rows.count()), -1, true);
+    setCursorPosition(qMax(0, (int)m_curRow - (int)rows.count()), -1, ForceSetCursorPosition);
 }
 
 void KexiTableScrollArea::setFont(const QFont &font)
@@ -1250,7 +1250,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
     m_vScrollBarValueChanged_enabled = false;
 
     // if focus cell changes, repaint
-    setCursorPosition(curRow, curCol);
+    setCursorPosition(curRow, curCol, DontEnsureCursorVisibleIfPositionUnchanged);
 
     m_vScrollBarValueChanged_enabled = true;
 

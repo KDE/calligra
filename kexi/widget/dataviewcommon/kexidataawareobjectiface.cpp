@@ -218,7 +218,7 @@ void KexiDataAwareObjectInterface::initDataContents()
                 }
             }
         }
-        setCursorPosition(curRow, curCol, true/*force*/);
+        setCursorPosition(curRow, curCol, ForceSetCursorPosition);
     }
     ensureCellVisible(m_curRow, m_curCol);
 
@@ -467,7 +467,8 @@ void KexiDataAwareObjectInterface::clearSelection()
         m_navPanel->setCurrentRecordNumber(0);
 }
 
-void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bool forceSet)
+void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
+                                                     CursorPositionFlags flags)
 {
     int newrow = row;
     int newcol = col;
@@ -499,7 +500,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
     newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
 // kDebug() << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
-
+    const bool forceSet = flags & ForceSetCursorPosition;
     if (forceSet || m_curRow != newrow || m_curCol != newcol) {
 #ifdef setCursorPosition_DEBUG
         kDebug() << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
@@ -646,7 +647,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         /*emit*/ cellSelected(m_curRow, m_curCol);
         selectCellInternal(oldRow, oldCol);
     } else {
-        if (m_curRow >= 0 && m_curRow < rows() && m_curCol >= 0 && m_curCol < columns()) {
+        if (!(flags & DontEnsureCursorVisibleIfPositionUnchanged)
+            && m_curRow >= 0 && m_curRow < rows() && m_curCol >= 0 && m_curCol < columns())
+        {
             // the same cell but may need a bit of scrolling to make it visible
             ensureCellVisible(m_curRow, m_curCol);
         }
@@ -712,7 +715,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         //editing is finished:
         if (m_newRowEditing) {
             //update current-item-iterator
-            setCursorPosition(-1, -1, true /*forceSet*/);
+            setCursorPosition(-1, -1, ForceSetCursorPosition);
         }
         m_rowEditing = false;
         m_newRowEditing = false;
@@ -1312,7 +1315,7 @@ void KexiDataAwareObjectInterface::slotRowDeleted()
         updateWidgetContentsSize();
 
         if (!(m_spreadSheetMode && m_rowWillBeDeleted >= (rows() - 1)))
-            setCursorPosition(m_rowWillBeDeleted, m_curCol, true/*forceSet*/);
+            setCursorPosition(m_rowWillBeDeleted, m_curCol, ForceSetCursorPosition);
         if (verticalHeader()) {
             //! @todo tableview-port verticalHeader()->removeLabel();
         }
@@ -1350,7 +1353,7 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
     if (m_spreadSheetMode) { //append empty row for spreadsheet mode
         m_data->append(m_data->createItem());
         if (lastRowDeleted) //back to the last row
-            setCursorPosition(rows() - 1, m_curCol, true/*forceSet*/);
+            setCursorPosition(rows() - 1, m_curCol, ForceSetCursorPosition);
         /*emit*/ newItemAppendedForAfterDeletingInSpreadSheetMode();
     }
     return true;
@@ -1805,7 +1808,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
                              matchAnyPartOfField, matchWholeField, caseSensitivity, 
                              wholeWordsOnly, forward))
             {
-                setCursorPosition(row, col, true/*forceSet*/);
+                setCursorPosition(row, col, ForceSetCursorPosition);
                 if (prevRow != m_curRow)
                     updateRow(prevRow);
                 // remember the exact position for the found value
