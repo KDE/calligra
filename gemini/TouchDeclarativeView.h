@@ -33,7 +33,7 @@ class TouchDeclarativeView : public QDeclarativeView
     Q_PROPERTY(QWidget* canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
 
 public:
-    TouchDeclarativeView(QWidget *parent = 0);
+    explicit TouchDeclarativeView(QWidget *parent = 0);
     TouchDeclarativeView(const QUrl &url, QWidget *parent = 0);
     virtual ~TouchDeclarativeView();
 
