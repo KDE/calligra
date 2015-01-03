@@ -316,7 +316,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
         if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
 //<temp>
 //! @todo this is temporary workaround as we have no import driver for SQLite
-            if (/*supported?*/ !d->data->connectionData()->driverName.toLower().startsWith("sqlite")) {
+            if (/*supported?*/ !d->data->connectionData()->driverName.startsWith(QLatin1String("sqlite"), Qt::CaseInsensitive)) {
 //</temp>
                 if (incompatibleWithKexi)
                     *incompatibleWithKexi = true;

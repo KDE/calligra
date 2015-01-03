@@ -254,7 +254,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
-    if (uri.toLower().endsWith("otp")) {
+    if (uri.endsWith(QLatin1String("otp"), Qt::CaseInsensitive)) {
         KUrl url(uri);
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
