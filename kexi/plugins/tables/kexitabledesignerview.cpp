@@ -1196,7 +1196,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
         b = d->sets->at(i);
         if (b) {
             no_fields = false;
-            const QString name((*b)["name"].value().toString());
+            const QString name((*b)["name"].value().toString().toLower());
             if (name.isEmpty()) {
                 if (beSilent) {
                     kWarning() << QString("no field caption entered at record %1...").arg(i + 1);
@@ -1208,10 +1208,10 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                 res = cancelled;
                 break;
             }
-            if (names.contains(name.toLower())) {
+            if (names.contains(name)) {
                 break;
             }
-            names.insert(name.toLower());   //remember
+            names.insert(name);   //remember
         }
     }
     if (res == true && no_fields) {//no fields added
