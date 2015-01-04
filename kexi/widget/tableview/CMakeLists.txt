@@ -5,11 +5,15 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CM
 
 ########### next target ###############
 
-set(kexidatatable_LIB_SRCS 
-   kexitableview.cpp 
-   kexitableview_p.cpp 
-   kexidatatableview.cpp 
-   kexicelleditorfactory.cpp 
+set(kexidatatable_LIB_SRCS
+   KexiTableScrollArea.cpp
+   KexiTableScrollArea_p.cpp
+   KexiTableScrollAreaHeader.cpp
+   KexiTableScrollAreaHeaderModel.cpp
+   KexiDataTableView.cpp
+   KexiDataTableScrollArea.cpp
+   KexiTableScrollAreaWidget.cpp
+   kexicelleditorfactory.cpp
    kexitableedit.cpp 
    kexiinputtableedit.cpp 
    kexiblobtableedit.cpp 
@@ -21,8 +25,6 @@ set(kexidatatable_LIB_SRCS
    kexitimetableedit.cpp 
    kexidatetimetableedit.cpp 
    kexitextformatter.cpp
-   kexitableviewheader.cpp
-   kexidatatable.cpp  
 )
 
 
@@ -38,7 +40,6 @@ target_link_libraries(
     kexidb
     ${CALLIGRADB_LIBS}
     ${KDE4_KIO_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
 )
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

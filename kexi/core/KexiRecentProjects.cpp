@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,8 @@
 #include <db/driver.h>
 #include <db/connection.h>
 #include <db/msghandler.h>
-#include <core/kexidbshortcutfile.h>
+#include "kexidbshortcutfile.h"
+#include "kexidbconnectionset.h"
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -98,14 +99,8 @@ void KexiRecentProjects::Private::load()
 
 static QString key(const KexiProjectData& data)
 {
-    const KexiDB::ConnectionData *conn = data.constConnectionData();
-    return conn->driverName.toLower() + ','
-        + conn->userName.toLower() + ','
-        + conn->hostName.toLower() + ','
-        + QString::number(conn->port) + ','
-        + QString::number(conn->useLocalSocketFile) + ','
-        + conn->localSocketFileName + ','
-        + (conn->fileName().isEmpty() ? data.databaseName() : conn->fileName());
+    return KexiDBConnectionSet::key(*data.constConnectionData())
+        + ',' + data.databaseName();
 }
 
 bool KexiRecentProjects::Private::add(KexiProjectData *newData,
@@ -241,9 +236,9 @@ KexiRecentProjects::~KexiRecentProjects()
     delete d;
 }
 
-void KexiRecentProjects::addProjectData(KexiProjectData *data)
+void KexiRecentProjects::addProjectData(const KexiProjectData &data)
 {
-    d->add(data, QString() /*save new shortcut*/);
+    d->add(new KexiProjectData(data), QString() /*save new shortcut*/);
 }
 
 void KexiRecentProjects::addProjectDataInternal(KexiProjectData *data)

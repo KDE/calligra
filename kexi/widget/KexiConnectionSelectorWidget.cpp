@@ -404,10 +404,8 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     if (QDialog::Accepted != dlg.exec())
         return;
 
-    KexiDB::ConnectionData *newData = new KexiDB::ConnectionData(*dlg.currentProjectData().connectionData());
-    if (!d->conn_set->saveConnectionData(item->data(), newData)) {
+    if (!d->conn_set->saveConnectionData(item->data(), *dlg.currentProjectData().connectionData())) {
         //! @todo msg?
-        delete newData;
         return;
     }
     const KexiDB::Driver::Info info(d->manager.driverInfo(item->data()->driverName));

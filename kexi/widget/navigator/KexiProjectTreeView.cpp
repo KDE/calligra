@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,18 @@
 
 #include "KexiProjectTreeView.h"
 #include "KexiProjectModel.h"
+#include "KexiProjectModelItem.h"
+
+#include <QHeaderView>
+#include <KDebug>
 
 KexiProjectTreeView::KexiProjectTreeView(QWidget *parent)
         : QTreeView(parent)
-        , nameEndsWithAsterisk(false)
 {
     setObjectName("KexiProjectTreeView");
     setEditTriggers(QAbstractItemView::EditKeyPressed);
+    header()->hide();
+    setAllColumnsShowFocus(true);
 }
 
 KexiProjectTreeView::~KexiProjectTreeView()
@@ -35,11 +40,19 @@ KexiProjectTreeView::~KexiProjectTreeView()
 
 void KexiProjectTreeView::setModel(KexiProjectModel *model)
 {
+    if (model == this->model()) {
+        return;
+    }
+    if (this->model()) {
+        this->model()->disconnect(this);
+    }
     QTreeView::setModel(model);
-    connect(model, SIGNAL(highlightSearchedItem(QModelIndex)),
-            this, SLOT(slotHighlightSearchedItem(QModelIndex)));
-    connect(model, SIGNAL(activateSearchedItem(QModelIndex)),
-            this, SLOT(slotActivateSearchedItem(QModelIndex)));
+    if (model) {
+        connect(model, SIGNAL(highlightSearchedItem(QModelIndex)),
+                this, SLOT(slotHighlightSearchedItem(QModelIndex)));
+        connect(model, SIGNAL(activateSearchedItem(QModelIndex)),
+                this, SLOT(slotActivateSearchedItem(QModelIndex)));
+    }
 }
 
 void KexiProjectTreeView::slotHighlightSearchedItem(const QModelIndex &index)
@@ -55,4 +68,13 @@ void KexiProjectTreeView::slotActivateSearchedItem(const QModelIndex &index)
     setFocus();
     scrollTo(index);
     setCurrentIndex(index);
+}
+
+void KexiProjectTreeView::drawBranches(QPainter *painter, const QRect &rect,
+                                       const QModelIndex &index) const
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+    Q_UNUSED(index);
+    // Don't draw.
 }

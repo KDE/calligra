@@ -38,7 +38,7 @@ class DocumentListModel : public QAbstractListModel, public QDeclarativeParserSt
     Q_INTERFACES(QDeclarativeParserStatus)
 
 public:
-    DocumentListModel(QObject *parent = 0);
+    explicit DocumentListModel(QObject *parent = 0);
     ~DocumentListModel();
 
     enum CustomRoles {

@@ -27,11 +27,11 @@
 #include <kmessagebox.h>
 #include <ktabwidget.h>
 
-#include <KexiMainWindowIface.h>
-#include "kexiproject.h"
-#include "kexipartinfo.h"
-#include "widget/tableview/kexidatatable.h"
-#include "widget/tableview/kexidatatableview.h"
+#include <core/KexiMainWindowIface.h>
+#include <core/kexiproject.h>
+#include <core/kexipartinfo.h>
+#include <widget/tableview/KexiDataTableView.h>
+#include <widget/tableview/KexiDataTableScrollArea.h>
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
 #include "kexilookupcolumnpage.h"

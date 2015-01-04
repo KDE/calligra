@@ -457,6 +457,7 @@ static double helper_eurofactor(const QString& currency)
     else if (cur == "GRD") result = 340.75;    // Greece
     else if (cur == "IEP") result = 0.787564;  // Ireland
     else if (cur == "ITL") result = 1936.27;   // Italy
+    else if (cur == "LTL") result = 3.45280;   // Lithuania
     else if (cur == "LUX") result = 40.3399;   // Luxembourg <-- This is the wrong code only here for compatibility with old versions
     else if (cur == "LUF") result = 40.3399;   // Luxembourg
     else if (cur == "LVL") result = 0.702804;  // Latvia

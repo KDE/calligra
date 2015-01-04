@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +19,17 @@
 
 #include "KexiProjectItemDelegate.h"
 #include "KexiProjectModel.h"
+#include "KexiProjectModelItem.h"
+
 #include <kexiutils/identifier.h>
+#include <kexiutils/utils.h>
+
 #include <QLineEdit>
+
+static int paddingBeforeGroupItem(const QFontMetrics& fm)
+{
+    return fm.lineSpacing() / 2;
+}
 
 class KexiProjectItemDelegate::Private
 {
@@ -47,6 +56,19 @@ void KexiProjectItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     if (highlighted.isValid() && highlighted == index) {
         newOption.state |= QStyle::State_MouseOver;
     }
+    KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    if (!item->partItem()) { // this is a group item
+        if (item->childCount() == 0) {
+            return;
+        }
+        newOption.palette = KexiUtils::paletteWithDimmedColor(newOption.palette,
+                                                              QPalette::Active, QPalette::Text);
+        newOption.palette.setColor(QPalette::Disabled, QPalette::Text,
+                                   newOption.palette.color(QPalette::Active, QPalette::Text));
+        newOption.displayAlignment = Qt::AlignLeft | Qt::AlignBottom;
+        newOption.state &= (0xffffffff ^ QStyle::State_MouseOver);
+        newOption.rect.setBottom(newOption.rect.bottom() - 3);
+    }
     QStyledItemDelegate::paint(painter, newOption, index);
 }
 
@@ -60,4 +82,18 @@ QWidget* KexiProjectItemDelegate::createEditor(
         qobject_cast<QLineEdit*>(editor)->setValidator(validator);
     }
     return editor;
+}
+
+QSize KexiProjectItemDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                        const QModelIndex &index) const
+{
+    QSize s = QStyledItemDelegate::sizeHint(option, index);
+    KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    if (!item->partItem()) { // this is a group item: add padding before
+        if (item->childCount() == 0) {
+            return QSize(0, 0);
+        }
+        s.setHeight(s.height() + paddingBeforeGroupItem(option.fontMetrics));
+    }
+    return s;
 }

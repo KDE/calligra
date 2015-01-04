@@ -52,7 +52,7 @@ public:
         stream << text;
         stream << accountType;
         stream << stackComponent;
-        Q_FOREACH(QByteArray name, accountDetails->dynamicPropertyNames()) {
+        Q_FOREACH(const QByteArray &name, accountDetails->dynamicPropertyNames()) {
             stream << name << accountDetails->property(name);
         }
         for(int i = accountDetails->metaObject()->propertyOffset(); i < accountDetails->metaObject()->propertyCount(); ++i) {
@@ -206,7 +206,7 @@ void CloudAccountsModel::addAccount(QString text, QString accountType, QString s
     entry->accountType = accountType;
     entry->stackComponent = stackComponent;
     if(accountDetails) {
-        Q_FOREACH(QByteArray name, accountDetails->dynamicPropertyNames()) {
+        Q_FOREACH(const QByteArray &name, accountDetails->dynamicPropertyNames()) {
             entry->accountDetails->setProperty(name, accountDetails->property(name));
         }
         for(int i = accountDetails->metaObject()->propertyOffset(); i < accountDetails->metaObject()->propertyCount(); ++i) {
@@ -267,7 +267,7 @@ void CloudAccountsModel::setAccountDetails(int index, QObject* newDetails)
     {
         AccountEntry* entry = d->entries.at(index);
         if(newDetails) {
-            Q_FOREACH(QByteArray name, newDetails->dynamicPropertyNames()) {
+            Q_FOREACH(const QByteArray &name, newDetails->dynamicPropertyNames()) {
                 entry->accountDetails->setProperty(name, newDetails->property(name));
             }
             for(int i = newDetails->metaObject()->propertyOffset(); i < newDetails->metaObject()->propertyCount(); ++i) {

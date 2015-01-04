@@ -489,7 +489,8 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
     // 2nd column: list of actions/objects
-    d->objectsListView = new KexiProjectNavigator(d->secondAnd3rdColumnMainWidget, KexiProjectNavigator::NoFeatures);
+    d->objectsListView = new KexiProjectNavigator(d->secondAnd3rdColumnMainWidget,
+                                                  KexiProjectNavigator::Borders);
     d->secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
     d->secondAnd3rdColumnGrLyr->setColumnStretch(0,1);
     d->secondAnd3rdColumnGrLyr->setColumnStretch(1,1);

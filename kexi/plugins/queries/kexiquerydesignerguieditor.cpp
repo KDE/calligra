@@ -46,9 +46,10 @@
 #include <kexiutils/utils.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <kexitableview.h>
+#include <kexiinternalpart.h>
 #include <kexidragobjects.h>
-#include <kexidatatable.h>
+#include <widget/tableview/KexiTableScrollArea.h>
+#include <widget/tableview/KexiDataTableView.h>
 #include <kexi.h>
 #include <kexisectionheader.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
@@ -101,7 +102,7 @@ public:
     }
 
     KexiDB::TableViewData *data;
-    KexiDataTable *dataTable;
+    KexiDataTableView *dataTable;
     QPointer<KexiDB::Connection> conn;
 
     KexiRelationsView *relations;
@@ -168,7 +169,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
     d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
     d->spl->addWidget(d->head);
-    d->dataTable = new KexiDataTable(d->head, false);
+    d->dataTable = new KexiDataTableView(d->head, false);
     d->head->setWidget(d->dataTable);
     d->dataTable->setObjectName("guieditor_dataTable");
     d->dataTable->dataAwareObject()->setSpreadSheetMode();

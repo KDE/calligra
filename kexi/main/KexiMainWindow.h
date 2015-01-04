@@ -428,7 +428,7 @@ protected:
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
 protected slots:
-    tristate createNewProject(KexiProjectData* projectData);
+    tristate createNewProject(const KexiProjectData &projectData);
 
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
@@ -438,8 +438,8 @@ protected slots:
 
     void slotPartLoaded(KexiPart::Part* p);
 
-    //! internal - creates and initializes kexi project
-    void createKexiProject(const KexiProjectData& new_data);
+    //! Internal - creates and initializes Kexi project object based on @a data.
+    KexiProject* createKexiProjectObject(const KexiProjectData &data);
 
     /*! Handles event when user double clicked (or single -depending on settings)
      or pressed Return key on the part item in the navigator.

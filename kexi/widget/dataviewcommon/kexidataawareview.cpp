@@ -332,11 +332,12 @@ void KexiDataAwareView::reloadActions()
     setAvailable("data_sort_az", d->dataAwareObject->isSortingEnabled());
     setAvailable("data_sort_za", d->dataAwareObject->isSortingEnabled());
 
-    slotCellSelected(d->dataAwareObject->currentColumn(), d->dataAwareObject->currentRow());
+    slotCellSelected(d->dataAwareObject->currentRow(), d->dataAwareObject->currentColumn());
 }
 
-void KexiDataAwareView::slotCellSelected(int /*col*/, int row)
+void KexiDataAwareView::slotCellSelected(int row, int col)
 {
+    Q_UNUSED(col);
     slotUpdateRowActions(row);
 }
 

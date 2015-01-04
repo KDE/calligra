@@ -60,7 +60,6 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
     : d(new Private(&i, 0, p))
 {
-    d->icon = KIcon(i.itemIconName());
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
@@ -170,7 +169,7 @@ Qt::ItemFlags KexiProjectModelItem::flags() const
     if (d->item) {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     } else {
-        return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+        return Qt::NoItemFlags;
     }
 }
 

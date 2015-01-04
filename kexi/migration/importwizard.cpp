@@ -864,8 +864,11 @@ tristate ImportWizard::import()
             d->args->insert("destinationDatabaseName",
                             fileBasedDstSelected() ? sourceDriver->data()->destination->connectionData()->fileName()
                                                    : sourceDriver->data()->destination->databaseName());
-            QString destinationConnectionShortcut(
-                Kexi::connset().fileNameForConnectionData(d->dstConn->selectedConnectionData()));
+            QString destinationConnectionShortcut;
+            if (d->dstConn->selectedConnectionData()) {
+                destinationConnectionShortcut
+                    = Kexi::connset().fileNameForConnectionData(*d->dstConn->selectedConnectionData());
+            }
             if (!destinationConnectionShortcut.isEmpty()) {
                 d->args->insert("destinationConnectionShortcut", destinationConnectionShortcut);
             }

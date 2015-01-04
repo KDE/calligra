@@ -293,7 +293,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     setWindowTitle(i18n("Calligra Gemini"));
     setWindowIcon(KIcon("calligragemini"));//gemini"));
 
-    foreach(QString fileName, fileNames) {
+    foreach(const QString &fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 

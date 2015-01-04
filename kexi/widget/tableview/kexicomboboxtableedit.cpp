@@ -27,12 +27,14 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QClipboard>
+#include <QScrollBar>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include <kexiutils/utils.h>
 #include "kexicomboboxpopup.h"
-#include "kexitableview.h"
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaWidget.h"
 #include "kexi.h"
 
 #include <klineedit.h>
@@ -143,8 +145,11 @@ void KexiComboBoxTableEdit::resize(int w, int h)
     updateLineEditStyleSheet();
     m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
-    if (m_scrollView)
-        r.translate(m_scrollView->contentsX(), m_scrollView->contentsY());
+    if (qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())) {
+        r.translate(
+            qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
+            qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->verticalScrollBar()->value());
+    }
     updateFocus(r);
     if (popup()) {
         popup()->updateSize();
@@ -317,15 +322,16 @@ bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
         kDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
-    KexiTableView *tv = dynamic_cast<KexiTableView*>(m_scrollView);
+    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
     if (tv && e->type() == QEvent::KeyPress) {
         if (tv->eventFilter(o, e)) {
             return true;
         }
     }
-    if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress && m_scrollView) {
-        QPoint gp = static_cast<QMouseEvent*>(e)->globalPos()
-                    + QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
+    if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress
+        && qobject_cast<KexiTableScrollAreaWidget*>(parentWidget()))
+    {
+        QPoint gp = static_cast<QMouseEvent*>(e)->globalPos() + d->button->pos();
         QRect r(d->button->mapToGlobal(d->button->geometry().topLeft()),
                 d->button->mapToGlobal(d->button->geometry().bottomRight()));
         if (o == popup() && popup()->isVisible() && r.contains(gp)) {
@@ -383,7 +389,7 @@ QVariant KexiComboBoxTableEdit::valueFromInternalEditor()
 
 QPoint KexiComboBoxTableEdit::mapFromParentToGlobal(const QPoint& pos) const
 {
-    KexiTableView *tv = dynamic_cast<KexiTableView*>(m_scrollView);
+    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
     if (!tv)
         return QPoint(-1, -1);
     return tv->viewport()->mapToGlobal(pos);

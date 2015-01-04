@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -33,16 +33,15 @@
 
 #include <kdebug.h>
 #include <core/kexisearchandreplaceiface.h>
+#include <core/kexidataiteminterface.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <db/tableviewdata.h>
 
-class QObject;
+class QHeaderView;
 class QScrollBar;
 class KMenu;
-class KexiRecordMarker;
-class KexiTableViewHeader;
+class KexiTableScrollAreaHeader;
 class KexiRecordNavigatorIface;
-#include <core/kexidataiteminterface.h>
 
 namespace KexiDB
 {
@@ -55,7 +54,7 @@ class TableViewData;
 #define KEXI_DEFAULT_DATA_COLUMN_WIDTH 120
 
 //! \brief The KexiDataAwareObjectInterface is an interface for record-based data object.
-/** This interface is implemented by KexiTableView and KexiFormView
+/** This interface is implemented by KexiTableScrollArea and KexiFormView
  and used by KexiDataAwareView. If yu're implementing this interface,
  add KEXI_DATAAWAREOBJECTINTERFACE convenience macro just after Q_OBJECT.
 
@@ -148,9 +147,10 @@ public:
         return m_isSortingEnabled;
     }
 
-    /*! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
-     this will do not work if sorting is disabled with setSortingEnabled() */
-    virtual void setSorting(int col, bool ascending = true);
+    /*! Sets sorting order on column @a column to @a order.
+     This method do not work if sorting is disabled using setSortingEnabled(false).
+     @a column may be -1, what means "no sorting". */
+    virtual void setSorting(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
     /*! Enables or disables sorting for this object
       This method is different that setSorting() because it prevents both user
@@ -159,17 +159,17 @@ public:
     */
     virtual void setSortingEnabled(bool set);
 
-    /*! \return sorted column number or -1 if no column is sorted within data.
+    /*! \return sorted column number or -1 if no column is sorted within data or there
+     is no data assigned at all.
      This does not mean that any sorting has been performed within GUI of this object,
      because the data could be changed in the meantime outside of this GUI object. */
-    int dataSortedColumn() const;
+    int dataSortColumn() const;
 
-    /*! \return 1 if ascending order for data sorting data is set, -1 for descending,
-     0 for no sorting.
-     This does not mean that any sorting has been performed within GUI of this objetct,
-     because the data could be changed in the meantime outside of this GUI object.
-    */
-    int dataSortingOrder() const;
+    /*! \return sort order for data. This information does not mean that any sorting
+     has been performed within GUI of this object, because the data could be changed
+     in the meantime outside of this GUI object.
+     dataSortColumn() should be checked first to see if sorting is enabled (and if there's data). */
+    Qt::SortOrder dataSortOrder() const;
 
     /*! Sorts all rows by column selected with setSorting().
      If there is currently row edited, it is accepted.
@@ -436,9 +436,14 @@ public:
     /*! Redraws the current cell. To be implemented. */
     virtual void updateCurrentCell() = 0;
 
-    inline KexiRecordMarker* verticalHeader() const {
-        return m_verticalHeader;
-    }
+    //! @return horizontal header, 0 by default.
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return height of the horizontal header, 0 by default.
+    virtual int horizontalHeaderHeight() const;
+
+    //! @return vertical header, 0 by default.
+    virtual QHeaderView* verticalHeader() const;
 
     //! signals
     virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
@@ -606,17 +611,13 @@ protected:
     virtual void clearColumnsInternal(bool repaint) = 0;
 
     /*! @internal for implementation
-     This should append another section within horizontal header or any sort of caption
-     for a field using provided names. \a width is a hint for new field's width. */
-    virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIcon& icon, int size) = 0;
-
-    /*! @internal for implementation
-     \return sorting order (within GUI): -1: descending, 1: ascending, 0: no sorting.
-     This does not mean that any sorting has been performed within GUI of this object,
+     \return sorting order (within GUI).
+     currentLocalSortColumn() should be also checked, and if it returns -1, no particular
+     sorting is set up.
+     Even this does not mean that any sorting has been performed within GUI of this object,
      because the data could be changed in the meantime outside of this GUI object.
-     @see dataSortingOrder()*/
-    virtual int currentLocalSortingOrder() const = 0;
+     @see dataSortOrder() currentLocalSortColumn() */
+    virtual Qt::SortOrder currentLocalSortOrder() const = 0;
 
     /*! @internal for implementation
      \return sorted column number for this widget or -1 if no column
@@ -624,15 +625,14 @@ protected:
      This does not mean that the same sorting is performed within data member
      which is used by this widget, because the data could be changed in the meantime
      outside of this GUI widget.
-     @see dataSortedColumn() */
+     @see dataSortColumn() currentLocalSortOrder() */
     virtual int currentLocalSortColumn() const = 0;
 
     /*! @internal for implementation
-     Shows sorting indicator order within GUI: -1: descending, 1: ascending,
-     0: no sorting. This should not perform any sorting within data member
-     which is used by this object.
-     col = -1 should mean "no sorting" as well. */
-    virtual void setLocalSortingOrder(int col, int order) = 0;
+     Shows sorting indicator order in the GUI for column @a column.
+     This should not perform any sorting in data assigned to this object.
+     @a column may be -1, what means "no sorting". */
+    virtual void setLocalSortOrder(int column, Qt::SortOrder order) = 0;
 
     /*! @internal Sets order for \a column: -1: descending, 1: ascending,
      0: invert order */
@@ -644,7 +644,7 @@ protected:
      is visible to avoid user confusion. For exaple, in KexiTableView
      implementation, current cell is centered (if possible)
      and updateContents() is called. */
-    virtual void updateGUIAfterSorting() = 0;
+    virtual void updateGUIAfterSorting(int previousRow) = 0;
 
     /*! Emitted in initActions() to force reload actions
      You should remove existing actions and add them again.
@@ -658,7 +658,7 @@ protected:
     virtual void itemSelected(KexiDB::RecordData *) = 0;
 
     /*! for implementation as a signal */
-    virtual void cellSelected(int col, int row) = 0;
+    virtual void cellSelected(int row, int col) = 0;
 
     /*! for implementation as a signal */
     virtual void sortedColumnChanged(int col) = 0;
@@ -739,9 +739,8 @@ protected:
     //! for sanity checks (return true if m_data is present; else: outputs warning)
     inline bool hasData() const;
 
-    /*! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition()
-     if cursor's position is really changed. */
-    virtual void selectCellInternal() {}
+    /*! Used by setCursorPosition() if cursor's position changed. */
+    virtual void selectCellInternal(int previousRow, int previousColumn);
 
     /*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
      to repaint tow \a row and all visible below.
@@ -750,6 +749,9 @@ protected:
         Q_UNUSED(row);
     }
 
+    /*! @return geometry of the viewport, i.e. the scrollable area, minus any scrollbars, etc. */
+    virtual QRect viewportGeometry() const = 0;
+
     //! Call this from the subclass. */
     virtual void focusOutEvent(QFocusEvent* e);
 
@@ -757,9 +759,6 @@ protected:
      Called when vscrollbar's value has been changed.
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
-
-    /*! @return height of horizontal header, if there is any. By default returns 0. */
-    virtual int horizontalHeaderHeight() const;
 
     /*! Changes 'row editing' flag, true if currently selected row is edited.
      * Can be reimplemented with calling superclass setRowEditing()
@@ -882,23 +881,12 @@ protected:
 
     DeletionPolicy m_deletionPolicy;
 
-//! @todo make generic interface out of KexiRecordMarker
-    KexiRecordMarker *m_verticalHeader;
-
-//! @todo make generic interface out of KexiTableViewHeader
-    KexiTableViewHeader *m_horizontalHeader;
-
     KexiDataItemInterface *m_editor;
 
     /*! Navigation panel, used if navigationPanelEnabled is true. */
     KexiRecordNavigatorIface *m_navPanel; //!< main navigation widget
 
     bool m_navPanelEnabled;
-
-    /*! true, if certical header shouldn't be increased in
-     KexiTableView::slotRowInserted() because it was already done
-     in KexiTableView::createEditor(). */
-    bool m_verticalHeaderAlreadyAdded;
 
     /*! Row number that over which user drags a mouse pointer.
      Used to indicate dropping possibility for that row.
