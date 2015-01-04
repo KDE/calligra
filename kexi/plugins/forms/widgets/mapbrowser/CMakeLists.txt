@@ -1,7 +1,5 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main ${KDE4_INCLUDES}  )
 
-find_package(Marble REQUIRED)
-
 include_directories(${MARBLE_INCLUDE_DIR})
 
 
