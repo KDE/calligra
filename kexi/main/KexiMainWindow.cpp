@@ -649,7 +649,7 @@ void KexiMainWindow::setupActions()
         d->action_project_import_data_table = 0;
     else {
         d->action_project_import_data_table = addAction("project_import_data_table",
-            koIcon("table"), 
+            koIcon("document-new"),
             /*! @todo: change to "file_import" with a table or so */
             i18nc("Import->Table Data From File...", "Import Data From &File..."));
         d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
