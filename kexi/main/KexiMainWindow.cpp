@@ -708,7 +708,7 @@ void KexiMainWindow::setupActions()
     else {
         d->action_edit_paste_special_data_table = addAction(
             "edit_paste_special_data_table",
-            koIcon("table"), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
+            KIcon(d->action_edit_paste->icon()), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
         d->action_edit_paste_special_data_table->setToolTip(
             i18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
