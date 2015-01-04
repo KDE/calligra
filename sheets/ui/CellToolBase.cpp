@@ -3281,10 +3281,10 @@ Cell CellToolBase::findNextCell()
     int col = d->findPos.x();
     int row = d->findPos.y();
     int maxRow = sheet->cellStorage()->rows();
-    // kDebug() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
+//     kWarning() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
 
     if (d->directionValue == FindOption::Row) {
-        while (!cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0)) {
+        while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
             while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
                 cell = nextFindValidCell(col, row);
                 if (forw) ++col;
@@ -3300,11 +3300,11 @@ Cell CellToolBase::findNextCell()
                 col = d->findRightColumn;
                 --row;
             }
-            //kDebug() <<"next row:" << col << ',' << row;
+            //kWarning() <<"next row:" << col << ',' << row;
         }
     } else {
         while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
-            while (!cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0)) {
+            while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
                 cell = nextFindValidCell(col, row);
                 if (forw) ++row;
                 else --row;
@@ -3325,7 +3325,9 @@ Cell CellToolBase::findNextCell()
     // if (!cell)
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make d->findEnd(max, max) in that case...)
-    // kDebug() <<" returning" << cell;
+//    if (cell.isNull()) kWarning()<<"returning null"<<endl;
+//    else kWarning() <<" returning" << cell;
+
     return cell;
 }
 
