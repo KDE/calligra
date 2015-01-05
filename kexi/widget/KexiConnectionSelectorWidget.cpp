@@ -56,7 +56,7 @@ public:
     {
         setupUi(this);
         setObjectName("conn_sel");
-        lblIcon->setPixmap(DesktopIcon(KEXI_DATABASE_SERVER_ICON_NAME));
+        lblIcon->setPixmap(DesktopIcon(Kexi::serverIconName()));
         lblIcon->setFixedSize(lblIcon->pixmap()->size());
         btn_add->setToolTip(i18n("Add a new database connection"));
         btn_edit->setToolTip(i18n("Edit selected database connection"));
@@ -133,8 +133,7 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     d->startDirOrVariable = startDirOrVariable;
     d->fileAccessType = fileAccessType;
     m_errorMessagePopup = 0;
-    QString iconname(KexiDB::defaultFileBasedDriverIconName());
-    setWindowIcon(KIcon(iconname));
+    setWindowIcon(Kexi::defaultFileBasedDriverIcon());
 
     QBoxLayout* globalLyr = new QVBoxLayout(this);
 

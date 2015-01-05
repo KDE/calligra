@@ -59,16 +59,7 @@ public:
             , templPageWidgetItem_CreateFromTemplate(0)
     {
         result = -1;
-        QString iconname(KexiDB::defaultFileBasedDriverIconName());
-        kexi_sqlite_icon = KIcon(iconname);
-        const char shortcutMimeTypeName[] = "application/x-kexiproject-shortcut";
-        KMimeType::Ptr mime(KMimeType::mimeType(shortcutMimeTypeName));
-        if (mime.isNull()) {
-            KexiDBWarn << QString("'%1' mimetype not installed!").arg(shortcutMimeTypeName);
-            iconname.clear();
-        } else
-            iconname = mime->iconName();
-        kexi_shortcut_icon = KIcon(iconname); // TODO: no longer used?
+        kexi_sqlite_icon = Kexi::defaultFileBasedDriverIcon();
         chkDoNotShow = 0;
         openExistingConnWidget = 0;
         templatesWidget = 0;
@@ -93,7 +84,6 @@ public:
     int result;
 
     KIcon kexi_sqlite_icon;
-    KIcon kexi_shortcut_icon;
 
     //! used for "open existing"
     KexiDBConnectionSet *connSet;
@@ -304,7 +294,7 @@ void KexiStartupDialog::setupPageTemplates()
                                             i18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
         i18n("Import Existing Database as New Database Project"));
-    d->templPageWidgetItem_ImportExisting->setIcon(koIcon("document_import_database"));
+    d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon(koIconName("database-import")));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_import = new QLabel(

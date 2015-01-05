@@ -621,7 +621,7 @@ void KexiMainWindow::setupActions()
 #else
     d->action_project_relations = d->dummy_action;
 #endif
-    d->action_tools_import_project = addAction("tools_import_project", koIcon("document_import_database"),
+    d->action_tools_import_project = addAction("tools_import_project", KexiIcon(koIconName("database-import")),
                                                i18n("&Import Database..."));
     d->action_tools_import_project->setToolTip(i18n("Import entire database as a Kexi project"));
     d->action_tools_import_project->setWhatsThis(
@@ -637,7 +637,7 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_compact_database = addAction("tools_compact_database",
 //! @todo icon
-                                                 KIcon(KexiDB::defaultFileBasedDriverIconName()),
+                                                 koIcon("application-x-compress"),
                                                  i18n("&Compact Database..."));
     d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
     d->action_tools_compact_database->setWhatsThis(
@@ -649,7 +649,7 @@ void KexiMainWindow::setupActions()
         d->action_project_import_data_table = 0;
     else {
         d->action_project_import_data_table = addAction("project_import_data_table",
-            koIcon("document-new"),
+            KexiIcon(koIconName("kexi-document-empty")),
             /*! @todo: change to "file_import" with a table or so */
             i18nc("Import->Table Data From File...", "Import Data From &File..."));
         d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));

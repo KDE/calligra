@@ -120,7 +120,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     d->showConnectionColumns = showConnectionColumns;
     list()->installEventFilter(this);
 
-    d->fileicon = KIcon(KexiDB::defaultFileBasedDriverIconName());
+    d->fileicon = Kexi::defaultFileBasedDriverIcon();
     setWindowIcon(d->fileicon);
     d->dbicon = koIcon("server-database");
 

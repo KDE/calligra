@@ -628,7 +628,7 @@ void KexiProjectNavigator::slotUpdateEmptyStateLabel()
     if (d->model->objectsCount() == 0) {
         // handle the empty state with care... http://www.pinterest.com/romanyakimovich/ui-empty-states/
         if (!d->emptyStateLabel) {
-            QString imgPath = KIconLoader::global()->iconPath("empty", - KIconLoader::SizeMedium);
+            QString imgPath = KIconLoader::global()->iconPath(KexiIconName(koIconName("kexi-document-empty")), - KIconLoader::SizeMedium);
             kDebug() << imgPath;
             d->emptyStateLabel = new QLabel(
                 i18nc("@info Message for empty state in project navigator",
