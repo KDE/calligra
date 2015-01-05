@@ -80,7 +80,7 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbutils.cpp
   widgets/kexidbautofield.cpp
   widgets/kexidbform.cpp
-# todo  widgets/kexidbsubform.cpp
+  #todo widgets/kexidbsubform.cpp
   widgets/kexidblabel.cpp
   widgets/kexidbimagebox.cpp
   widgets/KexiDBPushButton.cpp
@@ -93,14 +93,10 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbslider.cpp
   widgets/kexidbprogressbar.cpp
   widgets/kexidbdatepicker.cpp
-)
+  )
 
-#obsolete	widgets/kexidbdoublespinbox.cpp
-#obsolete	widgets/kexidbintspinbox.cpp
-#obsolete	widgets/kexidbdatetimeedit.cpp
-#obsolete	widgets/kexidbtimeedit.cpp
-#obsolete	widgets/kexidbdateedit.cpp
-
+    #obsolete	widgets/kexidbdoublespinbox.cpp
+    #obsolete	widgets/kexidbintspinbox.cpp
 
 kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 

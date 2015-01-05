@@ -30,13 +30,13 @@
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
-#include <Q3Frame>
+#include <QFrame>
 #include <QSet>
 
 KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent)
-        : Q3ScrollView(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
+        : QScrollArea(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
-    setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QPalette pal(viewport()->palette());
     pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
     viewport()->setPalette(pal);
@@ -78,7 +78,7 @@ KexiDBSubForm::setFormName(const QString &name)
     if (name.isEmpty()) {
         delete m_widget;
         m_widget = 0;
-        updateScrollBars();
+        //updateScrollBars();
         return;
     }
 
@@ -113,7 +113,7 @@ KexiDBSubForm::setFormName(const QString &name)
     m_widget = new QWidget(viewport());
     m_widget->setObjectName("KexiDBSubForm_widget");
     m_widget->show();
-    addChild(m_widget);
+    //addChild(m_widget);
     m_form = new KFormDesigner::Form(m_parentForm);
     m_form->setObjectName(QString("KFormDesigner::Form_") + objectName());
     m_form->createToplevel(m_widget);
@@ -126,7 +126,7 @@ KexiDBSubForm::setFormName(const QString &name)
     if (res != true) {
         delete m_widget;
         m_widget = 0;
-        updateScrollBars();
+        //updateScrollBars();
         m_formName.clear();
         return;
     }
@@ -134,7 +134,7 @@ KexiDBSubForm::setFormName(const QString &name)
 
     // Install event filters on the whole newly created form
     KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::objectName());
-    KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
+    //KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 }
 
 #include "kexidbsubform.moc"
