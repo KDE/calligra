@@ -45,7 +45,7 @@ public:
     QList<Entry*> entries;
 };
 
-CQTextDocumentNotesModel::CQTextDocumentNotesModel(QObject* parent = 0)
+CQTextDocumentNotesModel::CQTextDocumentNotesModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
