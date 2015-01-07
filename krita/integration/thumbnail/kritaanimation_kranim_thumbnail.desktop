@@ -25,5 +25,5 @@ Name[x-test]=xxKrita Animation Documentsxx
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-krita-animation;
 
-X-KDE-Library=calligraimagethumbnail
+X-KDE-Library=kritathumbnail
 CacheThumbnail=true

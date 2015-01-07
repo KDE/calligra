@@ -39,5 +39,5 @@ Name[zh_CN]=Krita 文档
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-krita;
 
-X-KDE-Library=calligraimagethumbnail
+X-KDE-Library=kritathumbnail
 CacheThumbnail=true
