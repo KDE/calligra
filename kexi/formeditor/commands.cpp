@@ -1105,7 +1105,7 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
         int rw = w.text().toInt();
         int rh = h.text().toInt();
         QRect r(rx, ry, rw, rh);
-        boundingRect = boundingRect.unite(r);
+        boundingRect = boundingRect.united(r);
     }
     setText( kundo2_i18n("Paste") );
 }
