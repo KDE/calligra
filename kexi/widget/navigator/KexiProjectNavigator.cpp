@@ -119,7 +119,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     d->lyr = new QVBoxLayout(this);
-    d->lyr->setContentsMargins(0, 0, 0, 0);
+    d->lyr->setContentsMargins(2, 0, 0, 0);
 
     d->list = new KexiProjectTreeView(this);
     if (d->features & Borders) {
