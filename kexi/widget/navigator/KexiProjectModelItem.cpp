@@ -65,7 +65,7 @@ KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelIt
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
     : d(new Private(&i, &item, p))
 {
-    d->icon = KIcon(i.itemIconName());
+    d->icon = SmallIcon(i.itemIconName(), KIconLoader::SizeSmall);
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()

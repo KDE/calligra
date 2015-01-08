@@ -95,5 +95,9 @@ QSize KexiProjectItemDelegate::sizeHint(const QStyleOptionViewItem &option,
         }
         s.setHeight(s.height() + paddingBeforeGroupItem(option.fontMetrics));
     }
+    const int minHeight = option.fontMetrics.lineSpacing() + 2;
+    if (s.height() < minHeight) { // make sure the item isn't too small (happens at least for Oxygen style)
+        s.setHeight(minHeight);
+    }
     return s;
 }
