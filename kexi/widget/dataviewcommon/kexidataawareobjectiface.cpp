@@ -180,8 +180,10 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     }
 
     //update gui mode
-    if (m_navPanel)
+    if (m_navPanel) {
         m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
+        m_navPanel->setInsertingButtonVisible(m_data && isInsertingEnabled());
+    }
     if (verticalHeader()) {
         //verticalHeader()->update(....)
 //! @todo tableview-port        verticalHeader()->showInsertRow(m_data && isInsertingEnabled());
@@ -390,8 +392,10 @@ void KexiDataAwareObjectInterface::setInsertingEnabled(bool set)
     if (isInsertingEnabled() == set || (m_data && !m_data->isInsertingEnabled() && set))
         return; //not allowed!
     m_insertingEnabled = (set ? 1 : 0);
-    if (m_navPanel)
+    if (m_navPanel) {
         m_navPanel->setInsertingEnabled(set);
+        m_navPanel->setInsertingButtonVisible(set);
+    }
     if (verticalHeader()) {
 //! @todo tableview-port        verticalHeader()->showInsertRow(set);
     }

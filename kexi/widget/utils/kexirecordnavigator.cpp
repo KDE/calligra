@@ -215,8 +215,7 @@ void KexiRecordNavigator::setInsertingEnabled(bool set)
     if (d->isInsertingEnabled == set)
         return;
     d->isInsertingEnabled = set;
-    if (isEnabled())
-        d->navBtnNew->setEnabled(d->isInsertingEnabled);
+    d->navBtnNew->setEnabled(d->isInsertingEnabled);
 }
 
 void KexiRecordNavigator::setEnabled(bool set)
