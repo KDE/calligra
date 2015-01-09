@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -528,14 +528,6 @@ protected:
     /*! Implementation for KexiDataAwareObjectInterface */
     virtual void updateGUIAfterSorting(int previousRow);
 
-    /*! Implementation for KexiDataAwareObjectInterface */
-    virtual void updateWidgetScrollBars() {
-        updateScrollBars();
-    }
-
-    //! temporary
-    void updateScrollBars() {}
-
     int leftMargin() const;
 
     int topMargin() const;
@@ -670,7 +662,11 @@ protected:
 
     virtual int horizontalHeaderHeight() const;
 
+    //! @return record navigator pane
     QWidget* navPanelWidget() const;
+
+    //! @return true if record navigator pane exists and is has "visible" appearance set to ON
+    bool navPanelWidgetVisible() const;
 
     virtual bool event(QEvent *e);
 

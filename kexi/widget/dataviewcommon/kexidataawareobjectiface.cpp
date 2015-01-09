@@ -1229,8 +1229,6 @@ void KexiDataAwareObjectInterface::reloadData()
         initDataContents();
     else
         m_initDataContentsOnShow = true;
-
-    updateWidgetScrollBars();
 }
 
 int KexiDataAwareObjectInterface::columnType(int col)

@@ -117,7 +117,6 @@ public:
     void setOuterAreaIndicatorVisible(bool visible);
 
     void refreshContentsSizeLater();
-    void updateNavPanelGeometry();
 
     KexiRecordNavigator* recordNavigator() const;
 
@@ -287,11 +286,6 @@ protected:
      Implementation for KexiDataAwareObjectInterface
      Updates widget's contents size e.g. using QScrollView::resizeContents(). */
     virtual void updateWidgetContentsSize();
-
-    /*! Implementation for KexiDataAwareObjectInterface
-     Updates scrollbars of the widget.
-     QScrollView::updateScrollbars() will be usually called here. */
-    virtual void updateWidgetScrollBars();
 
     //! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
     virtual void valueChanged(KexiDataItemInterface* item);

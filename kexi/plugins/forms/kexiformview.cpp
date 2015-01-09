@@ -999,7 +999,6 @@ KexiFormView::resizeEvent(QResizeEvent *e)
         d->scrollView->refreshContentsSizeLater();
     }
     KexiView::resizeEvent(e);
-    d->scrollView->updateNavPanelGeometry();
     if (d->delayedFormContentsResizeOnShow > 0) {
         d->delayedFormContentsResizeOnShow--;
         d->dbform->resize(e->size() - QSize(30, 30));

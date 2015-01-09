@@ -117,9 +117,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
     connect(&(d->delayedResize), SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
     if (d->preview) {
 //! @todo allow to hide navigator
-        d->scrollViewNavPanel = new KexiRecordNavigator(this, this);
-        d->scrollViewNavPanel->setLeftMargin(viewportMargins().left());
-        d->scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        d->scrollViewNavPanel = new KexiRecordNavigator(*this, this);
     }
     else {
         KexiFormScrollAreaWidget *scrollAreaWidget = new KexiFormScrollAreaWidget(this);
@@ -346,11 +344,6 @@ void KexiFormScrollView::updateWidgetContents()
 }
 
 void KexiFormScrollView::updateWidgetContentsSize()
-{
-    //! @todo
-}
-
-void KexiFormScrollView::updateWidgetScrollBars()
 {
     //! @todo
 }
@@ -668,7 +661,6 @@ void KexiFormScrollView::setRecordNavigatorVisible(bool visible)
         d->scrollViewNavPanel->setVisible(visible);
         d->scrollViewNavPanelVisible = visible;
     }
-    updateNavPanelGeometry();
 }
 
 bool KexiFormScrollView::isOuterAreaVisible() const
@@ -702,15 +694,6 @@ void KexiFormScrollView::refreshContentsSizeLater()
     d->setHorizontalScrollBarPolicyDependingOnNavPanel();
     updateScrollBars();
     d->delayedResize.start(100);
-}
-
-void KexiFormScrollView::updateNavPanelGeometry()
-{
-    if (d->scrollViewNavPanel) {
-        d->scrollViewNavPanel->setLeftMargin(leftMargin());
-        d->scrollViewNavPanel->setPositionRelativeToHorizontalScrollBar(
-                    this, KexiRecordNavigator::AsideOfHorizontalScrollBar);
-    }
 }
 
 void KexiFormScrollView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)

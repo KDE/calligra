@@ -711,10 +711,6 @@ protected:
     /*! Updates widget's contents size e.g. using QScrollView::resizeContents(). */
     virtual void updateWidgetContentsSize() = 0;
 
-    /*! Updates scrollbars of the widget.
-     QScrollView::updateScrollbars() will be usually called here. */
-    virtual void updateWidgetScrollBars() = 0;
-
     /*! @internal
      Updates row appearance after canceling row edit.
      Used by cancelRowEdit(). By default just calls updateRow(m_curRow).

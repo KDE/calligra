@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -188,7 +188,6 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     m_data = new KexiDB::TableViewData(); //to prevent crash because m_data==0
     m_owner = true;                   //-this will be deleted if needed
 
-    //setResizePolicy(Manual);
     viewport()->setFocusPolicy(Qt::WheelFocus);
     setFocusPolicy(Qt::WheelFocus); //<--- !!!!! important (was NoFocus),
                                     // otherwise QApplication::setActiveWindow() won't activate
@@ -199,9 +198,8 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     d->diagonalGrayPattern = QBrush(d->appearance.gridColor, Qt::BDiagPattern);
 
     setLineWidth(1);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     horizontalScrollBar()->installEventFilter(this);
-    horizontalScrollBar()->raise();
-    verticalScrollBar()->raise();
 
     //context menu
     m_contextMenu = new KMenu(this);
@@ -245,7 +243,6 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
 
     connect(d->pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 
-    updateScrollBars();
     setAppearance(d->appearance); //refresh
 
 #ifdef __GNUC__
@@ -276,13 +273,9 @@ void KexiTableScrollArea::clearVariables()
 
 void KexiTableScrollArea::setupNavigator()
 {
-    updateScrollBars();
-
-    m_navPanel = new KexiRecordNavigator(this, this);
-    //m_navPanel->setLeftMargin(leftMargin());
+    m_navPanel = new KexiRecordNavigator(*this, this);
     navPanelWidget()->setObjectName("navPanel");
     m_navPanel->setRecordHandler(this);
-    navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 }
 
 void KexiTableScrollArea::initDataContents()
@@ -361,11 +354,6 @@ void KexiTableScrollArea::slotUpdate()
 //    kDebug() << m_navPanel;
     updateScrollAreaWidgetSize();
     d->scrollAreaWidget->update();
-    updateScrollBars();
-    if (m_navPanel) {
-        m_navPanel->setLeftMargin(qMin(d->verticalHeader ? d->verticalHeader->width() : d->rowHeight, d->rowHeight));
-    }
-
     updateWidgetContentsSize();
 }
 
@@ -402,7 +390,7 @@ QSize KexiTableScrollArea::sizeHint() const
 {
     QSize ts = tableSize();
     int w = qMax(ts.width() + leftMargin() + verticalScrollBar()->sizeHint().width() + 2 * 2,
-                 ((navPanelWidget() && navPanelWidget()->isVisible()) ? navPanelWidget()->width() : 0));
+                 (navPanelWidgetVisible() ? navPanelWidget()->width() : 0));
     int h = qMax(ts.height() + topMargin() + horizontalScrollBar()->sizeHint().height(),
                  minimumSizeHint().height());
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
@@ -419,7 +407,7 @@ QSize KexiTableScrollArea::minimumSizeHint() const
 {
     return QSize(
                leftMargin() + ((columns() > 0) ? columnWidth(0) : KEXI_DEFAULT_DATA_COLUMN_WIDTH) + 2*2,
-                 d->rowHeight*5 / 2 + topMargin() + (m_navPanel && navPanelWidget()->isVisible() ? navPanelWidget()->height() : 0)
+               d->rowHeight*5 / 2 + topMargin() + (navPanelWidgetVisible() ? navPanelWidget()->height() : 0)
            );
 }
 
@@ -1411,10 +1399,6 @@ void KexiTableScrollArea::resizeEvent(QResizeEvent *e)
     d->insideResizeEvent = true;
     QScrollArea::resizeEvent(e);
 
-    if (m_navPanel) {
-        m_navPanel->setLeftMargin(qMin(d->verticalHeader
-                                       ? d->verticalHeader->width() : d->rowHeight, d->rowHeight));
-    }
     if ((viewport()->height() - e->size().height()) <= d->rowHeight) {
         slotUpdate();
         triggerUpdate();
@@ -1565,10 +1549,6 @@ void KexiTableScrollArea::slotColumnWidthChanged(int column, int oldSize, int ne
         editorWidget->resize(columnWidth(m_curCol), rowHeight());
     }
     updateGeometries();
-    updateScrollBars();
-    if (m_navPanel) {
-        m_navPanel->setLeftMargin(qMin(d->verticalHeader ? d->verticalHeader->width() : d->rowHeight, d->rowHeight));
-    }
     if (d->firstTimeEnsureCellVisible) {
         d->firstTimeEnsureCellVisible = false;
         ensureCellVisible( currentRow(), currentColumn() );
@@ -1690,7 +1670,6 @@ QSize KexiTableScrollArea::tableSize() const
         QSize s(
             columnPos(columns() - 1) + columnWidth(columns() - 1),
             rowPos(rows() - 1 + (isInsertingEnabled() ? 1 : 0)) + d->rowHeight
-            + horizontalScrollBar()->sizeHint().height()
             + d->internal_bottomMargin
         );
 
@@ -1715,7 +1694,7 @@ void KexiTableScrollArea::ensureCellVisible(int row, int col)
     QRect r(columnPos(col == -1 ? m_curCol : col) - 1, rowPos(row) + (d->appearance.fullRowSelection ? 1 : 0) - 1,
             columnWidth(col == -1 ? m_curCol : col)  + 2, rowHeight() + 2);
 
-    if (m_navPanel && navPanelWidget()->isVisible() && horizontalScrollBar()->isHidden()) {
+    if (navPanelWidgetVisible() && horizontalScrollBar()->isHidden()) {
         //a hack: for visible navigator: increase height of the visible rect 'r'
         r.setBottom(r.bottom() + navPanelWidget()->height());
     }
@@ -1975,11 +1954,10 @@ void KexiTableScrollArea::updateViewportMargins()
         leftMargin() + 1,
         topMargin() + 1,
         0, // right
-        (navPanelWidget() && d->appearance.navigatorEnabled) // bottom
-            ? navPanelWidget()->height() : 0
+        0 // bottom
     );
     setViewportMargins(d->viewportMargins);
-    kDebug () << d->viewportMargins << d->viewportMargins;
+    kDebug () << d->viewportMargins;
 }
 
 bool KexiTableScrollArea::horizontalHeaderVisible() const
@@ -2142,16 +2120,6 @@ bool KexiTableScrollArea::eventFilter(QObject *o, QEvent *e)
                         return true;
                 }
             }
-        }
-    } else if (o == horizontalScrollBar()) {
-        if (e->type() == QEvent::Show || e->type() == QEvent::Hide) {
-            updateWidgetContentsSize();
-            dynamic_cast<KexiRecordNavigator*>(m_navPanel)->setPositionRelativeToHorizontalScrollBar(
-                        this,
-                        horizontalScrollBar()->isVisible()
-                        ? KexiRecordNavigator::AsideOfHorizontalScrollBar
-                        : KexiRecordNavigator::BelowHorizontalScrollBar);
-            navPanelWidget()->setVisible(true); // the panel got hidden but shouldn't
         }
     } else if (e->type() == QEvent::Leave) {
         if (   o == d->scrollAreaWidget
@@ -2317,6 +2285,11 @@ int KexiTableScrollArea::horizontalHeaderHeight() const
 QWidget* KexiTableScrollArea::navPanelWidget() const
 {
     return dynamic_cast<QWidget*>(m_navPanel);
+}
+
+bool KexiTableScrollArea::navPanelWidgetVisible() const
+{
+    return navPanelWidget() && d->appearance.navigatorEnabled;
 }
 
 bool KexiTableScrollArea::event(QEvent *e)

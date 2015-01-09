@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,17 +62,8 @@ public:
         ButtonNew
     };
 
-    //! Position related to scroll area's horizontal scroll bar
-    //! @see setPositionRelativeToHorizontalScrollBar
-    enum Position {
-        AsideOfHorizontalScrollBar, //!< The navigator is placed aside of the horizontal scroll bar
-        BelowHorizontalScrollBar    //!< The navigator is placed below the horizontal scroll bar
-    };
-
-    KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView);
+    KexiRecordNavigator(QAbstractScrollArea &parentView, QWidget *parent = 0);
     virtual ~KexiRecordNavigator();
-
-    void setParentView(QAbstractScrollArea *view);
 
     /*! Sets record navigator handler. This allows to react
      on actions performed within navigator and vice versa. */
@@ -160,8 +151,6 @@ public slots:
      By default count is 0. */
     virtual void setRecordCount(uint count);
 
-    virtual void setLeftMargin(int leftMargin);
-
     /*! Sets label text at the left of the for record navigator's button.
      By default this label contains translated "Record:" text. */
     virtual void setLabelText(const QString& text);
@@ -169,11 +158,6 @@ public slots:
     void setButtonToolTipText(KexiRecordNavigator::Button btn, const QString& tooltip);
     void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
     void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
-
-    /*! Sets position relative to scroll area's @a area horizontal scrollbar.
-     Once the position is set, subsequent calls of this method with the same value
-     of @a position do nothing. */
-    void setPositionRelativeToHorizontalScrollBar(QAbstractScrollArea *area, Position position);
 
 signals:
     void prevButtonClicked();
