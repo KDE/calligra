@@ -875,8 +875,7 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
     do {
 
-        mystr = nextLine(stream);
-        mystr.trimmed();
+        mystr = nextLine(stream).trimmed();
 
         if (mystr == "END COLORMAP") ok = false;
         else {
@@ -893,7 +892,7 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
             // get colorname
             colstr = mystr.left(pos);
             mystr.remove(0, pos + 1);
-            mystr.trimmed();
+            mystr = mystr.trimmed();
 
             t_mycolor *tmc = new t_mycolor;
 
