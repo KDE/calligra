@@ -1107,7 +1107,7 @@ Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (eom && maturity.daysInMonth() == maturity.day()) {
         while (cDate.daysInMonth() != cDate.day())
-            cDate.addDays(1);
+            cDate = cDate.addDays(1);
     }
 
     if (settlement.day() >= cDate.day())
