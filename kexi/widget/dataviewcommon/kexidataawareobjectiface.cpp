@@ -723,11 +723,6 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         }
         m_rowEditing = false;
         m_newRowEditing = false;
-        //indicate on the vheader that we are not editing
-        if (verticalHeader()) {
-            //! @todo tableview-port verticalHeader()->setEditRow(-1);
-        }
-
         updateAfterAcceptRowEdit();
         kDebug() << "EDIT RECORD ACCEPTED:";
 
@@ -758,6 +753,11 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
             }
         }
     }
+    //indicate on the vheader that we are not editing
+    if (verticalHeader()) {
+        kDebug() << currentRow();
+        updateVerticalHeaderSection(currentRow());
+    }
     return success;
 }
 
@@ -769,10 +769,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
         return true;
     cancelEditor();
     m_rowEditing = false;
-    //indicate on the vheader that we are not editing
-    if (verticalHeader()) {
-        //! @todo tableview-port verticalHeader()->setEditRow(-1);
-    }
+
     m_alsoUpdateNextRow = m_newRowEditing;
     if (m_newRowEditing) {
         m_newRowEditing = false;
@@ -792,6 +789,12 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
 
     m_data->clearRowEditBuffer();
     updateAfterCancelRowEdit();
+
+    //indicate on the vheader that we are not editing
+    if (verticalHeader()) {
+        kDebug() << currentRow();
+        updateVerticalHeaderSection(currentRow());
+    }
 
 //! \todo (js): cancel changes for this row!
     kDebug() << "EDIT RECORD CANCELLED.";

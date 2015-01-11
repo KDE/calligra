@@ -802,6 +802,9 @@ protected:
      @see find() */
     void updateIndicesForVisibleValues();
 
+    //! Update section of vertical header
+    virtual void updateVerticalHeaderSection(int section) = 0;
+
     //! data structure displayed for this object
     KexiDB::TableViewData *m_data;
 

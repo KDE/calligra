@@ -682,6 +682,9 @@ protected:
 
     void updateScrollAreaWidgetSize();
 
+    //! Update section of vertical header
+    virtual void updateVerticalHeaderSection(int section);
+
     class Private;
     Private * const d;
 

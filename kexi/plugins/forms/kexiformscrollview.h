@@ -333,6 +333,9 @@ protected:
 
     const QTimer *delayedResizeTimer() const;
 
+    //! Update section of vertical header
+    virtual void updateVerticalHeaderSection(int section);
+
 private:
     class Private;
     Private * const d;

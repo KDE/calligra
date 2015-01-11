@@ -278,7 +278,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
         setRowEditing(true);
         //indicate on the vheader that we are editing:
         if (verticalHeader()) {
-            //! @todo tableview-port verticalHeader()->setEditRow(m_curRow);
+            updateVerticalHeaderSection(currentRow());
         }
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
             //we should know that we are in state "new record editing"
@@ -745,6 +745,12 @@ QWidget* KexiFormScrollView::mainAreaWidget() const
 QRect KexiFormScrollView::viewportGeometry() const
 {
     return viewport()->geometry();
+}
+
+void KexiFormScrollView::updateVerticalHeaderSection(int section)
+{
+    Q_UNUSED(section);
+    //! @todo implement when header is used
 }
 
 #include "kexiformscrollview.moc"

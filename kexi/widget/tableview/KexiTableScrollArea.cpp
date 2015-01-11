@@ -304,6 +304,11 @@ void KexiTableScrollArea::updateScrollAreaWidgetSize()
     d->scrollAreaWidget->resize(s);
 }
 
+void KexiTableScrollArea::updateVerticalHeaderSection(int row)
+{
+    d->verticalHeader->updateSection(currentRow());
+}
+
 void KexiTableScrollArea::slotRowsDeleted(const QList<int> &rows)
 {
     viewport()->repaint();
