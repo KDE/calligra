@@ -278,6 +278,12 @@ bool KexiRecordNavigator::eventFilter(QObject *o, QEvent *e)
     } else if ((bar = d->view->horizontalScrollBar()) == o) {
         // Visually hide and deactivate the scrollbar if it's unusable (there are no content to scroll)
         if (bar->value() == 0 && bar->minimum() == 0 && bar->maximum() == 0) {
+            QWidget *w = qobject_cast<QWidget*>(o);
+            if (t == QEvent::Paint && w->style()->objectName() == QLatin1String("gtk+")) {
+                // workaround for GTK+ style: fill the background
+                QPainter p(w);
+                p.fillRect(w->rect(), w->palette().color(QPalette::Window));
+            }
             return true;
         }
     }
