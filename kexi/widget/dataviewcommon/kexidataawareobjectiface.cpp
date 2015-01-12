@@ -1447,7 +1447,19 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
         if (!acceptRowEdit())
             return;
     }
-    selectRow(rows());
+    if (!hasData())
+        return;
+    // find first column that is not autoincrement
+    int columnToSelect = 0;
+    int i = 0;
+    foreach(KexiDB::TableViewColumn *col, *data()->columns()) {
+        if (!col->field()->isAutoIncrement()) {
+            columnToSelect = i;
+            break;
+        }
+        ++i;
+    }
+    setCursorPosition(rows(), columnToSelect);
     startEditCurrentCell();
     if (m_editor)
         m_editor->setFocus();
