@@ -209,7 +209,6 @@ KoView::~KoView()
             d->part->removeView(this);
         }
     }
-    delete d;
 }
 
 
@@ -361,7 +360,19 @@ void KoView::changeAuthorProfile(const QString &profileName)
 
 KoMainWindow * KoView::mainWindow() const
 {
-    return dynamic_cast<KoMainWindow *>(window());
+    // It is possible (when embedded inside a Gemini window) that you have a KoMainWindow which
+    // is not the top level window. The code below ensures you can still get access to it, even
+    // in that case.
+    KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
+    QWidget* parent = parentWidget();
+    while (!mw) {
+        mw = dynamic_cast<KoMainWindow*>(parent);
+        parent = parent->parentWidget();
+        if (!parent) {
+            break;
+        }
+    }
+    return mw;
 }
 
 KStatusBar * KoView::statusBar() const

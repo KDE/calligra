@@ -318,3 +318,13 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
         return KoColor();
     }
 }
+
+QString KoColor::toQString(const KoColor &color)
+{
+    QStringList ls;
+    foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(color.colorSpace()->channels())) {
+        ls << channel->name();
+        ls << color.colorSpace()->channelValueText(color.data(), channel->pos());
+    }
+    return ls.join(" ");
+}

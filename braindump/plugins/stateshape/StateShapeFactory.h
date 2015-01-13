@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _STATESHAPEFACTORY_H_
+#define _STATESHAPEFACTORY_H_
+
 #include "KoShapeFactoryBase.h"
 
 class StateShapeFactory : public KoShapeFactoryBase
@@ -29,3 +32,5 @@ public:
     bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
+
+#endif

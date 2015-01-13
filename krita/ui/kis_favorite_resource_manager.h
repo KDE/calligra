@@ -34,7 +34,7 @@ class QPoint;
 class KoID;
 class KisPaintopBox;
 class KisPaletteManager;
-class KisView2;
+class KisViewManager;
 class KisPaintOpPreset;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >
@@ -56,7 +56,7 @@ public:
 
     int numFavoritePresets();
 
-    QVector<KisPaintOpPreset*> favoritePresetList();
+    QVector<KisPaintOpPresetSP> favoritePresetList();
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
@@ -118,7 +118,7 @@ private slots:
 private:
     KisPaintopBox *m_paintopBox;
 
-    QVector<KisPaintOpPreset*> m_favoritePresetsList;
+    QVector<KisPaintOpPresetSP> m_favoritePresetsList;
 
     class ColorDataList;
     ColorDataList *m_colorList;

@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _STATUSBARITEM_H_
+#define _STATUSBARITEM_H_
 
 #include "MainWindow.h"
 
@@ -53,3 +55,5 @@ struct MainWindow::StatusBarItem {
     bool m_permanent;
     bool m_visible;
 };
+
+#endif

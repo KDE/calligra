@@ -45,8 +45,6 @@ select_shape.png
 shade.png
 shear_horizontal.png
 shear_vertical.png
-symmetry-horyzontal.png
-symmetry-vertical.png
 tablet.png
 tool_screenshot.png
 transparency-disabled.png
@@ -84,6 +82,8 @@ dark_properties.png
 dark_selection-mode_ants.png
 dark_selection-mode_invisible.png
 dark_selection-mode_mask.png
+dark_symmetry-horizontal.png
+dark_symmetry-vertical.png
 
 light_select.png
 light_pattern.png
@@ -100,7 +100,35 @@ light_properties.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+light_symmetry-vertical.png
+light_symmetry-horizontal.png
+
+
+tool_transform/dark_transform_icons_cage.png
+tool_transform/dark_transform_icons_liquify_erase.png
+tool_transform/dark_transform_icons_liquify_main.png
+tool_transform/dark_transform_icons_liquify_move.png
+tool_transform/dark_transform_icons_liquify_offset.png
+tool_transform/dark_transform_icons_liquify_resize.png
+tool_transform/dark_transform_icons_liquify_rotate.png
+tool_transform/dark_transform_icons_main.png
+tool_transform/dark_transform_icons_perspective.png
+tool_transform/dark_transform_icons_warp.png
+tool_transform/dark_transform_icons_penPressure.png
+
+tool_transform/light_transform_icons_cage.png
+tool_transform/light_transform_icons_liquify_erase.png
+tool_transform/light_transform_icons_liquify_main.png
+tool_transform/light_transform_icons_liquify_move.png
+tool_transform/light_transform_icons_liquify_offset.png
+tool_transform/light_transform_icons_liquify_resize.png
+tool_transform/light_transform_icons_liquify_rotate.png
+tool_transform/light_transform_icons_main.png
+tool_transform/light_transform_icons_perspective.png
+tool_transform/light_transform_icons_warp.png
+tool_transform/light_transform_icons_penPressure.png
+
+DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)
 

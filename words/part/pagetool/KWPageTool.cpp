@@ -35,6 +35,7 @@
 #include <KoPointerEvent.h>
 #include <KoTextDocument.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
 
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
@@ -51,8 +52,8 @@ KWPageTool::~KWPageTool()
 
 void KWPageTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    Q_UNUSED(painter)
+    Q_UNUSED(converter)
 }
 
 void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -89,9 +90,9 @@ void KWPageTool::insertPageBreak()
     }
 }
 
-QList<QWidget *> KWPageTool::createOptionWidgets()
+QList<QPointer<QWidget> > KWPageTool::createOptionWidgets()
 {
-    QList<QWidget*> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     SimpleSetupWidget *ssw = new SimpleSetupWidget(m_canvas->view());
     ssw->setWindowTitle(i18n("Page Setup"));

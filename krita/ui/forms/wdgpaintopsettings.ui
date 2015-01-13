@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1006</width>
+    <width>1059</width>
     <height>335</height>
    </rect>
   </property>
@@ -67,6 +67,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
         <item>
          <widget class="QPushButton" name="paintPresetIcon">
+          <property name="toolTip">
+           <string>Fill preset area with current icon</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -81,6 +84,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="fillGradient">
+          <property name="toolTip">
+           <string>Fill area with gradient</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -88,6 +94,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="fillSolid">
+          <property name="toolTip">
+           <string>Fill area with background color</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -95,6 +104,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="eraseScratchPad">
+          <property name="toolTip">
+           <string>Reset area to white</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -125,7 +137,6 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <zorder>dirtyPresetCheckBox</zorder>
     </widget>
    </item>
    <item row="0" column="1">
@@ -245,6 +256,28 @@
        </property>
        <property name="text">
         <string>Temporarily Save Tweaks To Presets</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="eraserBrushSizeCheckBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Erase mode will use a separate brush size</string>
+       </property>
+       <property name="text">
+        <string>Eraser switch size</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

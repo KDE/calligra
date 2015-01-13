@@ -88,3 +88,4 @@ Comment[zh_TW]=空白展示 10:16
 Type=Link
 URL=.source/emptyLandscapeWide.otp
 X-KDE-Hidden=false
+X-KDE-TemplateIsWideFormat=true

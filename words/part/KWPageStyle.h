@@ -58,7 +58,7 @@ class KoColumns;
  * Q_ASSERT(style2.headerPolicy() == Words::HFTypeEvenOdd); // the other changes too
  * @endcode
  */
-class WORDS_TEST_EXPORT KWPageStyle
+class WORDS_EXPORT KWPageStyle
 {
 public:
     /**

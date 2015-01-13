@@ -25,6 +25,7 @@ using namespace KexiDB;
 pqxxPreparedStatement::pqxxPreparedStatement(
     StatementType type, ConnectionInternal& conn, FieldList& fields)
         : KexiDB::PreparedStatement(type, conn, fields)
+        , m_resetRequired(false)
         , m_conn(conn.connection)
 {
 // KexiDBDrvDbg;

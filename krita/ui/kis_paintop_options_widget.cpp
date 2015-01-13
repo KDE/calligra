@@ -81,6 +81,8 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     connect(m_d->optionsList, SIGNAL(doubleClicked(QModelIndex))         , this, SLOT(lockProperties(const QModelIndex&)));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuDropSettingsTriggered())         , this, SLOT(slotLockPropertiesDrop()));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuSaveSettingsTriggered())         , this, SLOT(slotLockPropertiesSave()));
+    connect(m_d->optionsList, SIGNAL(sigEntryChecked(QModelIndex)), this, SLOT(slotEntryChecked(QModelIndex)));
+
 }
 
 
@@ -103,16 +105,14 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
-    KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
+    KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     int indexcount = 0;
-    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->readOptionSetting(m);
-        if(KisLockedPropertiesServer::instance()->propertiesFromLocked())
-        {
+    foreach (KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->readOptionSetting(propertiesProxy);
+        if (KisLockedPropertiesServer::instance()->propertiesFromLocked()) {
             option->setLocked(true);
         }
-        else
-        {
+        else {
             option->setLocked(false);
         }
 
@@ -125,18 +125,16 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
         m_d->model->signalDataChanged(m_d->model->indexOf(info));
         indexcount++;
     }
-
+    delete propertiesProxy;
 }
 
 void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
-    KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
+    KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->writeOptionSetting(m);
-
-
+        option->writeOptionSetting(propertiesProxy);
     }
-
+    delete propertiesProxy;
 }
 
 void KisPaintOpOptionsWidget::setImage(KisImageWSP image)

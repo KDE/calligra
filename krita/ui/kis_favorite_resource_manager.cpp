@@ -29,7 +29,7 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_resource_server_provider.h"
 #include "kis_min_heap.h"
 #include "kis_config.h"
@@ -206,7 +206,7 @@ void KisFavoriteResourceManager::unsetResourceServer()
     // ...
 }
 
-QVector<KisPaintOpPreset*>  KisFavoriteResourceManager::favoritePresetList()
+QVector<KisPaintOpPresetSP>  KisFavoriteResourceManager::favoritePresetList()
 {
     return m_favoritePresetsList;
 }
@@ -214,8 +214,10 @@ QVector<KisPaintOpPreset*>  KisFavoriteResourceManager::favoritePresetList()
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;   
-    foreach(KisPaintOpPreset* preset, m_favoritePresetsList) {
-        images.append(preset->image());
+    foreach(KisPaintOpPresetSP preset, m_favoritePresetsList) {
+        if (preset) {
+            images.append(preset->image());
+        }
 
     }
     return images;
@@ -231,7 +233,7 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
 
-    KoResource* resource = m_favoritePresetsList.at(pos);
+    KoResource* resource = const_cast<KisPaintOpPreset*>(m_favoritePresetsList.at(pos).data());
     m_paintopBox->resourceSelected(resource);
 
     emit hidePalettes();
@@ -328,7 +330,7 @@ KoColor KisFavoriteResourceManager::bgColor() const
 }
 
 
-bool sortPresetByName(KisPaintOpPreset* preset1, KisPaintOpPreset* preset2)
+bool sortPresetByName(KisPaintOpPresetSP preset1, KisPaintOpPresetSP preset2)
 {
      return preset1->name() < preset2->name();
 }

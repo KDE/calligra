@@ -30,7 +30,7 @@
 #include <kis_paintop_preset.h>
 #include <kis_smoothing_options.h>
 
-class KisView2;
+class KisViewManager;
 struct ViewModeSynchronisationObject {
     ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 
@@ -98,5 +98,3 @@ private:
 };
 
 #endif // VIEWMODESWITCHEVENT_H
-
-extern QMap< QString, QString > m;

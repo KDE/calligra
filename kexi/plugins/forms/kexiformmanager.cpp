@@ -554,7 +554,7 @@ QString KexiFormManager::translateName(const char* name) const
     QString n(QString::fromLatin1(name));
     // translate to our name space:
     if (n.startsWith("align_") || n.startsWith("adjust_")
-            || n == "format_raise" || n == "format_raise" || n == "taborder")
+            || n == "format_raise" || n == "format_lower" || n == "taborder")
     {
         n.prepend("formpart_");
     }

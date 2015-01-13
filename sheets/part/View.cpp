@@ -50,7 +50,6 @@
 #include <QMenu>
 #include <QPixmap>
 #include <QResizeEvent>
-#include <QTimer>
 #include <QToolButton>
 #ifndef QT_NO_SQL
 #include <QSqlDatabase>
@@ -154,7 +153,6 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
 #include <knotifyconfigwidget.h>
-#include <QtDBus>
 #endif
 
 using namespace Calligra::Sheets;
@@ -746,8 +744,8 @@ void View::initView()
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
-        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
