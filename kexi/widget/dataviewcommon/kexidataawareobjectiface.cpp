@@ -471,6 +471,8 @@ void KexiDataAwareObjectInterface::clearSelection()
         m_navPanel->setCurrentRecordNumber(0);
 }
 
+// #define setCursorPosition_DEBUG
+
 void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                                                      CursorPositionFlags flags)
 {
@@ -587,14 +589,15 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         //update row
         if (forceSet || m_curRow != oldRow) {
             if (isInsertingEnabled() && m_curRow == rows()) {
+#ifdef setCursorPosition_DEBUG
                 kDebug() << "NOW insert item is current";
+#endif
                 m_currentItem = m_insertItem;
                 m_itemIterator = KexiDB::TableViewData::Iterator();
             } else {
+#ifdef setCursorPosition_DEBUG
                 kDebug() << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
-// #define setCursorPosition_DEBUG
-#ifdef setCursorPosition_DEBUG
                 int _i = 0;
                 kDebug() << "m_curRow:" << m_curRow;
                 for (KexiDB::TableViewData::Iterator ii = m_data->constBegin();
