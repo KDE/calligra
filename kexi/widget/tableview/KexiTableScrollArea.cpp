@@ -1303,8 +1303,9 @@ KexiTableEdit* KexiTableScrollArea::tableEditorWidget(int col, bool ignoreMissin
     return dynamic_cast<KexiTableEdit*>(editor(col, ignoreMissingEditor));
 }
 
-void KexiTableScrollArea::editorShowFocus(int /*row*/, int col)
+void KexiTableScrollArea::editorShowFocus(int row, int col)
 {
+    Q_UNUSED(row);
     KexiDataItemInterface *edit = editor(col);
     if (edit) {
         //kDebug() << "IN";
