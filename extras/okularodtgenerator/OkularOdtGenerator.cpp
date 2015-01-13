@@ -25,6 +25,8 @@
 #include <QPainter>
 #include <QTextDocument>
 
+#include <calligraversion.h>
+
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KWDocument.h>
@@ -48,7 +50,7 @@ static KAboutData createAboutData()
          "okular_odt",
          "okularGenerator_odt",
          ki18n( "ODT/OTT Backend" ),
-         "0.1",
+         CALLIGRA_VERSION_STRING,
          ki18n( "ODT/OTT file renderer" ),
          KAboutData::License_GPL,
          ki18n( "© 2012 Sven Langkamp" )
@@ -248,7 +250,7 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         QSize rSize(request->width(), request->height());
 
         pix = new QPixmap();
-        pix->convertFromImage(page.thumbnail(rSize, shapeManager));
+        pix->convertFromImage(page.thumbnail(rSize, shapeManager, true));
     }
 
 // API change

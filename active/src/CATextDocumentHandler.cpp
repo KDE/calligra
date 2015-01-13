@@ -34,7 +34,6 @@
 #include <KoZoomController.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoPart.h>
 
 #include <kmimetype.h>

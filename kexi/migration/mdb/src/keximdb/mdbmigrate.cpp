@@ -160,9 +160,8 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
 
     /*! Convert column data to Kexi TableSchema
         Nice mix of terminology here, MDBTools has columns, Kexi has fields. */
-    MdbColumn *col;
     for (unsigned int i = 0; i < tableDef->num_cols; i++) {
-        col = (MdbColumn*) g_ptr_array_index(tableDef->columns, i);
+        MdbColumn *col = static_cast<MdbColumn*>(g_ptr_array_index(tableDef->columns, i));
 
         // Field name
         QString fldName = QString::fromUtf8(col->name);

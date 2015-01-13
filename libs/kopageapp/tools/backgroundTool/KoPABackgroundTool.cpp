@@ -27,9 +27,9 @@
 #include <klocale.h>
 
 //Calligra includes
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoCanvasResourceManager.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoPAPageBase.h> // this is needed to make setResource work correctly
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
@@ -95,10 +95,10 @@ KoPAViewBase * KoPABackgroundTool::view() const
     return m_view;
 }
 
-QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
+QList<QPointer<QWidget> > KoPABackgroundTool::createOptionWidgets()
 {
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     const QString title =
         (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
     widget->setWindowTitle(title);

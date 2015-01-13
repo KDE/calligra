@@ -51,7 +51,6 @@
 #include <KoPathConnectionPointStrategy.h>
 #include <KoStrokeConfigWidget.h>
 
-#include <KoToolManager.h>
 #include <KoIcon.h>
 
 #include <kaction.h>
@@ -791,9 +790,9 @@ void ConnectionTool::updateStatusText()
     }
 }
 
-QList<QWidget *> ConnectionTool::createOptionWidgets()
+QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
 {
-    QList<QWidget *> list;
+    QList<QPointer<QWidget> > list;
 
     m_connectionShapeWidgets.clear();
 

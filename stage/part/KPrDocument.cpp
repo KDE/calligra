@@ -34,12 +34,8 @@
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
 #include "commands/KPrDeleteSlidesCommand.h"
-#include <KoPACanvas.h>
-#include <KoPACanvasItem.h>
-#include <KoPAViewModeNormal.h>
 #include <KoPASavingContext.h>
 #include <KoPALoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>

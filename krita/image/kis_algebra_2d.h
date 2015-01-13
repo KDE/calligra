@@ -27,6 +27,8 @@
 #include <kis_global.h>
 #include <krita_export.h>
 
+class QPainterPath;
+
 namespace KisAlgebra2D {
 
 template <class T>
@@ -65,6 +67,29 @@ template <class T>
 qreal norm(const T &a)
 {
     return std::sqrt(pow2(a.x()) + pow2(a.y()));
+}
+
+template <class Point>
+Point normalize(const Point &a)
+{
+    const qreal length = norm(a);
+    return (1.0 / length) * a;
+}
+
+/**
+ * Usual sign() function with positive zero
+ */
+template <typename T>
+T signPZ(T x) {
+    return x >= T(0) ? T(1) : T(-1);
+}
+
+/**
+ * Usual sign() function with zero returning zero
+ */
+template <typename T>
+T signZZ(T x) {
+    return x == T(0) ? T(0) : x > T(0) ? T(1) : T(-1);
 }
 
 template <class T>
@@ -166,6 +191,39 @@ inline void accumulateBounds(const Point &pt, Rect *bounds)
         bounds->setTop(pt.y());
     }
 }
+
+template <class Point, class Rect>
+inline Point clampPoint(Point pt, const Rect &bounds)
+{
+    if (pt.x() > bounds.right()) {
+        pt.rx() = bounds.right();
+    }
+
+    if (pt.x() < bounds.left()) {
+        pt.rx() = bounds.left();
+    }
+
+    if (pt.y() > bounds.bottom()) {
+        pt.ry() = bounds.bottom();
+    }
+
+    if (pt.y() < bounds.top()) {
+        pt.ry() = bounds.top();
+    }
+
+    return pt;
+}
+
+QPainterPath KRITAIMAGE_EXPORT smallArrow();
+
+/**
+ * Multiply width and height of \p rect by \p coeff keeping the
+ * center of the rectangle pinned
+ */
+QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
+
+QPoint ensureInRect(QPoint pt, const QRect &bounds);
+QPointF ensureInRect(QPointF pt, const QRectF &bounds);
 
 }
 

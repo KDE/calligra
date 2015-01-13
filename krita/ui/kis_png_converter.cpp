@@ -48,7 +48,7 @@
 #include <KoColor.h>
 
 #include <kis_painter.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_layer.h>
@@ -256,7 +256,7 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
-KisPNGConverter::KisPNGConverter(KisDoc2 *doc)
+KisPNGConverter::KisPNGConverter(KisDocument *doc)
 {
 //     Q_ASSERT(doc);
 //     Q_ASSERT(adapter);
@@ -859,10 +859,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int color_nb_bits = 8 * device->pixelSize() / device->channelCount();
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
-    if (color_type == -1) {
-        device->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
-        color_type = options.alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
-    }
+    Q_ASSERT(color_type > -1);
 
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;

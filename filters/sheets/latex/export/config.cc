@@ -19,8 +19,9 @@
 **
 */
 
-#include <kdebug.h>  /* for kDebug() stream */
 #include "config.h"
+
+#include <kdebug.h>  /* for kDebug() stream */
 #include <QTextStream>
 
 /* Static variable */

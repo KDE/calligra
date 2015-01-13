@@ -32,6 +32,7 @@
 #include <KoShapeContainer.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoXmlReader.h>
 
 #include <QPainter>
 #include <QPainterPath>

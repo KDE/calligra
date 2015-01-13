@@ -33,7 +33,6 @@ class QPainter;
 class QPaintEvent;
 class KoViewConverter;
 class KoShape;
-class KoShapeManager;
 class KoPACanvas;
 class KoPAPageBase;
 class KoPAView;

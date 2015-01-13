@@ -524,13 +524,15 @@ KexiMatchData KexiCompletionEngine::filterHistory()
     QAbstractItemModel *source = c->proxy->sourceModel();
     if (curParts.count() <= 1 || c->proxy->showAll || !source)
         return KexiMatchData();
+#ifdef QT_NO_DIRMODEL
     bool isDirModel = false;
-    bool isFsModel = false;
-#ifndef QT_NO_DIRMODEL
-    isDirModel = (qobject_cast<QDirModel *>(source) != 0);
+#else
+    bool isDirModel = qobject_cast<QDirModel *>(source) != 0;
 #endif
-#ifndef QT_NO_FILESYSTEMMODEL
-    isFsModel = (qobject_cast<QFileSystemModel *>(source) != 0);
+#ifdef QT_NO_FILESYSTEMMODEL
+    bool isFsModel = false;
+#else
+    bool isFsModel = qobject_cast<QFileSystemModel *>(source) != 0;
 #endif
     QVector<int> v;
     KexiIndexMapper im(v);

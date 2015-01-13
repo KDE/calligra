@@ -4,17 +4,17 @@ INCLUDE(CheckFunctionExists)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
-option(KEXI_MOBILE "compile a mobile Kexi" OFF)
+option(KEXI_MOBILE "Compile a mobile version of Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
 option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
-option(KEXI_SHOW_UNFINISHED, "Show unfinnished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
+option(KEXI_SHOW_UNFINISHED, "Show unfinished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
 
 # Experimental:
 option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
-option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" ON)
+option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF)
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
 ADD_DEFINITIONS(
@@ -22,7 +22,6 @@ ADD_DEFINITIONS(
   -DKEXI_NO_CTXT_HELP
   -DKEXI_NO_SUBFORM
   -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
-# temporary for 2.x:
   -DKEXI_NO_AUTOFIELD_WIDGET
 )
 
@@ -40,7 +39,6 @@ include_directories(
 )
 
 IF(KEXI_MOBILE)
-  add_definitions(-DKEXI_MOBILE)
 ELSE(KEXI_MOBILE)
   add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 ENDIF(KEXI_MOBILE)

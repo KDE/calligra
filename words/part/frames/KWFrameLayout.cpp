@@ -622,27 +622,16 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, Words:
     Q_ASSERT(page.isValid());
     KWPageStyle pagestyle = page.pageStyle();
     Words::HeaderFooterType type = header ? pagestyle.headerPolicy() : pagestyle.footerPolicy();
-    switch (pagestyle.pageUsage()) {
-        case KWPageStyle::MirroredPages:
-        case KWPageStyle::AllPages: {
-            switch (type) {
-                case Words::HFTypeNone:
-                    return false;
-                case Words::HFTypeEvenOdd:
-                    if (header)
-                        *origin = pageNumber % 2 == 0 ? Words::EvenPagesHeaderTextFrameSet : Words::OddPagesHeaderTextFrameSet;
-                    else
-                        *origin = pageNumber % 2 == 0 ? Words::EvenPagesFooterTextFrameSet : Words::OddPagesFooterTextFrameSet;
-                    break;
-                case Words::HFTypeUniform:
-                    *origin = header ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet;
-                    break;
-            }
-        } break;
-        case KWPageStyle::LeftPages:
-            *origin = header ? Words::EvenPagesHeaderTextFrameSet : Words::EvenPagesFooterTextFrameSet;
+    switch (type) {
+        case Words::HFTypeNone:
+            return false;
+        case Words::HFTypeEvenOdd:
+            if (header)
+                *origin = pageNumber % 2 == 0 ? Words::EvenPagesHeaderTextFrameSet : Words::OddPagesHeaderTextFrameSet;
+            else
+                *origin = pageNumber % 2 == 0 ? Words::EvenPagesFooterTextFrameSet : Words::OddPagesFooterTextFrameSet;
             break;
-        case KWPageStyle::RightPages:
+        case Words::HFTypeUniform:
             *origin = header ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet;
             break;
     }

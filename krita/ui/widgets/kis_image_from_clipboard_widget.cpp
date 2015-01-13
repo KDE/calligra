@@ -29,7 +29,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <kundo2command.h>
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
@@ -41,7 +40,6 @@
 
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>
@@ -57,13 +55,13 @@
 #include <kis_painter.h>
 
 #include "kis_clipboard.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
 
-KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
-: KisCustomImageWidget(parent, doc, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
+KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+: KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
 {
     setObjectName("KisImageFromClipboard");
     
@@ -87,9 +85,9 @@ KisImageFromClipboard::~KisImageFromClipboard()
 
 void KisImageFromClipboard::createImage()
 {
-    createNewImage();
+    KisDocument *doc = createNewImage();
     
-    KisImageWSP image = m_doc->image();
+    KisImageWSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
 
@@ -105,7 +103,7 @@ void KisImageFromClipboard::createImage()
 
     }
 
-    emit documentSelected();
+    emit documentSelected(doc);
 }
 
 

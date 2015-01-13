@@ -634,7 +634,6 @@ void Form::emitWidgetSelected(bool multiple)
 
     // If the widgets selected is a container, we enable layout actions
     if (!multiple) {
-        KFormDesigner::ObjectTreeItem *item = 0;
         if (!wlist->isEmpty()) {
             objectTree()->lookup(wlist->first()->objectName());
         }
@@ -1487,8 +1486,8 @@ void Form::createPropertiesForWidget(QWidget *w)
     WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
     if (subpropIface) {
-        const QSet<QByteArray> subproperies(subpropIface->subproperies());
-        foreach(const QByteArray& propName, subproperies) {
+        const QSet<QByteArray> subproperties(subpropIface->subproperties());
+        foreach(const QByteArray& propName, subproperties) {
             propNames.insert(propName);
             //kDebug() << "Added subproperty: " << propName;
         }

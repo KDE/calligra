@@ -37,8 +37,7 @@
 KisToolText::KisToolText(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
-    setObjectName("tool_text");
-    configGroup = KGlobal::config()->group("textTool"); // save settings to kritarc
+    setObjectName("tool_text");  
 }
 
 KisToolText::~KisToolText()
@@ -127,7 +126,7 @@ void KisToolText::finishRect(const QRectF &rect)
     }
 }
 
-QList< QWidget* > KisToolText::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
 {
     m_optionsWidget = new KisTextToolOptionWidget();
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -136,12 +135,14 @@ QList< QWidget* > KisToolText::createOptionWidgets()
     specialSpacer->setFixedSize(0, 0);
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
-    QList< QWidget* > widgets;
+    QList<QPointer<QWidget> > widgets;
     widgets.append(m_optionsWidget);
 
     // when widget changes properties from UI, make sure we are notified
     connect(m_optionsWidget->cmbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleIndexChanged(int)));
     connect(m_optionsWidget->m_buttonGroup, SIGNAL(buttonPressed(int)), this, SLOT(textTypeIndexChanged(int)));
+
+    configGroup = KGlobal::config()->group(toolId());
 
     return widgets;
 }

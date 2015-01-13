@@ -264,6 +264,7 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
 {
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
+    Q_UNUSED(previewVisible);
     findHandleLocation();
     if (!useCache) {
         gc.save();
@@ -391,6 +392,24 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "perspective");
         assistantElement.setAttribute("filename", QString("perspective%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "vanishing point"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "vanishing point");
+        assistantElement.setAttribute("filename", QString("vanishing_point%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "infinite ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "infinite ruler");
+        assistantElement.setAttribute("filename", QString("infinite_rulers%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "parallel ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "parallel ruler");
+        assistantElement.setAttribute("filename", QString("parallel_ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
     else if (d->id == "ruler"){

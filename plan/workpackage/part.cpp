@@ -65,7 +65,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
-#include <KoGlobal.h>
 #include <KoMainWindow.h>
 
 #include "debugarea.h"

@@ -30,7 +30,7 @@
 #include "CAAbstractDocumentHandler.h"
 #include "calligra_active_global.h"
 
-#include <libs/main/calligraversion.h>
+#include <calligraversion.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -65,6 +65,8 @@ MainWindow::MainWindow (QWidget* parent)
     kdeclarative.setDeclarativeEngine(m_view->engine());
     kdeclarative.initialize();
     kdeclarative.setupBindings();
+    m_view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+    m_view->engine()->addImportPath(KGlobal::dirs()->findDirs("data", "calligra/imports").value(0));
 
     QList<QObject*> recentFiles;
     QList<QObject*> recentTextDocs;

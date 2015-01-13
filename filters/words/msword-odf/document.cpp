@@ -22,10 +22,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "document.h"
+
 #include "generated/leinputstream.h"
 #include "drawstyle.h"
 
-#include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
@@ -643,16 +645,20 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
             pageLayoutStyle->addPropertyPt("fo:margin-left", sep->dxaLeft / 20.0 - sep->brcLeft.dptSpace);
             pageLayoutStyle->addPropertyPt("fo:margin-right", sep->dxaRight / 20.0 - sep->brcRight.dptSpace);
             if (m_hasHeader_list[i]) {
-                // This is correct if border is supposed to be outside header (it's a .doc setting
-                // somewhere). Not sure .odt is even capable of this
-                // minimum height of headers is not yet calculated but should be smth like:
-                //   sep->dyaTop - sep->dyaHdrTop
-                 pageLayoutStyle->addPropertyPt("fo:margin-top", (sep->dyaHdrTop + sep->dyaTop) / 20.0 - sep->brcTop.dptSpace);
+                // If we have the header in the border, then our margin is the header top position
+                if (m_parser->dop().fIncludeHeader)
+                    pageLayoutStyle->addPropertyPt("fo:margin-top", sep->dyaHdrTop / 20.0 - sep->brcTop.dptSpace);
+                else
+                    pageLayoutStyle->addPropertyPt("fo:margin-top", (sep->dyaHdrTop + sep->dyaTop) / 20.0 - sep->brcTop.dptSpace);
             } else {
                 pageLayoutStyle->addPropertyPt("fo:margin-top", sep->dyaTop / 20.0 - sep->brcTop.dptSpace);
             }
             if (m_hasFooter_list[i]) {
-                pageLayoutStyle->addPropertyPt("fo:margin-bottom", (sep->dyaHdrBottom + sep->dyaBottom) / 20.0 - sep->brcBottom.dptSpace);
+                // If we have the footer in the border, then our margin is the header bottom position
+                if (m_parser->dop().fIncludeFooter)
+                    pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->dyaHdrBottom / 20.0 - sep->brcBottom.dptSpace);
+                else
+                    pageLayoutStyle->addPropertyPt("fo:margin-bottom", (sep->dyaHdrBottom + sep->dyaBottom) / 20.0 - sep->brcBottom.dptSpace);
             } else {
                 // same comment for footer as for header
                 pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->dyaBottom / 20.0 - sep->brcBottom.dptSpace);

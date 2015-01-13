@@ -23,8 +23,6 @@
 
 #include "KPrPresentationToolEventForwarder.h"
 
-#include <KoPACanvas.h>
-
 #include <QSize>
 
 class KPrPresentationBlackWidget : public KPrPresentationToolEventForwarder

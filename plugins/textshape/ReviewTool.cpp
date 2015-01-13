@@ -32,7 +32,6 @@
 #include <KoAnnotationManager.h>
 #include <KoShapeUserData.h>
 #include <KoTextShapeData.h>
-#include <KoGlobal.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>
@@ -100,9 +99,9 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
     TextTool::paint(painter,converter);
 }
 
-QList<QWidget *> ReviewTool::createOptionWidgets()
+QList<QPointer<QWidget> > ReviewTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
     SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, 0);
 

@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef XLSXXMLDOCREADER_H
-#define XLSXXMLDOCREADER_H
+#ifndef XLSXXMLDOCUMENTREADER_H
+#define XLSXXMLDOCUMENTREADER_H
 
 #include <MsooXmlTheme.h>
 #include <MsooXmlReader.h>
@@ -93,4 +93,4 @@ private:
     Private* const d;
 };
 
-#endif //XLSXXMLDOCREADER_H
+#endif //XLSXXMLDOCUMENTREADER_H

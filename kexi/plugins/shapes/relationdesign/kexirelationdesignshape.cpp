@@ -262,11 +262,10 @@ void KexiRelationDesignShape::addConnectionPoints()
     clearConnectionPoints();
 
     uint i = 0;
-    int offset = 0;
     foreach(SimpleField * column, m_fieldData) {
         Q_UNUSED(column);
         ++i;
-        offset = (13.0 * i) + 15;
+        const int offset = (13.0 * i) + 15;
         addConnectionPoint(QPointF(0, offset));
         addConnectionPoint(QPointF(boundingRect().width(), offset));
     }

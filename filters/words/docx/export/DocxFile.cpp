@@ -38,6 +38,7 @@
 
 // This filter
 #include "OpcContentTypes.h"
+#include "OdfReaderDocxContext.h"
 
 
 // ================================================================

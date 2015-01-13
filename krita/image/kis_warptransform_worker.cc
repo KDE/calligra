@@ -28,7 +28,6 @@
 #include <QPainter>
 #include <QVarLengthArray>
 
-#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
@@ -287,6 +286,8 @@ QImage KisWarpTransformWorker::transformQImage(WarpType warpType,
     case RIGID_TRANSFORM:
         warpMathFunction = &rigidTransformMath;
         break;
+    default:
+        KIS_ASSERT_RECOVER(0 && "Unknown warp mode") { return QImage(); }
     }
 
     if (!warpMathFunction ||

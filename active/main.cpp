@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     MainWindow mw;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if(args->count()) {
+    if (args->count()) {
        mw.openFile(args->arg(0));
     }
     args->clear();

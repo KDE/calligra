@@ -39,7 +39,6 @@
 #include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
-#include <KoZoomMode.h>
 #include <karbonui_export.h>
 #include "KarbonBooleanCommand.h"
 

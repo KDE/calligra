@@ -2949,15 +2949,21 @@ void Completion::copy( const Completion &p )
     m_started = p.isStarted(); m_finished = p.isFinished();
     m_startTime = p.startTime(); m_finishTime = p.finishTime();
     m_entrymode = p.entrymode();
+
     qDeleteAll( m_entries );
     m_entries.clear();
-    foreach ( const QDate &d, p.entries().keys() ) {
-        addEntry( d, new Entry( *(p.entries()[ d ]) ) );
+    Completion::EntryList::ConstIterator entriesIt = p.entries().constBegin();
+    const Completion::EntryList::ConstIterator entriesEnd = p.entries().constEnd();
+    for (; entriesIt != entriesEnd; ++entriesIt) {
+        addEntry( entriesIt.key(), new Entry( *entriesIt.value() ) );
     }
+
     qDeleteAll( m_usedEffort );
     m_usedEffort.clear();
-    foreach ( const Resource *r, p.usedEffortMap().keys() ) {
-        addUsedEffort( r, new UsedEffort( *( p.usedEffortMap()[ r ] ) ) );
+    Completion::ResourceUsedEffortMap::ConstIterator usedEffortMapIt = p.usedEffortMap().constBegin();
+    const Completion::ResourceUsedEffortMap::ConstIterator usedEffortMapEnd = p.usedEffortMap().constEnd();
+    for (; usedEffortMapIt != usedEffortMapEnd; ++usedEffortMapIt) {
+        addUsedEffort( usedEffortMapIt.key(), new UsedEffort( *usedEffortMapIt.value() ) );
     }
 }
 

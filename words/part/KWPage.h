@@ -179,9 +179,11 @@ public:
      *
      * @param size: the size in pixels of the thumbnail
      * @param shapeManager the shape manager containing the page's shapes
+     * @param asPrint set to @true if the rendering should be done like for print,
+     *                or @false if with the current view settings
      * @returns the thumbnail
      */
-    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager) const;
+    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager, bool asPrint = false) const;
 
     bool operator==(const KWPage &other) const;
     inline bool operator!=(const KWPage &other) const { return ! operator==(other); }

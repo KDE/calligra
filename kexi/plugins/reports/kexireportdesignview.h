@@ -72,7 +72,7 @@ protected:
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
-
+    
 private slots:
     void slotDesignerPropertySetChanged();
 
