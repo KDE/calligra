@@ -353,8 +353,9 @@ QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_
 
 static bool isSpecialIconTheme()
 {
-    return KIconTheme::current() == QLatin1String("breeze")
-            || KIconTheme::current() == QLatin1String("HighContrast");
+    const QString theme(KIconTheme::current().toLower());
+    return theme.contains(QLatin1String("breeze"))
+           || theme.contains(QLatin1String("highcontrast"));
 }
 
 QString KexiIconName(const QString &baseName)
