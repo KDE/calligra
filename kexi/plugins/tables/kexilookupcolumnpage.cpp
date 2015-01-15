@@ -64,7 +64,7 @@ QString typeToPartClass(const QString& type)
 class KexiLookupColumnPage::Private
 {
 public:
-    Private(KexiLookupColumnPage *that)
+    explicit Private(KexiLookupColumnPage *that)
             : q(that)
             , currentFieldUid(-1)
             , insideClearRowSourceSelection(false)

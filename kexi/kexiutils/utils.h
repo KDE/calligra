@@ -328,11 +328,11 @@ public:
     //! Creates object with all margins set to 0
     WidgetMargins();
     //! Creates object with margins copied from \a widget
-    WidgetMargins(QWidget *widget);
+    explicit WidgetMargins(QWidget *widget);
     //! Creates object with margins set to given values
     WidgetMargins(int _left, int _top, int _right, int _bottom);
     //! Creates object with all margins set to commonMargin
-    WidgetMargins(int commonMargin);
+    explicit WidgetMargins(int commonMargin);
     //! Copies margins from \a widget to this object
     void copyFromWidget(QWidget *widget);
     //! Creates margins from this object copied to \a widget
@@ -364,7 +364,7 @@ template <typename Container>
 class ContainerDeleter
 {
 public:
-    ContainerDeleter(Container& container) : m_container(container) {}
+    explicit ContainerDeleter(Container& container) : m_container(container) {}
     ~ContainerDeleter() {
         clear();
     }
@@ -464,7 +464,7 @@ private:
 class KEXIUTILS_EXPORT KTextEditorFrame : public QFrame
 {
 public:
-    KTextEditorFrame(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    explicit KTextEditorFrame(QWidget * parent = 0, Qt::WindowFlags f = 0);
 protected:
     virtual void changeEvent(QEvent *event);
 };
@@ -523,7 +523,7 @@ KEXIUTILS_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *filte
 class KEXIUTILS_EXPORT PaintBlocker : public QObject
 {
 public:
-    PaintBlocker(QWidget* parent);
+    explicit PaintBlocker(QWidget* parent);
     void setEnabled(bool set);
     bool enabled() const;
 protected:

@@ -32,7 +32,7 @@
 class KexiDBPasswordDialog::Private
 {
  public:
-    Private(KexiDB::ConnectionData* data);
+    explicit Private(KexiDB::ConnectionData* data);
     ~Private();
 
     KexiDB::ConnectionData *cdata;

@@ -49,7 +49,7 @@ public:
         const QString& forcedTabPageName = QString());
 
     //! For TabStopDialog
-    WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
+    explicit WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
         const QString& forcedTabPageName = QString());
     virtual ~WidgetTreeWidgetItem();
@@ -98,7 +98,7 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    WidgetTreeWidget(QWidget *parent = 0, Options options = NoOptions);
+    explicit WidgetTreeWidget(QWidget *parent = 0, Options options = NoOptions);
 
     virtual ~WidgetTreeWidget();
 

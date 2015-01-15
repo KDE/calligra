@@ -69,7 +69,7 @@ static QString realPartClass(const QString &partClass, const QString &partMime)
 class KexiProject::Private
 {
 public:
-    Private(KexiProject *qq)
+    explicit Private(KexiProject *qq)
             : q(qq)
             , data(0)
             , tempPartItemID_Counter(-1)

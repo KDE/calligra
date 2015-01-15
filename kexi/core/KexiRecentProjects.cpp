@@ -38,7 +38,7 @@
 class KexiRecentProjects::Private
 {
 public:
-    Private(KexiRecentProjects *qq)
+    explicit Private(KexiRecentProjects *qq)
         : q(qq), loaded(false)
     {
     }

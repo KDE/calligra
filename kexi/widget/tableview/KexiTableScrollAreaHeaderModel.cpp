@@ -27,7 +27,7 @@
 class KexiTableScrollAreaHeaderModel::Private
 {
 public:
-    Private(KexiTableScrollAreaHeaderModel *qq)
+    explicit Private(KexiTableScrollAreaHeaderModel *qq)
         : q(qq)
     {
         KexiTableScrollArea *scrollArea = qobject_cast<KexiTableScrollArea*>(qobject_cast<QObject*>(q)->parent());

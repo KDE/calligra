@@ -178,7 +178,7 @@ void KActionsListViewBase::init()
 class KActionsListView : public KActionsListViewBase
 {
 public:
-    KActionsListView(QWidget* parent)
+    explicit KActionsListView(QWidget* parent)
             : KActionsListViewBase(parent) {
     }
     virtual ~KActionsListView() {}
@@ -193,7 +193,7 @@ public:
 class CurrentFormActionsListView : public KActionsListViewBase
 {
 public:
-    CurrentFormActionsListView(QWidget* parent)
+    explicit CurrentFormActionsListView(QWidget* parent)
             : KActionsListViewBase(parent) {
     }
     virtual ~CurrentFormActionsListView() {}
@@ -208,7 +208,7 @@ public:
 class ActionCategoriesListView : public ActionsListViewBase
 {
 public:
-    ActionCategoriesListView(QWidget* parent) //, KexiProject& project)
+    explicit ActionCategoriesListView(QWidget* parent)
             : ActionsListViewBase(parent) {
         ActionSelectorDialogTreeItem *itm = new ActionSelectorDialogTreeItem(i18n("No action"), this );
         itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "noaction");
@@ -259,7 +259,7 @@ public:
 class ActionToExecuteListView : public ActionsListViewBase
 {
 public:
-    ActionToExecuteListView(QWidget* parent)
+    explicit ActionToExecuteListView(QWidget* parent)
             : ActionsListViewBase(parent) {
     }
 

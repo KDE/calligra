@@ -62,7 +62,7 @@ public:
         ButtonNew
     };
 
-    KexiRecordNavigator(QAbstractScrollArea &parentView, QWidget *parent = 0);
+    explicit KexiRecordNavigator(QAbstractScrollArea &parentView, QWidget *parent = 0);
     virtual ~KexiRecordNavigator();
 
     /*! Sets record navigator handler. This allows to react

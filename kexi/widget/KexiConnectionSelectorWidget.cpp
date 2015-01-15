@@ -51,7 +51,7 @@
 class KexiConnectionSelector : public QWidget, public Ui_KexiConnectionSelector
 {
 public:
-    KexiConnectionSelector(QWidget *parent)
+    explicit KexiConnectionSelector(QWidget *parent)
         : QWidget(parent)
     {
         setupUi(this);

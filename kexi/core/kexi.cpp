@@ -277,7 +277,7 @@ void ObjectStatus::append(const ObjectStatus& otherStatus)
 class ObjectStatusMessageHandler : public KexiDB::MessageHandler
 {
 public:
-    ObjectStatusMessageHandler(ObjectStatus *status)
+    explicit ObjectStatusMessageHandler(ObjectStatus *status)
             : KexiDB::MessageHandler()
             , m_status(status) {
     }

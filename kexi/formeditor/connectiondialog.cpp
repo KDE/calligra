@@ -44,7 +44,7 @@ using namespace KFormDesigner;
 class ConnectionDialog::Private
 {
 public:
-    Private(Form *f);
+    explicit Private(Form *f);
     ~Private();
 
     Form *form;

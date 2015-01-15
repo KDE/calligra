@@ -203,7 +203,7 @@ bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* dat
 class KexiOpenProjectAssistant::Private
 {
 public:
-    Private(KexiOpenProjectAssistant *qq)
+    explicit Private(KexiOpenProjectAssistant *qq)
      : q(qq)
     {
     }

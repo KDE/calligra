@@ -40,7 +40,7 @@
 class KexiProjectSelectorWidget::Private
 {
 public:
-    Private(KexiProjectSet *prj_set_)
+    explicit Private(KexiProjectSet *prj_set_)
          : prj_set(prj_set_)
     {
         selectable = true;

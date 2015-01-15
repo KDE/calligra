@@ -80,7 +80,7 @@ public:
 class KexiView::Private
 {
 public:
-    Private(KexiView *qq)
+    explicit Private(KexiView *qq)
             : q(qq)
             , viewWidget(0)
             , parentView(0)

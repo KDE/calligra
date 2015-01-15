@@ -195,7 +195,7 @@ QString WidgetTreeWidgetItem::customSortingKey() const
 class WidgetTreeWidget::Private
 {
 public:
-    Private(Options o);
+    explicit Private(Options o);
     ~Private();
 
     Form *form;

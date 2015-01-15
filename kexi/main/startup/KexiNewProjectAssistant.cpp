@@ -66,7 +66,7 @@ namespace KRecentDirs
 class KexiServerDBNamePage : public QWidget, public Ui::KexiServerDBNamePage
 {
 public:
-    KexiServerDBNamePage(QWidget* parent = 0);
+    explicit KexiServerDBNamePage(QWidget* parent = 0);
 };
 
 KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
@@ -533,7 +533,7 @@ void KexiProjectDatabaseNameSelectionPage::overwriteActionTriggered()
 class KexiNewProjectAssistant::Private
 {
 public:
-    Private(KexiNewProjectAssistant *qq)
+    explicit Private(KexiNewProjectAssistant *qq)
      : q(qq)
     {
     }
