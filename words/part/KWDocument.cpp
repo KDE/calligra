@@ -187,9 +187,7 @@ void KWDocument::addShape(KoShape *shape)
         addFrameSet(frame->frameSet());
     }
 
-    if (shape->shapeId() == "AnnotationTextShapeID") {
-        emit annotationShapeAdded(true);
-    } else {
+    if (!(shape->shapeId() == "AnnotationTextShapeID")) {
         emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
     }
 
