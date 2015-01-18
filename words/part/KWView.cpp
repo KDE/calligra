@@ -404,6 +404,10 @@ void KWView::setupActions()
     action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
+    // not sure why this isn't done through KStandardAction, but since it isn't
+    // we ought to set the MenuRole manually so the item ends up in the appropriate
+    // menu on OS X:
+    action->setMenuRole(QAction::PreferencesRole);
 
     // -------------- Page tool
     action = new KAction(i18n("Page Layout..."), this);
