@@ -25,7 +25,6 @@ set(docx2odt_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
-    #${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
 kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})

@@ -1,12 +1,19 @@
 #add_subdirectory( tests )
 
-include_directories(${KOODF_INCLUDES} ${KOODF2_INCLUDES}
-		    ${CMAKE_SOURCE_DIR}/filters/libmso  # for NumberFormatParser
+include_directories(${KOODF_INCLUDES}
+                    ${KOODF2_INCLUDES}
+
+                    # FIXME: This should not be here. Make sure that the chart
+                    #        classes parse the number formats while loading,
+                    #        and not just store the unparsed format strings to
+                    #        be parsed during saving.
+ 		    ${CMAKE_SOURCE_DIR}/filters/libmso  # for NumberFormatParser
 )
 
 ########### libkoodf2 ###############
 
 set(koodf2_LIB_SRCS
+    # Storage objects, using old DOM based loading
     KoXmlStreamReader.cpp
     KoTable.cpp
     KoRow.cpp
@@ -17,12 +24,14 @@ set(koodf2_LIB_SRCS
     KoCellChild.cpp
     KoRawCellChild.cpp
 
+    # Style objects, using old DOM based loading
     KoStyle.cpp
     KoTblStyle.cpp
     KoRowStyle.cpp
     KoColumnStyle.cpp
     KoCellStyle.cpp
 
+    # Style objects, using newer stream based loading
     KoOdfStyleBase.cpp
     KoOdfStyleManager.cpp
     KoOdfStyle.cpp

@@ -122,6 +122,8 @@ public:
         push_back( QColor( 153, 51, 102 ) );
         push_back( QColor( 51, 51, 153 ) );
         push_back( QColor( 51, 51, 51 ) );
+	// FIXME: The palette colors can apparently change during execution so
+	//        this should be calculated on the fly instead.
         push_back( QPalette().color( QPalette::Active, QPalette::WindowText ) );
         push_back( QPalette().color( QPalette::Active, QPalette::Window ) );
      }
