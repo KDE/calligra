@@ -153,9 +153,10 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     QAction* a;
     viewActions << (a = new KAction(koIcon("test_it"), i18n("Check Query"), this));
     a->setObjectName("querypart_check_query");
-    a->setShortcut(Qt::Key_F9);
+    a->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F5));
     a->setToolTip(i18n("Check Query"));
     a->setWhatsThis(i18n("Checks query for validity."));
+    addAction(a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotCheckQuery()));
 
     setViewActions(viewActions);
