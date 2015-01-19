@@ -56,7 +56,6 @@ ELSE (KEXI_MOBILE)
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
     kexidbconnectionwidget.cpp 
-  #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
 #      in kexiactionselectiondialog and remove them
     kexiprjtypeselector.cpp

@@ -250,8 +250,6 @@ void KexiFileWidget::showEvent(QShowEvent * event)
 /*TODO
 QString KexiFileWidget::selectedFile() const
 {
-//Qt4 setResult( QDialog::Accepted ); // selectedURL tests for it
-
 #ifdef Q_WS_WIN
 // QString path = selectedFile();
   //js @todo
@@ -297,7 +295,6 @@ QString KexiFileWidget::selectedFile() const
           defaultExtension = filters.first().trimmed().mid(2); //first one
         path += (QString(".")+defaultExtension);
         kDebug() << "KexiFileWidget::checkURL(): append extension, " << path;
-//Qt4    setSelection( path );
       }
     }
   }

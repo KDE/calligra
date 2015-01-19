@@ -44,7 +44,7 @@
 class MyLineEdit : public KLineEdit
 {
 public:
-    MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
+    explicit MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
 protected:
     virtual void drawFrame(QPainter * p) {
         p->setPen(QPen(palette().text(), 1.0));

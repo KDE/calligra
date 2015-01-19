@@ -135,7 +135,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 {
     setModal(true);
     setWindowTitle(i18nc("@title:window", "Import Database"));
-    setWindowIcon(koIcon("document_import_database"));
+    setWindowIcon(KexiIcon(koIconName("database-import")));
 
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
 
@@ -864,8 +864,11 @@ tristate ImportWizard::import()
             d->args->insert("destinationDatabaseName",
                             fileBasedDstSelected() ? sourceDriver->data()->destination->connectionData()->fileName()
                                                    : sourceDriver->data()->destination->databaseName());
-            QString destinationConnectionShortcut(
-                Kexi::connset().fileNameForConnectionData(d->dstConn->selectedConnectionData()));
+            QString destinationConnectionShortcut;
+            if (d->dstConn->selectedConnectionData()) {
+                destinationConnectionShortcut
+                    = Kexi::connset().fileNameForConnectionData(*d->dstConn->selectedConnectionData());
+            }
             if (!destinationConnectionShortcut.isEmpty()) {
                 d->args->insert("destinationConnectionShortcut", destinationConnectionShortcut);
             }

@@ -52,9 +52,9 @@
 #include <KexiMainWindowIface.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
+#include <widget/tableview/KexiTableScrollArea.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
-#include <kexitableview.h>
 
 #include <kexi_global.h>
 
@@ -107,7 +107,7 @@ static QVariant tryCastQVariant(const QVariant& fromVal, QVariant::Type toType)
 
 
 KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
-        : KexiDataTable(parent, false/*not db-aware*/)
+        : KexiDataTableView(parent, false/*not db-aware*/)
         , KexiTableDesignerInterface()
         , d(new KexiTableDesignerViewPrivate(this))
 {
@@ -116,7 +116,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     KexiCustomPropertyFactory::init();
 
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    d->view = dynamic_cast<KexiTableView*>(mainWidget());
+    d->view = dynamic_cast<KexiTableScrollArea*>(mainWidget());
 
     d->data = new KexiDB::TableViewData();
     if (conn->isReadOnly())
@@ -274,9 +274,10 @@ void KexiTableDesignerView::initData()
 
     //column widths
     d->view->setColumnWidth(COLUMN_ID_ICON, IconSize(KIconLoader::Small) + 10);
+    d->view->setColumnResizeEnabled(COLUMN_ID_ICON, false);
     d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
     d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
-    d->view->setColumnStretchEnabled(true, COLUMN_ID_DESC);   //last column occupies the rest of the area
+    d->view->setColumnResizeEnabled(COLUMN_ID_DESC, true);   //last column occupies the rest of the area
     const int minCaptionColumnWidth = d->view->fontMetrics().width("wwwwwwwwwww");
     if (minCaptionColumnWidth > d->view->columnWidth(COLUMN_ID_CAPTION))
         d->view->setColumnWidth(COLUMN_ID_CAPTION, minCaptionColumnWidth);
@@ -484,7 +485,7 @@ void KexiTableDesignerView::updateActions(bool activated)
 
 void KexiTableDesignerView::slotUpdateRowActions(int row)
 {
-    KexiDataTable::slotUpdateRowActions(row);
+    KexiDataTableView::slotUpdateRowActions(row);
     updateActions();
 }
 
@@ -1131,14 +1132,16 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             kDebug() << "no primay key defined...";
         } else {
             const int questionRes = KMessageBox::questionYesNoCancel(this,
-                i18n("<para>Table <resource>%1</resource> has no <b>primary key</b> defined.</para>"
-                     "<para>Although a primary key is not required, it is needed "
+                i18nc("@info",
+                     "Table <resource>%1</resource> has no primary key defined."
+                     "<para><note>Although a primary key is not required, it is needed "
                      "for creating relations between database tables. "
-                     "Do you want a primary key to be automatically added now?</para>"
+                     "Do you want a primary key to be automatically added now?</note></para>"
                      "<para>If you want to add a primary key by hand, press <interface>Cancel</interface> "
-                     "to cancel saving table design.</para>", schema.name()),
+                     "to cancel saving table design.</para></note>", schema.name()),
                 QString(),
-                KGuiItem(i18n("&Add Primary Key"), koIconName("key")), KStandardGuiItem::no(),
+                KGuiItem(i18nc("Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
+                KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()),
                 KStandardGuiItem::cancel(),
                 "autogeneratePrimaryKeysOnTableDesignSaving");
             if (questionRes == KMessageBox::Cancel) {
@@ -1193,7 +1196,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
         b = d->sets->at(i);
         if (b) {
             no_fields = false;
-            const QString name((*b)["name"].value().toString());
+            const QString name((*b)["name"].value().toString().toLower());
             if (name.isEmpty()) {
                 if (beSilent) {
                     kWarning() << QString("no field caption entered at record %1...").arg(i + 1);
@@ -1205,10 +1208,10 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                 res = cancelled;
                 break;
             }
-            if (names.contains(name.toLower())) {
+            if (names.contains(name)) {
                 break;
             }
-            names.insert(name.toLower());   //remember
+            names.insert(name);   //remember
         }
     }
     if (res == true && no_fields) {//no fields added
@@ -1839,7 +1842,7 @@ void KexiTableDesignerView::changePropertyVisibility(
 
 void KexiTableDesignerView::propertySetSwitched()
 {
-    KexiDataTable::propertySetSwitched();
+    KexiDataTableView::propertySetSwitched();
     KexiLookupColumnPage *page = qobject_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
     if (page)
         page->assignPropertySet(propertySet());

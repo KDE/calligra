@@ -38,10 +38,13 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
 {
     int width = 512;
     int height = 512;
-    if(id.toLower().endsWith("odt") || id.toLower().endsWith("doc") || id.toLower().endsWith("docx"))
+    if(id.endsWith(QLatin1String("odt"), Qt::CaseInsensitive) ||
+       id.endsWith(QLatin1String("doc"), Qt::CaseInsensitive) ||
+       id.endsWith(QLatin1String("docx"), Qt::CaseInsensitive)) {
         width *= 0.72413793;
-    else
+    } else {
         height *= 0.72413793;
+    }
 
     if (size) {
         *size = QSize(width, height);

@@ -1452,7 +1452,7 @@ typedef QMap< int, KexiWindow* > KexiWindowDict;
 class KexiMainWindow::Private
 {
 public:
-    Private(KexiMainWindow* w)
+    explicit Private(KexiMainWindow* w)
             : wnd(w) {
         actionCollection = new KActionCollection(w);
         propEditor = 0;

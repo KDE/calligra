@@ -39,7 +39,7 @@ namespace KexiUtils
 class KEXIUTILS_EXPORT LongLongValidator : public QValidator
 {
 public:
-    LongLongValidator(QWidget * parent, int base = 10);
+    explicit LongLongValidator(QWidget * parent, int base = 10);
     LongLongValidator(qint64 bottom, qint64 top, QWidget * parent, int base = 10);
     virtual ~LongLongValidator();
 

@@ -66,7 +66,7 @@ namespace KRecentDirs
 class KexiServerDBNamePage : public QWidget, public Ui::KexiServerDBNamePage
 {
 public:
-    KexiServerDBNamePage(QWidget* parent = 0);
+    explicit KexiServerDBNamePage(QWidget* parent = 0);
 };
 
 KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
@@ -103,7 +103,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "blank";
     info.caption = i18n("Blank database");
     info.description = i18n("Database project without any objects");
-    info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
+    info.icon = KexiIcon(koIconName("kexi-document-empty"));
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
 
@@ -165,10 +165,10 @@ KexiProjectStorageTypeSelectionPage::KexiProjectStorageTypeSelectionPage(QWidget
     QWidget* contents = new QWidget;
     setupUi(contents);
     const int dsize = IconSize(KIconLoader::Desktop);
-    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIconName()));
+    btn_file->setIcon(Kexi::defaultFileBasedDriverIcon());
     btn_file->setIconSize(QSize(dsize, dsize));
     connect(btn_file, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    btn_server->setIcon(KIcon(KEXI_DATABASE_SERVER_ICON_NAME));
+    btn_server->setIcon(Kexi::serverIcon());
     btn_server->setIconSize(QSize(dsize, dsize));
     connect(btn_server, SIGNAL(clicked()), this, SLOT(buttonClicked()));
     setFocusWidget(btn_file);
@@ -533,7 +533,7 @@ void KexiProjectDatabaseNameSelectionPage::overwriteActionTriggered()
 class KexiNewProjectAssistant::Private
 {
 public:
-    Private(KexiNewProjectAssistant *qq)
+    explicit Private(KexiNewProjectAssistant *qq)
      : q(qq)
     {
     }
@@ -661,7 +661,7 @@ void KexiNewProjectAssistant::createProject(
     const KexiDB::ConnectionData& cdata, const QString& databaseName,
     const QString& caption)
 {
-    KexiProjectData *new_data = new KexiProjectData(cdata, databaseName, caption);
+    KexiProjectData new_data(cdata, databaseName, caption);
     setCurrentPage(d->projectCreationPage());
     emit createProject(new_data);
 }

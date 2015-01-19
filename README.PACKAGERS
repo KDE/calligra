@@ -29,9 +29,10 @@ Table Of Contents
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 8. Plan
 8.1. Runtime dependency of Plan's import filters
-9. Okular ODP plugin
+9. Okular plugins
 9.1. Runtime dependency of the Okular ODP plugin
 9.2. Support for PPT, PPTX and more runtime dependency
+9.3. Support for DOC, DOCX, WPD and more runtime dependency
 
 
 1. Kexi
@@ -380,13 +381,13 @@ in the line before calligra_drop_unbuildable_products() with
 calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")
 
 
-9. Okular ODP plugin
-====================
+9. Okular plugins
+=================
 
 9.1. Runtime dependency of the Okular ODP plugin
 ------------------------------------------------
-OKULAR_GENERATOR_ODP, the plugin for Okular, in extras/okularodpgenerator, has a
-runtime dependency on the Stage engine, PART_STAGE.
+OKULAR_GENERATOR_ODP, the ODP plugin for Okular, in extras/okularodpgenerator,
+has a runtime dependency on the Stage engine, PART_STAGE.
 
 9.2. Support for PPT, PPTX and more runtime dependency
 ------------------------------------------------------
@@ -401,4 +402,20 @@ In that case the files
 will be installed from the filters/stage/{powerpoint,pptx}.
 
 So with those desktop files and the Okular ODP plugin installed there is a
-runtime dependency on the Stage engine and the respective filter.
+runtime dependency on the Stage engine and the respective filters.
+
+9.3. Support for DOC, DOCX, WPD and more runtime dependency
+-----------------------------------------------------------
+The Okular ODT plugin also supports the formats DOC, DOCX and WPD, if the
+respective filters FILTER_DOC_TO_ODT, FILTER_DOCX_TO_ODT and
+FILTER_WORDPERFECT_TO_ODT are built, by the products OKULAR_GENERATOR_DOC,
+OKULAR_GENERATOR_DOCX and OKULAR_GENERATOR_WORDPERFECT.
+
+In that case the files
+* libokularGenerator_{doc,docx,wpd}_calligra.desktop
+* okular{Doc,Doxx,Wpd}_calligra.desktop
+* okularApplication_{doc,docx,wpd}_calligra.desktop
+will be installed from the filters/word/{msword-odf,docx/import,wordperfect/import}.
+
+So with those desktop files and the Okular ODT plugin installed there is a
+runtime dependency on the respective filters.

@@ -37,7 +37,7 @@ public:
      * maps the types in KexiDB::Field::Type to the Sybase types.
      *
      */
-    SybaseDriver(QObject *parent, const QVariantList &args = QVariantList());
+    explicit SybaseDriver(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~SybaseDriver();
 
     virtual bool isSystemDatabaseName(const QString &n) const;

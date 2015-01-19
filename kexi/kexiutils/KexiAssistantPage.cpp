@@ -39,7 +39,7 @@
 
 class KexiAssistantPage::Private {
 public:    
-    Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
+    explicit Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
     {
     }
     void setButtonVisible(KexiLinkWidget** button, bool back, bool set,

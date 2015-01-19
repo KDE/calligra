@@ -246,8 +246,9 @@ void KexiDataAwarePropertySet::slotRowInserted(KexiDB::RecordData*, uint pos, bo
     emit rowInserted();
 }
 
-void KexiDataAwarePropertySet::slotCellSelected(int, int row)
+void KexiDataAwarePropertySet::slotCellSelected(int row, int col)
 {
+    Q_UNUSED(col);
     if (row == d->row)
         return;
     d->row = row;

@@ -132,8 +132,6 @@ public:
         insertRect.setBottomRight( QPoint(
             qMax(insertBegin.x(), end.x()) - 1,
             qMax(insertBegin.y(), end.y()) - 1) ); // minus 1 to make the size correct
-        QRegion region(oldInsertRect);
-        region.unite(insertRect);
         QRect toUpdate( oldInsertRect.united(insertRect) );
         toUpdate.setWidth(toUpdate.width()+1);
         toUpdate.setHeight(toUpdate.height()+1);

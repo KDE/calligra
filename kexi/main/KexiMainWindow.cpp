@@ -42,6 +42,7 @@
 #include <QMenuBar>
 #include <QShortcut>
 #include <QStylePainter>
+#include <QScopedPointer>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -620,7 +621,7 @@ void KexiMainWindow::setupActions()
 #else
     d->action_project_relations = d->dummy_action;
 #endif
-    d->action_tools_import_project = addAction("tools_import_project", koIcon("document_import_database"),
+    d->action_tools_import_project = addAction("tools_import_project", KexiIcon(koIconName("database-import")),
                                                i18n("&Import Database..."));
     d->action_tools_import_project->setToolTip(i18n("Import entire database as a Kexi project"));
     d->action_tools_import_project->setWhatsThis(
@@ -636,7 +637,7 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_compact_database = addAction("tools_compact_database",
 //! @todo icon
-                                                 KIcon(KexiDB::defaultFileBasedDriverIconName()),
+                                                 koIcon("application-x-compress"),
                                                  i18n("&Compact Database..."));
     d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
     d->action_tools_compact_database->setWhatsThis(
@@ -648,7 +649,7 @@ void KexiMainWindow::setupActions()
         d->action_project_import_data_table = 0;
     else {
         d->action_project_import_data_table = addAction("project_import_data_table",
-            koIcon("table"), 
+            KexiIcon(koIconName("kexi-document-empty")),
             /*! @todo: change to "file_import" with a table or so */
             i18nc("Import->Table Data From File...", "Import Data From &File..."));
         d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
@@ -707,7 +708,7 @@ void KexiMainWindow::setupActions()
     else {
         d->action_edit_paste_special_data_table = addAction(
             "edit_paste_special_data_table",
-            koIcon("table"), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
+            KIcon(d->action_edit_paste->icon()), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
         d->action_edit_paste_special_data_table->setToolTip(
             i18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
@@ -1307,29 +1308,23 @@ static QString internalReason(KexiDB::Object *obj)
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
-    createKexiProject(projectData);
-    if (~KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
-        delete d->prj;
-        d->prj = 0;
+    QScopedPointer<KexiProject> prj(createKexiProjectObject(projectData));
+    if (~KexiDBPasswordDialog::getPasswordIfNeeded(prj->data()->connectionData(), this)) {
         return cancelled;
     }
     bool incompatibleWithKexi;
-    tristate res = d->prj->open(&incompatibleWithKexi);
+    tristate res = prj->open(&incompatibleWithKexi);
 
-    if (d->prj->data()->connectionData()->passwordNeeded()) {
+    if (prj->data()->connectionData()->passwordNeeded()) {
         // password was supplied in this session, and shouldn't be stored or reused afterwards,
         // so let's remove it
-        d->prj->data()->connectionData()->password.clear();
+        prj->data()->connectionData()->password.clear();
     }
 
     if (~res) {
-        delete d->prj;
-        d->prj = 0;
         return cancelled;
     }
     else if (!res) {
-        delete d->prj;
-        d->prj = 0;
         if (incompatibleWithKexi) {
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
                     i18nc("@info",
@@ -1339,7 +1334,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
                     QString(), KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
-                const bool anotherProjectAlreadyOpened = d->prj;
+                const bool anotherProjectAlreadyOpened = prj;
                 tristate res = showProjectMigrationWizard("application/x-kexi-connectiondata",
                                projectData.databaseName(), projectData.constConnectionData());
 
@@ -1355,9 +1350,11 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         return false;
     }
 
+    // success
+    d->prj = prj.take();
     setupProjectNavigator();
     d->prj->data()->setLastOpened(QDateTime::currentDateTime());
-    Kexi::recentProjects()->addProjectData(new KexiProjectData(*d->prj->data()));
+    Kexi::recentProjects()->addProjectData(*d->prj->data());
     updateReadOnlyState();
     invalidateActions();
     enableMessages(false);
@@ -1872,10 +1869,6 @@ void KexiMainWindow::setupProjectNavigator()
 #endif
         connect(d->navigator, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
-        if (d->prj) {//connect to the project
-            connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)),
-                    d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
-        }
     }
     if (d->prj->isConnected()) {
         QString partManagerErrorMessages;
@@ -1887,8 +1880,8 @@ void KexiMainWindow::setupProjectNavigator()
         d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
         
     }
-
     connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->navigator->model(), SLOT(slotAddItem(KexiPart::Item&)));
+    connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
 
     d->navigator->setFocus();
     
@@ -1931,7 +1924,7 @@ void KexiMainWindow::setupPropertyEditor()
         QWidget *propEditorDockWidgetContents = new QWidget(d->propEditorDockableWidget);
         d->propEditorDockableWidget->setWidget(propEditorDockWidgetContents);
         QVBoxLayout *propEditorDockWidgetContentsLyr = new QVBoxLayout(propEditorDockWidgetContents);
-        KexiUtils::setMargins(propEditorDockWidgetContentsLyr, KDialog::marginHint() / 2);
+        propEditorDockWidgetContentsLyr->setContentsMargins(0, 0, 0, 0);
 
         d->propEditorTabWidget = new KTabWidget(propEditorDockWidgetContents);
         d->propEditorTabWidget->setDocumentMode(true);
@@ -2231,29 +2224,15 @@ void KexiMainWindow::slotProjectNew()
     createNewProject();
 }
 
-void
-KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
+KexiProject* KexiMainWindow::createKexiProjectObject(const KexiProjectData &data)
 {
-    d->prj = new KexiProject(new_data, this);
-    connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
+    KexiProject *prj = new KexiProject(data, this);
+    connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
 
     if (d->navigator){
-        connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
+        connect(prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
     }
-    
-}
-
-//unused
-KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
-                                       QString* shortcutFileName)
-{
-    Q_UNUSED(shortcutFileName);
-    Q_UNUSED(confirmOverwrites);
-
-    //! @todo
-    cancelled = false;
-    KexiProjectData *new_data = 0;
-    return new_data;
+    return prj;
 }
 
 void KexiMainWindow::createNewProject()
@@ -2262,26 +2241,34 @@ void KexiMainWindow::createNewProject()
         return;
     d->tabbedToolBar->showMainMenu("project_new");
     KexiNewProjectAssistant* assistant = new KexiNewProjectAssistant;
-    connect(assistant, SIGNAL(createProject(KexiProjectData*)), 
-            this, SLOT(createNewProject(KexiProjectData*)));
+    connect(assistant, SIGNAL(createProject(KexiProjectData)),
+            this, SLOT(createNewProject(KexiProjectData)));
 
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
 
-tristate KexiMainWindow::createNewProject(KexiProjectData* projectData)
+tristate KexiMainWindow::createNewProject(const KexiProjectData &projectData)
 {
-    createKexiProject(*projectData);
-    tristate res = d->prj->create(true /*overwrite*/);
+    QScopedPointer<KexiProject> prj(createKexiProjectObject(projectData));
+    tristate res = prj->create(true /*overwrite*/);
     if (res != true) {
-        delete d->prj;
-        d->prj = 0;
+        return res;
+    }
+    //kDebug() << "new project created ---";
+    if (d->prj) {
+        res = openProjectInExternalKexiInstance(
+                prj->data()->connectionData()->fileName(),
+                prj->data()->connectionData(),
+                prj->data()->databaseName());
+        Kexi::recentProjects()->addProjectData(*prj->data());
+        d->tabbedToolBar->hideMainMenu();
         return res;
     }
     d->tabbedToolBar->hideMainMenu();
-    //kDebug() << "new project created ---";
+    d->prj = prj.take();
     setupProjectNavigator();
-    projectData->setLastOpened(QDateTime::currentDateTime());
-    Kexi::recentProjects()->addProjectData(projectData);
+    d->prj->data()->setLastOpened(QDateTime::currentDateTime());
+    Kexi::recentProjects()->addProjectData(*d->prj->data());
 
     invalidateActions();
     updateAppCaption();
@@ -2403,7 +2390,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     QString fileNameForConnectionData;
     if (aFileName.isEmpty()) { //try .kexic file
         if (cdata)
-            fileNameForConnectionData = Kexi::connset().fileNameForConnectionData(cdata);
+            fileNameForConnectionData = Kexi::connset().fileNameForConnectionData(*cdata);
     }
     return openProjectInExternalKexiInstance(aFileName, fileNameForConnectionData, dbName);
 }
@@ -2423,6 +2410,10 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
         if (dbName.isEmpty()) { //use 'kexi --skip-conn-dialog file.kexic'
             fileName = fileNameForConnectionData;
         } else { //use 'kexi --skip-conn-dialog --connection file.kexic dbName'
+            if (fileNameForConnectionData.isEmpty()) {
+                kWarning() << "fileNameForConnectionData?";
+                return false;
+            }
             args << "--connection" << fileNameForConnectionData;
             fileName = dbName;
         }

@@ -77,6 +77,8 @@ bool SortManipulator::preProcessing()
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 Cell cell = Cell(m_sheet, col, row);
                 m_styles.insert(cell, cell.style());
+                // encode the formula if there is one, so that cell references get updated correctly
+                if (cell.isFormula()) m_formulas.insert(cell, cell.encodeFormula());
             }
     }
 
@@ -89,6 +91,7 @@ bool SortManipulator::postProcessing()
     delete m_cellStorage;
     m_cellStorage = 0;
     m_styles.clear();
+    m_formulas.clear();
 
     // to stop undo recording
     return AbstractDFManipulator::postProcessing();
@@ -111,7 +114,6 @@ void SortManipulator::clearCriteria()
 Value SortManipulator::newValue(Element *element, int col, int row,
                                 bool *parse, Format::Type *)
 {
-    Q_UNUSED(parse);
     QRect range = element->rect();
     int colidx = col - range.left();
     int rowidx = row - range.top();
@@ -119,9 +121,20 @@ Value SortManipulator::newValue(Element *element, int col, int row,
         rowidx = sorted[rowidx];
     else
         colidx = sorted[colidx];
+    rowidx += range.top();
+    colidx += range.left();
 
-    // have to return stored value, to avoid earlier calls disrupting latter ones
-    return m_cellStorage->value(colidx + range.left(), rowidx + range.top());
+    // If the cell contained a formula, we need to decode it with the -new- coordinates, so that the references remain intact
+    Cell orig_cell = Cell(m_sheet, colidx, rowidx);
+    Cell new_cell = Cell(m_sheet, col, row);
+    if (m_formulas.contains(orig_cell)) {
+        *parse = true;
+        return Value(new_cell.decodeFormula(m_formulas[orig_cell]));
+    }
+
+    *parse = false;
+    // have to return the stored value, to prevent the earlier calls from disrupting the latter ones
+    return m_cellStorage->value(colidx, rowidx);
 }
 
 Style SortManipulator::newFormat(Element *element, int col, int row)

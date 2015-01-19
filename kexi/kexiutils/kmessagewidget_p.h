@@ -29,7 +29,7 @@ class KMessageWidgetFrame : public QFrame
 {
     Q_OBJECT
 public:
-    KMessageWidgetFrame(QWidget* parent = 0);
+    explicit KMessageWidgetFrame(QWidget* parent = 0);
 
     virtual void paintEvent(QPaintEvent* event);
 

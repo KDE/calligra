@@ -93,7 +93,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidgetDetails
             : public QWidget, public Ui::KexiDBConnectionWidgetDetails
 {
 public:
-    KexiDBConnectionWidgetDetails(QWidget* parent = 0);
+    explicit KexiDBConnectionWidgetDetails(QWidget* parent = 0);
     ~KexiDBConnectionWidgetDetails();
 };
 
