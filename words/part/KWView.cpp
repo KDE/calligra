@@ -369,9 +369,10 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
     tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
     tAction->setToolTip(i18n("Set view in distraction free mode"));
-    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionCollection()->addAction("view_distractionfreemode", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
