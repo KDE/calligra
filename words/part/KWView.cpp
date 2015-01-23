@@ -138,7 +138,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
     m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
-    connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
+    connect(m_document->annotationLayoutManager(), SIGNAL(hasAnnotationsChanged(bool)), this, SLOT(hasNotes(bool)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -369,9 +369,10 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
     tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
     tAction->setToolTip(i18n("Set view in distraction free mode"));
-    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionCollection()->addAction("view_distractionfreemode", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
@@ -506,13 +507,20 @@ void KWView::pasteRequested()
     }
 }
 
-void KWView::showNotes(bool doShow)
+void KWView::showNotes(bool show)
 {
-    m_canvas->setShowAnnotations(doShow);
+    m_canvas->setShowAnnotations(show);
+    m_canvas->updateSize();
+}
+
+void KWView::hasNotes(bool has)
+{
+    m_canvas->setShowAnnotations(has);
     m_canvas->updateSize();
 
     KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
-    action->setChecked(doShow);
+    action->setEnabled(has);
+    action->setChecked(has);
 }
 
 void KWView::showWordCountInStatusBar(bool doShow)
