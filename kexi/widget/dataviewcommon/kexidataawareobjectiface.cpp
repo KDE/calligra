@@ -82,6 +82,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_recentSearchDirection = KexiSearchAndReplaceViewInterface::Options::DefaultSearchDirection;
 
     m_lengthExceededMessageVisible = false;
+    m_acceptRowEdit_in_setCursorPosition_enabled = true;
     clearVariables();
 }
 
@@ -515,7 +516,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
 
         // cursor moved: get rid of editor
         if (m_editor) {
-            if (!m_contentsMousePressEvent_dblClick) {
+            if (!m_contentsMousePressEvent_dblClick && m_acceptRowEdit_in_setCursorPosition_enabled) {
                 if (!acceptEditor()) {
                     return;
                 }
@@ -535,7 +536,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         bool newRowInserted = false;
         if (m_rowEditing && m_curRow != newrow) {
             newRowInserted = m_newRowEditing;
-            if (!acceptRowEdit()) {
+            if (m_acceptRowEdit_in_setCursorPosition_enabled
+                && !acceptRowEdit())
+            {
                 //accepting failed: cancel setting the cursor
                 return;
             }
@@ -1031,7 +1034,8 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     return false;
 }
 
-void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
+void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText,
+                                                        CreateEditorFlags flags)
 {
     //kDebug() << "setText:" << setText;
     if (isReadOnly() || !columnEditable(m_curCol))
@@ -1043,7 +1047,10 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
         }
     }
     else {
-        createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());
+        if (!setText.isEmpty()) {
+            flags |= ReplaceOldValue;
+        }
+        createEditor(m_curRow, m_curCol, setText, flags);
     }
 }
 
@@ -1056,7 +1063,7 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
         return;
     }
     ensureCellVisible(m_curRow + 1, m_curCol);
-    createEditor(m_curRow, m_curCol, QString(), false/*removeOld*/);
+    createEditor(m_curRow, m_curCol);
     if (!m_editor)
         return;
     m_editor->clear();
@@ -1467,10 +1474,15 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
         }
         ++i;
     }
-    setCursorPosition(rowCount(), columnToSelect);
-    startEditCurrentCell();
+    CreateEditorFlags flags = DefaultCreateEditorFlags;
+    flags ^= EnsureCellVisible;
+    createEditor(rowCount(), columnToSelect, QString(), flags);
     if (m_editor)
         m_editor->setFocus();
+    const bool orig_acceptRowEdit_in_setCursorPosition_enabled = m_acceptRowEdit_in_setCursorPosition_enabled;
+    m_acceptRowEdit_in_setCursorPosition_enabled = false;
+    setCursorPosition(rowCount(), columnToSelect);
+    m_acceptRowEdit_in_setCursorPosition_enabled = orig_acceptRowEdit_in_setCursorPosition_enabled;
 }
 
 bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int &curCol,

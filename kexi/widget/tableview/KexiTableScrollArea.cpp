@@ -1162,8 +1162,10 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
         if (e->isAccepted())
             return;
     } else if (k == Qt::Key_Backspace && nobtn) {
-        if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
-            createEditor(curRow, curCol, QString(), true);
+        if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol)) {
+            const CreateEditorFlags flags = DefaultCreateEditorFlags | ReplaceOldValue;
+            createEditor(curRow, curCol, QString(), flags);
+        }
     } else if (k == Qt::Key_Space) {
         if (nobtn && !ro && columnEditable(curCol)) {
             if (columnType(curCol) == KexiDB::Field::Boolean) {
@@ -1232,8 +1234,8 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
         KexiDB::TableViewColumn *tvcol = m_data->column(curCol);
         if (tvcol->acceptsFirstChar(e->text()[0])) {
             kDebug() << "ev pressed: acceptsFirstChar()==true";
-            //   if (e->text()[0].isPrint())
-            createEditor(curRow, curCol, e->text(), true);
+            const CreateEditorFlags flags = DefaultCreateEditorFlags | ReplaceOldValue;
+            createEditor(curRow, curCol, e->text(), flags);
         } else {
 //! @todo show message "key not allowed eg. on a statusbar"
             kDebug() << "ev pressed: acceptsFirstChar()==false";
@@ -1325,7 +1327,8 @@ void KexiTableScrollArea::reloadData()
     d->scrollAreaWidget->update();
 }
 
-void KexiTableScrollArea::createEditor(int row, int col, const QString& addText, bool removeOld)
+void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
+                                       CreateEditorFlags flags)
 {
     //kDebug() << "addText:" << addText << "removeOld:" << removeOld;
     if (isReadOnly()) {
@@ -1359,12 +1362,13 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
             //refr. current and next row
             d->scrollAreaWidget->update(columnPos(0), rowPos(row),
                                         viewport()->width(), d->rowHeight*2);
-//! @todo this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
-            ensureVisible(columnPos(m_curCol), rowPos(row + 1) + d->rowHeight - 1, columnWidth(m_curCol), d->rowHeight);
-
+            if (flags & EnsureCellVisible) {
+                ensureVisible(columnPos(col), rowPos(row + 1) + d->rowHeight - 1,
+                              columnWidth(col), d->rowHeight);
+            }
             d->verticalHeader->setOffset(verticalScrollBar()->value());
         }
-        d->verticalHeader->updateSection(m_curRow);
+        d->verticalHeader->updateSection(row);
     }
 
     KexiTableEdit *editorWidget = tableEditorWidget(col);
@@ -1372,10 +1376,11 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
     if (!editorWidget)
         return;
 
-    m_editor->setValue(*bufferedValueAt(col, !removeOld/*useDefaultValueIfPossible*/), addText, removeOld);
+    m_editor->setValue(*bufferedValueAt(col, !(flags & ReplaceOldValue)/*useDefaultValueIfPossible*/),
+                       addText, flags & ReplaceOldValue);
     if (m_editor->hasFocusableWidget()) {
-        editorWidget->move(columnPos(m_curCol), rowPos(m_curRow));
-        editorWidget->resize(columnWidth(m_curCol), rowHeight());
+        editorWidget->move(columnPos(col), rowPos(row));
+        editorWidget->resize(columnWidth(col), rowHeight());
         editorWidget->show();
 
         m_editor->setFocus();
@@ -1383,7 +1388,7 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
 
     if (startRowEdit) {
         m_navPanel->showEditingIndicator(true); //this will allow to enable 'next' btn
-        emit rowEditStarted(m_curRow);
+        emit rowEditStarted(row);
     }
     m_editor->installListener(this);
 }
@@ -1551,11 +1556,11 @@ void KexiTableScrollArea::slotColumnWidthChanged(int column, int oldSize, int ne
 
     QWidget *editorWidget = dynamic_cast<QWidget*>(m_editor);
     if (editorWidget) {
-        editorWidget->move(columnPos(m_curCol), rowPos(m_curRow));
-        editorWidget->resize(columnWidth(m_curCol), rowHeight());
+        editorWidget->move(columnPos(column), rowPos(m_curRow));
+        editorWidget->resize(columnWidth(column), rowHeight());
     }
     updateGeometries();
-    editorShowFocus(m_curRow, m_curCol);
+    editorShowFocus(m_curRow, column);
 }
 
 void KexiTableScrollArea::slotSectionHandleDoubleClicked(int section)

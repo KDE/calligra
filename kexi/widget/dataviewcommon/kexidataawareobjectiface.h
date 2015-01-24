@@ -401,9 +401,17 @@ public:
     //! \return true on success or false on failure (e.g. when editor does not exist or there is data validation error)
     virtual bool acceptEditor();
 
+    //! Flags for use in createEditor()
+    enum CreateEditorFlag {
+        ReplaceOldValue = 1,      //!< Remove old value replacing it with a new one
+        EnsureCellVisible = 2,    //!< Ensure the cell behind the editor is visible
+        DefaultCreateEditorFlags = EnsureCellVisible //!< Default flags.
+    };
+    Q_DECLARE_FLAGS(CreateEditorFlags, CreateEditorFlag)
+
     //! Creates editors and shows it, what usually means the beginning of a cell editing
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false) = 0;
+                              CreateEditorFlags flags = DefaultCreateEditorFlags) = 0;
 
     /*! Used when Return key is pressed on cell, the cell has been double clicked
      or "+" navigator's button is clicked.
@@ -411,7 +419,8 @@ public:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString());
+    virtual void startEditCurrentCell(const QString& setText = QString(),
+                                      CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     /*! Deletes currently selected cell's contents, if allowed.
      In most cases delete is not accepted immediately but "record editing" mode is just started. */
@@ -969,8 +978,12 @@ private:
     bool m_rowEditing;
 
     bool m_lengthExceededMessageVisible;
+
+    //! true if acceptRowEdit() should be called in setCursorPosition() (true by default)
+    bool m_acceptRowEdit_in_setCursorPosition_enabled;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CreateEditorFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CursorPositionFlags)
 
 inline bool KexiDataAwareObjectInterface::hasData() const

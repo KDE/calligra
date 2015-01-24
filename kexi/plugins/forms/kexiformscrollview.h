@@ -262,7 +262,7 @@ protected:
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false);
+                              CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false);

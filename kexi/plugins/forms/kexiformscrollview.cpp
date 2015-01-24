@@ -259,11 +259,11 @@ void KexiFormScrollView::updateGUIAfterSorting(int previousRow)
 }
 
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
-                                      bool removeOld)
+                                      CreateEditorFlags flags)
 {
     Q_UNUSED(row);
     Q_UNUSED(addText);
-    Q_UNUSED(removeOld);
+    Q_UNUSED(flags);
 
     if (isReadOnly()) {
         kWarning() << "DATA IS READ ONLY!";

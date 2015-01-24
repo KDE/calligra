@@ -345,8 +345,9 @@ public slots:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString()) {
-        KexiDataAwareObjectInterface::startEditCurrentCell(setText);
+    virtual void startEditCurrentCell(const QString& setText = QString(),
+                                      CreateEditorFlags flags = DefaultCreateEditorFlags) {
+        KexiDataAwareObjectInterface::startEditCurrentCell(setText, flags);
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
@@ -578,7 +579,7 @@ protected:
 
     //! Creates editors and shows it, what usually means the beginning of a cell editing
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false);
+                              CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     bool focusNextPrevChild(bool next);
 
