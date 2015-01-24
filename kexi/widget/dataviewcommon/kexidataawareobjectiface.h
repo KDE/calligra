@@ -313,12 +313,13 @@ public:
     virtual void selectLastRow();
     virtual void addNewRecordRequested();
 
+
     /*! Clears current selection. Current row and column will be now unspecified:
      currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
     virtual void clearSelection();
 
     //! Flags for setCursorPosition()
-    enum CursorPositionFlags {
+    enum CursorPositionFlag {
         NoCursorPositionFlags = 0,  //!< Default flag
         ForceSetCursorPosition = 1, //!< Update cursor position even if row and col doesn't
                                     //!< differ from actual position.
@@ -326,6 +327,7 @@ public:
                                                        //!< when position is unchanged and
                                                        //!< ForceSetCursorPosition is off.
     };
+    Q_DECLARE_FLAGS(CursorPositionFlags, CursorPositionFlag)
 
     /*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
      If forceSet is true, cursor position is updated even if \a row and \a col doesn't
@@ -965,6 +967,8 @@ private:
 
     bool m_lengthExceededMessageVisible;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CursorPositionFlags)
 
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
