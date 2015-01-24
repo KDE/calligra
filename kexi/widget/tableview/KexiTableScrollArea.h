@@ -248,13 +248,6 @@ public:
     //! single shot after 1ms for contents updating
     void triggerUpdate();
 
-    enum ScrollDirection {
-        ScrollUp,
-        ScrollDown,
-        ScrollLeft,
-        ScrollRight
-    };
-
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 

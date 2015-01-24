@@ -77,9 +77,6 @@ public:
     QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
     int rowHeight;
     QTimer *pUpdateTimer;
-    int menu_id_addRecord;
-    int menu_id_removeRecord;
-    KexiTableScrollArea::ScrollDirection scrollDirection;
     bool editOnDoubleClick;
     bool needAutoScroll;
     bool disableDrawContents;
