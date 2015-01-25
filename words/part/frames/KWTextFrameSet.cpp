@@ -81,11 +81,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         // layouting yet and therefore things are not proper setup yet. That's okay and they will be
         // proper setup at a later time once we start layouting.
     } else {
-        if (page.pageNumber() <= m_rootAreaProvider->pages().count()) {
-            // The just added KWFrame needs to invalidate the layouter so the layouter picks up the new
-            // KWFrame on the next layout-run.
-            m_rootAreaProvider->clearPages(page.pageNumber());
-        }
+        m_rootAreaProvider->clearPages(page.pageNumber());
     }
 
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());

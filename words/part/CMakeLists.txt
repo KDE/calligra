@@ -29,6 +29,7 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
+    KWRootAreaProviderBase.cpp
     KWRootAreaProvider.cpp
 
     pagetool/KWPageTool.cpp

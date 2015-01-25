@@ -26,7 +26,7 @@
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
 #include "KWPage.h"
-#include "KWRootAreaProvider.h"
+#include "KWRootAreaProviderBase.h"
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
@@ -125,7 +125,7 @@ void KWFrame::cleanupShape(KoShape* shape)
     Q_ASSERT(m_frameSet);
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
     if (tfs) {
-        KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
+        KWRootAreaProviderBase *rootAreaProvider = tfs->rootAreaProvider();
         // it is no longer set when document is destroyed
         if (rootAreaProvider) {
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
