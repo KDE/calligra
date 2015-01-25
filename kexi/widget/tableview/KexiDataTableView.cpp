@@ -82,7 +82,7 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
 {
     Q_ASSERT(data);
     const int id = window()->id();
-    if (id > 0 && data->columnsCount() > 0) {
+    if (id > 0 && data->columnCount() > 0) {
         QString columnWidthsString;
         tristate res = KexiMainWindowIface::global()->project()->loadUserDataBlock(
                 id, "columnWidths", &columnWidthsString);
@@ -139,10 +139,10 @@ bool KexiDataTableView::saveSettings()
     if (dynamic_cast<KexiDataTableScrollArea*>(mainWidget())) { // db-aware
         KexiTableScrollArea* tv = tableView();
         const int id = window()->id();
-        if (id > 0 && tv->data()->columnsCount() > 0) {
+        if (id > 0 && tv->data()->columnCount() > 0) {
             QStringList widths;
             bool equal = true; // will be only saved if widths are not equal
-            for (uint i = 0; i < tv->data()->columnsCount(); ++i) {
+            for (uint i = 0; i < tv->data()->columnCount(); ++i) {
                 if (equal) {
                     equal = tv->data()->column(i)->width() == uint(tv->columnWidth(i));
                 }

@@ -137,7 +137,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
   //show tooltip if needed
   if (col>=0 && row>=0) {
     KexiTableEdit *editor = m_tableView->tableEditorWidget( col );
-    const bool insertRowSelected = m_tableView->isInsertingEnabled() && row==m_tableView->rows();
+    const bool insertRowSelected = m_tableView->isInsertingEnabled() && row==m_tableView->rowCount();
     KexiDB::RecordData *record = insertRowSelected ? m_tableView->m_insertItem : m_tableView->itemAt( row );
     if (editor && record && (col < (int)record->count())) {
       int w = m_tableView->columnWidth( col );
@@ -341,7 +341,7 @@ void KexiTableScrollArea::updateAllVisibleRowsBelow(int row)
     //get last visible row
 //    int r = rowAt(viewport()->height() + verticalScrollBar()->value());
 //    if (r == -1) {
-//        r = rows() + 1 + (isInsertingEnabled() ? 1 : 0);
+//        r = rowCount() + 1 + (isInsertingEnabled() ? 1 : 0);
 //    }
     //update all visible rows below
     int leftcol = d->horizontalHeader->visualIndexAt(d->horizontalHeader->offset());
@@ -411,7 +411,7 @@ QSize KexiTableScrollArea::sizeHint() const
 QSize KexiTableScrollArea::minimumSizeHint() const
 {
     return QSize(
-               leftMargin() + ((columns() > 0) ? columnWidth(0) : KEXI_DEFAULT_DATA_COLUMN_WIDTH) + 2*2,
+               leftMargin() + ((columnCount() > 0) ? columnWidth(0) : KEXI_DEFAULT_DATA_COLUMN_WIDTH) + 2*2,
                d->rowHeight*5 / 2 + topMargin() + (navPanelWidgetVisible() ? navPanelWidget()->height() : 0)
            );
 }
@@ -440,7 +440,7 @@ inline void KexiTableScrollArea::paintRow(KexiDB::RecordData *record,
     if (colfirst == -1)
         colfirst = 0;
     if (collast == -1)
-        collast = columns() - 1;
+        collast = columnCount() - 1;
 
     int transly = rowp;
 
@@ -477,7 +477,7 @@ inline void KexiTableScrollArea::paintRow(KexiDB::RecordData *record,
 
     if (m_dragIndicatorLine >= 0) {
         int y_line = -1;
-        if (r == (rows() - 1) && m_dragIndicatorLine == rows()) {
+        if (r == (rowCount() - 1) && m_dragIndicatorLine == rowCount()) {
             y_line = transly + d->rowHeight - 3; //draw at last line
         }
         if (m_dragIndicatorLine == r) {
@@ -523,10 +523,10 @@ void KexiTableScrollArea::drawContents(QPainter *p)
     int rowfirst = rowAt(cy);
     int collast = columnAt(cx + cw - 1);
     int rowlast = rowAt(cy + ch - 1);
-    if (rowfirst == -1 && (cy / d->rowHeight) == (int)rows()) {
+    if (rowfirst == -1 && (cy / d->rowHeight) == rowCount()) {
         // make the insert row paint too when requested
 #ifdef KEXITABLEVIEW_DEBUG
-        kDebug() << "rowfirst == -1 && (cy / d->rowHeight) == (int)rows()";
+        kDebug() << "rowfirst == -1 && (cy / d->rowHeight) == rowCount()";
 #endif
         rowfirst = m_data->count();
         rowlast = rowfirst;
@@ -538,7 +538,7 @@ void KexiTableScrollArea::drawContents(QPainter *p)
         << "collast" << collast << "rowlast" << rowlast;*/
 
     if (rowlast == -1) {
-        rowlast = rows() - 1;
+        rowlast = rowCount() - 1;
         plus1row = inserting;
         if (rowfirst == -1) {
             if (rowAt(cy - d->rowHeight) != -1) {
@@ -547,11 +547,11 @@ void KexiTableScrollArea::drawContents(QPainter *p)
             }
         }
     }
-// kDebug() << "rowfirst="<<rowfirst<<" rowlast="<<rowlast<<" rows()="<<rows();
+// kDebug() << "rowfirst="<<rowfirst<<" rowlast="<<rowlast<<" rowCount()="<<rowCount();
 // kDebug()<<" plus1row=" << plus1row;
 
     if (collast == -1)
-        collast = columns() - 1;
+        collast = columnCount() - 1;
 
     if (colfirst > collast) {
         int tmp = colfirst;
@@ -573,7 +573,7 @@ void KexiTableScrollArea::drawContents(QPainter *p)
         }
     }
 
-    int maxwc = columnPos(columns() - 1) + columnWidth(columns() - 1);
+    int maxwc = columnPos(columnCount() - 1) + columnWidth(columnCount() - 1);
 // kDebug() << "maxwc:" << maxwc;
 
     p->fillRect(cx, cy, cw, ch, d->appearance.baseColor);
@@ -581,7 +581,7 @@ void KexiTableScrollArea::drawContents(QPainter *p)
     int rowp = 0;
     int r = 0;
     if (paintOnlyInsertRow) {
-        r = rows();
+        r = rowCount();
         rowp = rowPos(r); // 'insert' row's position
     } else {
         if (rowfirst >= 0) {
@@ -1000,7 +1000,7 @@ void KexiTableScrollArea::contentsMouseMoveEvent(QMouseEvent *e)
         row = -1;
     } else {
         row = rowAt(e->y(), true /*ignoreEnd*/);
-        if (row > (rows() - 1 + (isInsertingEnabled() ? 1 : 0)))
+        if (row > (rowCount() - 1 + (isInsertingEnabled() ? 1 : 0)))
             row = -1; //no row to paint
     }
 // kDebug() << " row="<<row<< " col="<<col;
@@ -1182,8 +1182,8 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
 //! \todo add option for stopping at 1st column for Qt::Key_left
             //tab
             if (acceptEditor()) {
-                if (curCol == (columns() - 1)) {
-                    if (curRow < (rows() - 1 + (isInsertingEnabled() ? 1 : 0))) {//skip to next row
+                if (curCol == (columnCount() - 1)) {
+                    if (curRow < (rowCount() - 1 + (isInsertingEnabled() ? 1 : 0))) {//skip to next row
                         curRow++;
                         curCol = 0;
                     }
@@ -1201,7 +1201,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
                 if (curCol == 0) {
                     if (curRow > 0) {//skip to previous row
                         curRow--;
-                        curCol = columns() - 1;
+                        curCol = columnCount() - 1;
                     }
                 } else
                     curCol--;
@@ -1263,7 +1263,7 @@ int KexiTableScrollArea::rowsPerPage() const
 
 KexiDataItemInterface *KexiTableScrollArea::editor(int col, bool ignoreMissingEditor)
 {
-    if (!m_data || col < 0 || col >= columns())
+    if (!m_data || col < 0 || col >= columnCount())
         return 0;
     KexiDB::TableViewColumn *tvcol = m_data->column(col);
 
@@ -1532,7 +1532,7 @@ void KexiTableScrollArea::updateCurrentCell()
 void KexiTableScrollArea::updateRow(int row)
 {
 //    kDebug()<<row << horizontalScrollBar()->value() << rowPos(row) << viewport()->width() << rowHeight();
-    if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/))
+    if (row < 0 || row >= (rowCount() + 2/* sometimes we want to refresh the row after last*/))
         return;
     //kDebug() << horizontalScrollBar()->value() << " " << verticalScrollBar()->value();
     //kDebug() << QRect( columnPos( leftcol ), rowPos(row), viewport()->width(), rowHeight() );
@@ -1622,7 +1622,7 @@ int KexiTableScrollArea::columnPos(int col) const
     if (!hasData())
         return 0;
     //if this column is hidden, find first column before that is visible
-    int c = qMin(col, (int)m_data->columnsCount() - 1), vcID = 0;
+    int c = qMin(col, (int)m_data->columnCount() - 1), vcID = 0;
     while (c >= 0 && (vcID = m_data->visibleColumnIndex(c)) == -1)
         c--;
     if (c < 0)
@@ -1668,20 +1668,20 @@ QRect KexiTableScrollArea::cellGeometry(int row, int col) const
 
 QSize KexiTableScrollArea::tableSize() const
 {
-    if ((rows() + (isInsertingEnabled() ? 1 : 0)) > 0 && columns() > 0) {
-        /*  kDebug() << columnPos( columns() - 1 ) + columnWidth( columns() - 1 )
-              << ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight */
+    if ((rowCount() + (isInsertingEnabled() ? 1 : 0)) > 0 && columnCount() > 0) {
+        /*  kDebug() << columnPos( columnCount() - 1 ) + columnWidth( columnCount() - 1 )
+              << ", " << rowPos( rowCount()-1+(isInsertingEnabled()?1:0)) + d->rowHeight */
 //  kDebug() << m_navPanel->isVisible() <<" "<<m_navPanel->height()<<" "
-//           << horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0));
+//           << horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rowCount()-1+(isInsertingEnabled()?1:0));
         QSize s(
-            columnPos(columns() - 1) + columnWidth(columns() - 1),
-            rowPos(rows() - 1 + (isInsertingEnabled() ? 1 : 0)) + d->rowHeight
+            columnPos(columnCount() - 1) + columnWidth(columnCount() - 1),
+            rowPos(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0)) + d->rowHeight
             + d->internal_bottomMargin
         );
 
-//  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
+//  kDebug() << rowCount()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
-kDebug() << s << "cw(last):" << columnWidth(columns() - 1);
+kDebug() << s << "cw(last):" << columnWidth(columnCount() - 1);
 #endif
         return s;
     }
@@ -1774,7 +1774,7 @@ KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog
 
     KexiDB::RecordData *i;
     int width = leftMargin;
-    for (int col = 0; col < columns(); col++) {
+    for (int col = 0; col < columnCount(); col++) {
         p.fillRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, QBrush(Qt::gray));
         p.drawRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight);
         p.drawText(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, Qt::AlignLeft | Qt::AlignVCenter,
@@ -1789,7 +1789,7 @@ KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog
         if (!i->isInsertItem()) {
             kDebug() << "row=" << row << "y=" << yOffset;
             int xOffset = leftMargin;
-            for (int col = 0; col < columns(); col++) {
+            for (int col = 0; col < columnCount(); col++) {
                 kDebug() << "col=" << col << "x=" << xOffset;
                 p.saveWorldMatrix();
                 p.translate(xOffset, yOffset);
@@ -1830,7 +1830,7 @@ void KexiTableScrollArea::adjustColumnWidthToContents(int column)
     if (!hasData())
         return;
     if (column == -1) {
-        const int cols = columns();
+        const int cols = columnCount();
         for (int i = 0; i < cols; i++)
             adjustColumnWidthToContents(i);
         return;
@@ -1875,7 +1875,7 @@ void KexiTableScrollArea::adjustColumnWidthToContents(int column)
 
 void KexiTableScrollArea::setColumnWidth(int column, int width)
 {
-    if (columns() <= column || column < 0)
+    if (columnCount() <= column || column < 0)
         return;
     d->horizontalHeader->resizeSection(column, width);
     editorShowFocus(m_curRow, m_curCol);
@@ -1923,7 +1923,7 @@ void KexiTableScrollArea::adjustHorizontalHeaderSize()
 
 void KexiTableScrollArea::setColumnResizeEnabled(int column, bool set)
 {
-    if (column < 0 || column >= columns()) {
+    if (column < 0 || column >= columnCount()) {
         return;
     }
     d->horizontalHeader->setResizeMode(column, set ? QHeaderView::Interactive : QHeaderView::Fixed);
@@ -2012,15 +2012,15 @@ int KexiTableScrollArea::validRowNumber(const QString& text)
     int r = text.toInt(&ok);
     if (!ok || r < 1)
         r = 1;
-    else if (r > (rows() + (isInsertingEnabled() ? 1 : 0)))
-        r = rows() + (isInsertingEnabled() ? 1 : 0);
+    else if (r > (rowCount() + (isInsertingEnabled() ? 1 : 0)))
+        r = rowCount() + (isInsertingEnabled() ? 1 : 0);
     return r -1;
 }
 
 void KexiTableScrollArea::moveToRecordRequested(uint r)
 {
-    if (r > uint(rows() + (isInsertingEnabled() ? 1 : 0)))
-        r = rows() + (isInsertingEnabled() ? 1 : 0);
+    if (r > uint(rowCount() + (isInsertingEnabled() ? 1 : 0)))
+        r = rowCount() + (isInsertingEnabled() ? 1 : 0);
     setFocus();
     selectRow(r);
 }
@@ -2028,7 +2028,7 @@ void KexiTableScrollArea::moveToRecordRequested(uint r)
 void KexiTableScrollArea::moveToLastRecordRequested()
 {
     setFocus();
-    selectRow(rows() > 0 ? (rows() - 1) : 0);
+    selectRow(rowCount() > 0 ? (rowCount() - 1) : 0);
 }
 
 void KexiTableScrollArea::moveToPreviousRecordRequested()
@@ -2208,7 +2208,7 @@ int KexiTableScrollArea::highlightedRow() const
 void KexiTableScrollArea::setHighlightedRow(int row)
 {
     if (row != -1) {
-        row = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), row);
+        row = qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), row);
         row = qMax(0, row);
     }
     const int previouslyHighlightedRow = d->highlightedRow;

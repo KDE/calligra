@@ -183,7 +183,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     const bool emptyInserting = d->dataAwareObject->isEmptyRowInsertingEnabled();
     const bool editing = isDataEditingInProgress();
     const bool sorting = d->dataAwareObject->isSortingEnabled();
-    const int rows = d->dataAwareObject->rows();
+    const int rows = d->dataAwareObject->rowCount();
     const bool insertRowFocusedWithoutEditing = !editing && row == rows;
 
     setAvailable("edit_cut", !ro && !insertRowFocusedWithoutEditing);

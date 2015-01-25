@@ -175,7 +175,7 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
         if (!m_insertItem) {//first setData() call - add 'insert' item
             m_insertItem = m_data->createItem();
         } else {//just reinit
-            m_insertItem->init(m_data->columnsCount());
+            m_insertItem->init(m_data->columnCount());
         }
     }
 
@@ -200,14 +200,14 @@ void KexiDataAwareObjectInterface::initDataContents()
 {
     m_editor = 0;
     if (m_navPanel)
-        m_navPanel->setRecordCount(rows());
+        m_navPanel->setRecordCount(rowCount());
 
     if (m_data && !m_cursorPositionSetExplicityBeforeShow) {
         //set current row:
         m_currentItem = 0;
         int curRow = -1, curCol = -1;
-        if (m_data->columnsCount() > 0) {
-            if (rows() > 0) {
+        if (m_data->columnCount() > 0) {
+            if (rowCount() > 0) {
                 m_itemIterator = m_data->constBegin();
                 m_currentItem = *m_itemIterator;
                 curRow = 0;
@@ -265,7 +265,7 @@ bool KexiDataAwareObjectInterface::sort()
     if (!m_data || !m_isSortingEnabled)
         return false;
 
-    if (rows() < 2)
+    if (rowCount() < 2)
         return true;
 
     if (!acceptRowEdit())
@@ -418,7 +418,7 @@ void KexiDataAwareObjectInterface::setSpreadSheetMode()
 
 void KexiDataAwareObjectInterface::selectNextRow()
 {
-    selectRow(qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), m_curRow + 1));
+    selectRow(qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), m_curRow + 1));
 }
 
 void KexiDataAwareObjectInterface::selectPrevPage()
@@ -432,7 +432,7 @@ void KexiDataAwareObjectInterface::selectNextPage()
 {
     selectRow(
         qMin(
-            rows() - 1 + (isInsertingEnabled() ? 1 : 0),
+            rowCount() - 1 + (isInsertingEnabled() ? 1 : 0),
             m_curRow + rowsPerPage()
         )
     );
@@ -445,7 +445,7 @@ void KexiDataAwareObjectInterface::selectFirstRow()
 
 void KexiDataAwareObjectInterface::selectLastRow()
 {
-    selectRow(rows() - 1);
+    selectRow(rowCount() - 1);
 }
 
 void KexiDataAwareObjectInterface::selectRow(int row)
@@ -479,7 +479,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
     int newrow = row;
     int newcol = col;
 
-    if (rows() <= 0) {
+    if (rowCount() <= 0) {
         if (isInsertingEnabled()) {
             m_currentItem = m_insertItem;
             newrow = 0;
@@ -497,13 +497,13 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
 
     if (col >= 0) {
         newcol = qMax(0, col);
-        newcol = qMin(columns() - 1, newcol);
+        newcol = qMin(columnCount() - 1, newcol);
     } else {
         newcol = m_curCol; //no changes
         newcol = qMax(0, newcol); //may not be < 0 !
     }
     newrow = qMax(0, row);
-    newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
+    newrow = qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
 // kDebug() << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
     const bool forceSet = flags & ForceSetCursorPosition;
@@ -520,7 +520,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                     return;
                 }
                 //update row num. again
-                newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
+                newrow = qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
             }
         }
         if (m_errorMessagePopup) {
@@ -540,7 +540,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                 return;
             }
             //update row number, because number of rows changed
-            newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
+            newrow = qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
             if (m_navPanel)
                 m_navPanel->setCurrentRecordNumber(newrow + 1); //refresh
@@ -553,7 +553,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         m_curCol = newcol;
 
         //show editor-dependent focus, if we're changing the current column
-        if (oldCol >= 0 && oldCol < columns() && m_curCol != oldCol) {
+        if (oldCol >= 0 && oldCol < columnCount() && m_curCol != oldCol) {
             //find the editor for this column
             KexiDataItemInterface *edit = editor(oldCol);
             if (edit) {
@@ -588,7 +588,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         }
         //update row
         if (forceSet || m_curRow != oldRow) {
-            if (isInsertingEnabled() && m_curRow == rows()) {
+            if (isInsertingEnabled() && m_curRow == rowCount()) {
 #ifdef setCursorPosition_DEBUG
                 kDebug() << "NOW insert item is current";
 #endif
@@ -612,7 +612,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                          << (*m_itemIterator)->debugString();
 #endif
                 if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
-                    && m_curRow == (rows() - 1))
+                    && m_curRow == (rowCount() - 1))
                 {
                     //moving from the 'insert item' to the last item
                     m_itemIterator = m_data->constBegin();
@@ -655,7 +655,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         selectCellInternal(oldRow, oldCol);
     } else {
         if (!(flags & DontEnsureCursorVisibleIfPositionUnchanged)
-            && m_curRow >= 0 && m_curRow < rows() && m_curCol >= 0 && m_curCol < columns())
+            && m_curRow >= 0 && m_curRow < rowCount() && m_curCol >= 0 && m_curCol < columnCount())
         {
             // the same cell but may need a bit of scrolling to make it visible
             ensureCellVisible(m_curRow, m_curCol);
@@ -732,12 +732,12 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         if (inserting) {
             //update navigator's data
             if (m_navPanel)
-                m_navPanel->setRecordCount(rows());
+                m_navPanel->setRecordCount(rowCount());
         }
         /*emit*/ rowEditTerminated(m_curRow);
     } else {
         int faultyColumn = -1;
-        if (m_data->result().column >= 0 && m_data->result().column < columns())
+        if (m_data->result().column >= 0 && m_data->result().column < columnCount())
             faultyColumn = m_data->result().column;
         else if (columnEditedBeforeAccepting >= 0)
             faultyColumn = columnEditedBeforeAccepting;
@@ -989,7 +989,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             //now: there might be called cancelEditor() in updateRowEditBuffer() handler,
             //if this is true, d->pEditor is NULL.
 
-            if (m_editor && m_data->result().column >= 0 && m_data->result().column < columns()) {
+            if (m_editor && m_data->result().column >= 0 && m_data->result().column < columnCount()) {
                 //move to faulty column (if m_editor is not cleared)
                 setCursorPosition(m_curRow, m_data->result().column);
             }
@@ -1110,7 +1110,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
 KexiDB::RecordData* KexiDataAwareObjectInterface::insertEmptyRow(int pos)
 {
     if (!acceptRowEdit() || !isEmptyRowInsertingEnabled()
-            || (pos != -1 && pos >= ((int)rows() + (isInsertingEnabled() ? 1 : 0))))
+            || (pos != -1 && pos >= (rowCount() + (isInsertingEnabled() ? 1 : 0))))
         return 0;
 
     KexiDB::RecordData *newRecord = m_data->createItem();
@@ -1143,7 +1143,7 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData* record, b
 
 void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record*/, uint pos, bool repaint)
 {
-    if (repaint && (int)pos < rows()) {
+    if (repaint && (int)pos < rowCount()) {
         updateWidgetContentsSize();
         updateAllVisibleRowsBelow(pos);
         /*! @todo tableview-port
@@ -1158,7 +1158,7 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record
 
         //update navigator's data
         if (m_navPanel)
-            m_navPanel->setRecordCount(rows());
+            m_navPanel->setRecordCount(rowCount());
 
         if (m_curRow >= (int)pos) {
             //update
@@ -1190,7 +1190,7 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
 
     cancelRowEdit();
     const bool repaintLater = repaint && m_spreadSheetMode;
-    const int oldRows = rows();
+    const int oldRows = rowCount();
 
     bool res = m_data->deleteAllRows(repaint && !repaintLater);
 
@@ -1222,7 +1222,7 @@ void KexiDataAwareObjectInterface::clearColumns(bool repaint)
 void KexiDataAwareObjectInterface::reloadData()
 {
     acceptRowEdit();
-    if (m_curCol >= 0 && m_curCol < columns()) {
+    if (m_curCol >= 0 && m_curCol < columnCount()) {
         //find the editor for this column
         KexiDataItemInterface *edit = editor(m_curCol);
         if (edit) {
@@ -1264,18 +1264,23 @@ QHeaderView* KexiDataAwareObjectInterface::verticalHeader() const
     return 0;
 }
 
-int KexiDataAwareObjectInterface::rows() const
+int KexiDataAwareObjectInterface::rowCount() const
 {
     if (!hasData())
         return 0;
     return m_data->count();
 }
 
+int KexiDataAwareObjectInterface::columnCount() const
+{
+    return dataColumns();
+}
+
 int KexiDataAwareObjectInterface::dataColumns() const
 {
     if (!hasData())
         return 0;
-    return m_data->columnsCount();
+    return m_data->columnCount();
 }
 
 QVariant KexiDataAwareObjectInterface::columnDefaultValue(int /*col*/) const
@@ -1318,11 +1323,11 @@ void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiDB::RecordData& reco
 void KexiDataAwareObjectInterface::slotRowDeleted()
 {
     if (m_rowWillBeDeleted >= 0) {
-        if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= (rows() - 1) && !m_spreadSheetMode)
-            m_rowWillBeDeleted = rows() - 1; //move up if it's the last row
+        if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= (rowCount() - 1) && !m_spreadSheetMode)
+            m_rowWillBeDeleted = rowCount() - 1; //move up if it's the last row
         updateWidgetContentsSize();
 
-        if (!(m_spreadSheetMode && m_rowWillBeDeleted >= (rows() - 1)))
+        if (!(m_spreadSheetMode && m_rowWillBeDeleted >= (rowCount() - 1)))
             setCursorPosition(m_rowWillBeDeleted, m_curCol, ForceSetCursorPosition);
         if (verticalHeader()) {
             //! @todo tableview-port verticalHeader()->removeLabel();
@@ -1331,7 +1336,7 @@ void KexiDataAwareObjectInterface::slotRowDeleted()
 
         //update navigator's data
         if (m_navPanel)
-            m_navPanel->setRecordCount(rows());
+            m_navPanel->setRecordCount(rowCount());
 
         m_rowWillBeDeleted = -1;
     }
@@ -1361,15 +1366,15 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
     if (m_spreadSheetMode) { //append empty row for spreadsheet mode
         m_data->append(m_data->createItem());
         if (lastRowDeleted) //back to the last row
-            setCursorPosition(rows() - 1, m_curCol, ForceSetCursorPosition);
+            setCursorPosition(rowCount() - 1, m_curCol, ForceSetCursorPosition);
         /*emit*/ newItemAppendedForAfterDeletingInSpreadSheetMode();
     }
     return true;
 }
 
-KexiDB::TableViewColumn* KexiDataAwareObjectInterface::column(int col)
+KexiDB::TableViewColumn* KexiDataAwareObjectInterface::column(int column)
 {
-    return m_data->column(col);
+    return m_data->column(column);
 }
 
 bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol)
@@ -1462,7 +1467,7 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
         }
         ++i;
     }
-    setCursorPosition(rows(), columnToSelect);
+    setCursorPosition(rowCount(), columnToSelect);
     startEditCurrentCell();
     if (m_editor)
         m_editor->setFocus();
@@ -1519,10 +1524,10 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
             curRow = m_data->count() - 1 + (isInsertingEnabled() ? 1 : 0);//to last row
         } else {//cell selection mode: different actions depending on ctrl and shift keys mods
             if (nobtn) {
-                curCol = columns() - 1;//to last col
+                curCol = columnCount() - 1;//to last col
             } else if (e->modifiers() == Qt::ControlModifier) {
                 curRow = m_data->count() - 1 /*+(isInsertingEnabled()?1:0)*/; //to last row and col
-                curCol = columns() - 1;//to last col
+                curCol = columnCount() - 1;//to last col
             } else
                 return false;
         }
@@ -1623,10 +1628,10 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(const KexiDB::Result
 
 void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
 {
-    m_indicesForVisibleValues.resize(m_data ? m_data->columnsCount() : 0);
+    m_indicesForVisibleValues.resize(m_data ? m_data->columnCount() : 0);
     if (!m_data)
         return;
-    for (uint i = 0; i < m_data->columnsCount(); i++) {
+    for (uint i = 0; i < m_data->columnCount(); i++) {
         KexiDB::TableViewColumn* tvCol = m_data->column(i);
         if (tvCol->columnInfo() && tvCol->columnInfo()->indexForVisibleLookupValue() != -1)
             // retrieve visible value from lookup field
@@ -1755,16 +1760,16 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     const bool startFromLastRowAndCol =
            (   !m_positionOfRecentlyFoundValue.exists && !next
             && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
-        || (m_curRow >= rows() && !forward); //we're at "insert" record, and searching backwards: move to the last cell
+        || (m_curRow >= rowCount() && !forward); //we're at "insert" record, and searching backwards: move to the last cell
 
-    if (!startFrom1stRowAndCol && !startFromLastRowAndCol && m_curRow >= rows()) {
+    if (!startFrom1stRowAndCol && !startFromLastRowAndCol && m_curRow >= rowCount()) {
         //we're at "insert" record, and searching forward: no chances to find something
         return false;
     }
     KexiDB::TableViewData::Iterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
                                    ? m_data->constBegin() : m_itemIterator /*start from the current cell*/);
     if (startFromLastRowAndCol)
-        it += (m_data->columnsCount() - 1);
+        it += (m_data->columnCount() - 1);
     int firstCharacter;
     if (m_positionOfRecentlyFoundValue.exists) {// start after the next/prev char position
         if (forward)
@@ -1777,14 +1782,14 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
         firstCharacter = -1; //forward ? -1 : INT_MAX;
     }
 
-    const int columnsCount = m_data->columnsCount();
+    const int columnCount = m_data->columnCount();
     int row, col;
     if (startFrom1stRowAndCol) {
         row = 0;
         col = 0;
     } else if (startFromLastRowAndCol) {
-        row = rows() - 1;
-        col = columnsCount - 1;
+        row = rowCount() - 1;
+        col = columnCount - 1;
     } else {
         row = m_curRow;
         col = m_curCol;
@@ -1806,8 +1811,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     int firstColumn; // real number of the first column, can be smaller than lastColumn if forward==true
     int lastColumn; // real number of the last column
     if (lookInAllColumns) {
-        firstColumn = forward ? 0 : columnsCount - 1;
-        lastColumn = forward ? columnsCount - 1 : 0;
+        firstColumn = forward ? 0 : columnCount - 1;
+        lastColumn = forward ? columnCount - 1 : 0;
     } else {
         firstColumn = columnNumber;
         lastColumn = columnNumber;

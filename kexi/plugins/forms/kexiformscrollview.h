@@ -78,8 +78,8 @@ public:
 
     /*! \return number of visible columns in this view.
      There can be a number of duplicated columns defined,
-     so columns() can return greater or smaller number than dataColumns(). */
-    virtual int columns() const;
+     so columnCount() can return greater or smaller number than dataColumns(). */
+    virtual int columnCount() const;
 
     /*! \return column information for column number \a col.
      Reimplemented for KexiDataAwareObjectInterface:

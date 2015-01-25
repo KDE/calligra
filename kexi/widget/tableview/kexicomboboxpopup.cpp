@@ -304,7 +304,7 @@ void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
 
 void KexiComboBoxPopup::updateSize(int minWidth)
 {
-    const int rows = qMin(d->max_rows, d->tv->rows());
+    const int rows = qMin(d->max_rows, d->tv->rowCount());
 
     d->tv->adjustColumnWidthToContents(-1);
 
@@ -312,11 +312,11 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
     //kDebug() << "size=" << size();
-    resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
+    resize(qMax(minWidth, width)/*+(d->tv->columnCount()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
     //kDebug() << "size after=" << size();
 
     //stretch the last column
-    d->tv->setColumnResizeEnabled(d->tv->columns() - 1, true);
+    d->tv->setColumnResizeEnabled(d->tv->columnCount() - 1, true);
 }
 
 KexiTableScrollArea* KexiComboBoxPopup::tableView()

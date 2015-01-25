@@ -107,16 +107,14 @@ public:
     }
 
     /*! \return number of rows in this view. */
-    int rows() const;
+    int rowCount() const;
 
     /*! \return number of visible columns in this view.
      By default returns dataColumns(), what is proper table view.
      In case of form view, there can be a number of duplicated columns defined
-     (data-aware widgets, see KexiFormScrollView::columns()),
-     so columns() can return greater number than dataColumns(). */
-    virtual int columns() const {
-        return dataColumns();
-    }
+     (data-aware widgets, see KexiFormScrollView::columnCount()),
+     so columnCount() can return greater number than dataColumns(). */
+    virtual int columnCount() const;
 
     /*! Helper function.
      \return number of columns of data. */
@@ -336,8 +334,8 @@ public:
                                    CursorPositionFlags flags = NoCursorPositionFlags);
 
     /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col (if not -1) must
-     be between 0 and rows() (or cols() accordingly). */
+     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
+     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
     virtual void ensureCellVisible(int row, int col) = 0;
 
     /*! Specifies, if this object automatically accepts
