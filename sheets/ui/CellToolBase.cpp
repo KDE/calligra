@@ -870,6 +870,7 @@ CellToolBase::~CellToolBase()
 {
     delete d->formulaDialog;
     delete d->popupListChoose;
+    delete d->cellEditor;
     qDeleteAll(d->popupMenuActions);
     qDeleteAll(actions());
     delete d;
