@@ -153,6 +153,9 @@ public slots:
     //! Implementation for KexiDataAwareObjectInterface
     virtual void ensureCellVisible(int row, int col);
 
+    //! Implementation for KexiDataAwareObjectInterface
+    virtual void ensureColumnVisible(int col);
+
     virtual void moveToRecordRequested(uint r);
     virtual void moveToLastRecordRequested();
     virtual void moveToPreviousRecordRequested();

@@ -1712,6 +1712,23 @@ void KexiTableScrollArea::ensureCellVisible(int row, int col)
     ensureVisible(pcenter.x(), pcenter.y(), r.width() / 2, r.height() / 2);
 }
 
+void KexiTableScrollArea::ensureColumnVisible(int col)
+{
+    if (!isVisible()) {
+        return;
+    }
+
+    //quite clever: ensure the cell is visible:
+    QRect r(columnPos(col == -1 ? m_curCol : col) - 1, d->verticalHeader->offset(),
+            columnWidth(col == -1 ? m_curCol : col)  + 2, 0);
+
+    QPoint pcenter = r.center();
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << pcenter.x() << pcenter.y() << (r.width() / 2)  << (r.height() / 2);
+#endif
+    ensureVisible(pcenter.x(), pcenter.y(), r.width() / 2, r.height() / 2);
+}
+
 void KexiTableScrollArea::updateAfterCancelRowEdit()
 {
     KexiDataAwareObjectInterface::updateAfterCancelRowEdit();

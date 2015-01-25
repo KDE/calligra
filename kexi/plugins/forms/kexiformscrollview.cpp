@@ -185,6 +185,12 @@ void KexiFormScrollView::ensureCellVisible(int row, int col)
     //! @todo
 }
 
+void KexiFormScrollView::ensureColumnVisible(int col)
+{
+    Q_UNUSED(col);
+    //! @todo
+}
+
 void KexiFormScrollView::moveToRecordRequested(uint r)
 {
     //! @todo
