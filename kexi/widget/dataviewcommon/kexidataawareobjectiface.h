@@ -452,14 +452,8 @@ public:
     /*! Redraws the current cell. To be implemented. */
     virtual void updateCurrentCell() = 0;
 
-    //! @return horizontal header, 0 by default.
-    virtual QHeaderView* horizontalHeader() const;
-
     //! @return height of the horizontal header, 0 by default.
     virtual int horizontalHeaderHeight() const;
-
-    //! @return vertical header, 0 by default.
-    virtual QHeaderView* verticalHeader() const;
 
     //! signals
     virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
@@ -806,6 +800,12 @@ protected:
      Called whenever columns definition changes, i.e. in setData() and clearColumns().
      @see find() */
     void updateIndicesForVisibleValues();
+
+    //! @return horizontal header, 0 by default.
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return vertical header, 0 by default.
+    virtual QHeaderView* verticalHeader() const;
 
     //! Update section of vertical header
     virtual void updateVerticalHeaderSection(int section) = 0;

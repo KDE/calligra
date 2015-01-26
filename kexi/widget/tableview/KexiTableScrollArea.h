@@ -203,12 +203,6 @@ public:
     bool editableOnDoubleClick() const;
     void setEditableOnDoubleClick(bool set);
 
-    //! @return horizontal header
-    virtual QHeaderView* horizontalHeader() const;
-
-    //! @return vertical header
-    virtual QHeaderView* verticalHeader() const;
-
     //! \return true if the vertical header is visible
     bool verticalHeaderVisible() const;
 
@@ -669,6 +663,12 @@ protected:
     /*! Called by KexiDataAwareObjectInterface::setCursorPosition()
       if cursor's position is really changed. */
     virtual void selectCellInternal(int previousRow, int previousColumn);
+
+    //! @return horizontal header
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return vertical header
+    virtual QHeaderView* verticalHeader() const;
 
     //! @return common model for header views of this area. @see KexiTableScrollAreaHeader
     QAbstractItemModel* headerModel() const;
