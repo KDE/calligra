@@ -301,11 +301,6 @@ public slots:
      to resize columns. If this table view is not visible, resizing will be performed on showing. */
     void maximizeColumnsWidth(const QList<int> &columnList);
 
-    /*! Adjusts the size of the sections to fit the size of the horizontal header
-     as completely as possible. Only sections for which column stretch is enabled will be resized.
-     \sa setColumnStretchEnabled() QHeaderView::resizeSections() */
-    void adjustHorizontalHeaderSize();
-
     /*! Sets highlighted row number or -1 if no row has to be highlighted.
      Makes sense if row highlighting is enabled.
      @see Appearance::rowHighlightingEnabled */

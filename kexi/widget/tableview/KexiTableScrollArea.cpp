@@ -1930,11 +1930,6 @@ void KexiTableScrollArea::maximizeColumnsWidth(const QList<int> &columnList)
     editorShowFocus(m_curRow, m_curCol);
 }
 
-void KexiTableScrollArea::adjustHorizontalHeaderSize()
-{
-    d->horizontalHeader->resizeSections(QHeaderView::Stretch);
-}
-
 void KexiTableScrollArea::setColumnResizeEnabled(int column, bool set)
 {
     if (column < 0 || column >= columnCount()) {
