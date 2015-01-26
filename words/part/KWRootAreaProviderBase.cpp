@@ -132,10 +132,10 @@ QRectF KWRootAreaProviderBase::suggestRect(KoTextLayoutRootArea *rootArea)
 
     rect.setWidth(qMax(rect.width(), qreal(1.0)));
     rect.setHeight(qMax(rect.height(), qreal(1.0)));
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight
-        || frameSet()->textFrameSetType() == Words::OtherTextFrameSet) {
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         rect.setHeight(1E6);
     }
+
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         // By setting this we make sure the textlayout librar does 2 internal runs. Once to

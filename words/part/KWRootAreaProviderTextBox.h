@@ -18,39 +18,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWROOTAREAPROVIDER_H
-#define KWROOTAREAPROVIDER_H
+#ifndef KWROOTAREAPROVIDERTEXTBOX_H
+#define KWROOTAREAPROVIDERTEXTBOX_H
 
-#include "KWPage.h"
 #include <KWRootAreaProviderBase.h>
 
-#include <QMap>
-#include <QPair>
+#include <QList>
 
-class KoShape;
-class KoTextShapeData;
 class KWTextFrameSet;
-class KWFrame;
-class KWPage;
 
-class KWRootAreaPage
+class KWRootAreaProviderTextBox : public KWRootAreaProviderBase
 {
 public:
-    KWRootAreaPage() {};
-    ~KWRootAreaPage() {};
-    KWPage page;
-    QList<KoTextLayoutRootArea *> rootAreas;
-    explicit KWRootAreaPage(const KWPage &p) : page(p) {}
-};
-
-class KWRootAreaProvider : public KWRootAreaProviderBase
-{
-public:
-    //KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
-    explicit KWRootAreaProvider(KWTextFrameSet *textFrameSet);
-    virtual ~KWRootAreaProvider();
-
-    void addDependentProvider(KWRootAreaProviderBase *provider, int pageNumber);
+    explicit KWRootAreaProviderTextBox(KWTextFrameSet *textFrameSet);
+    virtual ~KWRootAreaProviderTextBox();
 
     virtual void clearPages(int pageNumber);
     virtual void setPageDirty(int pageNumber);
@@ -59,16 +40,9 @@ public:
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
-
+    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
 private:
-    QList<KWRootAreaPage *> m_pages;
-    QHash<KoTextLayoutRootArea*, KWRootAreaPage *> m_pageHash;
     QList<KoTextLayoutRootArea*> m_rootAreaCache;
-    QList<QPair<KWRootAreaProviderBase *, int> > m_dependentProviders;
-
-    QList<KWRootAreaPage *> pages() const { return m_pages; }
-    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints);
-    void handleDependentProviders(int pageNumber);
 };
 
 #endif

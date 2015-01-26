@@ -25,6 +25,7 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
+#include "KWRootAreaProviderTextBox.h"
 #include "KWDocument.h"
 #include "KWCopyShape.h"
 
@@ -50,8 +51,12 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
     , m_textFrameSetType(type)
     , m_pageManager(wordsDocument->pageManager())
     , m_wordsDocument(wordsDocument)
-    , m_rootAreaProvider(new KWRootAreaProvider(this))
 {
+    if(type == Words::OtherTextFrameSet) {
+        m_rootAreaProvider = new KWRootAreaProviderTextBox(this);
+    } else {
+        m_rootAreaProvider = new KWRootAreaProvider(this);
+    }
     Q_ASSERT(m_wordsDocument);
     setName(Words::frameSetTypeName(m_textFrameSetType));
     setupDocument();
