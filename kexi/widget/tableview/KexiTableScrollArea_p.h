@@ -111,8 +111,6 @@ public:
      False by default. Used by KeixComboBoxPopup. */
     bool moveCursorOnMouseRelease;
 
-    bool firstTimeEnsureCellVisible;
-
     bool insideResizeEvent;
 
     KexiTableScrollArea::Appearance appearance;

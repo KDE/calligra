@@ -1555,10 +1555,6 @@ void KexiTableScrollArea::slotColumnWidthChanged(int column, int oldSize, int ne
         editorWidget->resize(columnWidth(m_curCol), rowHeight());
     }
     updateGeometries();
-    if (d->firstTimeEnsureCellVisible) {
-        d->firstTimeEnsureCellVisible = false;
-        ensureCellVisible( currentRow(), currentColumn() );
-    }
     editorShowFocus(m_curRow, m_curCol);
 }
 
@@ -1566,6 +1562,7 @@ void KexiTableScrollArea::slotSectionHandleDoubleClicked(int section)
 {
     adjustColumnWidthToContents(section);
     slotColumnWidthChanged(0, 0, 0); //to update contents and redraw
+    ensureColumnVisible(section);
 }
 
 void KexiTableScrollArea::setSortingEnabled(bool set)
