@@ -277,7 +277,7 @@ void KexiTableDesignerView::initData()
     d->view->setColumnResizeEnabled(COLUMN_ID_ICON, false);
     d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
     d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
-    d->view->setColumnResizeEnabled(COLUMN_ID_DESC, true);   //last column occupies the rest of the area
+    d->view->setStretchLastColumn(true);
     const int minCaptionColumnWidth = d->view->fontMetrics().width("wwwwwwwwwww");
     if (minCaptionColumnWidth > d->view->columnWidth(COLUMN_ID_CAPTION))
         d->view->setColumnWidth(COLUMN_ID_CAPTION, minCaptionColumnWidth);

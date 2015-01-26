@@ -1943,6 +1943,19 @@ void KexiTableScrollArea::setColumnsResizeEnabled(bool set)
     d->horizontalHeader->setResizeMode(set ? QHeaderView::Interactive : QHeaderView::Fixed);
 }
 
+bool KexiTableScrollArea::stretchLastColumn() const
+{
+    return d->horizontalHeader->stretchLastSection();
+}
+
+void KexiTableScrollArea::setStretchLastColumn(bool set)
+{
+    if (columnCount() > 0) {
+        setColumnResizeEnabled(columnCount() - 1, !set);
+    }
+    d->horizontalHeader->setStretchLastSection(set);
+}
+
 void KexiTableScrollArea::setEditableOnDoubleClick(bool set)
 {
     d->editOnDoubleClick = set;

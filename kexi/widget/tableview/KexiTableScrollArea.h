@@ -186,6 +186,10 @@ public:
     int columnAt(int pos) const;
     int rowAt(int pos, bool ignoreEnd = false) const;
 
+    /*! \return true if the last visible column takes up all the available space.
+     @see setStretchLastColumn(bool). */
+    bool stretchLastColumn() const;
+
     /*! \return last row visible on the screen (counting from 0).
      The returned value is guaranteed to be smaller or equal to currentRow() or -1
      if there are no rows. */
@@ -294,6 +298,13 @@ public slots:
      by the same value. Does nothing if \a columnList is empty or there is no free space
      to resize columns. If this table view is not visible, resizing will be performed on showing. */
     void maximizeColumnsWidth(const QList<int> &columnList);
+
+    /*! If \a set is true the last visible column takes up all the available space
+     ensuring that the available area is not wasted. Then it can't be resized by the user
+     (setColumnResizeEnabled(columnCount()-1, !set) is used for that).
+     The default value is false.
+     @note Calling setColumnResizeEnabled(columnCount()-1, bool) can override this property. */
+    void setStretchLastColumn(bool set);
 
     /*! Sets highlighted row number or -1 if no row has to be highlighted.
      Makes sense if row highlighting is enabled.
