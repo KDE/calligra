@@ -118,7 +118,7 @@ void CAuMetaDataManager::callEditor(KoSection *sec) const
 
     KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_doc->documentRdf());
 
-    QList<hKoRdfBasicSemanticItem> lst = rdf->semanticItems("AuthorSection");
+    QList<hKoRdfBasicSemanticItem> lst = rdf->semanticItems("Section");
 
     hKoRdfBasicSemanticItem semItem;
     bool found = false;
@@ -131,7 +131,7 @@ void CAuMetaDataManager::callEditor(KoSection *sec) const
     }
 
     if (!found) {
-        semItem = rdf->createSemanticItem("AuthorSection", rdf);
+        semItem = rdf->createSemanticItem("Section", rdf);
     }
 
     QWidget *widget = new QWidget();

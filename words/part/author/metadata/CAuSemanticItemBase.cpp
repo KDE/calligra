@@ -67,19 +67,19 @@ QString CAuSemanticItemBase::formQuery()
 
     QString bindingsList, queryList;
     foreach (const QString &propName, stringProps()) {
-        bindingsList = " ?" + propName;
+        bindingsList += " ?" + propName;
         queryList += QString("?uri type:%1 ?%1 . \n").arg(propName);
     }
 
     foreach (const QString &propName, intProps()) {
-        bindingsList = " ?" + propName;
+        bindingsList += " ?" + propName;
         queryList += QString("?uri type:%1 ?%1 . \n").arg(propName);
     }
 
     QString result = QString(
         "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "PREFIX cau:  %1 \n"
-        "PREFIX type: %2 \n"
+        "PREFIX cau:  <%1> \n"
+        "PREFIX type: <%2> \n"
         "SELECT DISTINCT ?graph ?uri ?magicid%3\n"
         "WHERE { \n"
         "  GRAPH ?graph { \n"
