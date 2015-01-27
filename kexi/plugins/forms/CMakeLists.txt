@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 
@@ -80,7 +80,7 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbutils.cpp
   widgets/kexidbautofield.cpp
   widgets/kexidbform.cpp
-# todo  widgets/kexidbsubform.cpp
+  #todo widgets/kexidbsubform.cpp
   widgets/kexidblabel.cpp
   widgets/kexidbimagebox.cpp
   widgets/KexiDBPushButton.cpp
@@ -93,14 +93,10 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbslider.cpp
   widgets/kexidbprogressbar.cpp
   widgets/kexidbdatepicker.cpp
-)
+  )
 
-#obsolete	widgets/kexidbdoublespinbox.cpp
-#obsolete	widgets/kexidbintspinbox.cpp
-#obsolete	widgets/kexidbdatetimeedit.cpp
-#obsolete	widgets/kexidbtimeedit.cpp
-#obsolete	widgets/kexidbdateedit.cpp
-
+    #obsolete	widgets/kexidbdoublespinbox.cpp
+    #obsolete	widgets/kexidbintspinbox.cpp
 
 kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 

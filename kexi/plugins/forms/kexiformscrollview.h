@@ -117,7 +117,6 @@ public:
     void setOuterAreaIndicatorVisible(bool visible);
 
     void refreshContentsSizeLater();
-    void updateNavPanelGeometry();
 
     KexiRecordNavigator* recordNavigator() const;
 
@@ -141,6 +140,10 @@ public:
 
     //! temporary
     void updateScrollBars() {}
+
+    /*! @return geometry of the viewport, i.e. the scrollable area, minus any scrollbars, etc.
+     Implementation for KexiDataAwareObjectInterface. */
+    virtual QRect viewportGeometry() const;
 
 public slots:
     //! Implementation for KexiDataAwareObjectInterface
@@ -184,7 +187,7 @@ signals:
     void dataRefreshed();
     void dataSet(KexiDB::TableViewData *data);
     void itemSelected(KexiDB::RecordData*);
-    void cellSelected(int col, int row);
+    void cellSelected(int row, int col);
     void sortedColumnChanged(int col);
     void rowEditStarted(int row);
     void rowEditTerminated(int row);
@@ -240,23 +243,19 @@ protected:
     virtual void clearColumnsInternal(bool repaint);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIcon& icon, int width);
-
-    //! Implementation for KexiDataAwareObjectInterface
-    virtual int currentLocalSortingOrder() const;
+    virtual Qt::SortOrder currentLocalSortOrder() const;
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual int currentLocalSortColumn() const;
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void setLocalSortingOrder(int col, int order);
+    virtual void setLocalSortOrder(int column, Qt::SortOrder order);
 
     //! Implementation for KexiDataAwareObjectInterface
     void sortColumnInternal(int col, int order = 0);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void updateGUIAfterSorting();
+    virtual void updateGUIAfterSorting(int previousRow);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void createEditor(int row, int col, const QString& addText = QString(),
@@ -288,17 +287,12 @@ protected:
      Updates widget's contents size e.g. using QScrollView::resizeContents(). */
     virtual void updateWidgetContentsSize();
 
-    /*! Implementation for KexiDataAwareObjectInterface
-     Updates scrollbars of the widget.
-     QScrollView::updateScrollbars() will be usually called here. */
-    virtual void updateWidgetScrollBars();
-
     //! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Reimplemented from KexiFormDataProvider.
      \return information whether we're currently at new record or not.
-     This can be used e.g. by data-aware widgets to determine if "(autonumber)"
+     This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
 
@@ -311,7 +305,7 @@ protected:
     //! Implementation for KexiDataAwareObjectInterface
     //! Called by KexiDataAwareObjectInterface::setCursorPosition()
     //! if cursor's position is really changed.
-    inline virtual void selectCellInternal();
+    virtual void selectCellInternal(int previousRow, int previousColumn);
 
     /*! Reimplementation: used to refresh "editing indicator" visibility. */
     virtual void initDataContents();
@@ -338,6 +332,9 @@ protected:
     virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
 
     const QTimer *delayedResizeTimer() const;
+
+    //! Update section of vertical header
+    virtual void updateVerticalHeaderSection(int section);
 
 private:
     class Private;

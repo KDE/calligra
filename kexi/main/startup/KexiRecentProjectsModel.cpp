@@ -132,10 +132,10 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype
         if (fileBased) {
-            return KIcon(KexiDB::defaultFileBasedDriverIconName());
+            return Kexi::defaultFileBasedDriverIcon();
         }
         else {
-            return KIcon(KEXI_DATABASE_SERVER_ICON_NAME);
+            return Kexi::serverIcon();
         }
     }
     /*case KCategorizedSortFilterProxyModel::CategorySortRole: {

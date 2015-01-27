@@ -210,8 +210,10 @@ private slots:
     void pasteRequested();
     /// Call when the user want to show/hide the WordsCount in the statusbar
     void showWordCountInStatusBar(bool doShow);
-    /// Show annotations ("notes" in the UI) on the canvas
-    void showNotes(bool doShow);
+    /// Show annotations ("notes" in the UI) on the canvas - this is the user view menu visibility change
+    void showNotes(bool show);
+    /// "hasAnnotations" has changed ("notes" in the UI) - will cause showNotes above to change too
+    void hasNotes(bool has);
     /**
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.

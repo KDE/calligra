@@ -172,7 +172,7 @@ signals:
 
 protected:
     //! Used by MigrateManager.
-    KexiMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    explicit KexiMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     //! Connect to source database (driver specific)
     virtual bool drv_connect() = 0;

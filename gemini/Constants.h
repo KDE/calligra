@@ -41,7 +41,7 @@ class Constants : public QObject
     Q_PROPERTY(qreal HugeFontSize READ hugeFontSize NOTIFY gridSizeChanged)
 
 public:
-    Constants(QObject* parent = 0);
+    explicit Constants(QObject* parent = 0);
 
     int animationDuration() const;
     qreal gridHeight() const;

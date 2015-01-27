@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -106,7 +106,7 @@ public slots:
     virtual tristate cancelDataChanges();
 
 protected slots:
-    void slotCellSelected(int col, int row);
+    void slotCellSelected(int row, int col);
     void reloadActions();
     void slotUpdateRowActions(int row);
     //! Updates 'save/cancel record changes' actions

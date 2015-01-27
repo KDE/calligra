@@ -42,9 +42,9 @@
 #include <KexiMainWindowIface.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
+#include <widget/tableview/KexiTableScrollArea.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
-#include <kexitableview.h>
 #include "kexitabledesignercommands.h"
 
 using namespace KexiTableDesignerCommands;

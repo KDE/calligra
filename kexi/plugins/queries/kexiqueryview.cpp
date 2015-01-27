@@ -30,7 +30,7 @@
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerypart.h"
-#include <widget/tableview/kexitableview.h>
+#include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/kexiqueryparameters.h>
 
 //! @internal
@@ -50,7 +50,7 @@ public:
 //---------------------------------------------------------------------------------
 
 KexiQueryView::KexiQueryView(QWidget *parent)
-        : KexiDataTable(parent)
+        : KexiDataTableView(parent)
         , d(new Private())
 {
     // setup main menu actions

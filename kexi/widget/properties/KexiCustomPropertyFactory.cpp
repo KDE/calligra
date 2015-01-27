@@ -28,7 +28,7 @@ using namespace KoProperty;
 class PixmapIdCustomProperty : public CustomProperty
 {
 public:
-    PixmapIdCustomProperty(Property *parent)
+    explicit PixmapIdCustomProperty(Property *parent)
             : CustomProperty(parent) {
     }
     virtual ~PixmapIdCustomProperty() {}
@@ -48,7 +48,7 @@ public:
 class IdentifierCustomProperty : public CustomProperty
 {
 public:
-    IdentifierCustomProperty(Property *parent)
+    explicit IdentifierCustomProperty(Property *parent)
             : CustomProperty(parent) {
     }
     virtual ~IdentifierCustomProperty() {}

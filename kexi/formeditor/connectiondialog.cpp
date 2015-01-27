@@ -44,7 +44,7 @@ using namespace KFormDesigner;
 class ConnectionDialog::Private
 {
 public:
-    Private(Form *f);
+    explicit Private(Form *f);
     ~Private();
 
     Form *form;
@@ -171,7 +171,7 @@ ConnectionDialog::initTable()
     QList<int> c;
     c << 2 << 4;
     d->table->maximizeColumnsWidth(c);
-    d->table->setColumnStretchEnabled(true, 4);
+    d->table->setColumnResizeEnabled(4, true);
 
     connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
             this, SLOT(slotCellChanged(KexiDB::RecordData*,int,QVariant,KexiDB::ResultInfo*)));
@@ -185,7 +185,7 @@ void ConnectionDialog::exec()
     KDialog::exec();
 }
 
-void ConnectionDialog::slotCellSelected(int col, int row)
+void ConnectionDialog::slotCellSelected(int row, int col)
 {
     d->removeButton->setEnabled(row < d->table->rows());
     KexiDB::RecordData *record = d->table->itemAt(row);

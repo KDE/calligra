@@ -183,7 +183,7 @@ void KexiUserFeedbackAgent::Private::updateData()
                 else if (runningDesktop == "Xfce") {
                     info = "Xubuntu";
                 }
-                else if (runningDesktop.toLower().contains("gnome")) {
+                else if (runningDesktop.contains(QLatin1String("gnome"), Qt::CaseInsensitive)) {
                     info = "Ubuntu GNOME";
                 }
             }

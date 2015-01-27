@@ -414,7 +414,7 @@ public:
         int m_index;
     };
 
-    AlterTableHandler(Connection &conn);
+    explicit AlterTableHandler(Connection &conn);
 
     virtual ~AlterTableHandler();
 

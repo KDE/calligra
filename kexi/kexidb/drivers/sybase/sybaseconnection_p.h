@@ -51,7 +51,7 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 {
 
 public:
-    SybaseConnectionInternal(KexiDB::Connection* connection);
+    explicit SybaseConnectionInternal(KexiDB::Connection* connection);
     virtual ~SybaseConnectionInternal();
 
     //! Connects to a Sybase database
@@ -94,7 +94,7 @@ public:
 class SybaseCursorData : public SybaseConnectionInternal
 {
 public:
-    SybaseCursorData(KexiDB::Connection* connection);
+    explicit SybaseCursorData(KexiDB::Connection* connection);
     virtual ~SybaseCursorData();
 
     //unsigned long *lengths;
