@@ -89,8 +89,6 @@ QString CAuSemanticItemBase::formQuery()
         "    }\n"
         "}\n").arg(authorPrefix, typePrefix, bindingsList, className(), queryList);
 
-   qDebug() << className() << result;
-
    return result;
 }
 
