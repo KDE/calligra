@@ -1560,7 +1560,7 @@ void KexiTableScrollArea::slotColumnWidthChanged(int column, int oldSize, int ne
         editorWidget->resize(columnWidth(column), rowHeight());
     }
     updateGeometries();
-    editorShowFocus(m_curRow, column);
+    editorShowFocus(m_curRow, m_curCol);
 }
 
 void KexiTableScrollArea::slotSectionHandleDoubleClicked(int section)
