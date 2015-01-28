@@ -125,7 +125,7 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
 // afterThis==NULL means delete everything
 void KWRootAreaProviderTextBox::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
-    while (m_rootAreaCache.back() != afterThis){
+    while (m_rootAreaCache.count() != 0 && m_rootAreaCache.back() != afterThis){
         m_rootAreaCache.removeLast();
     }
 }
