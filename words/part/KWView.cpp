@@ -475,9 +475,12 @@ QList<KWFrame*> KWView::selectedFrames() const
     QList<KWFrame*> frames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes()) {
         KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        frames.append(frame);
+
+	if (frame) {
+	    frames.append(frame);
+	}
     }
+
     return frames;
 }
 
@@ -849,13 +852,18 @@ void KWView::selectionChanged()
 
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        QVariant variant;
-        variant.setValue<void*>(frame);
-        m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
-        variant.setValue<void*>(frame->frameSet());
-        m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
-        break;
+
+	// Some shapes are not attached to any frame but are "free floating",
+	// to cite the UI.  This actually means anchored to the page instead.
+	if (frame) {
+	    QVariant variant;
+	    variant.setValue<void*>(frame);
+	    m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
+
+	    variant.setValue<void*>(frame->frameSet());
+	    m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
+	    break;
+	}
     }
 }
 
