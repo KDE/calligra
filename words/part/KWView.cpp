@@ -37,7 +37,6 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWConfigureDialog.h"
-#include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
 #include "gemini/ViewModeSwitchEvent.h"
@@ -394,13 +393,6 @@ void KWView::setupActions()
     }
 #endif
 
-    // -------------- Frame menu
-    action  = new KAction(i18n("Create Linked Copy"), this);
-    actionCollection()->addAction("create_linked_frame", action);
-    action->setToolTip(i18n("Create a copy of the current frame, always showing the same contents"));
-    action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
-    connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
-
     // -------------- Settings menu
     action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
@@ -652,31 +644,6 @@ void KWView::showRulers(bool visible)
 {
     m_document->config().setViewRulers(visible);
     m_gui->updateRulers();
-}
-
-void KWView::createLinkedFrame()
-{
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    QList<KoShape*> oldSelection = selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (oldSelection.count() == 0)
-        return;
-    selection->deselectAll();
-
-    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Create Linked Copy"));
-    foreach (KoShape *shape, oldSelection) {
-        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-        Q_ASSERT(frame);
-        KWCopyShape *copy = new KWCopyShape(frame->shape(), m_document->pageManager());
-        copy->setPosition(frame->shape()->position());
-        QPointF offset(40, 40);
-        canvasBase()->clipToDocument(copy, offset);
-        copy->setPosition(frame->shape()->position() + offset);
-        copy->setZIndex(frame->shape()->zIndex() + 1);
-        KWFrame *newFrame = new KWFrame(copy, frame->frameSet());
-        new KWFrameCreateCommand(m_document, newFrame, cmd);
-        selection->select(copy);
-    }
-    m_document->addCommand(cmd);
 }
 
 void KWView::showStatusBar(bool toggled)
