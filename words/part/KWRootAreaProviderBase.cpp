@@ -24,6 +24,7 @@
 #include "KWDocument.h"
 #include "KWView.h"
 #include "frames/KWTextFrameSet.h"
+#include "frames/KWCopyShape.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoShape.h>
@@ -91,12 +92,8 @@ void KWRootAreaProviderBase::doPostLayout(KoTextLayoutRootArea *rootArea, bool /
         rootArea->associatedShape()->setSize(newSize);
 
         // transfer the new size to the copy-shapes
-        if (KWFrame *frame = dynamic_cast<KWFrame*>(rootArea->associatedShape()->applicationData())) {
-            foreach(KWFrame* f, frame->copies()) {
-                if (f->shape()) {
-                    f->shape()->setSize(newSize);
-                }
-            }
+        foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
+            cs->setSize(newSize);
         }
     }
 

@@ -24,6 +24,7 @@
 #include "KWDocument.h"
 #include "KWView.h"
 #include "KWPage.h"
+#include "frames/KWCopyShape.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrameLayout.h"
 
@@ -501,12 +502,8 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
         rootArea->associatedShape()->setSize(newSize);
 
         // transfer the new size to the copy-shapes
-        if (KWFrame *frame = dynamic_cast<KWFrame*>(rootArea->associatedShape()->applicationData())) {
-            foreach(KWFrame* f, frame->copies()) {
-                if (f->shape()) {
-                    f->shape()->setSize(newSize);
-                }
-            }
+        foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
+            cs->setSize(newSize);
         }
 
         if (isHeaderFooter) {
@@ -516,6 +513,10 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             if (frame->minimumFrameHeight() != newSize.height()) {
                 frame->setMinimumFrameHeight(newSize.height());
 
+                // transfer the new minimumFrameHeight to the copy-shapes too
+                foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
+                    cs->setMinimumFrameHeight(newSize.height());
+                }
                 // cause the header/footer's height changed we have to relayout the whole page
                 frameSet()->wordsDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
             }

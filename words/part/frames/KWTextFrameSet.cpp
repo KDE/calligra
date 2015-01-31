@@ -35,6 +35,7 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 #include <KoShapeFactoryBase.h>
 #include <KoAnnotationLayoutManager.h>
 
@@ -124,6 +125,25 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     Q_ASSERT(doc.inlineTextObjectManager() == m_wordsDocument->inlineTextObjectManager());
     Q_ASSERT(doc.undoStack() == m_wordsDocument->resourceManager()->undoStack());
 #endif
+}
+
+void KWTextFrameSet::cleanupShape(KoShape *shape) {
+    // it is no longer set when document is destroyed
+    if (rootAreaProvider()) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(document()->documentLayout());
+        Q_ASSERT(lay);
+        QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
+        for(int i = 0; i < layoutRootAreas.count(); ++i) {
+            KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
+            if (rootArea->associatedShape() == shape) {
+                KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
+                rootAreaProvider()->releaseAllAfter(prevRootArea);
+                lay->removeRootArea(prevRootArea);
+                rootArea->setAssociatedShape(0);
+                break;
+            }
+        }
+    }
 }
 
 void KWTextFrameSet::setupDocument()

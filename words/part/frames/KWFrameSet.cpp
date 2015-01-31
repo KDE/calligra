@@ -65,10 +65,7 @@ void KWFrameSet::addFrame(KWFrame *frame)
     KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
     if (copyShape) {
         if (copyShape->original()) {
-            KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
-            if (originalFrame) {
-                originalFrame->addCopy(frame);
-            }
+            addCopy(copyShape);
         }
     }
     emit frameAdded(frame);
@@ -79,12 +76,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
     Q_ASSERT(frame);
     KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
     if (copyShape) {
-        if (copyShape->original()) {
-            KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
-            if (originalFrame) {
-                originalFrame->removeCopy(frame);
-            }
-        }
+        removeCopy(copyShape);
     } else {
         //TODO use the copyFrame-list the KWFrame's remembers now
         // Loop over all frames to see if there is a copy frame that references the removed
@@ -94,7 +86,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
             if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frame->shape())) {
                 if (cs->original() == shape) {
                     Q_ASSERT(frame->frameSetxx() == this);
-                    frame->cleanupShape(cs);
+                    cleanupShape(cs);
                     removeFrame(frame, cs);
                     delete cs;
                 }
@@ -108,3 +100,18 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
     }
 }
 
+QList<KWCopyShape *> KWFrameSet::copyShapes() const
+{
+    return m_copyShapes;
+}
+
+void KWFrameSet::addCopy(KWCopyShape *copyShape)
+{
+    if (!m_copyShapes.contains(copyShape))
+        m_copyShapes.append(copyShape);
+}
+
+void KWFrameSet::removeCopy(KWCopyShape *copyShape)
+{
+    m_copyShapes.removeAll(copyShape);
+}

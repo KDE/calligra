@@ -29,6 +29,7 @@
 
 #include <QObject>
 
+class KWCopyShape;
 
 /**
  * A frameSet holds a number of frames (zero or more) and a frameSet holds the
@@ -116,6 +117,14 @@ public:
         return m_type;
     }
 
+    /**
+     * Returns the list of copy-shapes, see @a KWCopyShape
+     */
+    QList<KWCopyShape *> copyShapes() const;
+
+    void addCopy(KWCopyShape *copyShape);
+    void removeCopy(KWCopyShape *copyShape);
+
 signals:
     /**
      * emitted whenever a frame is added
@@ -140,6 +149,13 @@ protected:
         Q_UNUSED(frame);
     }
 
+    /**
+     * @param frame the frame that has just been added
+     */
+    virtual void cleanupShape(KoShape *shape) {
+        Q_UNUSED(shape);
+    }
+
     void cleanupFrames();
 
 private:
@@ -149,6 +165,7 @@ private:
     Words::FrameSetType m_type;
     /// The name of the frameset.
     QString m_name;
+    QList<KWCopyShape *> m_copyShapes;
 };
 
 #endif

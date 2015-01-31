@@ -79,6 +79,7 @@ protected:
     friend class TestTextFrameManagement;
 
     virtual void setupFrame(KWFrame *frame);
+    virtual void cleanupShape(KoShape *shape);
 
 private:
     void setupDocument();

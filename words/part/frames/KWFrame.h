@@ -88,23 +88,12 @@ public:
      */
     virtual void setFrameSetxx(KWFrameSet *newFrameSet);
 
-    void cleanupShape(KoShape* shape);
-
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
     }
     void setAnchoredFrameOffset(qreal offset) {
         m_anchoredFrameOffset = offset;
     }
-
-    /**
-     * Returns the list of copy-shapes, see @a KWCopyShape , that
-     * are copies of this KWFrame.
-     */
-    QList<KWFrame*> copies() const;
-
-    void addCopy(KWFrame* frame);
-    void removeCopy(KWFrame* frame);
 
     /**
      * Save the frame as ODF
@@ -117,7 +106,6 @@ private:
     qreal m_anchoredFrameOffset;
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
-    QList<KWFrame*> m_copyShapes;
 };
 
 #endif
