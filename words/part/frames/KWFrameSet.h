@@ -44,6 +44,11 @@ public:
     explicit KWFrameSet(Words::FrameSetType type = Words::OtherFrameSet);
     virtual ~KWFrameSet();
 
+    /** fetch the frameset of a shape
+     * @param shape the shape to fetch the frameset from
+     */
+    static KWFrameSet *from(KoShape *shape) {KWFrame *f = dynamic_cast<KWFrame*>(shape->applicationData()); return f ? f->frameSet() : 0;}
+
     /**
      * Add a new Frame
      * @param frame the new frame to add.
@@ -91,9 +96,19 @@ public:
     }
 
     /**
+     * List all shapes this frameset has.  In the order that any content will flow through them.
+     */
+    const QList<KoShape *> shapes() const {
+        QList<KoShape *> sps;
+        foreach (KWFrame *f, m_frames) {
+            sps.append(f->shape());
+        }
+        return sps;
+    }
+    /**
      * Return the amount of frames this frameset has.
      */
-    int frameCount() const {
+    int shapeCount() const {
         return m_frames.count();
     }
 

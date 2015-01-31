@@ -285,10 +285,6 @@ void KWView::setupActions()
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
 
-    action = new KAction(i18n("Select All Shapes"), this);
-    actionCollection()->addAction("edit_selectallframes", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
-
     action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
@@ -748,17 +744,6 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void KWView::editSelectAllFrames()
-{
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        foreach (KWFrame *frame, fs->frames()) {
-            if (frame->shape()->isVisible())
-                selection->select(frame->shape());
-        }
-    }
-}
-
 void KWView::editDeleteSelection()
 {
     canvasBase()->toolProxy()->deleteSelection();
@@ -840,7 +825,7 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
 
     // Since we move _up_ calculate the position where a frame would _start_ if
     // we were scrolled to the _first_ page
-    QPointF pos = currentFrameSet->frames().first()->shape()->absoluteTransformation(0).map(QPointF(0, 5));
+    QPointF pos = currentFrameSet->shapes().first()->absoluteTransformation(0).map(QPointF(0, 5));
 
     pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset(), viewConverter());
 
@@ -850,10 +835,10 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
     foreach (KoShape* shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
         if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
-            foreach (KWFrame *frame, currentFrameSet->frames()) {
-                if (frame->shape() == shape) {
+            foreach (KoShape *s, currentFrameSet->shapes()) {
+                if (s == shape) {
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
-                     pos += QPointF(0.0, textShapeData->documentOffset());
+                    pos += QPointF(0.0, textShapeData->documentOffset());
 
                     int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
                     KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
@@ -875,7 +860,7 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
 
     // Since we move _down_ calculate the position where a frame would _end_ if
     // we were scrolled to the _lasst_ page
-    KoShape *shape = currentFrameSet->frames().last()->shape();
+    KoShape *shape = currentFrameSet->shapes().last();
     QPointF pos = shape->absoluteTransformation(0).map(QPointF(0, shape->size().height() - 5));
     pos.setY(pos.y() - m_document->pageManager()->page(qreal(pos.y())).rect().bottom());
 
@@ -887,8 +872,8 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
     foreach (KoShape* shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
         if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
-            foreach (KWFrame *frame, currentFrameSet->frames()) {
-                if (frame->shape() == shape) {
+            foreach (KoShape *s, currentFrameSet->shapes()) {
+                if (s == shape) {
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
                     pos += QPointF(0.0, textShapeData->documentOffset());
 

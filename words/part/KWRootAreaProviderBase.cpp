@@ -71,7 +71,7 @@ void KWRootAreaProviderBase::doPostLayout(KoTextLayoutRootArea *rootArea, bool /
         newSize.setHeight(rootArea->bottom() - rootArea->top());
 
         // adjust size to have at least the defined minimum height
-        Q_ASSERT(frameSet()->frameCount() > 0);
+        Q_ASSERT(frameSet()->shapeCount() > 0);
         KWFrame *frame = static_cast<KWFrame*>(frameSet()->frames().first());
         if (frame->minimumFrameHeight() > newSize.height())
             newSize.setHeight(frame->minimumFrameHeight());
@@ -106,8 +106,8 @@ void KWRootAreaProviderBase::doPostLayout(KoTextLayoutRootArea *rootArea, bool /
 
 void KWRootAreaProviderBase::updateAll()
 {
-    foreach (KWFrame *frame, frameSet()->frames()) {
-        frame->shape()->update();
+    foreach (KoShape *shape, frameSet()->shapes()) {
+        shape->update();
     }
 }
 
@@ -172,8 +172,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(Ko
             }
         }
 
-        foreach (KWFrame *frame, fs->frames()) {
-            KoShape *shape = frame->shape();
+        foreach (KoShape *shape, fs->shapes()) {
             if (shape == currentShape) {
                 continue;
             }

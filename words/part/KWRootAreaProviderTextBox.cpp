@@ -88,9 +88,8 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
         documentLayout->setReferencedLayout(reflay);
     }
 
-    if (frameSet()->frameCount() > requestedPosition) {
-        KWFrame *frame = frameSet()->frames()[requestedPosition];
-        KoShape *shape = frame->shape();
+    if (frameSet()->shapeCount() > requestedPosition) {
+        KoShape *shape = frameSet()->shapes()[requestedPosition];
         Q_ASSERT(shape);
 
         KoTextLayoutRootArea *area = new KoTextLayoutRootArea(documentLayout);
@@ -205,7 +204,7 @@ QRectF KWRootAreaProviderTextBox::suggestRect(KoTextLayoutRootArea *rootArea)
 
     QRectF rect = KWRootAreaProviderBase::suggestRect(rootArea);
 
-    if (frameSet()->frames().back()->shape() == shape) {
+    if (frameSet()->shapes().back() == shape) {
         rect.setHeight(1E6);
     }
 

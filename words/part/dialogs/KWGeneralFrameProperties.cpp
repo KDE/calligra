@@ -86,7 +86,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
             newFrame = GuiHelper::TriState;
 
 
-        if (frame->frameSet()->frameCount() > 1) {
+        if (frame->frameSet()->shapeCount() > 1) {
             allFrames.addState(GuiHelper::On);
             if (frame->frameSet()->frames().indexOf(frame) > 0)
                 copyFrame.addState(frame->isCopy() ? GuiHelper::On : GuiHelper::Off);

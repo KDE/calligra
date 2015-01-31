@@ -184,8 +184,6 @@ private slots:
     void showRulers(bool visible);
     /// shows or hides the status bar
     void showStatusBar(bool);
-    /// selects all frames
-    void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */

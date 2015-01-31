@@ -103,7 +103,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // to take over. This is the case with OtherTextFrameSet's where the KWTextFrameSet
     // and the KWFrame are created after the TextShape was created and it's loadOdf was called which
     // means that the QTextDocument of the KoTextShapeData already has content we like to take over.
-    if (textFrameSetType() == Words::OtherTextFrameSet && frameCount() == 1 && data->document() && m_document->isEmpty() && !data->document()->isEmpty()) {
+    if (textFrameSetType() == Words::OtherTextFrameSet && shapeCount() == 1 && data->document() && m_document->isEmpty() && !data->document()->isEmpty()) {
         // FIXME probably better to test if rangemanager has anything rather than tesing if frame
         // is not empty
         Q_ASSERT(m_document != data->document());

@@ -62,7 +62,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
         if (textFs->textFrameSetType() != Words::OtherTextFrameSet)
             return false; // can't alter frameSet of this auto-generated frame!
 
-        if (textFs->frameCount() == 1) { // don't allow us to remove the last frame of an FS
+        if (textFs->shapeCount() == 1) { // don't allow us to remove the last frame of an FS
             widget.newRadio->setEnabled(false);
             widget.frameSetName->setEnabled(false);
             widget.frameSetName->setText(textFs->name());
@@ -116,7 +116,7 @@ void KWFrameConnectSelector::save()
         if (oldFS != newFS)
             m_frame->setFrameSet(newFS);
     }
-    if (oldFS && oldFS->frameCount() == 0) {
+    if (oldFS && oldFS->shapeCount() == 0) {
         // TODO
     }
     m_state->markFrameUsed();

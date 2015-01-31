@@ -182,9 +182,9 @@ void KWDocument::addShape(KoShape *shape)
             frame = new KWFrame(shape, fs);
         }
     }
-    Q_ASSERT(frame->frameSet());
-    if (!m_frameSets.contains(frame->frameSet())) {
-        addFrameSet(frame->frameSet());
+    Q_ASSERT(KWFrameSet::from(shape));
+    if (!m_frameSets.contains(KWFrameSet::from(shape))) {
+        addFrameSet(KWFrameSet::from(shape));
     }
 
     if (!(shape->shapeId() == "AnnotationTextShapeID")) {
@@ -198,10 +198,9 @@ void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
-    if (frame) { // not all shapes have to have a frame. Only top-level ones do.
-        KWFrameSet *fs = frame->frameSet();
-        Q_ASSERT(fs);
-        if (fs->frameCount() == 1) // last frame on FrameSet
+    KWFrameSet *fs = KWFrameSet::from(shape);
+    if (fs) { // not all shapes have to have a frame. Only top-level ones do.
+        if (fs->shapeCount() == 1) // last frame on FrameSet
             removeFrameSet(fs); // frame and frameset will be deleted when the shape is deleted
         else
             fs->removeFrame(frame);

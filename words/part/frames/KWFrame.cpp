@@ -88,7 +88,7 @@ KWFrame::~KWFrame()
     if (m_frameSet) {
         cleanupShape(ourShape);
 
-        bool justMe = m_frameSet->frameCount() == 1;
+        bool justMe = m_frameSet->shapeCount() == 1;
         m_frameSet->removeFrame(this, ourShape); // first remove me so we won't get double
                                                  // deleted. ourShape is needed to mark any
                                                  // copyShapes as retired

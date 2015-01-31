@@ -474,7 +474,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
         if (frameSet()->type() == Words::OtherFrameSet || frameSet()->textFrameSetType() == Words::OtherTextFrameSet) {
             // adjust size to have at least the defined minimum height
-            Q_ASSERT(frameSet()->frameCount() > 0);
+            Q_ASSERT(frameSet()->shapeCount() > 0);
             KWFrame *frame = static_cast<KWFrame*>(frameSet()->frames().first());
             if (frame->minimumFrameHeight() > newSize.height())
                 newSize.setHeight(frame->minimumFrameHeight());
@@ -510,7 +510,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
         if (isHeaderFooter) {
             // adjust the minimum frame height for headers and footer
-            Q_ASSERT(frameSet()->frameCount() > 0);
+            Q_ASSERT(frameSet()->shapeCount() > 0);
             KWFrame *frame = static_cast<KWFrame*>(frameSet()->frames().first());
             if (frame->minimumFrameHeight() != newSize.height()) {
                 frame->setMinimumFrameHeight(newSize.height());
