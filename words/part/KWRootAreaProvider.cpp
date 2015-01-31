@@ -515,7 +515,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
                 // transfer the new minimumFrameHeight to the copy-shapes too
                 foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
-                    cs->setMinimumFrameHeight(newSize.height());
+                    //cs->setMinimumFrameHeight(newSize.height());
                 }
                 // cause the header/footer's height changed we have to relayout the whole page
                 frameSet()->wordsDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
