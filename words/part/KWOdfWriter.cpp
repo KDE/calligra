@@ -305,16 +305,29 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
                 shape->setName(QString("%1-%2").arg(fs->name(), QString::number(counter)));
             uniqueNames << shape->name();
         }
-        const QList<KWFrame*> frames = fs->frames();
-        for (int i = 0; i < frames.count(); ++i) {
-            KWFrame *frame = frames.at(i);
-            KWPage page = m_document->pageManager()->page(frame->shape());
-            KoShape *shape = frame->shape();
+        foreach (KoShape *shape, fs->shapes()) {
+            KWPage page = m_document->pageManager()->page(shape);
             if (m_document->annotationLayoutManager()->isAnnotationShape(shape)) {
                 // Skip to save annotation shapes.
                 continue;
             }
-            frame->saveOdf(context, page, m_zIndexOffsets.value(page));
+
+            if (shape->minimumHeight() > 1) {
+                shape->setAdditionalAttribute("fo:min-height", QString::number(shape->minimumHeight()) + "pt");
+            }
+
+            // shape properties
+            const qreal pagePos = page.offsetInDocument();
+
+            shape->setAdditionalAttribute("text:anchor-type", "page");
+            shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
+            context.addShapeOffset(shape, QTransform(1, 0, 0 , 1, 0, -pagePos));
+            shape->saveOdf(context);
+            context.removeShapeOffset(shape);
+            shape->removeAdditionalAttribute("fo:min-height");
+            shape->removeAdditionalAttribute("text:anchor-page-number");
+            shape->removeAdditionalAttribute("text:anchor-page-number");
+            shape->removeAdditionalAttribute("text:anchor-type");
         }
     }
 

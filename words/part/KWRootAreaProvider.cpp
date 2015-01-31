@@ -46,7 +46,7 @@
 class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
-        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, KWFrame *frame, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_frame(frame), m_pageNumber(pageNumber) {
+        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_pageNumber(pageNumber) {
             //kDebug(32001);
         }
         virtual ~KWTextLayoutRootArea() {
@@ -58,7 +58,6 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
             return ok;
         }
         KWTextFrameSet *m_frameSet;
-        KWFrame *m_frame;
         int m_pageNumber;
 };
 
@@ -204,13 +203,13 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     }
     // Determinate the frames that are on the page. Note that the KWFrameLayout only knows
     // about header, footer and the mainframes but not about all other framesets.
-    QList<KWFrame *> frames;
+    QList<KoShape *> shapes;
 
     if (frameSet()->type() == Words::OtherFrameSet || frameSet()->textFrameSetType() == Words::OtherTextFrameSet) {
-        if (KWFrame *f = frameSet()->frames().value(pageNumber - 1))
-            frames = QList<KWFrame *>() << f;
+        if (KoShape *s = frameSet()->shapes().value(pageNumber - 1))
+            shapes = QList<KoShape *>() << s;
     } else {
-        frames = kwdoc->frameLayout()->framesOn(frameSet(), pageNumber);
+        shapes = kwdoc->frameLayout()->sequencedShapesOn(frameSet(), pageNumber);
     }
 
     // position OtherFrameSet's which are anchored to this page
@@ -249,16 +248,14 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         }
     }
 
-    KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
+    KoShape *shape = rootAreaPage->rootAreas.count() < shapes.count() ? shapes[rootAreaPage->rootAreas.count()] : 0;
 
-    KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, frameSet(), frame, pageNumber);
+    KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, frameSet(), pageNumber);
     if (frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
         area->setAcceptsPageBreak(true);
     }
 
-    if (frame) { // Not every KoTextLayoutRootArea has a frame that contains a KoShape for display purposes.
-        KoShape *shape = frame->shape();
-        Q_ASSERT(shape);
+    if (shape) { // Not every KoTextLayoutRootArea has a KoShape for display purposes.
         //Q_ASSERT_X(pageNumber == pageManager->page(shape).pageNumber(), __FUNCTION__, QString("KWPageManager is out-of-sync, pageNumber=%1 vs pageNumber=%2 with offset=%3 vs offset=%4 on frameSetType=%5").arg(pageNumber).arg(pageManager->page(shape).pageNumber()).arg(shape->absolutePosition().y()).arg(pageManager->page(shape).offsetInDocument()).arg(Words::frameSetTypeName(frameSet()->textFrameSetType())).toLocal8Bit());
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
         if (data) {

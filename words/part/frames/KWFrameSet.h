@@ -32,10 +32,7 @@
 class KWCopyShape;
 
 /**
- * A frameSet holds a number of frames (zero or more) and a frameSet holds the
- * content that is displayed on screen.
- * The FrameSet holds KWFrame objects that actually render the content this object
- * holds to the screen or to the printer.
+ * A frameSet holds a number of shapes (1 or more)
  */
 class WORDS_EXPORT KWFrameSet : public QObject
 {
@@ -51,27 +48,17 @@ public:
     static KWFrameSet *from(KoShape *shape) {KWFrame *f = dynamic_cast<KWFrame*>(shape->applicationData()); return f ? f->frameSetxx() : 0;}
 
     /**
-     * Add a new Frame
-     * @param frame the new frame to add.
-     * @see frameAdded()
+     * Add a new shape
+     * @param shape the new shape to add.
+     * @see shapeAdded()
      */
-    void addFrame(KWFrame *frame);
+    void addShape(KoShape *shape);
 
     /**
-     * Remove a previously added Frame
-     * @param frame the frame to remove
-     * @param shape the shape of the frame
-     * You shouldn't use this method in most cases but the convenience version with only a single
-     * parameter
+     * Remove a previously added shape
+     * @param shape the shape to be removed
      */
-    void removeFrame(KWFrame *frame, KoShape *shape);
-
-    /**
-     * Remove a previously added Frame
-     * @param frame the frame to remove
-     * @see frameRemoved()
-     */
-    void removeFrame(KWFrame *frame) {removeFrame(frame, frame->shape());}
+    void removeShape(KoShape *shape);
 
     /**
      * Give this frameSet a name.
@@ -93,24 +80,25 @@ public:
      * List all frames this frameset has.  In the order that any content will flow through them.
      */
     const QList<KWFrame*> frames() const {
-        return m_frames;
+        QList<KWFrame *> frms;
+        foreach (KoShape *shape, m_shapes) {
+            frms.append(dynamic_cast<KWFrame *>(shape->applicationData()));
+        }
+
+        return frms;
     }
 
     /**
      * List all shapes this frameset has.  In the order that any content will flow through them.
      */
     const QList<KoShape *> shapes() const {
-        QList<KoShape *> sps;
-        foreach (KWFrame *f, m_frames) {
-            sps.append(f->shape());
-        }
-        return sps;
+        return m_shapes;
     }
     /**
      * Return the amount of frames this frameset has.
      */
     int shapeCount() const {
-        return m_frames.count();
+        return m_shapes.count();
     }
 
     Words::FrameSetType type() const {
@@ -127,26 +115,26 @@ public:
 
 signals:
     /**
-     * emitted whenever a frame is added
-     * @param frame the frame that has just been added
+     * emitted whenever a shape is added
+     * @param shape the shape that has just been added
      */
-    void frameAdded(KWFrame *frame);
+    void shapeAdded(KoShape *shape);
     /**
-     * emitted whenever a frame that was formerly registerd is removed
-     * @param frame the frame that has just been removed
+     * emitted whenever a shape that was formerly registerd is removed
+     * @param shape the shape that has just been removed
      */
-    void frameRemoved(KWFrame *frame);
+    void shapeRemoved(KoShape *shape);
 
 protected:
     friend class KWFrame;
 
     /**
-     * Called from addFrame.
-     * Overwrite in inheriting classes to do something with the frame on add.
-     * @param frame the frame that has just been added
+     * Called from addShape
+     * Overwrite in inheriting classes to do something with the shape on add.
+     * @param shape the shape that has just been added
      */
-    virtual void setupFrame(KWFrame *frame) {
-        Q_UNUSED(frame);
+    virtual void setupShape(KoShape *shape) {
+        Q_UNUSED(shape);
     }
 
     /**
@@ -156,11 +144,9 @@ protected:
         Q_UNUSED(shape);
     }
 
-    void cleanupFrames();
-
 private:
     /// The list of frames that this frameset owns.
-    QList<KWFrame*> m_frames;
+    QList<KoShape *> m_shapes;
     /// The type of the frameset.
     Words::FrameSetType m_type;
     /// The name of the frameset.

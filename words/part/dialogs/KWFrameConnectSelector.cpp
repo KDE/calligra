@@ -105,7 +105,7 @@ void KWFrameConnectSelector::save()
     if (widget.newRadio->isChecked()) {
         KWTextFrameSet *newFS = new KWTextFrameSet(m_state->document());
         newFS->setName(widget.frameSetName->text());
-        m_frame->setFrameSetxx(newFS);
+        //m_frame->setFrameSetxx(newFS);
         m_state->document()->addFrameSet(newFS);
     } else { // attach to (different) FS
         QTreeWidgetItem *selected = widget.framesList->currentItem();
@@ -113,8 +113,9 @@ void KWFrameConnectSelector::save()
         int index = m_items.indexOf(selected);
         Q_ASSERT(index >= 0);
         KWFrameSet *newFS = m_frameSets[index];
-        if (oldFS != newFS)
-            m_frame->setFrameSetxx(newFS);
+        if (oldFS != newFS) {
+            //FIXMEm_frame->setFrameSetxx(newFS);
+        }
     }
     if (oldFS && oldFS->shapeCount() == 0) {
         // TODO

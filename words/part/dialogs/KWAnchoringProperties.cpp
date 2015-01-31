@@ -530,12 +530,12 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
             KoShapeContainer *container = 0;
             // we change from page anchored to text shape anchored.
             if (type != KoShapeAnchor::AnchorPage && anchor->anchorType() == KoShapeAnchor::AnchorPage) {
-                KWFrame *targetFrame = m_state->document()->findClosestFrame(anchor->shape());
+                KoShape *targetShape = m_state->document()->findTargetTextShape(anchor->shape());
 
-                if (targetFrame != 0) {
-                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetFrame->shape()->userData());
+                if (targetShape != 0) {
+                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetShape->userData());
                     if (textData) {
-                        container = static_cast<KoShapeContainer*>(targetFrame->shape());
+                        container = static_cast<KoShapeContainer*>(targetShape);
                     }
                 }
             }

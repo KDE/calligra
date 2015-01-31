@@ -148,8 +148,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        kDebug(32001) << "HeaderTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << pageStyle.name();
-        if (!frameOn(fs, pageNumber)) {
+        kDebug(32001) << "HeaderTextFrame" << fs << "sequencedShapeOn=" << sequencedShapeOn(fs, pageNumber) << "pageStyle=" << pageStyle.name();
+        if (!sequencedShapeOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
     }
@@ -157,8 +157,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        kDebug(32001) << "FooterTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << pageStyle.name();
-        if (!frameOn(fs, pageNumber)) {
+        kDebug(32001) << "FooterTextFrame" << fs << "sequencedShapeOn=" << sequencedShapeOn(fs, pageNumber) << "pageStyle=" << pageStyle.name();
+        if (!sequencedShapeOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
     }
@@ -166,22 +166,22 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     //kDebug(32001) <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << Words::frameSetTypeName(origin);
 
     // delete headers/footer frames that are not needed on this page
-    foreach (KWFrame *frame, framesInPage(page.rect())) {
-        if (KWFrameSet::from(frame->shape())->type() != Words::TextFrameSet)
+    foreach (KoShape *shape, sequencedShapesOnPage(page.rect())) {
+        if (KWFrameSet::from(shape)->type() != Words::TextFrameSet)
             continue;
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(frame->shape()));
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
         if (tfs && (allHFTypes.contains(tfs->textFrameSetType())
                 || (tfs->pageStyle() != pageStyle && Words::isHeaderFooter(tfs)))) {
-            Q_ASSERT(frame->shape());
-            KWPage p = m_pageManager->page(frame->shape());
+            Q_ASSERT(shape);
+            KWPage p = m_pageManager->page(shape);
             Q_ASSERT(p.isValid());
-            kDebug(32001)<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
-            tfs->removeFrame(frame);
-            delete frame->shape();
+            kDebug(32001)<<"Delete disabled header/footer shape=" << shape << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
+            tfs->removeShape(shape);
+            delete shape;
         }
     }
 
-    // create main text frame. All columns of them.
+    // create main text shape. All columns of them.
     const int columnsCount = pageStyle.columns().count;
     Q_ASSERT(columnsCount >= 1);
     KWTextFrameSet *fs = getOrCreate(Words::MainTextFrameSet, page);
@@ -190,13 +190,13 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     kDebug(32001) << "MainTextFrame" << fs << "pageRect=" << rect << "columnsCount=" << columnsCount;
     int neededColumnsCount = columnsCount;
     // Check existing column shapes
-    foreach (KWFrame *frame, framesInPage(rect)) {
-        if (KWFrameSet::from(frame->shape()) == fs) {
+    foreach (KoShape *shape, sequencedShapesOnPage(rect)) {
+        if (KWFrameSet::from(shape) == fs) {
             --neededColumnsCount;
             if (neededColumnsCount < 0) {
                 kDebug(32001) << "Deleting KWFrame from MainTextFrame";
-                fs->removeFrame(frame);
-                delete frame->shape();
+                fs->removeShape(shape);
+                delete shape;
             }
         }
     }
@@ -219,19 +219,19 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             emit newFrameSet(m_backgroundFrameSet);
             Q_ASSERT(m_frameSets.contains(m_backgroundFrameSet)); // the emit should have made that so :)
         }
-        KWFrame *background = frameOn(m_backgroundFrameSet, pageNumber);
+        KoShape *background = sequencedShapeOn(m_backgroundFrameSet, pageNumber);
         if (background == 0) {
-            KoShape *shape = new KWPageBackground();
-            shape->setPosition(QPointF(0, page.offsetInDocument()));
-            background = new KWFrame(shape, m_backgroundFrameSet);
-            shape->setTextRunAroundSide(KoShape::RunThrough);
+            background = new KWPageBackground();
+            background->setPosition(QPointF(0, page.offsetInDocument()));
+            new KWFrame(background, m_backgroundFrameSet);
+            background->setTextRunAroundSide(KoShape::RunThrough);
         }
-        background->shape()->setBackground(pageStyle.background());
+        background->setBackground(pageStyle.background());
     } else {
         // check if there is a frame, if so, delete it, we don't need it.
-        KWFrame *background = frameOn(m_backgroundFrameSet, pageNumber);
+        KoShape *background = sequencedShapeOn(m_backgroundFrameSet, pageNumber);
         if (background)
-            delete background->shape();
+            delete background;
     }
 
     layoutFramesOnPage(pageNumber);
@@ -281,31 +281,31 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     KWPageStyle pageStyle = page.pageStyle();
     KoColumns columns = pageStyle.columns();
     int columnIndex = 0;
-    KWFrame **main;
-    KWFrame *footer = 0, *header = 0;
-    KWFrame *pageBackground = 0;
-    main = new KWFrame*[columns.count];
+    KoShape **main;
+    KoShape *footer = 0, *header = 0;
+    KoShape *pageBackground = 0;
+    main = new KoShape*[columns.count];
     if (columns.count > 0)
         main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
-    QList<KWFrame *> frames = framesInPage(pageRect);
+    QList<KoShape *> shapes = sequencedShapesOnPage(pageRect);
 
-    kDebug(32001) << "pageNumber=" << pageNumber << "columns=" << columns.count << "shapeCount=" << frames.count();
-    foreach (KWFrame *frame, frames) {
+    kDebug(32001) << "pageNumber=" << pageNumber << "columns=" << columns.count << "shapeCount=" << shapes.count();
+    foreach (KoShape *shape, shapes) {
         KWTextFrameSet *textFrameSet = 0;
-        switch (KWFrameSet::from(frame->shape())->type()) {
+        switch (KWFrameSet::from(shape)->type()) {
         case Words::BackgroundFrameSet:
-            pageBackground = frame;
+            pageBackground = shape;
             continue;
         case Words::TextFrameSet:
-            textFrameSet = static_cast<KWTextFrameSet*>(KWFrameSet::from(frame->shape()));
+            textFrameSet = static_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
             if (textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
-                minZIndex = qMin(minZIndex, frame->shape()->zIndex());
+                minZIndex = qMin(minZIndex, shape->zIndex());
                 continue;
             }
             break;
         case Words::OtherFrameSet:
-            minZIndex = qMin(minZIndex, frame->shape()->zIndex());
+            minZIndex = qMin(minZIndex, shape->zIndex());
             continue;
         }
         Q_ASSERT(textFrameSet);
@@ -325,7 +325,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         switch (textFrameSet->textFrameSetType()) {
         case Words::OddPagesHeaderTextFrameSet:
         case Words::EvenPagesHeaderTextFrameSet: {
-            header = frame;
+            header = shape;
             minimumHeight[2] = pageStyle.headerDistance();
             minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight() - pageStyle.headerDistance());
             requestedHeight[1] = qMax(minimumHeight[1], textFrameSet->shapes().first()->minimumHeight());
@@ -336,7 +336,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
         case Words::OddPagesFooterTextFrameSet:
         case Words::EvenPagesFooterTextFrameSet: {
-            footer = frame;
+            footer = shape;
             minimumHeight[4] = pageStyle.footerDistance();
             minimumHeight[5] = qMax((qreal)10, pageStyle.footerMinimumHeight() - pageStyle.footerDistance());
             requestedHeight[5] = qMax(minimumHeight[5], textFrameSet->shapes().first()->minimumHeight());
@@ -350,7 +350,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                 kWarning(32001) << "Too many columns present on page, ignoring 1, columns.count=" << columns.count;
                 break;
             }
-            main[columnIndex] = frame;
+            main[columnIndex] = shape;
             ++columnIndex;
             minimumHeight[3] = 10;
             // make at least one line fit lest we add endless pages.
@@ -365,30 +365,28 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
     }
 
-    pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
+    pageBackground = sequencedShapeOn(m_backgroundFrameSet, pageNumber);
 
     --minZIndex;
     for (int i = 0; i < columns.count; ++i) {
-        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnsCount=%2").arg(i).arg(columns.count).toLocal8Bit());
-        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnsCount=%2").arg(i).arg(columns.count).toLocal8Bit());
-        if (main[i] && main[i]->shape())
-            main[i]->shape()->setZIndex(minZIndex);
+        Q_ASSERT_X(main[i], __FUNCTION__, QString("No TextShape for column=%1 columnsCount=%2").arg(i).arg(columns.count).toLocal8Bit());
+        if (main[i])
+            main[i]->setZIndex(minZIndex);
     }
-    if (footer && footer->shape()) {
-        footer->shape()->setZIndex(minZIndex);
+    if (footer) {
+        footer->setZIndex(minZIndex);
         // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
-        footer->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
+        footer->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
-    if (header && header->shape()) {
-        header->shape()->setZIndex(minZIndex);
+    if (header) {
+        header->setZIndex(minZIndex);
         // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
-        header->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
+        header->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
 
     if (pageBackground) {
-        KoShape *bs = pageBackground->shape();
-        bs->setRunThrough(-10); //so it will be below everything
-        bs->setZIndex(--minZIndex);
+        pageBackground->setRunThrough(-10); //so it will be below everything
+        pageBackground->setZIndex(--minZIndex);
     }
 
     // spread space across items.
@@ -460,7 +458,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         for (int i = 0; i < columns.count; i++) {
             for (int f = 0; f < columns.count; f++) {
                 if (f == i) continue;
-                if (qAbs(main[f]->shape()->position().x() - columnRects[i].x()) < 10.0) {
+                if (qAbs(main[f]->position().x() - columnRects[i].x()) < 10.0) {
                     qSwap(main[f], main[i]);
                     break;
                 }
@@ -469,9 +467,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
         // finally set size and position of the shapes
         for (int i = columns.count - 1; i >= 0; i--) {
-            KoShape *shape = main[i]->shape();
-            shape->setPosition(columnRects[i].topLeft());
-            shape->setSize(columnRects[i].size());
+            main[i]->setPosition(columnRects[i].topLeft());
+            main[i]->setSize(columnRects[i].size());
         }
 
         delete[] columnRects;
@@ -481,22 +478,22 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         page.setContentRect(QRectF(QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[3]), QSizeF(textWidth ,resultingPositions[4] - resultingPositions[3])));
     }
     if (header) {
-        header->shape()->setPosition(
+        header->setPosition(
             QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[1]));
-        header->shape()->setSize(QSizeF(textWidth, resultingPositions[2] - resultingPositions[1]));
+        header->setSize(QSizeF(textWidth, resultingPositions[2] - resultingPositions[1]));
     }
     if (footer) {
-        footer->shape()->setPosition(
+        footer->setPosition(
             QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[5]));
-        footer->shape()->setSize(QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
+        footer->setSize(QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
     }
     if (pageBackground) {
-        pageBackground->shape()->setPosition(QPointF(left + layout.leftMargin, page.offsetInDocument() + layout.topMargin));
-        pageBackground->shape()->setSize(QSizeF(width - layout.leftMargin - layout.rightMargin,
+        pageBackground->setPosition(QPointF(left + layout.leftMargin, page.offsetInDocument() + layout.topMargin));
+        pageBackground->setSize(QSizeF(width - layout.leftMargin - layout.rightMargin,
                                                 page.height() - layout.topMargin - layout.bottomMargin));
 
         // set separator data
-        KWPageBackground *bs = dynamic_cast<KWPageBackground *>(pageBackground->shape());
+        KWPageBackground *bs = dynamic_cast<KWPageBackground *>(pageBackground);
         if (columns.count > 1) {
             const qreal fullColumnHeight = resultingPositions[4] - resultingPositions[3];
 
@@ -636,21 +633,21 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, Words:
     return true;
 }
 
-QList<KWFrame *> KWFrameLayout::framesInPage(int pageNumber) const
+QList<KoShape *> KWFrameLayout::sequencedShapesOnPage(int pageNumber) const
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    return framesInPage(page.rect());
+    return sequencedShapesOnPage(page.rect());
 }
 
-QList<KWFrame *> KWFrameLayout::framesInPage(const QRectF &page) const
+QList<KoShape *> KWFrameLayout::sequencedShapesOnPage(const QRectF &page) const
 {
     // hopefully replaced with a tree
-    QList<KWFrame*> answer;
+    QList<KoShape *> answer;
     foreach (KWFrameSet *fs, m_frameSets) {
-        foreach (KWFrame *frame, fs->frames()) {
-            if (page.contains(frame->shape()->absolutePosition()))
-                answer.append(frame);
+        foreach (KoShape *shape, fs->shapes()) {
+            if (page.contains(shape->absolutePosition()))
+                answer.append(shape);
         }
     }
     return answer;
@@ -731,10 +728,10 @@ void KWFrameLayout::setup()
                 Q_ASSERT(m_maintext == 0); // there can be only one!
                 if (tfs != oldMainText) {
                     oldMainText = 0;
-                    disconnect(tfs, SIGNAL(frameRemoved(KWFrame*)),
-                            this, SLOT(mainframeRemoved(KWFrame*)));
-                    connect(tfs, SIGNAL(frameRemoved(KWFrame*)),
-                            this, SLOT(mainframeRemoved(KWFrame*)));
+                    disconnect(tfs, SIGNAL(shapeRemoved(KoShape *)),
+                            this, SLOT(mainShapeRemoved(KoShape *)));
+                    connect(tfs, SIGNAL(shapeRemoved(KoShape *)),
+                            this, SLOT(mainShapeRemoved(KoShape *)));
                 }
                 m_maintext = tfs;
             default: ;// ignore
@@ -761,27 +758,27 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     return shape;
 }
 
-KWFrame *KWFrameLayout::frameOn(KWFrameSet *fs, int pageNumber) const
+KoShape *KWFrameLayout::sequencedShapeOn(KWFrameSet *fs, int pageNumber) const
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    foreach (KWFrame *frame, framesInPage(page.rect())) {
-        if (KWFrameSet::from(frame->shape()) == fs)
-            return frame;
+    foreach (KoShape *shape, sequencedShapesOnPage(page.rect())) {
+        if (KWFrameSet::from(shape) == fs)
+            return shape;
     }
     return 0;
 }
 
-QList<KWFrame *> KWFrameLayout::framesOn(KWFrameSet *fs, int pageNumber) const
+QList<KoShape *> KWFrameLayout::sequencedShapesOn(KWFrameSet *fs, int pageNumber) const
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    QList<KWFrame *> frames;
-    foreach (KWFrame *frame, framesInPage(page.rect())) {
-        if (KWFrameSet::from(frame->shape()) == fs)
-            frames.append(frame);
+    QList<KoShape *> shapes;
+    foreach (KoShape *shape, sequencedShapesOnPage(page.rect())) {
+        if (KWFrameSet::from(shape) == fs)
+            shapes.append(shape);
     }
-    return frames;
+    return shapes;
 }
 
 void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
@@ -792,7 +789,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
     if (fs->shapeCount() == 0)
         return;
     foreach (KWFrame *frame, fs->frames()) {
-        fs->removeFrame(frame);
+        fs->removeShape(frame->shape());
         delete frame->shape();
     }
 }
@@ -867,13 +864,11 @@ KWTextFrameSet* KWFrameLayout::getFrameSet(Words::TextFrameSetType type, const K
     return 0;
 }
 
-void KWFrameLayout::mainframeRemoved(KWFrame *frame)
+void KWFrameLayout::mainShapeRemoved(KoShape *shape)
 {
     // if a main-shape is removed we should remove all other auto-generated shapes on that page to allow
     // the page to be removed totally.  Besides; we don't want to have a header when there is no main-shape on a page :)
 
-    KoShape *shape = frame->shape();
-if(!shape) return;
     KWPage page = m_pageManager->page(shape);
     if (!page.isValid()) return;
     kDebug(32001) << "shape=" << shape << "pageNumber=" << page.pageNumber();

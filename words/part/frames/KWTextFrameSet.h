@@ -78,7 +78,7 @@ protected:
     friend class TestTextFrameSorting;
     friend class TestTextFrameManagement;
 
-    virtual void setupFrame(KWFrame *frame);
+    virtual void setupShape(KoShape *shape);
     virtual void cleanupShape(KoShape *shape);
 
 private:

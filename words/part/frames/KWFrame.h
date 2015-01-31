@@ -69,13 +69,6 @@ public:
     KWFrameSet *frameSetxx() const {
         return m_frameSet;
     }
-    /**
-     * Set the frameset this frame will work on.
-     * Altering the frameset requires you to remove this frame on the old and add the frame on the
-     * new frameset
-     * @param newFrameSet the new frameset
-     */
-    virtual void setFrameSetxx(KWFrameSet *newFrameSet);
 
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
@@ -84,11 +77,6 @@ public:
         m_anchoredFrameOffset = offset;
     }
 
-    /**
-     * Save the frame as ODF
-     * @param context the context for saving.
-     */
-    void saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset = 0) const;
 
 private:
     KoShape *m_shape;

@@ -22,7 +22,6 @@
 
 #include "KWFrameSet.h"
 #include "KWFrame.h"
-#include <KoColorBackground.h>
 #include "KWCopyShape.h"
 
 #include <kdebug.h>
@@ -36,67 +35,54 @@ KWFrameSet::KWFrameSet(Words::FrameSetType type)
 
 KWFrameSet::~KWFrameSet()
 {
-    cleanupFrames();
-}
+    while (!shapes().isEmpty()) { // deleting a shape can result in multiple KWFrame's and shapes being deleted (e.g. copy-shapes)
+        KoShape *s = shapes().last();
 
-void KWFrameSet::cleanupFrames()
-{
-    kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
-    while (!frames().isEmpty()) { // deleting a shape can result in multiple KWFrame's and shapes being deleted (e.g. copy-shapes)
-        KWFrame *f = frames().last();
-        if (f->shape()) {
-            delete f->shape(); // deletes also the KWFrame and calls KWFrameSet::removeFrame
-            Q_ASSERT(!frames().contains(f));
-        } else {
-            removeFrame(f);
-        }
+        // we are going to delete the shape which under normal circumstances also removes it
+        // But if we rely on that a signal will be emitted and we are being deleted
+        m_shapes.removeAll(s);
+        delete s; // deletes also the KWFrame and calls KWFrameSet::removeFrame
     }
 }
 
-void KWFrameSet::addFrame(KWFrame *frame)
+void KWFrameSet::addShape(KoShape *shape)
 {
-    Q_ASSERT(frame);
-    kDebug(32001) << "frame=" << frame << "frameSetxx=" << frame->frameSetxx();
-    Q_ASSERT(!m_frames.contains(frame));
-    m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
-    frame->setFrameSetxx(this);
-    setupFrame(frame);
+    kDebug(32001) << "shape=" << shape << "frameSet=" << this;
+    Q_ASSERT(!m_shapes.contains(shape));
+    m_shapes.append(shape); // this one first, so we don't enter the addFrame twice.
+    setupShape(shape);
 
-    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(shape);
     if (copyShape) {
         if (copyShape->original()) {
             addCopy(copyShape);
         }
     }
-    emit frameAdded(frame);
+    emit shapeAdded(shape);
 }
 
-void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
+void KWFrameSet::removeShape(KoShape *shape)
 {
-    Q_ASSERT(frame);
-    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(shape);
     if (copyShape) {
         removeCopy(copyShape);
     } else {
-        //TODO use the copyFrame-list the KWFrame's remembers now
-        // Loop over all frames to see if there is a copy frame that references the removed
-        // frame; if it does, then delete the copy too.
-        for(int i = frames().count() - 1; i >= 0; --i) {
-            KWFrame *frame = frames()[i];
-            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frame->shape())) {
+        // Loop over all frames to see if there is a copy shape that references the removed
+        // shape; if it does, then delete the copy too.
+        for(int i = shapes().count() - 1; i >= 0; --i) {
+            KoShape *s = shapes()[i];
+            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(s)) {
                 if (cs->original() == shape) {
-                    Q_ASSERT(frame->frameSetxx() == this);
                     cleanupShape(cs);
-                    removeFrame(frame, cs);
+                    removeShape(cs);
                     delete cs;
                 }
             }
         }
     }
 
-    if (m_frames.removeAll(frame)) {
-        frame->setFrameSetxx(0);
-        emit frameRemoved(frame);
+    if (m_shapes.removeAll(shape)) {
+        emit shapeRemoved(shape);
     }
 }
 

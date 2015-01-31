@@ -36,8 +36,8 @@ class KWPageManager;
 class KWFrameSet;
 class KWTextFrameSet;
 class KWPage;
-class KWFrame;
 class KWDocument;
+class KWFrame;
 
 class KoShape;
 
@@ -89,16 +89,16 @@ public:
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
-    QList<KWFrame *> framesInPage(const QRectF &page) const;
-    QList<KWFrame *> framesInPage(int pageNumber) const;
+    QList<KoShape *> sequencedShapesOnPage(const QRectF &page) const;
+    QList<KoShape *> sequencedShapesOnPage(int pageNumber) const;
 
-    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
-    QList<KWFrame *> framesOn(KWFrameSet *fs, int pageNumber) const;
+    KoShape *sequencedShapeOn(KWFrameSet *fs, int pageNumber) const;
+    QList<KoShape *> sequencedShapesOn(KWFrameSet *fs, int pageNumber) const;
 
-    QList<KWTextFrameSet*> getFrameSets(const KWPageStyle &pageStyle) const;
+    QList<KWTextFrameSet *> getFrameSets(const KWPageStyle &pageStyle) const;
     KWTextFrameSet* getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
-    KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
+    KWFrame *createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
 signals:
     /**
@@ -111,8 +111,8 @@ signals:
     void removedFrameSet(KWFrameSet *fs);
 
 private slots:
-    // called when a frame from the main text is removed to check if we should clear the page of other auto-created frames
-    void mainframeRemoved(KWFrame *frame);
+    // called when a shape from the main text is removed to check if we should clear the page of other auto-created shape
+    void mainShapeRemoved(KoShape *shape);
 
 private:
     struct FrameSets {
