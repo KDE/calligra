@@ -35,8 +35,7 @@
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),
         m_anchoredFrameOffset(0.0),
-        m_frameSet(parent),
-        m_minimumFrameHeight(0.0) // no minimum height per default
+        m_frameSet(parent)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -101,18 +100,6 @@ KWFrame::~KWFrame()
     }
 }
 
-qreal KWFrame::minimumFrameHeight() const
-{
-    return m_minimumFrameHeight;
-}
-
-void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
-{
-    if (m_minimumFrameHeight == minimumFrameHeight)
-        return;
-    m_minimumFrameHeight = minimumFrameHeight;
-}
-
 void KWFrame::setFrameSetxx(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
@@ -130,8 +117,8 @@ void KWFrame::setFrameSetxx(KWFrameSet *fs)
 
 void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*pageZIndexOffset*/) const
 {
-    if (minimumFrameHeight() > 1) {
-        m_shape->setAdditionalAttribute("fo:min-height", QString::number(minimumFrameHeight()) + "pt");
+    if (m_shape->minimumHeight() > 1) {
+        m_shape->setAdditionalAttribute("fo:min-height", QString::number(m_shape->minimumHeight()) + "pt");
     }
 
     // shape properties

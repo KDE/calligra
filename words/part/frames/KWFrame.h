@@ -55,17 +55,6 @@ public:
     virtual ~KWFrame();
 
     /**
-     * Set the minimum height of the frame.
-     * @param minimumFrameHeight the minimum height of the frame.
-     */
-    void setMinimumFrameHeight(qreal minimumFrameHeight);
-    /**
-     * Return the minimum height of the frame.
-     * @return the minimum height of the frame. Default is 0.0.
-     */
-    qreal minimumFrameHeight() const;
-
-    /**
      * Each frame will be rendered by a shape which also holds the position etc.
      * @return the shape that represents this frame.
      */
@@ -105,7 +94,6 @@ private:
     KoShape *m_shape;
     qreal m_anchoredFrameOffset;
     KWFrameSet *m_frameSet;
-    qreal m_minimumFrameHeight;
 };
 
 #endif

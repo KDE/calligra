@@ -73,9 +73,9 @@ void KWRootAreaProviderBase::doPostLayout(KoTextLayoutRootArea *rootArea, bool /
 
         // adjust size to have at least the defined minimum height
         Q_ASSERT(frameSet()->shapeCount() > 0);
-        KWFrame *frame = static_cast<KWFrame*>(frameSet()->frames().first());
-        if (frame->minimumFrameHeight() > newSize.height())
-            newSize.setHeight(frame->minimumFrameHeight());
+        KoShape *firstShape = frameSet()->shapes().first();
+        if (firstShape->minimumHeight() > newSize.height())
+            newSize.setHeight(firstShape->minimumHeight());
     }
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {

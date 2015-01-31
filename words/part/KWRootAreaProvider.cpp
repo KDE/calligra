@@ -477,9 +477,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
         if (frameSet()->type() == Words::OtherFrameSet || frameSet()->textFrameSetType() == Words::OtherTextFrameSet) {
             // adjust size to have at least the defined minimum height
             Q_ASSERT(frameSet()->shapeCount() > 0);
-            KWFrame *frame = static_cast<KWFrame*>(frameSet()->frames().first());
-            if (frame->minimumFrameHeight() > newSize.height())
-                newSize.setHeight(frame->minimumFrameHeight());
+            KoShape *firstShape = frameSet()->shapes().first();
+            if (firstShape->minimumHeight() > newSize.height())
+                newSize.setHeight(firstShape->minimumHeight());
         }
     }
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
@@ -507,15 +507,15 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
         }
 
         if (isHeaderFooter) {
-            // adjust the minimum frame height for headers and footer
+            // adjust the minimum shape height for headers and footer
             Q_ASSERT(frameSet()->shapeCount() > 0);
-            KWFrame *frame = static_cast<KWFrame*>(frameSet()->frames().first());
-            if (frame->minimumFrameHeight() != newSize.height()) {
-                frame->setMinimumFrameHeight(newSize.height());
+            KoShape *firstShape = frameSet()->shapes().first();
+            if (firstShape->minimumHeight() != newSize.height()) {
+                firstShape->setMinimumHeight(newSize.height());
 
                 // transfer the new minimumFrameHeight to the copy-shapes too
                 foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
-                    //cs->setMinimumFrameHeight(newSize.height());
+                    cs->setMinimumHeight(newSize.height());
                 }
                 // cause the header/footer's height changed we have to relayout the whole page
                 frameSet()->wordsDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
