@@ -77,7 +77,7 @@ KWTextFrameSet::~KWTextFrameSet()
 void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
     Q_ASSERT(frame->shape());
-    Q_ASSERT(frame->frameSet() == this);
+    Q_ASSERT(frame->frameSetxx() == this);
     Q_ASSERT(frames().contains(frame));
 
     KWPage page = m_pageManager->page(frame->shape());
@@ -97,7 +97,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         return;
     }
 
-    kDebug(32001) << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
+    kDebug(32001) << "frameSet=" << frame->frameSetxx() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
     // Handle the special case that the KoTextShapeData already defines a QTextDocument that we need
     // to take over. This is the case with OtherTextFrameSet's where the KWTextFrameSet

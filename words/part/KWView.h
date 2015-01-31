@@ -159,8 +159,8 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
+    /// loops over the selected shapes and returns the top level shapes.
+    QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;
 
 private slots:

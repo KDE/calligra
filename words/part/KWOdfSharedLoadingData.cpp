@@ -63,7 +63,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
         KWTextFrameSet *fs = 0;
         KWFrame *previous = m_nextFrames.value(shape->name());
         if (previous)
-            fs = dynamic_cast<KWTextFrameSet*>(previous->frameSet());
+            fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(previous->shape()));
         if (fs == 0) {
             fs = new KWTextFrameSet(m_loader->document());
             fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));

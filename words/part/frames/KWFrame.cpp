@@ -143,7 +143,7 @@ void KWFrame::cleanupShape(KoShape* shape)
     }
 }
 
-void KWFrame::setFrameSet(KWFrameSet *fs)
+void KWFrame::setFrameSetxx(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
         return;
@@ -172,11 +172,6 @@ void KWFrame::addCopy(KWFrame* frame)
 void KWFrame::removeCopy(KWFrame* frame)
 {
     m_copyShapes.removeAll(frame);
-}
-
-void KWFrame::copySettings(const KWFrame *frame)
-{
-    shape()->copySettings(frame->shape());
 }
 
 void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*pageZIndexOffset*/) const

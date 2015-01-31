@@ -47,7 +47,7 @@ public:
     /** fetch the frameset of a shape
      * @param shape the shape to fetch the frameset from
      */
-    static KWFrameSet *from(KoShape *shape) {KWFrame *f = dynamic_cast<KWFrame*>(shape->applicationData()); return f ? f->frameSet() : 0;}
+    static KWFrameSet *from(KoShape *shape) {KWFrame *f = dynamic_cast<KWFrame*>(shape->applicationData()); return f ? f->frameSetxx() : 0;}
 
     /**
      * Add a new Frame

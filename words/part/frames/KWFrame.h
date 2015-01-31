@@ -77,7 +77,7 @@ public:
      * Return the parent frameset.
      * @return the parent frameset
      */
-    KWFrameSet *frameSet() const {
+    KWFrameSet *frameSetxx() const {
         return m_frameSet;
     }
     /**
@@ -86,19 +86,10 @@ public:
      * new frameset
      * @param newFrameSet the new frameset
      */
-    virtual void setFrameSet(KWFrameSet *newFrameSet);
+    virtual void setFrameSetxx(KWFrameSet *newFrameSet);
 
     void cleanupShape(KoShape* shape);
 
-    /*
-    void clearLoadingData() {
-        m_anchoredPageNumber = -1;
-    }
-    */
-
-    int anchoredPageNumber() const {
-        return m_shape->anchor() ? m_shape->anchor()->pageNumber() : -1;
-    }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
     }
@@ -116,12 +107,6 @@ public:
     void removeCopy(KWFrame* frame);
 
     /**
-     * Copy all the settings from the parameter frame and apply them to this frame.
-     * @param frame the frame to use as original
-     */
-    void copySettings(const KWFrame *frame);
-
-    /**
      * Save the frame as ODF
      * @param context the context for saving.
      */
@@ -129,7 +114,6 @@ public:
 
 private:
     KoShape *m_shape;
-    bool m_copyToEverySheet;
     qreal m_anchoredFrameOffset;
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;

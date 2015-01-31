@@ -27,9 +27,9 @@
 #include "KWRunAroundProperties.h"
 #include "KWAnchoringProperties.h"
 #include "KWCanvas.h"
-#include "frames/KWFrame.h"
+#include "frames/KWFrameSet.h"
 
-KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, KWCanvas *canvas)
+KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *document, KWCanvas *canvas)
         : KPageDialog(canvas)
         , m_frameConnectSelector(0)
         , m_canvas(canvas)
@@ -38,25 +38,26 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
     setFaceType(Tabbed);
 
     m_anchoringProperties = new KWAnchoringProperties(m_state);
-    if (m_anchoringProperties->open(frames))
+    if (m_anchoringProperties->open(shapes))
         addPage(m_anchoringProperties, i18n("Smart Positioning"));
 
     m_runAroundProperties = new KWRunAroundProperties(m_state);
-    if (m_runAroundProperties->open(frames))
+    if (m_runAroundProperties->open(shapes))
         addPage(m_runAroundProperties, i18n("Text Run Around"));
 
-    if (frames.count() == 1) {
+    /*
+    if (shapes.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
-        KWFrame *frame = frames.first();
-        m_state->setKeepAspectRatio(frame->shape()->keepAspectRatio());
-        if (m_frameConnectSelector->open(frame))
+        KoShape *shape = shapes.first();
+        m_state->setKeepAspectRatio(shape->keepAspectRatio());
+        if (m_frameConnectSelector->open(shape))
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
         else {
             delete m_frameConnectSelector;
             m_frameConnectSelector = 0;
         }
     }
-
+    */
 
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));

@@ -52,13 +52,13 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
         m_frameSets.append(textFs);
         QTreeWidgetItem *row = new QTreeWidgetItem(widget.framesList);
         row->setText(0, textFs->name());
-        if (frame->frameSet() == fs)
+        if (KWFrameSet::from(m_frame->shape()) == fs)
             widget.framesList->setCurrentItem(row);
         m_items.append(row);
     }
 
-    if (textFrame->frameSet()) { // already has a frameset
-        KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(textFrame->frameSet());
+    if (KWFrameSet::from(textFrame->shape())) { // already has a frameset
+        KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(KWFrameSet::from(textFrame->shape()));
         if (textFs->textFrameSetType() != Words::OtherTextFrameSet)
             return false; // can't alter frameSet of this auto-generated frame!
 
@@ -101,11 +101,11 @@ void KWFrameConnectSelector::nameChanged(const QString &text)
 void KWFrameConnectSelector::save()
 {
     Q_ASSERT(m_frameSets.count() == m_items.count());
-    KWFrameSet *oldFS = m_frame->frameSet();
+    KWFrameSet *oldFS = KWFrameSet::from(m_frame->shape());
     if (widget.newRadio->isChecked()) {
         KWTextFrameSet *newFS = new KWTextFrameSet(m_state->document());
         newFS->setName(widget.frameSetName->text());
-        m_frame->setFrameSet(newFS);
+        m_frame->setFrameSetxx(newFS);
         m_state->document()->addFrameSet(newFS);
     } else { // attach to (different) FS
         QTreeWidgetItem *selected = widget.framesList->currentItem();
@@ -114,7 +114,7 @@ void KWFrameConnectSelector::save()
         Q_ASSERT(index >= 0);
         KWFrameSet *newFS = m_frameSets[index];
         if (oldFS != newFS)
-            m_frame->setFrameSet(newFS);
+            m_frame->setFrameSetxx(newFS);
     }
     if (oldFS && oldFS->shapeCount() == 0) {
         // TODO

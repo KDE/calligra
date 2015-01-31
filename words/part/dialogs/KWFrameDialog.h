@@ -48,7 +48,7 @@ public:
      * @param document the parent document where the frames belong to
      * @param canvas the canvas for centering the dialog and providing undobuffer
      */
-    KWFrameDialog(const QList<KWFrame*> &selectedFrames, KWDocument *document, KWCanvas *canvas = 0);
+    KWFrameDialog(const QList<KoShape *> &selectedShapes, KWDocument *document, KWCanvas *canvas = 0);
     ~KWFrameDialog();
 
     /**

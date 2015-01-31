@@ -56,10 +56,10 @@ void KWFrameSet::cleanupFrames()
 void KWFrameSet::addFrame(KWFrame *frame)
 {
     Q_ASSERT(frame);
-    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+    kDebug(32001) << "frame=" << frame << "frameSetxx=" << frame->frameSetxx();
     Q_ASSERT(!m_frames.contains(frame));
     m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
-    frame->setFrameSet(this);
+    frame->setFrameSetxx(this);
     setupFrame(frame);
 
     KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
@@ -93,7 +93,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
             KWFrame *frame = frames()[i];
             if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frame->shape())) {
                 if (cs->original() == shape) {
-                    Q_ASSERT(frame->frameSet() == this);
+                    Q_ASSERT(frame->frameSetxx() == this);
                     frame->cleanupShape(cs);
                     removeFrame(frame, cs);
                     delete cs;
@@ -103,7 +103,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
     }
 
     if (m_frames.removeAll(frame)) {
-        frame->setFrameSet(0);
+        frame->setFrameSetxx(0);
         emit frameRemoved(frame);
     }
 }

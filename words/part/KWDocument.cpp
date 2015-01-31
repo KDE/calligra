@@ -197,7 +197,7 @@ void KWDocument::addShape(KoShape *shape)
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
+    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(KWFrameSet::from(shape)) : QString());
     KWFrameSet *fs = KWFrameSet::from(shape);
     if (fs) { // not all shapes have to have a frame. Only top-level ones do.
         if (fs->shapeCount() == 1) // last frame on FrameSet
@@ -454,7 +454,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
 void KWDocument::addFrame(KWFrame *frame)
 {
-    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+    kDebug(32001) << "frame=" << frame << "frameSet=" << KWFrameSet::from(frame->shape());
     //firePageSetupChanged();
     emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
 }
@@ -462,7 +462,7 @@ void KWDocument::addFrame(KWFrame *frame)
 void KWDocument::removeFrame(KWFrame *frame)
 {
     if (frame->shape() == 0) return;
-    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+    kDebug(32001) << "frame=" << frame << "frameSet=" << KWFrameSet::from(frame->shape());
 
     emit shapeRemoved(frame->shape());
     KWPage page = pageManager()->page(frame->shape());

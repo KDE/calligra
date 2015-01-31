@@ -293,12 +293,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     kDebug(32001) << "pageNumber=" << pageNumber << "columns=" << columns.count << "shapeCount=" << frames.count();
     foreach (KWFrame *frame, frames) {
         KWTextFrameSet *textFrameSet = 0;
-        switch (frame->frameSet()->type()) {
+        switch (KWFrameSet::from(frame->shape())->type()) {
         case Words::BackgroundFrameSet:
             pageBackground = frame;
             continue;
         case Words::TextFrameSet:
-            textFrameSet = static_cast<KWTextFrameSet*>(frame->frameSet());
+            textFrameSet = static_cast<KWTextFrameSet*>(KWFrameSet::from(frame->shape()));
             if (textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
                 minZIndex = qMin(minZIndex, frame->shape()->zIndex());
                 continue;

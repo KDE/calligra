@@ -219,10 +219,11 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
             if (fs->type() != Words::OtherFrameSet && (!tfs || tfs->textFrameSetType() != Words::OtherTextFrameSet))
                 continue;
             foreach (KWFrame *frame, fs->frames()) {
-                if (frame->anchoredPageNumber() == pageNumber) {
+                KoShape *shape = frame->shape();
+                int anchoredPageNumber = shape->anchor() ? shape->anchor()->pageNumber() : -1;
+                if (anchoredPageNumber == pageNumber) {
                     qreal oldOffset = frame->anchoredFrameOffset();
                     qreal newOffset = rootAreaPage->page.offsetInDocument();
-                    KoShape *shape = frame->shape();
                     if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
                         frame->setAnchoredFrameOffset(newOffset);
                         QPointF pos(shape->position().x(), newOffset - oldOffset + shape->position().y());
