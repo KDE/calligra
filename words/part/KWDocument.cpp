@@ -327,8 +327,6 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     foreach (KWFrame *frame, fs->frames())
         removeFrame(frame);
 
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
-
     disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
@@ -460,7 +458,6 @@ void KWDocument::addFrame(KWFrame *frame)
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
     emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
 }
 
 void KWDocument::removeFrame(KWFrame *frame)

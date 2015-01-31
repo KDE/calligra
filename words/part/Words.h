@@ -76,10 +76,7 @@ namespace Words
     /// Specifies the Words specific resources that you can put and get from the KoCanvasResourceManager
     enum WordsCanvasResources {
         // lets try to put Current in front of everything for ease of reading.
-        CurrentFrame = KoCanvasResourceManager::WordsStart,
-        CurrentFrameSet,
-        CurrentFrameSetCount,
-        CurrentPictureCount,
+        CurrentPictureCount = KoCanvasResourceManager::WordsStart,
         CurrentTableCount,
         CurrentPageCount,
         FrameOutlineColor

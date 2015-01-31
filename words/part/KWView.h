@@ -182,8 +182,6 @@ private slots:
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// shows or hides the rulers
     void showRulers(bool visible);
-    /// creates a copy of the current frame
-    void createLinkedFrame();
     /// shows or hides the status bar
     void showStatusBar(bool);
     /// selects all frames

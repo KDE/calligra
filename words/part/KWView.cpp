@@ -812,26 +812,9 @@ void KWView::selectionChanged()
     }
 
     // actions that need at least one shape selected
-    QAction *action = actionCollection()->action("create_linked_frame");
-    if (action) action->setEnabled(shape);
-    action = actionCollection()->action("anchor");
-    if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
-
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-
-	// Some shapes are not attached to any frame but are "free floating",
-	// to cite the UI.  This actually means anchored to the page instead.
-	if (frame) {
-	    QVariant variant;
-	    variant.setValue<void*>(frame);
-	    m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
-
-	    variant.setValue<void*>(frame->frameSet());
-	    m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
-	    break;
-	}
-    }
+    QAction *action = actionCollection()->action("anchor");
+    if (action)
+        action->setEnabled(shape && kwdocument()->mainFrameSet());
 }
 
 void KWView::setCurrentPage(const KWPage &currentPage)
