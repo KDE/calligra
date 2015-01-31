@@ -55,35 +55,6 @@ public:
     virtual ~KWFrame();
 
     /**
-     * This property what should happen when the frame is full
-     */
-    Words::FrameBehavior frameBehavior() const {
-        return m_frameBehavior;
-    }
-    /**
-     * Set what should happen when the frame is full
-     * @param fb the new FrameBehavior
-     */
-    void setFrameBehavior(Words::FrameBehavior fb) {
-        m_frameBehavior = fb;
-    }
-
-    /**
-     * For frame duplication policy on new page creation.
-     */
-    Words::NewFrameBehavior newFrameBehavior() const {
-        return m_newFrameBehavior;
-    }
-    /**
-     * For frame duplication policy on new page creation.
-     * Altering this does not change the frames placed until a new page is created.
-     * @param nf the NewFrameBehavior.
-     */
-    void setNewFrameBehavior(Words::NewFrameBehavior nf) {
-        m_newFrameBehavior = nf;
-    }
-
-    /**
      * Set the minimum height of the frame.
      * @param minimumFrameHeight the minimum height of the frame.
      */
@@ -145,14 +116,6 @@ public:
     void removeCopy(KWFrame* frame);
 
     /**
-     * States if this frame is a copy of the previous one.
-     * If this frame is a copy, then this frame is drawn with the same content as the
-     * previous frame in this frameset.
-     * @return true if this is a copy
-     */
-    bool isCopy() const;
-
-    /**
      * Copy all the settings from the parameter frame and apply them to this frame.
      * @param frame the frame to use as original
      */
@@ -166,9 +129,7 @@ public:
 
 private:
     KoShape *m_shape;
-    Words::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
-    Words::NewFrameBehavior m_newFrameBehavior;
     qreal m_anchoredFrameOffset;
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;

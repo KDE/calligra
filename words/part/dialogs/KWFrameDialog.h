@@ -30,7 +30,6 @@
 class KWFrameConnectSelector;
 class KWFrameGeometry;
 class KWRunAroundProperties;
-class KWGeneralFrameProperties;
 class KWAnchoringProperties;
 class KWFrame;
 class KWFrameSet;
@@ -65,7 +64,6 @@ private slots:
 private:
     KWFrameConnectSelector *m_frameConnectSelector;
     KWRunAroundProperties *m_runAroundProperties;
-    KWGeneralFrameProperties *m_generalFrameProperties;
     KWAnchoringProperties *m_anchoringProperties;
     FrameConfigSharedState *m_state;
     KWCanvas *m_canvas;

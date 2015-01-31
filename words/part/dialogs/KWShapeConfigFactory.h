@@ -139,27 +139,5 @@ private:
     FrameConfigSharedState *m_state;
 };
 
-/// factory to create a KWGeneralFrameProperties widget
-class KWGeneralFramePropertiesFactory : public KoShapeConfigFactoryBase
-{
-public:
-    /// constructor
-    explicit KWGeneralFramePropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
-    ~KWGeneralFramePropertiesFactory() {}
-
-    /// reimplemented method from superclass
-    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
-    /// reimplemented method from superclass
-    QString name() const;
-    /// reimplemented method from superclass
-    int sortingOrder() const {
-        return 10;
-    }
-    /// reimplemented method from superclass
-    bool showForShapeId(const QString &id) const;
-
-private:
-    FrameConfigSharedState *m_state;
-};
 
 #endif

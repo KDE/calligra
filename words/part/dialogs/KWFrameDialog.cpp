@@ -25,7 +25,6 @@
 #include "KWShapeConfigFactory.h"
 #include "KWFrameConnectSelector.h"
 #include "KWRunAroundProperties.h"
-#include "KWGeneralFrameProperties.h"
 #include "KWAnchoringProperties.h"
 #include "KWCanvas.h"
 #include "frames/KWFrame.h"
@@ -37,9 +36,6 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
-    m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
-    addPage(m_generalFrameProperties, i18n("General"));
-    m_generalFrameProperties->open(frames);
 
     m_anchoringProperties = new KWAnchoringProperties(m_state);
     if (m_anchoringProperties->open(frames))
@@ -101,7 +97,6 @@ void KWFrameDialog::okClicked()
     MasterCommand *macro = new MasterCommand(m_anchoringProperties, m_canvas);
 
     //these we can just add as children as they don't deal with kotexteditor
-    m_generalFrameProperties->save();
     m_runAroundProperties->save(macro);
 
     m_canvas->addCommand(macro);
@@ -118,7 +113,6 @@ QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc)
     FrameConfigSharedState *state = new FrameConfigSharedState(doc);
     answer.append(new KWFrameConnectSelectorFactory(state));
     answer.append(new KWRunAroundPropertiesFactory(state));
-    answer.append(new KWGeneralFramePropertiesFactory(state));
     return answer;
 }
 

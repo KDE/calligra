@@ -18,7 +18,6 @@
  */
 
 #include "KWShapeConfigFactory.h"
-#include "KWGeneralFrameProperties.h"
 #include "KWRunAroundProperties.h"
 #include "KWFrameConnectSelector.h"
 #include "KWAnchoringProperties.h"
@@ -80,25 +79,6 @@ bool KWRunAroundPropertiesFactory::showForShapeId(const QString &id) const
 {
     return id == TextShape_SHAPEID;
 }
-
-
-KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoShape *shape)
-{
-    KWGeneralFrameProperties *panel = new KWGeneralFrameProperties(m_state);
-    panel->open(shape);
-    return panel;
-}
-
-QString KWGeneralFramePropertiesFactory::name() const
-{
-    return i18n("Options");
-}
-
-bool KWGeneralFramePropertiesFactory::showForShapeId(const QString &id) const
-{
-    return id == TextShape_SHAPEID;
-}
-
 
 FrameConfigSharedState::FrameConfigSharedState(KWDocument *document)
         : QObject(document),

@@ -30,19 +30,6 @@ class KWTextFrameSet;
 /// The words-global namespace for all Words related things.
 namespace Words
 {
-    /// what should happen when the frame is full (too small for its contents)
-    enum FrameBehavior {
-        AutoExtendFrameBehavior,    ///< Make the frame bigger to fit the contents
-        AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
-        IgnoreContentFrameBehavior  ///< Ignore the content and clip it
-    };
-    /// What happens on new page
-    enum NewFrameBehavior {
-        ReconnectNewFrame,  ///< On new page reconnect a copied from to the flow
-        NoFollowupFrame,    ///< On new page don't create a new page
-        CopyNewFrame        ///< On new page create a copy-frame and show that.
-    };
-
     enum FrameSetType {
         BackgroundFrameSet,
         TextFrameSet,

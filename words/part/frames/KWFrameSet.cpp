@@ -61,9 +61,10 @@ void KWFrameSet::addFrame(KWFrame *frame)
     m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
     frame->setFrameSet(this);
     setupFrame(frame);
-    if (frame->isCopy()) {
-        KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
-        if (copyShape && copyShape->original()) {
+
+    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+    if (copyShape) {
+        if (copyShape->original()) {
             KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
             if (originalFrame) {
                 originalFrame->addCopy(frame);
@@ -76,9 +77,9 @@ void KWFrameSet::addFrame(KWFrame *frame)
 void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
 {
     Q_ASSERT(frame);
-    if (frame->isCopy()) {
-        KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
-        if (copyShape && copyShape->original()) {
+    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+    if (copyShape) {
+        if (copyShape->original()) {
             KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
             if (originalFrame) {
                 originalFrame->removeCopy(frame);

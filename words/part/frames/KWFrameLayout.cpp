@@ -469,8 +469,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
         // finally set size and position of the shapes
         for (int i = columns.count - 1; i >= 0; i--) {
-            main[i]->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
-            main[i]->setNewFrameBehavior(Words::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
             shape->setPosition(columnRects[i].topLeft());
             shape->setSize(columnRects[i].size());
@@ -815,10 +813,10 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 
     KoShape *orig = 0;
     //Lets find the last non-copy frame in the frameset
-    for(int i = fs->frames().count() - 1; i >= 0; --i) {
-        KWFrame *candidate = fs->frames()[i];
-        if (!candidate->isCopy()) {
-            orig = candidate->shape();
+    for(int i = fs->shapeCount() - 1; i >= 0; --i) {
+        KoShape *candidate = fs->shapes()[i];
+        if (!dynamic_cast<KWCopyShape*>(candidate)) {
+            orig = candidate;
             break;
         }
     }

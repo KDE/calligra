@@ -34,8 +34,6 @@
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),
-        m_frameBehavior(Words::AutoExtendFrameBehavior),
-        m_newFrameBehavior(Words::NoFollowupFrame),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
         m_minimumFrameHeight(0.0) // no minimum height per default
@@ -178,38 +176,13 @@ void KWFrame::removeCopy(KWFrame* frame)
 
 void KWFrame::copySettings(const KWFrame *frame)
 {
-    setFrameBehavior(frame->frameBehavior());
-    setNewFrameBehavior(frame->newFrameBehavior());
     shape()->copySettings(frame->shape());
 }
 
 void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*pageZIndexOffset*/) const
 {
-    QString value;
-    switch (frameBehavior()) {
-    case Words::AutoCreateNewFrameBehavior:
-        value = "auto-create-new-frame";
-        break;
-    case Words::IgnoreContentFrameBehavior:
-        value = "clip";
-        break;
-    case Words::AutoExtendFrameBehavior:
-        // the third case, AutoExtendFrame is handled by min-height
-        value.clear();
-        if (minimumFrameHeight() > 1)
-            m_shape->setAdditionalAttribute("fo:min-height", QString::number(minimumFrameHeight()) + "pt");
-        break;
-    }
-    if (!value.isEmpty())
-        m_shape->setAdditionalStyleAttribute("style:overflow-behavior", value);
-
-    switch (newFrameBehavior()) {
-    case Words::ReconnectNewFrame: value = "followup"; break;
-    case Words::NoFollowupFrame: value.clear(); break; // "none" is the default
-    case Words::CopyNewFrame: value = "copy"; break;
-    }
-    if (!value.isEmpty()) {
-        m_shape->setAdditionalStyleAttribute("calligra:frame-behavior-on-new-page", value);
+    if (minimumFrameHeight() > 1) {
+        m_shape->setAdditionalAttribute("fo:min-height", QString::number(minimumFrameHeight()) + "pt");
     }
 
     // shape properties
@@ -224,9 +197,4 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*p
     m_shape->removeAdditionalAttribute("text:anchor-page-number");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");
     m_shape->removeAdditionalAttribute("text:anchor-type");
-}
-
-bool KWFrame::isCopy() const
-{
-    return dynamic_cast<KWCopyShape*>(shape());
 }
