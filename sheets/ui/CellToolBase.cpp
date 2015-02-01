@@ -1271,11 +1271,15 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         }
     }
 
-    // Drag & drop, if the selected area was hit.
-    const bool controlPressed = event->modifiers() & Qt::ControlModifier;
-    if (hitSelection && !controlPressed && !selection()->referenceSelectionMode()) {
+    // Do we want to drag and drop the selection?
+    bool wantDragDrop = hitSelection;
+    if (event->modifiers() & Qt::ControlModifier) wantDragDrop = false;   // no drag&drop if Ctrl is pressed
+    QRect selRect = selection()->boundingRect();
+    // no drag&drop if it's a single cell, assume they want a selection
+    if ((selRect.width() <= 1) && (selRect.height() <= 1)) wantDragDrop = false;
+    if (selection()->referenceSelectionMode()) wantDragDrop = false;
+    if (wantDragDrop)
         return new DragAndDropStrategy(this, position, event->modifiers());
-    }
 
     return new SelectionStrategy(this, position, event->modifiers());
 }

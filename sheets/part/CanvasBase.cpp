@@ -512,7 +512,7 @@ bool CanvasBase::dragEnter(const QMimeData* mimeData)
     return false;
 }
 
-bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos)
+bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source)
 {
     register Sheet * const sheet = activeSheet();
     if (!sheet) {
@@ -527,7 +527,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos)
 #if 0 // TODO Stefan: implement drag marking rectangle
     QRect dragMarkingRect;
     if (mimeData->hasFormat("application/x-kspread-snippet")) {
-        if (event->source() == this) {
+        if (source == canvasWidget()) {
             kDebug(36005) << "source == this";
             dragMarkingRect = selection()->boundingRect();
         } else {
@@ -586,14 +586,14 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos)
     dragMarkingRect.moveTo(QPoint(col, row));
     kDebug(36005) << "MARKING RECT =" << dragMarkingRect;
 #endif
-    return false;
+    return true;
 }
 
 void CanvasBase::dragLeave()
 {
 }
 
-bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos)
+bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source)
 {
     register Sheet * const sheet = activeSheet();
     // FIXME Sheet protection: Not all cells have to be protected.
@@ -635,14 +635,14 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos)
     command->setSheet(sheet);
     command->add(Region(col, row, 1, 1, sheet));
     command->setMimeData(mimeData);
-/* XXX TODO
-    if (event->source() == this) {
+
+    if (source == canvasWidget()) {
         DeleteCommand *const deleteCommand = new DeleteCommand(command);
         deleteCommand->setSheet(sheet);
         deleteCommand->add(*selection()); // selection is still, where the drag started
         deleteCommand->setRegisterUndo(false);
     }
-*/
+
     command->execute();
 
     // Select the pasted cells
