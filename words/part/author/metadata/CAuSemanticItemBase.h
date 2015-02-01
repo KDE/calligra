@@ -22,6 +22,15 @@
 
 #include <KoRdfBasicSemanticItem.h>
 
+/**
+ * Base class for all Author semantic items.
+ *
+ * This implements "declare on subclassing" method to
+ * store of QString and Int properties.
+ *
+ * That allows to automatically generate soprano queries
+ * and hold RDF triples and the actual data in sync.
+ */
 class CAuSemanticItemBase : public KoRdfBasicSemanticItem
 {
     Q_OBJECT
@@ -36,18 +45,54 @@ public:
     virtual void updateFromEditorData();
 
 protected:
+    /**
+     * Call this after updating from UI editors
+     * to notify system about the changes in semantic items.
+     */
     void finishUpdateFromEditorData();
 
+    /**
+     * You MUST call this function in constructor of subclass
+     * to setup properties properly.
+     */
     void setupProps();
 
+    /**
+     * This function should return the list of string properties
+     * of subclass item.
+     */
     virtual QList<QString> stringProps() = 0;
+
+    /**
+     * Returns string property by @p propName.
+     */
     QString stringProp(const QString &propName);
-    void setStringProp(const QString &propName, QString value);
 
+    /**
+     * Sets string property with name @p propName to @p value
+     */
+    void setStringProp(const QString &propName, const QString &value);
+
+    /**
+     * This function should return the list of integer properties
+     * of subclass item.
+     */
     virtual QList<QString> intProps() = 0;
-    int intProp(const QString &propName);
-    void setIntProp(const QString &propName, int value);
 
+    /**
+     * Returns integer property by @p propName.
+     */
+    int intProp(const QString &propName);
+
+    /**
+     * Sets integer property with name @p propName to @p value
+     */
+    void setIntProp(const QString &propName, const int &value);
+
+    /**
+     * Forms Soprano query that can be used to retrieve semantic
+     * items of the class. Recommended to use this in factories.
+     */
     QString formQuery();
 
 private:

@@ -117,7 +117,7 @@ QString CAuSemanticItemBase::stringProp(const QString &propName)
     return m_stringProps[propName];
 }
 
-void CAuSemanticItemBase::setStringProp(const QString &propName, QString value)
+void CAuSemanticItemBase::setStringProp(const QString &propName, const QString &value)
 {
     updateTriple(
         m_stringProps[propName],
@@ -131,7 +131,7 @@ int CAuSemanticItemBase::intProp(const QString &propName)
     return m_intProps[propName];
 }
 
-void CAuSemanticItemBase::setIntProp(const QString &propName, int value)
+void CAuSemanticItemBase::setIntProp(const QString &propName, const int &value)
 {
     updateTriple(
         m_stringProps[propName],

@@ -28,6 +28,7 @@ using namespace Soprano;
 
 QString CAuSectionRdf::QUERY;
 
+/// Possible statuses of the review process for the section
 const QString CAuSectionRdf::STATUS[CAuSectionRdf::STATUS_COUNT] = {
     i18n("1st Draft"),
     i18n("2nd Draft"),

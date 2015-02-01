@@ -29,12 +29,14 @@ using namespace Soprano;
 
 QString CAuActorRdf::QUERY;
 
+/// Possible types of the actor
 const QString CAuActorRdf::TYPE[] = {
     i18n("None"),
     i18n("Main"),
     i18n("Secondary")
 };
 
+/// Possible roles of the actor
 const QString CAuActorRdf::ROLE[] = {
     i18n("None"),
     i18n("Protagonist"),

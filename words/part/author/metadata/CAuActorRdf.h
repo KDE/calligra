@@ -24,6 +24,13 @@
 
 #include "ui_CAuActorRdfEditWidget.h"
 
+/**
+ * This class represents actor and connected
+ * with this entity metadata.
+ *
+ * Uses the CAuSemanticItemBase "declare properties"
+ * design.
+ */
 class CAuActorRdf : public CAuSemanticItemBase
 {
     Q_OBJECT

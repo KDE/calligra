@@ -42,21 +42,13 @@ QString CAuActorSemanticItemFactory::classDisplayName() const
     return i18nc("displayname of the semantic item type AuthorActor", "AuthorActor");
 }
 
-void CAuActorSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+//TODO: next functions look like the ones from CAuSectionRdf. Maybe there is anyway to share code?
+void CAuActorSemanticItemFactory::updateSemanticItems(
+    QList<hKoRdfBasicSemanticItem> &semanticItems,
+    const KoDocumentRdf *rdf,
+    QSharedPointer<Soprano::Model> m)
 {
-    const QString sparqlQuery = QLatin1String(
-        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "PREFIX cau: <http://www.calligra.org/author/> \n"
-        "PREFIX cauact: <http://www.calligra.org/author/Actor#> \n"
-        "SELECT DISTINCT ?graph ?actor ?magicid ?descr\n"
-        "WHERE { \n"
-        "  GRAPH ?graph { \n"
-        "    ?actor rdf:type       cau:Actor . \n"
-        "    ?actor cauact:magicid ?magicid  . \n"
-        "    ?actor cauact:descr   ?descr    . \n"
-        "    }\n"
-        "}\n"
-    );
+    const QString sparqlQuery = CAuActorRdf::QUERY;
 
     Soprano::QueryResultIterator it = m->executeQuery(
         sparqlQuery,

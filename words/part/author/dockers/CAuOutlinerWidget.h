@@ -28,10 +28,12 @@
 #include <QPushButton>
 #include <QTimer>
 
-//TODO: add doc
-/** CAuOutlinerWidget
+/**
+ * This widget shows the current structure of book
+ * with additional information in columns and provide
+ * ability to rearrange sections, change their metadata
+ * and etc.
  */
-
 class CAuOutlinerWidget : public QWidget
 {
     Q_OBJECT

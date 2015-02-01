@@ -23,6 +23,10 @@
 
 #include <KoRdfSemanticItemFactoryBase.h>
 
+/**
+ * Factory for CAuActorRdf.
+ * TODO: maybe we can implement one templated factory for all CAuSemanticItemBase derived items
+ */
 class CAuActorSemanticItemFactory : public KoRdfSemanticItemFactoryBase
 {
 public:
@@ -32,11 +36,18 @@ public:
     virtual QString className() const;
     virtual QString classDisplayName() const;
 
-    virtual void updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m);
+    virtual void updateSemanticItems(
+        QList<hKoRdfBasicSemanticItem> &semanticItems,
+        const KoDocumentRdf *rdf,
+        QSharedPointer<Soprano::Model> m);
+
     virtual hKoRdfBasicSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
     virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
-    virtual hKoRdfBasicSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host,
-                                                                   const KoDocumentRdf *rdf, QObject *parent = 0) const;
+    virtual hKoRdfBasicSemanticItem createSemanticItemFromMimeData(
+        const QMimeData* mimeData,
+        KoCanvasBase* host,
+        const KoDocumentRdf *rdf,
+        QObject *parent = 0) const;
     virtual bool isBasic() const;
 };
 

@@ -24,6 +24,13 @@
 
 #include "ui_CAuSectionRdfEditWidget.h"
 
+/**
+ * This class represents section and connected
+ * with this entity metadata.
+ *
+ * Uses the CAuSemanticItemBase "declare properties"
+ * design.
+ */
 class CAuSectionRdf : public CAuSemanticItemBase
 {
     Q_OBJECT

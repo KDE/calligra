@@ -28,17 +28,25 @@
 class KoSection;
 class CAuDocument;
 
+/**
+ * Class to manage Authors metadata.
+ * It creates needed links to main rdf files.
+ */
 class CAuMetaDataManager : public QObject
 {
     Q_OBJECT
 
 public:
+    /// Prefix for all Author related stuff.
     static const QString AUTHOR_PREFIX;
+    /// How file with Author data in package should be named.
     static const QString AUTHOR_RDF_FILE_NAME;
 
     CAuMetaDataManager(CAuDocument *caudoc);
 
+    /// Context for all the Author data.
     static Soprano::Node authorContext();
+    /// Calls editor for the metadata associated with specified section.
     void callEditor(KoSection *sec) const;
 
 private:

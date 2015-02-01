@@ -23,6 +23,10 @@
 
 #include <KoRdfSemanticItemFactoryBase.h>
 
+/**
+ * Factory for CAuSectionRdf
+ * TODO: maybe we can implement one templated factory for all CAuSemanticItemBase derived items
+ */
 class CAuSectionSemanticItemFactory : public KoRdfSemanticItemFactoryBase
 {
 public:
