@@ -195,7 +195,7 @@ void CASpreadsheetHandler::nextSheet()
     emit currentSheetNumChanged();
     d->canvasItem->setActiveSheet (d->sheet);
     documentController()->canvasController()->updateDocumentSize (d->sheet->cellCoordinatesToDocument (d->sheet->usedArea (false)).toRect().size(), false);
-    if(!d->searchString.isEmpty()) {
+    if (!d->searchString.isEmpty()) {
        setSearchString(d->searchString);
     }
 }
@@ -222,9 +222,9 @@ void CASpreadsheetHandler::previousSheet()
 
 void CASpreadsheetHandler::gotoSheet(int sheetNumber, SearchDirection direction)
 {
-    if(direction == SearchForward) {
+    if (direction == SearchForward) {
        d->currentSheetNum = sheetNumber;
-    } else if(direction == SearchBackwards) {
+    } else if (direction == SearchBackwards) {
        d->currentSheetNum = sheetNumber;
     }
     emit currentSheetNumChanged();
@@ -252,15 +252,15 @@ void CASpreadsheetHandler::setSearchString (const QString& searchString)
 
 void CASpreadsheetHandler::searchOtherSheets(SearchDirection direction) {
     int tempCurrentSheet = d->currentSheetNum;
-    if(direction == SearchForward) {
+    if (direction == SearchForward) {
        d->matchPerSheet = 0;
-       if(d->searchSheetNumber < sheetCount()) {
+       if (d->searchSheetNumber < sheetCount()) {
            d->searchSheetNumber = currentSheetNumber();
        } else {
          return;
        }
-    } else if(direction == SearchBackwards) {
-       if(d->searchSheetNumber >= 0) {
+    } else if (direction == SearchBackwards) {
+       if (d->searchSheetNumber >= 0) {
           d->matchPerSheet = d->findText->matches().count() - 1;
           d->searchSheetNumber = d->currentSheetNum - 1;
        } else {
@@ -270,37 +270,37 @@ void CASpreadsheetHandler::searchOtherSheets(SearchDirection direction) {
 
     Calligra::Sheets::DocBase* kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*> (document());
 
-    while((d->searchSheetNumber < sheetCount()) && (d->searchSheetNumber >= 0)) {
+    while ((d->searchSheetNumber < sheetCount()) && (d->searchSheetNumber >= 0)) {
       d->sheet = kspreadDoc->map()->sheet(d->searchSheetNumber);
       d->sheet = kspreadDoc->map()->sheet(d->searchSheetNumber);
       setSearchString(d->searchString);
-      if(d->matchFound == true) {
+      if (d->matchFound == true) {
          gotoSheet(d->searchSheetNumber, direction);
          setSearchString(d->searchString);
-         if(direction == SearchBackwards) {
-            if(d->findText->matches().count() == 1) {
+         if (direction == SearchBackwards) {
+            if (d->findText->matches().count() == 1) {
                d->matchPerSheet = 0;
             }
-            if(d->searchSheetNumber == 0) {
+            if (d->searchSheetNumber == 0) {
                d->findText->findPrevious();
             }
          }
          break;
       }
 
-      if(direction == SearchForward) {
+      if (direction == SearchForward) {
          d->searchSheetNumber++;
-      } else if(direction == SearchBackwards) {
+      } else if (direction == SearchBackwards) {
          d->searchSheetNumber--;
       }
     }
 
-    if(d->matchFound == false) {
+    if (d->matchFound == false) {
        gotoSheet(tempCurrentSheet,direction);
-       if(direction == SearchBackwards) {
+       if (direction == SearchBackwards) {
           d->matchPerSheet = d->findText->matches().count();
           d->findText->findPrevious();
-       } else if( direction == SearchForward) {
+       } else if ( direction == SearchForward) {
           d->matchPerSheet = 1;
        }
     }
@@ -309,7 +309,7 @@ void CASpreadsheetHandler::searchOtherSheets(SearchDirection direction) {
 void CASpreadsheetHandler::findNext() {
     d->matchPerSheet++;
     d->findText->findNext();
-    if(d->matchPerSheet >= d->findText->matches().count()) {
+    if (d->matchPerSheet >= d->findText->matches().count()) {
        searchOtherSheets(SearchForward);
     }
 
@@ -318,7 +318,7 @@ void CASpreadsheetHandler::findNext() {
 void CASpreadsheetHandler::findPrevious() {
     d->matchPerSheet--;
     d->findText->findPrevious();
-    if(d->matchPerSheet < 0) {
+    if (d->matchPerSheet < 0) {
        searchOtherSheets(SearchBackwards);
     }
 }

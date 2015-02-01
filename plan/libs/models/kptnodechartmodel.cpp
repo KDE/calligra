@@ -24,6 +24,8 @@
 #include "kptresource.h"
 #include "kptdebug.h"
 
+#include <kglobal.h>
+
 #include <QPointF>
 #include <QVariant>
 #include <QColor>

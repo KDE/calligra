@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
+#include <kpushbutton.h>
 
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)

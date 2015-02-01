@@ -8,13 +8,13 @@ kde4_add_plugin(calligrathumbnail ${calligrathumbnail_SRCS})
 target_link_libraries(calligrathumbnail komain)
 install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-if( SHOULD_BUILD_APP_KRITA OR SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
+if( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
     set(calligraimagethumbnail_SRCS calligracreator.cpp)
     kde4_add_plugin(calligraimagethumbnail ${calligraimagethumbnail_SRCS})
     macro_add_compile_flags(calligraimagethumbnail "-DNO_ICON_BLENDING")
     target_link_libraries(calligraimagethumbnail komain)
     install(TARGETS calligraimagethumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
-endif( SHOULD_BUILD_APP_KRITA OR SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
+endif( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
 
 # thumbnailing for the native opendocument formats
 set( THUMBNAIL_SERVICES
@@ -24,10 +24,6 @@ set( THUMBNAIL_SERVICES
 if( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
     list( APPEND THUMBNAIL_SERVICES calligra_odg_thumbnail.desktop )
 endif( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
-
-if( SHOULD_BUILD_APP_KRITA )
-    list( APPEND THUMBNAIL_SERVICES krita_kra_thumbnail.desktop )
-endif( SHOULD_BUILD_APP_KRITA )
 
 if( SHOULD_BUILD_PART_SHEETS )
     list( APPEND THUMBNAIL_SERVICES sheets_ods_thumbnail.desktop )

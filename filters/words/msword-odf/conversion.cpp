@@ -22,8 +22,9 @@
 
 */
 
-#include "msdoc.h"
 #include "conversion.h"
+
+#include "msdoc.h"
 
 #include <wv2/src/word97_generated.h>
 #include <wv2/src/functordata.h>

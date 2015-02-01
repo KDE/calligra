@@ -21,6 +21,7 @@
 
 #include <QPainter>
 #include <QGraphicsWidget>
+#include <QWidget>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

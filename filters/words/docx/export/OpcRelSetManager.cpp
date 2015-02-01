@@ -30,10 +30,8 @@
 
 // odf lib
 #include "KoStore.h"
-#include <KoOdfReadStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 
 // Filter libraries
 #include "KoOdfStyle.h"
@@ -120,6 +118,8 @@ void OpcRelSetManager::clear()
 
 bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
 {
+    Q_UNUSED(odfStore);
+
     QString errorMsg;
     //int errorLine;
     //int errorColumn;
@@ -136,11 +136,13 @@ bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
 
 bool OpcRelSetManager::saveRelSets(KoStore *odfStore)
 {
+    Q_UNUSED(odfStore);
+
     // FIXME: save the document relset here
 
-    foreach (const QString &path, d->relSets.keys()) {
+//     foreach (const QString &path, d->relSets.keys()) {
         // FIXME: save the .rels file for the file with path 'path' here.
-    }
+//     }
 
     // FIXME: Return actual return status.
     return true;

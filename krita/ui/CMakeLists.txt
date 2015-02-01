@@ -8,25 +8,29 @@ else (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
-include_directories( ${KOTEXT_INCLUDES}
-    ${TEXTLAYOUT_INCLUDES}
+include_directories(
+
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
     ${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${CMAKE_SOURCE_DIR}/krita/ui/qtsingleapplication
+    ${CMAKE_SOURCE_DIR}/krita/ui/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR})
 
 add_subdirectory( tests )
 
-
-configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+endif (APPLE)
 
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
+    canvas/kis_canvas_updates_compressor.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
     canvas/kis_display_color_converter.cpp
@@ -36,8 +40,10 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
     canvas/kis_grid_manager.cpp
+    canvas/kis_grid_decoration.cpp
     canvas/kis_grid_painter_configuration.cpp
     canvas/kis_perspective_grid_manager.cpp
+    canvas/kis_perspective_grid_decoration.cpp
     canvas/kis_prescaled_projection.cpp
     canvas/kis_qpainter_canvas.cpp
     canvas/kis_projection_backend.cpp
@@ -46,6 +52,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_pyramid.cpp
     canvas/kis_qpainter_canvas_widget_factory.cpp
     canvas/kis_infinity_manager.cpp
+    dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -67,6 +74,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    kis_aboutdata.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
@@ -83,15 +91,13 @@ set(kritaui_LIB_SRCS
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_pattern.cc
-    kis_doc2.cc
-    kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
+    kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    kis_flipbook.cpp
-    kis_flipbook_item.cpp
+    kis_animation.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -107,26 +113,25 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter_show_all.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
+    kis_painting_assistants_manager.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
     kis_paintop_options_widget.cpp
-    kis_palette_manager.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
-    kis_print_job.cpp
     kis_resource_server_provider.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
     kis_statusbar.cc
-    kis_view2.cpp
     kis_zoom_manager.cc
     kis_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
+    kis_animation_doc.cpp
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
@@ -139,6 +144,9 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_savexml_visitor.cpp
+    kranim/kis_kranim_saver.cpp
+    kranim/kis_kranim_loader.cpp
+    kranimstore/kis_animation_store.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
@@ -159,8 +167,10 @@ set(kritaui_LIB_SRCS
     recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
+    tool/kis_rectangle_constraint_widget.cpp
     tool/kis_shape_tool_helper.cpp
     tool/kis_tool.cc
+    tool/kis_delegated_tool_policies.cpp
     tool/kis_tool_freehand.cc
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
@@ -179,7 +189,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
-    widgets/KisFlipbookSelector.cpp
+    widgets/kis_animation_selector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -235,6 +245,7 @@ set(kritaui_LIB_SRCS
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
     input/kis_select_layer_action.cpp
+
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
     operations/kis_operation_registry.cpp
@@ -264,7 +275,58 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
-    kis_mirror_axis.cpp
+    canvas/kis_mirror_axis.cpp
+
+    kis_animation_frame.cpp
+    kis_animation_layer.cpp
+    kis_animation_model.cpp
+
+    kis_abstract_perspective_grid.cpp
+
+    KisApplication.cpp
+    KisAutoSaveRecoveryDialog.cpp
+    KisDetailsPane.cpp
+    KisDocument.cpp
+    KisDocumentEntry.cpp
+    KisDocumentSectionDelegate.cpp
+    KisDocumentSectionToolTip.cpp
+    KisDocumentSectionView.cpp
+    KisFilterChain.cpp
+    KisFilterChainLink.cpp
+    KisFilterChainLinkList.cpp
+    KisImportExportFilter.cpp
+    KisFilterEdge.cpp
+    KisFilterEntry.cpp
+    KisFilterGraph.cpp
+    KisImportExportManager.cpp
+    KisImportExportManager_p.cpp
+    KisFilterVertex.cpp
+    KisMainWindow.cpp
+    KisOpenPane.cpp
+    KisPart.cpp
+    KisPrintJob.cpp
+    KisRecentDocumentsPane.cpp
+    KisStartupDialog.cpp
+    KisTemplate.cpp
+    KisTemplateCreateDia.cpp
+    KisTemplateGroup.cpp
+    KisTemplates.cpp
+    KisTemplatesPane.cpp
+    KisTemplateTree.cpp
+    KisUndoStackAction.cpp
+    KisView.cpp
+
+    thememanager.cpp
+
+    kis_mainwindow_observer.cpp
+    KisViewManager.cpp
+    kis_mirror_manager.cpp
+
+
+    qtlockedfile/qtlockedfile.cpp
+
+    qtsingleapplication/qtlocalpeer.cpp
+    qtsingleapplication/qtsingleapplication.cpp
 )
 
 if(WIN32)
@@ -272,6 +334,9 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
+        input/wintab/kis_screen_size_choice_dialog.cpp
+        qtlockedfile/qtlockedfile_win.cpp
+        widgets/kis_url_requester_impl.cpp
         )
 endif(WIN32)
 
@@ -280,6 +345,7 @@ if(UNIX)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support.cpp
+        qtlockedfile/qtlockedfile_unix.cpp
         )
     if(NOT APPLE)
         set(kritaui_LIB_SRCS
@@ -289,7 +355,22 @@ if(UNIX)
     endif(NOT APPLE)
 endif(UNIX)
 
+if (APPLE)
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            MacSupport.mm
+        )
+endif (APPLE)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+if(WIN32)
+    #kde4_add_ui_files(
+    #    input/wintab/kis_screen_size_choice_dialog.ui
+    #)
+endif(WIN32)
+
+
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui
@@ -328,27 +409,40 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
-    forms/wdgflipbookselector.ui
+    forms/wdganimationselector.ui
+    forms/wdgrectangleconstraints.ui
+    forms/KisDetailsPaneBase.ui
+    forms/KisOpenPaneBase.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
     input/config/kis_mouse_input_editor.ui
     input/config/kis_wheel_input_editor.ui
     input/config/kis_key_input_editor.ui
+    wdgsplash.ui
+	input/wintab/kis_screen_size_choice_dialog.ui
+	forms/kis_url_requester_impl.ui
 )
+
+if(WIN32)
+    #kde4_add_ui_files(
+    #  forms/kis_url_requester_impl.ui
+    #)
+endif(WIN32)
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
-
-target_link_libraries(kritaui ${GLEW_LIBRARIES})
+if(APPLE)
+    target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
+endif (APPLE)
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -366,7 +460,7 @@ if(HAVE_OPENGL)
 
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komain ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -375,6 +469,9 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
+if (APPLE)
+    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
+endif (APPLE)
 
 install( FILES
     canvas/kis_canvas2.h
@@ -383,7 +480,7 @@ install( FILES
     tool/kis_tool.h
     kis_canvas_resource_provider.h
     kis_cursor.h
-    kis_view2.h
+    KisViewManager.h
     kis_ui_types.h
 #    kis_cmb_composite.h
 #    kis_cmb_idlist.h

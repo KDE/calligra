@@ -589,7 +589,7 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
 
     d->externSheetTable.resize(record->refCount());
 
-    for (unsigned i = 0; i < record->refCount(); i++) {
+    for (unsigned i = 0; i < record->refCount(); ++i) {
         unsigned bookRef = record->bookRef(i);
 
         QString result;
@@ -709,7 +709,7 @@ void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
     if (!record) return;
 
     QList<QColor> colorTable;
-    for (unsigned i = 0; i < record->count(); i++)
+    for (unsigned i = 0; i < record->count(); ++i)
         colorTable.append(QColor(record->red(i), record->green(i), record->blue(i)));
     d->workbook->setColorTable(colorTable);
 }
@@ -720,7 +720,7 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
 
     d->stringTable.clear();
     d->formatRunsTable.clear();
-    for (unsigned i = 0; i < record->count(); i++) {
+    for (unsigned i = 0; i < record->count(); ++i) {
         QString str = record->stringAt(i);
         d->stringTable.push_back(str);
         std::map<unsigned, unsigned> formatRunsRaw = record->formatRunsAt(i);

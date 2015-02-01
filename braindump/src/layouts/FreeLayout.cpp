@@ -19,6 +19,7 @@
 
 #include "FreeLayout.h"
 
+#include <QRectF>
 #include <klocale.h>
 #include <KoShapeContainer.h>
 

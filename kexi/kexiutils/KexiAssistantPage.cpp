@@ -23,6 +23,7 @@
 #include "KexiTitleLabel.h"
 #include "KexiLinkWidget.h"
 #include "KexiLinkButton.h"
+#include "KexiCloseButton.h"
 
 #include <KoIcon.h>
 
@@ -38,7 +39,7 @@
 
 class KexiAssistantPage::Private {
 public:    
-    Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
+    explicit Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
     {
     }
     void setButtonVisible(KexiLinkWidget** button, bool back, bool set,
@@ -50,7 +51,7 @@ public:
     QLabel* descriptionLabel;
     KexiLinkWidget* backButton;
     KexiLinkWidget* nextButton;
-    KexiLinkButton* cancelButton;
+    KexiCloseButton* cancelButton;
     QPointer<QWidget> focusWidget;
 };
 
@@ -121,9 +122,7 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
     
-    d->cancelButton = new KexiLinkButton(koIcon("close"));
-    d->cancelButton->setToolTip(KStandardGuiItem::cancel().plainText());
-    d->cancelButton->setUsesForegroundColor(true);
+    d->cancelButton = new KexiCloseButton;
     connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
     d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
 }

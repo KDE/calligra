@@ -21,21 +21,21 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "graphicshandler.h"
+
 #include "generated/leinputstream.h"
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "pictures.h"
 #include "msodraw.h"
 
-#include "graphicshandler.h"
 #include "conversion.h"
 #include "document.h"
 #include "msdoc.h"
 
-#include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 #include <kdebug.h>
-#include <kmimetype.h>
 #include <QColor>
 #include <QByteArray>
 

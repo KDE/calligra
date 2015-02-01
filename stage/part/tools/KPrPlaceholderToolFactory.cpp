@@ -22,6 +22,8 @@
 #include "KPrPlaceholderTool.h"
 #include "KPrPlaceholderShape.h"
 
+#include <klocale.h>
+
 KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
     : KoToolFactoryBase("Layout Tool")
 {

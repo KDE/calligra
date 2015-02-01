@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
 
 #include <db/tableschema.h>
 #include <db/indexschema.h>
@@ -73,7 +72,7 @@ public:
 class KexiRelationsScrollAreaWidget : public QWidget
 {
 public:
-    KexiRelationsScrollAreaWidget(KexiRelationsScrollArea* parent);
+    explicit KexiRelationsScrollAreaWidget(KexiRelationsScrollArea* parent);
     ~KexiRelationsScrollAreaWidget();
 
 protected:

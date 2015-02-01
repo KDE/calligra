@@ -23,7 +23,7 @@
 #ifndef QT_NO_DBUS
 #include "KPrPresentationTool.h"
 
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 
 class KPrViewModePresentation;
 class KPrPresentationTool;

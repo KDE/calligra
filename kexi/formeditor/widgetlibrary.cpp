@@ -64,13 +64,16 @@ public:
         advancedProperties.insert("contextMenuEnabled");
         advancedProperties.insert("contextMenuPolicy");
         advancedProperties.insert("cursorPosition");
+        advancedProperties.insert("cursorMoveStyle");
         advancedProperties.insert("dragEnabled");
         advancedProperties.insert("enableSqueezedText");
         advancedProperties.insert("layout");// too large risk to break things
+        advancedProperties.insert("layoutDirection");
         advancedProperties.insert("locale");
         advancedProperties.insert("mouseTracking");
 /*! @todo: reenable */ advancedProperties.insert("palette");
         advancedProperties.insert("sizeIncrement");
+        advancedProperties.insert("sizePolicy");
         advancedProperties.insert("statusTip");
         advancedProperties.insert("trapEnterKeyEvent");
         advancedProperties.insert("windowModality");
@@ -78,6 +81,9 @@ public:
         // by providing this in propeditor
         advancedProperties.insert("minimumSize");
         advancedProperties.insert("maximumSize");
+#if QT_VERSION  >= 0x040700
+        advancedProperties.insert("clickMessage");
+#endif
 #ifndef KEXI_SHOW_UNFINISHED
 /*! @todo reenable */
         advancedProperties.insert("accel");

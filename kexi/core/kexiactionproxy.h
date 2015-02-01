@@ -27,8 +27,6 @@
 
 class QAction;
 class KAction;
-class KXMLGUIClient;
-class KAction_setEnabled_Helper;
 class KexiActionProxy;
 
 //! Abstract helper class used to connect shared actions from outside of shared-action-aware object.
@@ -55,10 +53,6 @@ public:
 
 protected:
     void plugSharedAction(const QString& action_name, const char *slot);
-
-    void plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client);
-
-    void plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client);
 
     KexiActionProxy* m_proxy;
     QObject *m_object;
@@ -118,10 +112,6 @@ protected:
      \sa action(), QWidget::addAction(QAction*) */
     void plugSharedAction(const QString& action_name, QWidget* w);
 
-    void plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client);
-
-    void plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client);
-
     /*! Unplugs action named \a action_name from a widget \a w.
      \sa plugSharedAction(const char *action_name, QWidget* w) */
     void unplugSharedAction(const QString& action_name, QWidget* w);
@@ -165,9 +155,6 @@ protected:
 
     QObject m_signal_parent; //!< it's just to have common parent for owned signals
 
-    //! For internal use by plugSharedActionToExternalGUI()
-    KAction_setEnabled_Helper *m_KAction_setEnabled_helper;
-
 public:
     //! For internal use by addActionProxyChild(). \a parent can be 0.
     void setActionProxyParent_internal(KexiActionProxy* parent);
@@ -176,7 +163,6 @@ public:
     KexiActionProxy *m_focusedChild;
 
     friend class KexiSharedActionHost;
-    friend class KAction_setEnabled_Helper;
     friend class KexiSharedActionConnector;
 
 private:

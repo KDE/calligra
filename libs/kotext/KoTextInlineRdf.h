@@ -157,7 +157,7 @@ private:
     friend class KoDocumentRdf;
 
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 Q_DECLARE_METATYPE(KoTextInlineRdf*)

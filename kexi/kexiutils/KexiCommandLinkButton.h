@@ -39,6 +39,8 @@ public:
     explicit KexiCommandLinkButton(QWidget *parent=0);
     explicit KexiCommandLinkButton(const QString &text, QWidget *parent=0);
     KexiCommandLinkButton(const QString &text, const QString &description, QWidget *parent=0);
+    virtual ~KexiCommandLinkButton();
+
     QString description() const;
     void setDescription(const QString &description);
     bool isArrowVisible() const;

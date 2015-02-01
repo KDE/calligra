@@ -28,23 +28,18 @@
 
 #include <KoXmlReaderForward.h>
 
-#include <QSortFilterProxyModel>
-
 class KoDocument;
 
 class KToggleAction;
 
 class QPoint;
-class QKeyEvent;
+class QSortFilterProxyModel;
 
 namespace KPlato
 {
 
-class View;
 class Project;
 class ScheduleManager;
-class MainSchedule;
-class Schedule;
 
 class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {

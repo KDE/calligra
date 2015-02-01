@@ -38,12 +38,18 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
+
+
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0)
-    {}
+        : settings(0),
+          dirtyPreset(false)
+    {
+    }
 
     KisPaintOpSettingsSP settings;
+    bool dirtyPreset;
+
 };
 
 
@@ -64,19 +70,31 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
-KisPaintOpPreset* KisPaintOpPreset::clone() const
+KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
-    KisPaintOpPreset * preset = new KisPaintOpPreset();
+    KisPaintOpPresetSP preset = new KisPaintOpPreset();
+
     if (settings()) {
         preset->setSettings(settings()->clone());
     }
+    preset->setPresetDirty(isPresetDirty());
     // only valid if we could clone the settings
     preset->setValid(settings());
 
     preset->setPaintOp(paintOp());
     preset->setName(name());
+    preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
+
 
     return preset;
+}
+void KisPaintOpPreset::setPresetDirty(bool value)
+{
+    m_d->dirtyPreset = value;    
+}
+bool KisPaintOpPreset::isPresetDirty() const
+{
+    return m_d->dirtyPreset;
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
@@ -96,11 +114,14 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
+    DirtyStateSaver dirtyStateSaver(this);
+
     if (settings) {
         m_d->settings = settings->clone();
-    }
-    else {
+        m_d->settings->setPreset(KisPaintOpPresetWSP(this));
+    } else {
         m_d->settings = 0;
+        m_d->settings->setPreset(0);
     }
     setValid(m_d->settings);
 }
@@ -132,11 +153,15 @@ bool KisPaintOpPreset::load()
 
     bool res = loadFromDevice(&file);
 
+
+    this->setPresetDirty(false);
     return res;
+
 }
 
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
 {
+
     QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");
@@ -228,8 +253,11 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         qWarning() << "Could not load settings for preset" << paintopid;
         return;
     }
+
     settings->fromXML(presetElt);
+
     setSettings(settings);
+
 }
 
 QByteArray KisPaintOpPreset::generateMD5() const
@@ -264,11 +292,12 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     QImage img;
 
     if (image().isNull()) {
-        img = QImage(1,1, QImage::Format_RGB32);
-    }
-    else {
+        img = QImage(1, 1, QImage::Format_RGB32);
+    } else {
         img = image();
     }
+
+    m_d->dirtyPreset = false;
 
     return writer.write(img);
 

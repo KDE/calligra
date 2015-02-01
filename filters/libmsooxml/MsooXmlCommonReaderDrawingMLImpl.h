@@ -270,7 +270,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
                         m_ignoreLinkHref = true;
                     }
                 }
-#ifdef DOCXXMLDOCREADER_H
+#ifdef DOCXXMLDOCUMENTREADER_H
                 ELSE_TRY_READ_IF_NS_IN_CONTEXT(pic, blipFill)
 #endif
                 ELSE_TRY_READ_IF(nvPicPr)
@@ -282,7 +282,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     m_ignoreLinkHref = false;
 
-#ifndef DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCUMENTREADER_H
     body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -370,7 +370,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("xlink:actuate", "onLoad");
         body->endElement(); //draw:image
 
-#ifdef DOCXXMLDOCREADER_H
+#ifdef DOCXXMLDOCUMENTREADER_H
         if (!m_cNvPrName.isEmpty() || !m_cNvPrDescr.isEmpty()) {
             body->startElement("svg:title");
             body->addTextSpan(m_cNvPrDescr.isEmpty() ? m_cNvPrName : m_cNvPrDescr);
@@ -380,7 +380,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_xlinkHref.clear();
     }
 
-#ifndef DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCUMENTREADER_H
     body->endElement(); //draw:frame
 #endif
 
@@ -4926,7 +4926,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
     // In theory we should interpret all possible values here, not just "val"
     // in practice it does not happen
     if (fmla.startsWith("val ")) {
-        fmla = fmla.mid(4);
+        fmla.remove(0, 4);
     }
 
     m_avModifiers[name] = fmla;

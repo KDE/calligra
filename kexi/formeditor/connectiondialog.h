@@ -94,7 +94,7 @@ protected slots:
       and an empty connection is created. */
     void slotConnectionAborted(KFormDesigner::Form *form);
 
-    void slotCellSelected(int col, int row);
+    void slotCellSelected(int row, int col);
     void slotRowInserted(KexiDB::RecordData*, bool);
 
     /*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.

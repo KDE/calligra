@@ -381,10 +381,6 @@
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">kcombobox.h</include>
-  <include location="local">kbuttongroup.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

@@ -19,13 +19,14 @@
 **
 */
 
+#include "spreadsheet.h"
+
 #include <stdlib.h>  /* for atoi function    */
 
 #include <kdebug.h>
 
 #include "fileheader.h"
 //#include "paper.h"
-#include "spreadsheet.h"
 #include <QTextStream>
 
 /*******************************************/

@@ -23,10 +23,10 @@
 #include "sheets/Map.h"
 #include "sheets/Sheet.h"
 
-#include <kapplication.h>
 #include <kcharsets.h>
 #include <kmessagebox.h>
 
+#include <QApplication>
 #include <QTextCodec>
 #include <QValidator>
 
@@ -40,7 +40,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 {
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
@@ -67,10 +67,10 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
             this, SLOT(delimiterClicked(int)));
     connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
-    connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged(const QString &)),
-            this, SLOT(textChanged(const QString &)));
-    connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
-            this, SLOT(textquoteSelected(const QString &)));
+    connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(textChanged(QString)));
+    connect(m_dialog->m_comboQuote, SIGNAL(activated(QString)),
+            this, SLOT(textquoteSelected(QString)));
     connect(m_dialog->m_selectionOnly, SIGNAL(toggled(bool)),
             this, SLOT(selectionOnlyChanged(bool)));
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -82,7 +82,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 CSVExportDialog::~CSVExportDialog()
 {
     saveSettings();
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     delete m_delimiterValidator;
 }
 

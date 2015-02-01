@@ -21,14 +21,14 @@
 #ifndef KEXIQUERYVIEW_H
 #define KEXIQUERYVIEW_H
 
-#include <kexidatatable.h>
+#include <widget/tableview/KexiDataTableView.h>
 
 namespace KexiDB
 {
 class QuerySchema;
 }
 
-class KexiQueryView : public KexiDataTable
+class KexiQueryView : public KexiDataTableView
 {
     Q_OBJECT
 

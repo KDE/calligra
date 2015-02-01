@@ -33,7 +33,7 @@
 #define CALLIGRA_SHEETS_CANVASBASE
 
 #include <QList>
-
+#include <QSizeF>
 #include <KoCanvasBase.h>
 
 #include "../calligra_sheets_export.h"
@@ -41,6 +41,8 @@
 
 class QFocusEvent;
 class QKeyEvent;
+class QInputMethodEvent;
+class QTabletEvent;
 class QMimeData;
 class QPainter;
 class KoPointerEvent;

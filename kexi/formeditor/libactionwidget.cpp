@@ -26,14 +26,13 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <kactioncollection.h>
 
 using namespace KFormDesigner;
 
 class LibActionWidget::Private
 {
 public:
-    Private(WidgetInfo *w);
+    explicit Private(WidgetInfo *w);
     ~Private();
 
     QByteArray className;

@@ -173,9 +173,6 @@ protected:
      depending on their orientation (i.e. HorizontalWidgetList or VerticalWidgetList). */
     void createBoxLayout(CustomSortableWidgetList* list);
 
-    /*! Internal function to create a KexiFlowLayout. */
-    void createFlowLayout();
-
     /*! Internal function to create a GridLayout. if \a testOnly is true, the layout
       is simulated, and only the widget's grid info aris filled. */
     void createGridLayout(bool testOnly = false);

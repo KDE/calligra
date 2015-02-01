@@ -50,6 +50,7 @@ class QPushButton;
 #endif
 
 class KToggleAction;
+class KAction;
 /**
  * Words' view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
@@ -152,6 +153,7 @@ public slots:
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
+    virtual bool event(QEvent* event);
 
 private:
     void setupActions();
@@ -207,8 +209,10 @@ private slots:
     void pasteRequested();
     /// Call when the user want to show/hide the WordsCount in the statusbar
     void showWordCountInStatusBar(bool doShow);
-    /// Show annotations ("notes" in the UI) on the canvas
-    void showNotes(bool doShow);
+    /// Show annotations ("notes" in the UI) on the canvas - this is the user view menu visibility change
+    void showNotes(bool show);
+    /// "hasAnnotations" has changed ("notes" in the UI) - will cause showNotes above to change too
+    void hasNotes(bool has);
     /**
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.

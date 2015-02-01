@@ -24,9 +24,7 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
-
-#include <KoProgressUpdater.h>
-#include <KoProgressProxy.h>
+#include "commands_new/kis_node_move_command2.h"
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
@@ -84,10 +82,10 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
     return 0;
 }
 
-KoDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("File"), m_filename);
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    l << KisDocumentSectionModel::Property(i18n("File"), m_filename);
     return l;
 }
 
@@ -164,10 +162,12 @@ void KisFileLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAda
     return visitor.visit(this, undoAdapter);
 }
 
-KUndo2Command* KisFileLayer::crop(const QRect & /*rect*/)
+KUndo2Command* KisFileLayer::crop(const QRect & rect)
 {
-    qWarning() << "WARNING: File Layer does not support cropping!" << name();
-    return 0;
+    QPoint oldPos(x(), y());
+    QPoint newPos = oldPos - rect.topLeft();
+
+    return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
 KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)

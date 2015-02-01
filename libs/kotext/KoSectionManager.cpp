@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +23,7 @@
 #include "KoSectionEnd.h"
 #include <KLocalizedString>
 #include <KoTextDocument.h>
+#include "KoSectionUtils.h"
 
 #include <QHash>
 #include <QString>
@@ -73,7 +74,7 @@ private:
 };
 
 KoSectionManager::KoSectionManager(QTextDocument* doc)
-: d_ptr(new KoSectionManagerPrivate(this, doc))
+    : d_ptr(new KoSectionManagerPrivate(this, doc))
 {
     KoTextDocument(doc).setSectionManager(this); //FIXME: setting it back from here looks bad
 }
@@ -111,22 +112,24 @@ void KoSectionManager::invalidate()
     d->valid = false;
 }
 
-bool KoSectionManager::isValidNewName(QString name)
+bool KoSectionManager::isValidNewName(const QString &name)
 {
     Q_D(KoSectionManager);
-    return (d->sectionNames().find(name) == d->sectionNames().end());
+    return (d->sectionNames().constFind(name) == d->sectionNames().constEnd());
 }
 
 QString KoSectionManager::possibleNewName()
 {
     Q_D(KoSectionManager);
 
-    int i = d->registeredSections.count() + 1;
-    while (!isValidNewName(QString(i18n("New section %1")).arg(i))) {
+    QString newName;
+    int i = d->registeredSections.count();
+    do {
         i++;
-    }
+        newName = i18nc("new numbered section name", "New section %1", i);
+    } while (!isValidNewName(newName));
 
-    return QString(i18n("New section %1")).arg(i);
+    return newName;
 }
 
 void KoSectionManager::registerSection(KoSection* section)
@@ -173,37 +176,29 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
     do {
         QTextBlockFormat fmt = block.blockFormat();
 
-        if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
-            QList<QVariant> starts = fmt.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, starts) {
-                curLevel++;
-                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-                sec->setBeginPos(block.position());
-                sec->setLevel(curLevel);
+        foreach (KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
+            curLevel++;
+            sec->setBeginPos(block.position());
+            sec->setLevel(curLevel);
 
-                d->sectionNames()[sec->name()] = sec;
+            d->sectionNames()[sec->name()] = sec;
 
-                if (needModel) {
-                    QStandardItem *item = new QStandardItem(sec->name());
-                    item->setData(qVariantFromValue(static_cast<void *>(sec)), Qt::UserRole + 1);
+            if (needModel) {
+                QStandardItem *item = new QStandardItem(sec->name());
+                item->setData(QVariant::fromValue<KoSection *>(sec), Qt::UserRole + 1);
 
-                    curChain.top()->appendRow(item);
+                curChain.top()->appendRow(item);
 
-                    curChain.push(item);
-                }
+                curChain.push(item);
             }
         }
 
-        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
-            QList<QVariant> ends = fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, ends) {
-                curLevel--;
-                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-                sec->correspondingSection()->setEndPos(block.position() + block.length());
+        foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(fmt)) {
+            curLevel--;
+            sec->correspondingSection()->setEndPos(block.position() + block.length());
 
-                if (needModel) {
-                    curChain.pop();
-                }
+            if (needModel) {
+                curChain.pop();
             }
         }
     } while ((block = block.next()).isValid());

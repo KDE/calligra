@@ -21,10 +21,11 @@
 
 */
 
+#include "paragraph.h"
+
 #include <math.h>
 #include <kdebug.h>
 
-#include "paragraph.h"
 #include "conversion.h"
 #include "msdoc.h"
 

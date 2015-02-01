@@ -25,12 +25,9 @@
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
-#include <kglobal.h>
 #include <kmessagebox.h>
 
 FlowPart::FlowPart(QObject *parent)

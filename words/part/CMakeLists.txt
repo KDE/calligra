@@ -82,13 +82,11 @@ set(wordsprivate_LIB_SRCS
     author/CAuDocument.cpp
 )
 
-if( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]" )
-    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
-        dockers/KWDebugDocker.cpp
-        dockers/KWDebugDockerFactory.cpp
-        dockers/KWDebugWidget.cpp
-    )
-endif ( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]")
+set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
+    dockers/KWDebugDocker.cpp
+    dockers/KWDebugDockerFactory.cpp
+    dockers/KWDebugWidget.cpp
+)
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}

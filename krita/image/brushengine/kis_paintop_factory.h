@@ -67,7 +67,7 @@ public:
      * @param settings the settings associated with the input device
      * @param painter the painter used to draw
      */
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) = 0;
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual QString category() const = 0;
@@ -82,15 +82,6 @@ public:
      * The filename of the pixmap we can use to represent this paintop in the ui.
      */
     virtual QString pixmap();
-
-    void setUserVisible(PaintopVisibility visibility);
-
-    /**
-     * Whether this paintop is internal to a certain tool or can be used
-     * in various tools. If false, it won't show up in the toolchest.
-     * The KoColorSpace argument can be used when certain paintops only support a specific cs
-     */
-    virtual bool userVisible(const KoColorSpace * cs = 0) const;
 
     /**
      * Create and return an settings object for this paintop.

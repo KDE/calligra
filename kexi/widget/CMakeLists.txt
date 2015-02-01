@@ -46,6 +46,7 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiServerDriverNotFoundMessage.cpp
     KexiNameWidget.cpp
     KexiNameDialog.cpp
+    KexiStartupFileHandler.cpp
   )
 
 IF (KEXI_MOBILE)
@@ -55,13 +56,13 @@ ELSE (KEXI_MOBILE)
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
     kexidbconnectionwidget.cpp 
-  #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
 #      in kexiactionselectiondialog and remove them
     kexiprjtypeselector.cpp
     KexiConnectionSelectorWidget.cpp
     KexiFileWidget.cpp
     KexiPasswordWidget.cpp
+    KexiDBPasswordDialog.cpp
   )
   kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui

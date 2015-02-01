@@ -25,7 +25,6 @@
 #include <cfloat>
 #include <stack>
 
-#include <QMessageBox>
 #include <QFontInfo>
 #include <QFontMetrics>
 #include <QPen>
@@ -38,7 +37,6 @@
 
 #include <klocale.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include "generator/kis_generator.h"

@@ -24,7 +24,6 @@
 #include <gnumericexport.h>
 #include <kdebug.h>
 #include <kfilterdev.h>
-#include <kmessagebox.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoZoomHandler.h>

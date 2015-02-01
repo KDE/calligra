@@ -25,6 +25,8 @@
 #include "KPrAnimationData.h"
 #include "stage_export.h"
 
+class KoPASavingContext;
+
 class STAGE_EXPORT KPrAnimationStep : public QSequentialAnimationGroup, KPrAnimationData
 {
 public:

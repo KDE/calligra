@@ -33,14 +33,10 @@
 
 #include <KoIcon.h>
 
-#include <kapplication.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kurlcombobox.h>
-#include <ktoolbar.h>
-#include <kmenu.h>
+#include <kdialog.h>
 
 #include <QLabel>
 #include <QPushButton>
@@ -55,12 +51,12 @@
 class KexiConnectionSelector : public QWidget, public Ui_KexiConnectionSelector
 {
 public:
-    KexiConnectionSelector(QWidget *parent)
+    explicit KexiConnectionSelector(QWidget *parent)
         : QWidget(parent)
     {
         setupUi(this);
         setObjectName("conn_sel");
-        lblIcon->setPixmap(DesktopIcon(KEXI_DATABASE_SERVER_ICON_NAME));
+        lblIcon->setPixmap(DesktopIcon(Kexi::serverIconName()));
         lblIcon->setFixedSize(lblIcon->pixmap()->size());
         btn_add->setToolTip(i18n("Add a new database connection"));
         btn_edit->setToolTip(i18n("Edit selected database connection"));
@@ -137,8 +133,7 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     d->startDirOrVariable = startDirOrVariable;
     d->fileAccessType = fileAccessType;
     m_errorMessagePopup = 0;
-    QString iconname(KexiDB::defaultFileBasedDriverIconName());
-    setWindowIcon(KIcon(iconname));
+    setWindowIcon(Kexi::defaultFileBasedDriverIcon());
 
     QBoxLayout* globalLyr = new QVBoxLayout(this);
 
@@ -374,7 +369,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     KexiDB::ConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
                                KGuiItem(i18n("&Add"), koIconName("dialog-ok"), i18n("Add database connection")));
-    dlg.setWindowTitle(i18n("Add New Database Connection"));
+    dlg.setWindowTitle(i18nc("@title:window", "Add a New Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 
@@ -404,14 +399,12 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
                                KGuiItem(i18n("&Save"), koIconName("document-save"),
                                         i18n("Save changes made to this database connection")));
-    dlg.setWindowTitle(i18n("Edit Database Connection"));
+    dlg.setWindowTitle(i18nc("@title:window", "Edit Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 
-    KexiDB::ConnectionData *newData = new KexiDB::ConnectionData(*dlg.currentProjectData().connectionData());
-    if (!d->conn_set->saveConnectionData(item->data(), newData)) {
+    if (!d->conn_set->saveConnectionData(item->data(), *dlg.currentProjectData().connectionData())) {
         //! @todo msg?
-        delete newData;
         return;
     }
     const KexiDB::Driver::Info info(d->manager.driverInfo(item->data()->driverName));
@@ -432,7 +425,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
                 "Do you want to remove database connection \"%1\" from the list of available connections?",
                 item->data()->serverInfoString(true)),
             QString(), //caption
-            KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+            KStandardGuiItem::remove(), KStandardGuiItem::cancel(),
             QString(), //dont'ask name
             KMessageBox::Notify | KMessageBox::Dangerous)) {
         return;

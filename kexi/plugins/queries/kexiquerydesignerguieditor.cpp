@@ -46,9 +46,10 @@
 #include <kexiutils/utils.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <kexitableview.h>
+#include <kexiinternalpart.h>
 #include <kexidragobjects.h>
-#include <kexidatatable.h>
+#include <widget/tableview/KexiTableScrollArea.h>
+#include <widget/tableview/KexiDataTableView.h>
 #include <kexi.h>
 #include <kexisectionheader.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
@@ -101,7 +102,7 @@ public:
     }
 
     KexiDB::TableViewData *data;
-    KexiDataTable *dataTable;
+    KexiDataTableView *dataTable;
     QPointer<KexiDB::Connection> conn;
 
     KexiRelationsView *relations;
@@ -168,7 +169,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
     d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
     d->spl->addWidget(d->head);
-    d->dataTable = new KexiDataTable(d->head, false);
+    d->dataTable = new KexiDataTableView(d->head, false);
     d->head->setWidget(d->dataTable);
     d->dataTable->setObjectName("guieditor_dataTable");
     d->dataTable->dataAwareObject()->setSpreadSheetMode();
@@ -243,14 +244,14 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     d->data->addColumn(col3);
 
 #ifndef KEXI_NO_QUERY_TOTALS
-    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
-            i18n("Describes a way of computing totals for a given field or expression."));
+    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn("totals", KexiDB::Field::Enum, futureI18n("Totals"),
+            futureI18n("Describes a way of computing totals for a given field or expression."));
     QVector<QString> totalsTypes;
-    totalsTypes.append(i18n("Group by"));
-    totalsTypes.append(i18n("Sum"));
-    totalsTypes.append(i18n("Average"));
-    totalsTypes.append(i18n("Min"));
-    totalsTypes.append(i18n("Max"));
+    totalsTypes.append(futureI18n("Group by"));
+    totalsTypes.append(futureI18n("Sum"));
+    totalsTypes.append(futureI18n("Average"));
+    totalsTypes.append(futureI18n("Min"));
+    totalsTypes.append(futureI18n("Max"));
     //! @todo more like this
     col4->field()->setEnumHints(totalsTypes);
     d->data->addColumn(col4);

@@ -43,8 +43,8 @@ class KisDoubleWidget;
 class KoZoomAdapter;
 class SqueezedComboBox;
 class QCheckBox;
-class KComboBox;
 class QToolButton;
+class BlackWhitePointChooser;
 
 #include "ocio_display_filter.h"
 #include "kis_exposure_gamma_correction_interface.h"
@@ -58,10 +58,10 @@ public:
 
     LutDockerDock();
     ~LutDockerDock();
-
+QString observerName() { return "LutDockerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); m_displayFilter = 0;}
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;
@@ -92,8 +92,9 @@ private slots:
     void selectLut();
     void clearLut();
 
+    void slotShowBWConfiguration();
+
     void slotUpdateIcons();
-    void slotLockCurrentColorVisualRepresentation(bool value);
 
 private:
     void enableControls();
@@ -108,12 +109,14 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    OcioDisplayFilterSP m_displayFilter;
+    OcioDisplayFilter *m_displayFilter;
 
     bool m_draggingSlider;
 
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_exposureCompressor;
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_gammaCompressor;
+
+    BlackWhitePointChooser *m_bwPointChooser;
 };
 
 

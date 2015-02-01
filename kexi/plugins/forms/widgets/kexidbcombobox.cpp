@@ -23,8 +23,8 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kapplication.h>
 
+#include <QApplication>
 #include <QMetaObject>
 #include <QPainter>
 #include <QStyle>
@@ -241,7 +241,9 @@ void KexiDBComboBox::createEditor()
             subwidget()->setPalette(subwidgetPalette);
             d->subWidgetsWithDisabledEvents.clear();
             d->subWidgetsWithDisabledEvents << subwidget();
-            subwidget()->installEventFilter(this);
+            if (!designMode()) {
+                subwidget()->installEventFilter(this);
+            }
             QList<QWidget*> widgets(subwidget()->findChildren<QWidget*>());
             foreach(QWidget *widget, widgets) {
                 d->subWidgetsWithDisabledEvents << widget;

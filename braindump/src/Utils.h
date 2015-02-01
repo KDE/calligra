@@ -17,13 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _UTILS_H_
+#define _UTILS_H_
+
 #include <QList>
 
 class QRectF;
 
 class KoShape;
 class KoShapeLayer;
-class KoXmlWriter;
 
 class Section;
 class SectionGroup;
@@ -35,3 +37,5 @@ void containerBoundRec(KoShape* shape, QRectF& b);
 
 Section* sectionForLayer(KoShapeLayer* _layer, SectionGroup* _rootSection);
 }
+
+#endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 class ActionsListViewBase : public QTreeWidget
 {
 public:
-    ActionsListViewBase(QWidget* parent);
+    explicit ActionsListViewBase(QWidget* parent);
     virtual ~ActionsListViewBase();
 
     //! \return item for action \a actionName
@@ -40,7 +40,7 @@ class KActionsListViewBase : public ActionsListViewBase
 {
     Q_OBJECT
 public:
-    KActionsListViewBase(QWidget* parent);
+    explicit KActionsListViewBase(QWidget* parent);
     virtual ~KActionsListViewBase();
     void init();
     virtual bool isActionVisible(const char* actionName, int actionCategories) const = 0;

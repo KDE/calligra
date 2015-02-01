@@ -86,9 +86,9 @@ public:
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
     virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
-    /// reimplemented from KoOdfDocument
+    /// reimplemented from KoDocumentBase
     virtual bool loadOdf(KoOdfReadStore &odfStore);
-    /// reimplemented from KoOdfDocument
+    /// reimplemented from KoDocumentBase
     virtual bool saveOdf(SavingContext &documentContext);
     /// reimplemented from KoDocument
     virtual int pageCount() const {
@@ -232,12 +232,6 @@ signals:
 
     /// emitted whenever a shape is added.
     void shapeAdded(KoShape *, KoShapeManager::Repaint);
-
-    /// emitted whenever an annotation shape is added.
-    void annotationShapeAdded(bool);
-
-    /// emitted whenever an annotation shape is removed
-    void annotationShapeRemoved(KoShape *);
 
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);

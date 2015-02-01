@@ -1092,19 +1092,6 @@ void KisImage::setModified()
     m_d->signalRouter->emitNotification(ModifiedSignal);
 }
 
-void KisImage::renderToPainter(qint32 srcX,
-                               qint32 srcY,
-                               qint32 dstX,
-                               qint32 dstY,
-                               qint32 width,
-                               qint32 height,
-                               QPainter &painter,
-                               const KoColorProfile *  monitorProfile)
-{
-    QImage image = convertToQImage(srcX, srcY, width, height, monitorProfile);
-    painter.drawImage(dstX, dstY, image, 0, 0, width, height);
-}
-
 QImage KisImage::convertToQImage(QRect imageRect,
                                  const KoColorProfile * profile)
 {
@@ -1128,27 +1115,7 @@ QImage KisImage::convertToQImage(qint32 x,
                                         KoColorConversionTransformation::InternalRenderingIntent,
                                         KoColorConversionTransformation::InternalConversionFlags);
 
-    if (!image.isNull()) {
-#ifdef WORDS_BIGENDIAN
-        uchar * data = image.bits();
-        for (int i = 0; i < w * h; ++i) {
-            uchar r, g, b, a;
-            a = data[0];
-            b = data[1];
-            g = data[2];
-            r = data[3];
-            data[0] = r;
-            data[1] = g;
-            data[2] = b;
-            data[3] = a;
-            data += 4;
-        }
-#endif
-
-        return image;
-    }
-
-    return QImage();
+    return image;
 }
 
 
@@ -1210,22 +1177,6 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
                                                      KoColorConversionTransformation::InternalConversionFlags);
 
         delete [] scaledImageData;
-
-#ifdef WORDS_BIGENDIAN
-        uchar * data = image.bits();
-        for (int i = 0; i < image.width() * image.height(); ++i) {
-            uchar r, g, b, a;
-            a = data[0];
-            b = data[1];
-            g = data[2];
-            r = data[3];
-            data[0] = r;
-            data[1] = g;
-            data[2] = b;
-            data[3] = a;
-            data += 4;
-        }
-#endif
 
         return image;
     }
@@ -1644,7 +1595,7 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
-bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 {
     KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
     if (mask &&
@@ -1657,7 +1608,7 @@ bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
     KisNodeSP node = root->firstChild();
 
     while (node) {
-        if (checkMasksNeedConersion(node, bounds)) {
+        if (checkMasksNeedConversion(node, bounds)) {
             return true;
         }
 
@@ -1672,7 +1623,7 @@ void KisImage::setWrapAroundModePermitted(bool value)
     m_d->wrapAroundModePermitted = value;
 
     if (m_d->wrapAroundModePermitted &&
-        checkMasksNeedConersion(root(), bounds())) {
+        checkMasksNeedConversion(root(), bounds())) {
 
         KisProcessingApplicator applicator(this, root(),
                                            KisProcessingApplicator::RECURSIVE,

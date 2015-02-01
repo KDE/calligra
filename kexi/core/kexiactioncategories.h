@@ -20,7 +20,6 @@
 #ifndef KEXI_ACTION_CATEGORIES_H
 #define KEXI_ACTION_CATEGORIES_H
 
-#include <ksharedptr.h>
 #include "kexipart.h"
 
 namespace Kexi
@@ -29,11 +28,11 @@ namespace Kexi
 enum ActionCategory {
     NoActionCategory = 0,      //!< no category at all
     GlobalActionCategory = 1,  //!< global application action like editcopy;
-    //!< can be applied to focused widget (of many types)
+                               //!< can be applied to focused widget (of many types)
     PartItemActionCategory = 2,//!< action related to part item, e.g. data_execute;
-    //!< requires context, used only in the navigator
+                               //!< requires context, used only in the navigator
     WindowActionCategory = 4   //!< action related to active window, which can display
-    //!< table, query, form, report...
+                               //!< table, query, form, report...
 };
 
 //! @short A set of functions used to declare action categories

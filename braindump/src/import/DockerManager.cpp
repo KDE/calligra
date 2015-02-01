@@ -22,12 +22,8 @@
 #include "DockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
-#include <ktoolbar.h>
 
 #include "ToolDocker.h"
 
@@ -69,7 +65,7 @@ DockerManager::~DockerManager()
     delete d;
 }
 
-void DockerManager::newOptionWidgets(const QList<QWidget*> &optionWidgetMap)
+void DockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetMap)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }

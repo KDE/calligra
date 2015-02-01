@@ -19,7 +19,7 @@
 
 #include "KPrAnimTransitionFilter.h"
 #include "KoShapeSavingContext.h"
-
+#include "KoPASavingContext.h"
 
 KPrAnimTransitionFilter::KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)

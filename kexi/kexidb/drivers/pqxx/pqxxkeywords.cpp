@@ -27,7 +27,7 @@
 #include <pqxxdriver.h>
 
 namespace KexiDB {
-  const char* pqxxSqlDriver::keywords[] = {
+  const char* const pqxxSqlDriver::keywords[] = {
 		"ABORT_P",
 		"ABSOLUTE_P",
 		"ACCESS",

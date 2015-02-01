@@ -24,6 +24,7 @@
 #include "kplatokernel_export.h"
 
 #include <kundo2command.h>
+
 #include <QPointer>
 
 #include "kptappointment.h"

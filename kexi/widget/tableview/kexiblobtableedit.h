@@ -21,18 +21,17 @@
 #ifndef _KEXIBLOBTABLEEDIT_H_
 #define _KEXIBLOBTABLEEDIT_H_
 
-#include <kurl.h>
-
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
 class KTemporaryFile;
+class KUrl;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {
     Q_OBJECT
 public:
-    KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiBlobTableEdit();
 
     bool valueIsNull();
@@ -127,7 +126,7 @@ KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 class KexiKIconTableEdit : public KexiTableEdit
 {
 public:
-    KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiKIconTableEdit();
 

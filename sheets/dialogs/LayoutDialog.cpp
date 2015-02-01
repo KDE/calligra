@@ -48,11 +48,11 @@
 #include <QGridLayout>
 #include <QPixmap>
 
+#include <knuminput.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klineedit.h>
-#include <kmessagebox.h>
 #include <knumvalidator.h>
 
 #include <KoIcon.h>

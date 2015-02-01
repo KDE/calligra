@@ -29,6 +29,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoViewConverter.h>
 
 using namespace Calligra::Sheets;
 
@@ -58,8 +59,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
 {
     Q_UNUSED(modifiers)
     Selection *const selection = d->cellTool->selection();
-    //const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
+    const QPointF position = documentPos - cellTool()->offset();
     // In which cell did the user click?
     qreal xpos;
     qreal ypos;

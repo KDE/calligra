@@ -55,10 +55,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktoggleaction.h>
-#include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <KoServiceLocator.h>
 
@@ -159,7 +156,7 @@ void View::initGUI()
     KoToolBoxFactory toolBoxFactory;
     m_mainWindow->createDockWidget(&toolBoxFactory);
 
-    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>(m_mainWindow->createDockWidget(&structureDockerFactory));

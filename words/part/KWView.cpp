@@ -40,6 +40,7 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
+#include "gemini/ViewModeSwitchEvent.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
@@ -62,11 +63,11 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointedAt.h>
-#include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
 #include <KoAnnotation.h>
 #include <KoTextEditor.h>
+#include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
@@ -137,7 +138,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
     m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
-    connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
+    connect(m_document->annotationLayoutManager(), SIGNAL(hasAnnotationsChanged(bool)), this, SLOT(hasNotes(bool)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -368,9 +369,10 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
     tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
     tAction->setToolTip(i18n("Set view in distraction free mode"));
-    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionCollection()->addAction("view_distractionfreemode", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
@@ -403,6 +405,10 @@ void KWView::setupActions()
     action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
+    // not sure why this isn't done through KStandardAction, but since it isn't
+    // we ought to set the MenuRole manually so the item ends up in the appropriate
+    // menu on OS X:
+    action->setMenuRole(QAction::PreferencesRole);
 
     // -------------- Page tool
     action = new KAction(i18n("Page Layout..."), this);
@@ -501,13 +507,20 @@ void KWView::pasteRequested()
     }
 }
 
-void KWView::showNotes(bool doShow)
+void KWView::showNotes(bool show)
 {
-    m_canvas->setShowAnnotations(doShow);
+    m_canvas->setShowAnnotations(show);
+    m_canvas->updateSize();
+}
+
+void KWView::hasNotes(bool has)
+{
+    m_canvas->setShowAnnotations(has);
     m_canvas->updateSize();
 
     KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
-    action->setChecked(doShow);
+    action->setEnabled(has);
+    action->setChecked(has);
 }
 
 void KWView::showWordCountInStatusBar(bool doShow)
@@ -693,13 +706,24 @@ void KWView::setDistractionFreeMode(bool status)
     m_dfmExitButton->setVisible(status);
 
     //Hide cursor.
-    if(status) {
+    if (status) {
         m_hideCursorTimer->start(4000);
     }
     else {
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
+
+    // From time to time you can end up in a situation where the shape manager suddenly
+    // looses track of the current shape selection. So, we trick it here. Logically,
+    // it also makes sense to just make sure the text tool is active anyway when
+    // switching to/from distraction free (since that's explicitly for typing things
+    // out, not layouting)
+    const QList<KoShape*> selection = m_canvas->shapeManager()->selection()->selectedShapes();
+    m_canvas->shapeManager()->selection()->deselectAll();
+    if (selection.count() > 0)
+        m_canvas->shapeManager()->selection()->select(selection.at(0));
+    KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }
 
 void KWView::hideUI()
@@ -926,6 +950,50 @@ void KWView::showEvent(QShowEvent *e)
 {
     KoView::showEvent(e);
     QTimer::singleShot(0, this, SLOT(updateStatusBarAction()));
+}
+
+bool KWView::event(QEvent* event)
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (m_canvas) {
+                syncObject->documentOffset = m_canvas->documentOffset();
+                syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->shapes = m_canvas->shapeManager()->shapes();
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (m_canvas && syncObject->initialized) {
+                m_canvas->canvasWidget()->setFocus();
+                qApp->processEvents();
+
+                m_canvas->shapeManager()->setShapes(syncObject->shapes);
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+
+                qApp->processEvents();
+                m_canvas->canvasController()->setScrollBarValue(syncObject->documentOffset);
+
+                qApp->processEvents();
+                foreach(KoShape* const &shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
+                    if (qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                        m_canvas->shapeManager()->selection()->select(shape);
+                        break;
+                    }
+                }
+                KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
+            }
+
+            return true;
+        }
+    }
+    return QWidget::event(event);
 }
 
 void KWView::updateStatusBarAction()

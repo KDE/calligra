@@ -19,7 +19,7 @@
 
 #include "kis_tiff_writer_visitor.h"
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <klocale.h>
 
 #include <KoColorProfile.h>
@@ -41,7 +41,8 @@ namespace
 {
     bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_type)
     {
-        if (cs->id() == "GRAYA" || cs->id() == "GRAYA16") {
+        qDebug() << cs->id();
+        if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
             color_type = PHOTOMETRIC_MINISBLACK;
             return true;
         }
@@ -49,7 +50,7 @@ namespace
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if (KoID(cs->id()) == KoID("RgbAF16") || KoID(cs->id()) == KoID("RgbAF32")) {
+        if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
             color_type = PHOTOMETRIC_RGB;
             sample_type = SAMPLEFORMAT_IEEEFP;
             return true;
@@ -64,7 +65,7 @@ namespace
             return true;
         }
 
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", cs->name())) ;
         return false;
 
     }

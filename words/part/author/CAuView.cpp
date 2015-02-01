@@ -30,7 +30,6 @@
 #include <KStatusBar>
 
 #include <QWidget>
-#include <ktoggleaction.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 

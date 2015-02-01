@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _STATESMODEL_H_
+#define _STATESMODEL_H_
+
 #include <QAbstractListModel>
 
 #include <QImage>
@@ -39,3 +42,5 @@ private:
     QList<const State*> m_states;
     QList<QImage> m_icons;
 };
+
+#endif

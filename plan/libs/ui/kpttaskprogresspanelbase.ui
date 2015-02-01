@@ -288,12 +288,6 @@
   <tabstop>addResource</tabstop>
   <tabstop>resourceTable</tabstop>
  </tabstops>
- <includes>
-  <include location="local">kdatetimewidget.h</include>
-  <include location="local">kdatewidget.h</include>
-  <include location="local">knuminput.h</include>
-  <include location="local">kptusedefforteditor.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

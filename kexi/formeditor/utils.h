@@ -62,7 +62,7 @@ class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
 {
     Q_OBJECT
 public:
-    TabWidget(QWidget *parent)
+    explicit TabWidget(QWidget *parent)
             : TabWidgetBase(parent) {}
     virtual ~TabWidget() {}
     int tabBarHeight() const {
@@ -85,7 +85,7 @@ public:
 class HorizontalWidgetList : public CustomSortableWidgetList
 {
 public:
-    HorizontalWidgetList(QWidget *topLevelWidget);
+    explicit HorizontalWidgetList(QWidget *topLevelWidget);
     //! Copy constructor needed required by foreach()
     HorizontalWidgetList(const HorizontalWidgetList& list);
     virtual ~HorizontalWidgetList();
@@ -99,7 +99,7 @@ protected:
 class VerticalWidgetList : public CustomSortableWidgetList
 {
 public:
-    VerticalWidgetList(QWidget *topLevelWidget);
+    explicit VerticalWidgetList(QWidget *topLevelWidget);
     //! Copy constructor needed required by foreach()
     VerticalWidgetList(const VerticalWidgetList& list);
     virtual ~VerticalWidgetList();
@@ -141,7 +141,7 @@ KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc,
 class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
 {
     public:
-        ActionGroup( QObject * parent );
+        explicit ActionGroup( QObject * parent );
         ~ActionGroup();
         //! Reimplemented.
         void addAction(QAction* action);

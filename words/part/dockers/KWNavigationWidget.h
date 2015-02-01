@@ -26,8 +26,6 @@
 #include <QTreeView>
 #include <QTimer>
 
-#include <kglobal.h>
-
 // FIXME: Don't cross include
 //#include "KWNavigationDocker.h"
 #include "StatisticsPreferencesPopup.h"
@@ -36,7 +34,6 @@
 
 class QTextDocument;
 class QToolButton;
-class KConfigGroup;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;

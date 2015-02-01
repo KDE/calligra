@@ -191,7 +191,7 @@ public:
      * character string comparisons and when searching. Wildcards may be
      * escaped with a tilde '~' character.
      *
-     * This is the only comparision mode supported by Excel.
+     * This is the only comparison mode supported by Excel.
      */
     void setUseWildcards(bool enabled);
     bool useWildcards() const;

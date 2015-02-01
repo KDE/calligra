@@ -40,10 +40,8 @@ KPrPlaceholderTool::~KPrPlaceholderTool()
 {
 }
 
-void KPrPlaceholderTool::paint( QPainter &painter, const KoViewConverter &converter )
+void KPrPlaceholderTool::paint( QPainter &/*painter*/, const KoViewConverter &/*converter*/ )
 {
-    Q_UNUSED( painter );
-    Q_UNUSED( converter );
 }
 
 void KPrPlaceholderTool::mousePressEvent( KoPointerEvent *event )

@@ -29,10 +29,8 @@
  */
 
 #include "KoTextLayoutArea.h"
+#include "KoTextLayoutArea_p.h"
 
-#include "KoTextLayoutEndNotesArea.h"
-#include "KoTextLayoutTableArea.h"
-#include "KoTextLayoutNoteArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
@@ -47,7 +45,6 @@
 #include <KoTableStyle.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
-#include <KoTextBlockBorderData.h>
 #include <KoText.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
@@ -71,8 +68,6 @@ Q_DECLARE_METATYPE(QTextDocument *)
 
 #define DropCapsAdditionalFormattingId 25602902
 #define PresenterFontStretch 1.2
-
-#include "KoTextLayoutArea_p.h"
 
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
  : d (new Private)
@@ -400,9 +395,9 @@ void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
             //setBottom(d->blockRects.last()->bottom() + d->footNotesHeight);
         }
         if (!keepWithNext) {
+            cursor->it = ++it;
             break;
         }
-        --(cursor->it);
     }
 }
 
@@ -1355,7 +1350,7 @@ bool KoTextLayoutArea::presentationListTabWorkaround(qreal indent, qreal labelBo
     return false;
 }
 
-qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const
+qreal KoTextLayoutArea::textIndent(const QTextBlock &block, QTextList *textList, const KoParagraphStyle &pStyle) const
 {
     if (pStyle.autoTextIndent()) {
         // if auto-text-indent is set,
@@ -1800,7 +1795,7 @@ void KoTextLayoutArea::setBottom(qreal bottom)
     d->bottom = bottom;
 }
 
-void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText)
+void KoTextLayoutArea::findFootNotes(const QTextBlock &block, const QTextLine &line, qreal bottomOfText)
 {
     if (d->documentLayout->inlineTextObjectManager() == 0) {
         return;

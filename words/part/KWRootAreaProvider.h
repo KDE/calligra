@@ -39,7 +39,7 @@ public:
     KWRootAreaPage() {};
     ~KWRootAreaPage() {};
     KWPage page;
-	QList<KoTextLayoutRootArea *> rootAreas;
+    QList<KoTextLayoutRootArea *> rootAreas;
     explicit KWRootAreaPage(const KWPage &p) : page(p) {}
 };
 
@@ -54,7 +54,7 @@ public:
     QList<KWRootAreaPage *> pages() const { return m_pages; }
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
     virtual void updateAll();
@@ -64,9 +64,10 @@ private:
     KWTextFrameSet *m_textFrameSet;
     QList<KWRootAreaPage *> m_pages;
     QHash<KoTextLayoutRootArea*, KWRootAreaPage *> m_pageHash;
+    QList<KoTextLayoutRootArea*> m_rootAreaCache;
     QList<QPair<KWRootAreaProvider *, int> > m_dependentProviders;
 
-    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout);
+    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints);
     void addDependentProvider(KWRootAreaProvider *provider, int pageNumber);
     void handleDependentProviders(int pageNumber);
 };

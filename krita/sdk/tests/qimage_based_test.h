@@ -27,7 +27,7 @@
 
 #include <KoShapeContainer.h>
 #include <KoShapeRegistry.h>
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_shape_layer.h"
 
 #include "kis_undo_stores.h"
@@ -134,12 +134,9 @@ protected:
         image->undoAdapter()->addCommand(cmd);
     }
 
-    void addShapeLayer(KisDoc2 *doc, KisImageSP image) {
-        KoShapeContainer *parentContainer =
-            dynamic_cast<KoShapeContainer*>(doc->shapeForNode(image->root()));
+    void addShapeLayer(KisDocument *doc, KisImageSP image) {
 
-        Q_ASSERT(parentContainer);
-        KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
+        KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
         image->addNode(shapeLayer);
 
         KoShapeFactoryBase *f1 = KoShapeRegistry::instance()->get("StarShape");

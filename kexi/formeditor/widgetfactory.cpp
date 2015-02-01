@@ -21,18 +21,11 @@
 
 #include "widgetfactory.h"
 
-#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <ktextedit.h>
-
-#include <klineedit.h>
-
 #include <kdialog.h>
 # include <keditlistwidget.h>
-
-#include <kactioncollection.h>
 
 #include "richtextdialog.h"
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
@@ -156,7 +149,7 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     KDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
-    dialog.setWindowTitle(i18n("Edit Contents of %1", w->objectName()));
+    dialog.setWindowTitle(i18nc("@title:window", "Edit Contents of %1", w->objectName()));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
     KEditListWidget *edit = new KEditListWidget(&dialog);

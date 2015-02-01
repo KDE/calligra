@@ -104,7 +104,7 @@ bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
     return QString::compare(n, "mysql", Qt::CaseInsensitive) == 0
         || QString::compare(n, "information_schema", Qt::CaseInsensitive) == 0
-        || Driver::isSystemObjectName(n);
+        || QString::compare(n, "performance_schema", Qt::CaseInsensitive) == 0;
 }
 
 bool MySqlDriver::drv_isSystemFieldName(const QString&) const

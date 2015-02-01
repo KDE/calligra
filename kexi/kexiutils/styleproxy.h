@@ -50,6 +50,7 @@ namespace KexiUtils
 */
 class KEXIUTILS_EXPORT StyleProxy : public QStyle
 {
+    Q_OBJECT
 public:
     /*! Creates a new style proxy object with @a parentStyle parent style
      and @a parent owner. */

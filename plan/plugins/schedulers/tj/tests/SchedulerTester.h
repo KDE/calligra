@@ -21,7 +21,6 @@
 #define KPlato_SchedulerTester_h
 
 #include <QtTest>
-#include <ktempdir.h>
 
 class KoXmlDocument;
 

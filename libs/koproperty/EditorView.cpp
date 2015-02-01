@@ -47,7 +47,7 @@ using namespace KoProperty;
 class EditorViewStyle : public KexiUtils::StyleProxy
 {
 public:
-    EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    explicit EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
     {
     }
 
@@ -81,7 +81,7 @@ static bool computeAutoSync(Property *property, bool defaultAutoSync)
 class ItemDelegate : public QItemDelegate
 {
 public:
-    ItemDelegate(QWidget *parent);
+    explicit ItemDelegate(QWidget *parent);
     virtual ~ItemDelegate();
     virtual void paint(QPainter *painter, 
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -353,10 +353,10 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
     if (d->set && setChanged) {
         //receive property changes
-        connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
-                this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
-        connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
+        connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&,KoProperty::Property&)),
+                this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+        connect(d->set, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+                this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
         connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }

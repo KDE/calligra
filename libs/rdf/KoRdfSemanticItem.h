@@ -28,6 +28,7 @@
 #include <QMimeData>
 
 class KoCanvasBase;
+class KDateTime;
 class QTreeWidgetItem;
 
 /**

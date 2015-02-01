@@ -22,7 +22,6 @@
 
 #include "kplatoui_export.h"
 
-#include <QWidget>
 #include <QTableView>
 
 #include "kpttask.h"

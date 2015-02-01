@@ -26,8 +26,6 @@
 #include <kptitemmodelbase.h>
 #include <kptdocumentmodel.h>
 
-
-
 class QPoint;
 
 class KoDocument;

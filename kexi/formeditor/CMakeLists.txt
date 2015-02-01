@@ -31,7 +31,6 @@ set(kformdesigner_LIB_SRCS
    FormWidget.cpp
    FormWidgetInterface.cpp
    WidgetTreeWidget.cpp
-#todo   spring.cpp
    commands.cpp
    events.cpp
    richtextdialog.cpp

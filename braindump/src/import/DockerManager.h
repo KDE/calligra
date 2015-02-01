@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QPointer>
 
 class MainWindow;
 
@@ -42,7 +43,7 @@ public slots:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QWidget*> & optionWidgetMap);
+    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetMap);
 
 
 private:

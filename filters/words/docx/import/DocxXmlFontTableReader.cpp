@@ -24,7 +24,6 @@
 #include "DocxXmlFontTableReader.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
 #define MSOOXML_CURRENT_NS "w"
@@ -86,7 +85,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderCo
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
-        raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::wordprocessingml)));
         return KoFilter::WrongFormat;
     }
 //! @todo expect other namespaces too...

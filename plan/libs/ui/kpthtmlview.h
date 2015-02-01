@@ -25,10 +25,10 @@
 #include "kptviewbase.h"
 
 #include "khtml_part.h"
-#include <kurl.h>
 
 class KoDocument;
 
+class KUrl;
 class QPoint;
 
 

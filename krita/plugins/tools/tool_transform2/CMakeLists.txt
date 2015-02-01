@@ -1,11 +1,20 @@
+add_subdirectory(tests)
+
 set(kritatooltransform_PART_SRCS
     tool_transform.cc
     tool_transform_args.cc
+    kis_transform_mask_adapter.cpp
     tool_transform_changes_tracker.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
     kis_transform_strategy_base.cpp
     kis_warp_transform_strategy.cpp
+    kis_cage_transform_strategy.cpp
+    kis_simplified_action_policy_strategy.cpp
+    kis_liquify_transform_strategy.cpp
+    kis_liquify_paint_helper.cpp
+    kis_liquify_paintop.cpp
+    kis_liquify_properties.cpp
     kis_free_transform_strategy.cpp
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp
@@ -37,3 +46,6 @@ install( FILES  rotate_cursor.xpm
                 krita_tool_transform_recursive.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooltransform.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES
+    KisToolTransform.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

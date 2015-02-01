@@ -3,7 +3,8 @@ add_subdirectory( tests )
 
 include_directories(
     ../kernel 
-    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+    ${KOODF_INCLUDES}
     ${KUNDO2_INCLUDES}
     ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}

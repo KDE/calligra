@@ -20,7 +20,6 @@
 #include "KPrShapeAnimationRegistry.h"
 #include "KPrShapeAnimationFactory.h"
 
-#include <kglobal.h>
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
 
@@ -43,7 +42,7 @@ public:
         // XXX: Use minversion here?
         // The plugins are responsible for adding a factory to the registry
         KoPluginLoader::instance()->load( QString::fromLatin1("CalligraStage/ShapeAnimation"),
-                                          QString::fromLatin1("[X-KPresenter-Version] == 27"),
+                                          QString::fromLatin1("[X-KPresenter-Version] == 28"),
                                           config);
     }
 

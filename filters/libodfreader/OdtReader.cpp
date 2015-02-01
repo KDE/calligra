@@ -34,8 +34,6 @@
 #include <KoStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
-#include <KoOdfReadStore.h>
 
 // Reader library
 #include "OdtReaderBackend.h"
@@ -148,6 +146,10 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
             // We already have the styles in the context.  No need to read them again.
             reader.skipCurrentElement();
         }
+        else if (tagName == "office:body") {
+            // This is the big one.
+            readElementOfficeBody(reader);
+        }
         else if (tagName == "office:font-face-decls") {
             // FIXME: Not yet implemented
             reader.skipCurrentElement();
@@ -155,10 +157,6 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
         else if (tagName == "office:scripts") {
             // FIXME: Not yet implemented
             reader.skipCurrentElement();
-        }
-        else if (tagName == "office:body") {
-            // This is the big one.
-            readElementOfficeBody(reader);
         }
         else {
             reader.skipCurrentElement();

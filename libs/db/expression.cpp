@@ -164,20 +164,46 @@ NArgExpr* NArgExpr::copy() const
     return new NArgExpr(*this);
 }
 
+Field::Type NArgExpr::type()
+{
+    switch (m_token) {
+    case KEXIDB_TOKEN_BETWEEN_AND:
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND:
+        foreach (BaseExpr* e, list) {
+            Field::Type type = e->type();
+            if (type == Field::InvalidType || type == Field::Null) {
+                return type;
+            }
+        }
+
+        return Field::Boolean;
+    default:;
+    }
+
+    return BaseExpr::type();
+}
+
 QString NArgExpr::debugString()
 {
     QString s = QString("NArgExpr(")
-                + "class=" + exprClassName(m_cl);
+                + tokenToString() + ", " + "class=" + exprClassName(m_cl);
     foreach(BaseExpr *expr, list) {
         s += ", " +
              expr->debugString();
     }
-    s += ')';
+    s += QString::fromLatin1(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
     return s;
 }
 
 QString NArgExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
+    if (BaseExpr::token() == KEXIDB_TOKEN_BETWEEN_AND && list.count() == 3) {
+        return list[0]->toString() + " BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+    }
+    if (BaseExpr::token() == KEXIDB_TOKEN_NOT_BETWEEN_AND && list.count() == 3) {
+        return list[0]->toString() + " NOT BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+    }
+
     QString s;
     s.reserve(256);
     foreach(BaseExpr* e, list) {
@@ -226,7 +252,45 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
         if (!e->validate(parseInfo))
             return false;
     }
+
+    switch (m_token) {
+    case KEXIDB_TOKEN_BETWEEN_AND:
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND: {
+        if (list.count() != 3) {
+            parseInfo.errMsg = i18n("Three arguments required");
+            parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN...AND");
+            return false;
+        }
+
+        if (!(!Field::isNumericType(list[0]->type()) || !Field::isNumericType(list[1]->type()) || !Field::isNumericType(list[2]->type()))) {
+            return true;
+        } else if (!(!Field::isTextType(list[0]->type()) || !Field::isTextType(list[1]->type()) || !Field::isTextType(list[2]->type()))) {
+            return true;
+        }
+
+        if ((list[0]->type() == list[1]->type() && list[1]->type() == list[2]->type())) {
+            return true;
+        }
+
+        parseInfo.errMsg = i18n("Incompatible types of arguments");
+        parseInfo.errDescr = i18nc("@info BETWEEN..AND type error", "%1 operator requires compatible types of arguments.", "BETWEEN..AND");
+
+        return false;
+    }
+    default:;
+    }
+
     return true;
+}
+
+QString NArgExpr::tokenToString()
+{
+    switch (m_token) {
+    case KEXIDB_TOKEN_BETWEEN_AND: return "BETWEEN_AND";
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND: return "NOT_BETWEEN_AND";
+    default:;
+    }
+    return QString("{INVALID_N_ARG_OPERATOR#%1} ").arg(m_token);
 }
 
 //=========================================
@@ -729,17 +793,19 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
                 } else if (f->table() != firstField->table()) {
                     //ambiguous field name
                     parseInfo.errMsg = i18n("Ambiguous field name");
-                    parseInfo.errDescr = i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-                                              "Use \"<tableName>.%4\" notation to specify table name.",
-                                              firstField->table()->name(), f->table()->name(),
-                                              fieldName, fieldName);
+                    parseInfo.errDescr = i18nc("@info",
+                        "Both table <resource>%1</resource> and <resource>%2</resource> have "
+                        "defined <resource>%3</resource> field. "
+                        "Use <resource><placeholder>tableName</placeholder>.%4</resource> notation to specify table name.",
+                        firstField->table()->name(), f->table()->name(),
+                        fieldName, fieldName);
                     return false;
                 }
             }
         }
         if (!firstField) {
             parseInfo.errMsg = i18n("Field not found");
-            parseInfo.errDescr = i18n("Table containing \"%1\" field not found", fieldName);
+            parseInfo.errDescr = i18n("Table containing \"%1\" field not found.", fieldName);
             return false;
         }
         //ok
@@ -766,8 +832,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
         }
         if (covered) {
             parseInfo.errMsg = i18n("Could not access the table directly using its name");
-            parseInfo.errDescr = i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-                                      "you can write \"%3\"", tableName, tableName + "." + fieldName, tableAlias + "." + QString(fieldName));
+            parseInfo.errDescr = i18n("Table name <resource>%1</resource> is covered by aliases. "
+                                      "Instead of <resource>%2</resource>, "
+                                      "you can write <resource>%3</resource>.",
+                                      tableName, tableName + "." + fieldName,
+                                      tableAlias + "." + QString(fieldName));
             return false;
         }
         if (!tPositions.isEmpty()) {
@@ -786,7 +855,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
     if (!ts) {
         parseInfo.errMsg = i18n("Table not found");
-        parseInfo.errDescr = i18n("Unknown table \"%1\"", tableName);
+        parseInfo.errDescr = i18n("Unknown table \"%1\".", tableName);
         return false;
     }
 
@@ -800,7 +869,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     if (fieldName == "*") {
         if (positionsList.count() > 1) {
             parseInfo.errMsg = i18n("Ambiguous \"%1.*\" expression", tableName);
-            parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined", tableName);
+            parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined.", tableName);
             return false;
         }
         tableForQueryAsterisk = ts;
@@ -812,7 +881,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     Field *realField = ts->field(fieldName);
     if (!realField) {
         parseInfo.errMsg = i18n("Field not found");
-        parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field", tableName, fieldName);
+        parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field.", tableName, fieldName);
         return false;
     }
 
@@ -820,7 +889,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     // (so the column is ambiguous)
     if (positionsList.count() > 1) {
         parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
-        parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
+        parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field.",
                                   tableName, fieldName);
         return false;
     }

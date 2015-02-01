@@ -6,10 +6,6 @@ ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
 ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
 ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS(
--DKEXI_NO_CTXT_HELP=1
-)
-
 set(QT_USE_QTUITOOLS true)
 
 ########### next target ###############
@@ -19,16 +15,16 @@ KexiMainWindow.cpp
 KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
-kexinewstuff.cpp
+#TODO: kexinewstuff.cpp
 KexiSearchLineEdit.cpp
 KexiUserFeedbackAgent.cpp
+KexiBugReportDialog.cpp
 
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
 startup/KexiWelcomeAssistant.cpp
 startup/KexiWelcomeStatusBar.cpp
 startup/KexiImportExportAssistant.cpp
-startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
 startup/KexiTemplatesModel.cpp
@@ -62,7 +58,7 @@ target_link_libraries(
     kexiextendedwidgets
     kexiguiutils
     keximigrate
-    ${KDE4_KNEWSTUFF_LIBS}
+#TODO:    ${KDE4_KNEWSTUFF_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBS}
     ${QT_QTUITOOLS_LIBRARY}

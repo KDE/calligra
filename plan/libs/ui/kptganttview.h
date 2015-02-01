@@ -36,12 +36,8 @@
 
 class KoDocument;
 
-class QPainter;
 class QPoint;
 class QSplitter;
-class QModelIndex;
-class QPointF;
-class QSortFilterProxyModel;
 
 class KoPrintJob;
 

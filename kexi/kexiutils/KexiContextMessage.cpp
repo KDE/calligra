@@ -134,7 +134,7 @@ K_GLOBAL_STATIC(PaletteForPages, origPagesPalettes);
 class KexiContextMessageWidget::Private
 {
 public:
-    Private(KexiContextMessageWidget *_q)
+    explicit Private(KexiContextMessageWidget *_q)
      : q(_q)
      , resizeTrackingPolicy(0)
      , hasActions(false)

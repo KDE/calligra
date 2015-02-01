@@ -22,7 +22,6 @@
  * 02110-1301 USA
  *
  */
-#include <QTextStream>
 #include "MsooXmlDiagramReader_p.h"
 
 #include <typeinfo>
@@ -44,6 +43,8 @@
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlDiagramReader.h>
+
+#include <QTextStream>
 
 #include <algorithm>
 

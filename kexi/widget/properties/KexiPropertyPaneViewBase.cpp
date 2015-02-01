@@ -46,7 +46,7 @@ KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     QVBoxLayout *lyr = new QVBoxLayout(this);
-    lyr->setContentsMargins(2, 2, 2, 2);
+    lyr->setContentsMargins(0, 0, 0, 0);
     lyr->setSpacing(0);
 
     //add object class info

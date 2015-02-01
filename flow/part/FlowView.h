@@ -22,8 +22,6 @@
 
 #include <KoPAView.h>
 
-class KAction;
-
 class FlowDocument;
 class FlowPart;
 
