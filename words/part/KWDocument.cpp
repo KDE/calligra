@@ -325,7 +325,7 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     foreach (KoShape *shape, fs->shapes())
         removeSequencedShape(shape);
 
-    disconnect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSquencedShape(KoShape *)));
+    disconnect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
     disconnect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
 }
 
