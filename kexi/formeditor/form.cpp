@@ -1259,7 +1259,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
 //! @todo add to merge in PropertyCommand if needed
         if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
             addPropertyCommand(d->selected.first()->objectName().toLatin1(),
-                d->selected.first()->property(property), value, property, DontExecuteCommand);
+                               p.oldValue(), value, property, DontExecuteCommand);
         }
 
         // If the property is changed, we add it in ObjectTreeItem modifProp
@@ -1386,6 +1386,11 @@ void Form::redo()
     if (saveExecutingCommand)
         d->executingCommand = 0;
     d->isRedoing = false;
+}
+
+bool Form::isRedoing() const
+{
+    return d->isRedoing;
 }
 
 void Form::setUndoing(bool undoing)

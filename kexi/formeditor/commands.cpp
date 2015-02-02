@@ -1019,7 +1019,7 @@ void InsertWidgetCommand::execute()
     container->reloadLayout(); // reload the layout to take the new wigdet into account
 
     container->selectWidget(w);
-    if (!d->form->library()->internalProperty(w->metaObject()->className(),
+    if (!d->form->isRedoing() && !d->form->library()->internalProperty(w->metaObject()->className(),
             "dontStartEditingOnInserting").toBool())
     {
         // edit the widget on creation
