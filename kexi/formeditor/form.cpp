@@ -456,8 +456,14 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
     }
 #endif
 
-    if (w && w != widget())
-        d->resizeHandles.insert(w->objectName(), new ResizeHandleSet(w, this));
+    if (w && w != widget()) {
+        ResizeHandleSet *handles = new ResizeHandleSet(w, this);
+        d->resizeHandles.insert(w->objectName(), handles);
+        connect(handles, SIGNAL(geometryChangeStarted()),
+                parentContainer(w), SLOT(startChangingGeometryPropertyForSelectedWidget()));
+        connect(handles, SIGNAL(geometryChanged(QRect)),
+                parentContainer(w), SLOT(setGeometryPropertyForSelectedWidget(QRect)));
+    }
 }
 
 void Form::selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags)
