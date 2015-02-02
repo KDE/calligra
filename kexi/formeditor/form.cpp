@@ -794,7 +794,7 @@ bool Form::addCommand(Command *command, AddCommandOption option)
 
     if (saveExecutingCommand)
         d->executingCommand = 0;
-    //kDebug() << "ADDED:" << command;
+    //kDebug() << "ADDED:" << *command;
     return true;
 }
 
@@ -1162,6 +1162,7 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
     d->insideAddPropertyCommand = true;
     d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
     d->lastCommand->setUniqueId(idOfPropertyCommand);
+    //kDebug() << "ADD:" << *d->lastCommand;
     if (!addCommand(d->lastCommand, addOption)) {
         d->lastCommand = 0;
     }

@@ -93,7 +93,7 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const Command &c
 {
     dbg.nospace() << "Command";
     const int count = c.childCount();
-    dbg.nospace() << "name=" << c.text() << "#=" << count;
+    dbg.space() << "name=" << c.text() << "#=" << count;
     for (int i = 0; i < count; i++) {
         dbg.nospace() << "- subcommand" << i+1 << ":" << *static_cast<const Command*>(c.child(i)) << "\n";
     }
@@ -246,8 +246,11 @@ void PropertyCommand::undo()
 
         WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
         QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
-        if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName))
+        if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName)) {
+            //kDebug() << "OLD" << d->propertyName << subWidget->property(d->propertyName);
+            //kDebug() << "NEW" << d->propertyName << it.value();
             subWidget->setProperty(d->propertyName, it.value());
+        }
     }
 
     d->form->propertySet().changeProperty(d->propertyName, d->oldValues.constBegin().value());
