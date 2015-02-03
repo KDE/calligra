@@ -37,7 +37,6 @@
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameLayout.h"
-#include "frames/KWOutlineShape.h"
 #include "dialogs/KWFrameDialog.h"
 #include "KWRootAreaProvider.h"
 

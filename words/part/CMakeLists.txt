@@ -43,7 +43,6 @@ set(wordsprivate_LIB_SRCS
     frames/KWFrameSet.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
-    frames/KWOutlineShape.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWRunAroundProperties.cpp
