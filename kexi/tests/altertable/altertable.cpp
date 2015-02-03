@@ -669,7 +669,6 @@ int main(int argc, char *argv[])
     newArgc = 2;
     newArgv = new char*[newArgc];
     newArgv[0] = qstrdup(argv[0]);
-    newArgv[1] = qstrdup("--skip-startup-dialog");
 
     KAboutData aboutdata;
     aboutdata.setProgramName("Kexi Alter Table Test");

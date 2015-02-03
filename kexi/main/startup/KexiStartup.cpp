@@ -616,8 +616,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KexiStartupData::setAction(ShowWelcomeScreen);
         return true;
 //! @todo remove startup dialog code
-        if (args->isSet("skip-startup-dialog") || !KexiStartupDialog::shouldBeShown())
-            return true;
 
         if (!d->startupDialog) {
             //create startup dialog for reuse because it can be used again after conn err.
