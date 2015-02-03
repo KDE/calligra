@@ -39,15 +39,6 @@ public:
     void addUser();
     void removeUser();
 
-    KWFrame *frame() const {
-        return m_frame;
-    }
-    void setFrame(KWFrame *frame);
-    KWFrame *createFrame(KoShape *shape);
-    void markFrameUsed() {
-        m_deleteFrame = false;
-    }
-
     KWDocument *document() const {
         return m_document;
     }
@@ -62,9 +53,7 @@ signals:
 
 private:
     int m_refcount;
-    bool m_deleteFrame;
     bool m_protectAspectRatio; // states if the user has this boolean set right now.
-    KWFrame *m_frame;
     KWDocument *m_document;
 };
 

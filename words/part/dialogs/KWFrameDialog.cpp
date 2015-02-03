@@ -45,19 +45,18 @@ KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *documen
     if (m_runAroundProperties->open(shapes))
         addPage(m_runAroundProperties, i18n("Text Run Around"));
 
-    /*
     if (shapes.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
         KoShape *shape = shapes.first();
         m_state->setKeepAspectRatio(shape->keepAspectRatio());
-        if (m_frameConnectSelector->open(shape))
+        if (m_frameConnectSelector->canOpen(shape)) {
+            m_frameConnectSelector->open(shape);
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
-        else {
+        } else {
             delete m_frameConnectSelector;
             m_frameConnectSelector = 0;
         }
     }
-    */
 
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));

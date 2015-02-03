@@ -31,9 +31,12 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         m_frameSet(parent)
 {
     Q_ASSERT(shape);
+    Q_ASSERT(parent);
+    if (shape->applicationData()) {
+        delete shape->applicationData();
+    }
     shape->setApplicationData(this);
-    if (parent)
-        parent->addShape(shape);
+    parent->addShape(shape);
 }
 
 KWFrame::~KWFrame()
