@@ -25,42 +25,38 @@
 #include "KWShapeConfigFactory.h"
 #include "KWFrameConnectSelector.h"
 #include "KWRunAroundProperties.h"
-#include "KWGeneralFrameProperties.h"
 #include "KWAnchoringProperties.h"
 #include "KWCanvas.h"
-#include "frames/KWFrame.h"
+#include "frames/KWFrameSet.h"
 
-KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, KWCanvas *canvas)
+KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *document, KWCanvas *canvas)
         : KPageDialog(canvas)
         , m_frameConnectSelector(0)
         , m_canvas(canvas)
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
-    m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
-    addPage(m_generalFrameProperties, i18n("General"));
-    m_generalFrameProperties->open(frames);
 
     m_anchoringProperties = new KWAnchoringProperties(m_state);
-    if (m_anchoringProperties->open(frames))
+    if (m_anchoringProperties->open(shapes))
         addPage(m_anchoringProperties, i18n("Smart Positioning"));
 
     m_runAroundProperties = new KWRunAroundProperties(m_state);
-    if (m_runAroundProperties->open(frames))
+    if (m_runAroundProperties->open(shapes))
         addPage(m_runAroundProperties, i18n("Text Run Around"));
 
-    if (frames.count() == 1) {
+    if (shapes.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
-        KWFrame *frame = frames.first();
-        m_state->setKeepAspectRatio(frame->shape()->keepAspectRatio());
-        if (m_frameConnectSelector->open(frame))
+        KoShape *shape = shapes.first();
+        m_state->setKeepAspectRatio(shape->keepAspectRatio());
+        if (m_frameConnectSelector->canOpen(shape)) {
+            m_frameConnectSelector->open(shape);
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
-        else {
+        } else {
             delete m_frameConnectSelector;
             m_frameConnectSelector = 0;
         }
     }
-
 
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
@@ -101,7 +97,6 @@ void KWFrameDialog::okClicked()
     MasterCommand *macro = new MasterCommand(m_anchoringProperties, m_canvas);
 
     //these we can just add as children as they don't deal with kotexteditor
-    m_generalFrameProperties->save();
     m_runAroundProperties->save(macro);
 
     m_canvas->addCommand(macro);
@@ -118,7 +113,6 @@ QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc)
     FrameConfigSharedState *state = new FrameConfigSharedState(doc);
     answer.append(new KWFrameConnectSelectorFactory(state));
     answer.append(new KWRunAroundPropertiesFactory(state));
-    answer.append(new KWGeneralFramePropertiesFactory(state));
     return answer;
 }
 

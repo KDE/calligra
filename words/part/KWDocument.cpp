@@ -37,7 +37,6 @@
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameLayout.h"
-#include "frames/KWOutlineShape.h"
 #include "dialogs/KWFrameDialog.h"
 #include "KWRootAreaProvider.h"
 
@@ -165,7 +164,7 @@ void KWDocument::setIsMasterDocument(bool isMasterDocument)
 
 
 // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
-// will call addFrameSet.  Which will itself call addFrame()
+// will call addFrameSet.  Which will itself call addSequencedShape()
 // any call coming in here is due to the undo/redo framework, pasting or for nested frames
 void KWDocument::addShape(KoShape *shape)
 {
@@ -182,9 +181,9 @@ void KWDocument::addShape(KoShape *shape)
             frame = new KWFrame(shape, fs);
         }
     }
-    Q_ASSERT(frame->frameSet());
-    if (!m_frameSets.contains(frame->frameSet())) {
-        addFrameSet(frame->frameSet());
+    Q_ASSERT(KWFrameSet::from(shape));
+    if (!m_frameSets.contains(KWFrameSet::from(shape))) {
+        addFrameSet(KWFrameSet::from(shape));
     }
 
     if (!(shape->shapeId() == "AnnotationTextShapeID")) {
@@ -196,16 +195,14 @@ void KWDocument::addShape(KoShape *shape)
 
 void KWDocument::removeShape(KoShape *shape)
 {
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
-    if (frame) { // not all shapes have to have a frame. Only top-level ones do.
-        KWFrameSet *fs = frame->frameSet();
-        Q_ASSERT(fs);
-        if (fs->frameCount() == 1) // last frame on FrameSet
-            removeFrameSet(fs); // frame and frameset will be deleted when the shape is deleted
+    kDebug(32001) << "shape=" << shape;
+    KWFrameSet *fs = KWFrameSet::from(shape);
+    if (fs) { // not all shapes have to have to be in a frameset
+        if (fs->shapeCount() == 1) // last shape on FrameSet
+            removeFrameSet(fs); // shape and frameset will be deleted when the shape is deleted
         else
-            fs->removeFrame(frame);
-    } else { // not a frame, but we still have to remove it from views.
+            fs->removeShape(shape);
+    } else { // not in a frameset, but we still have to remove it from views.
         emit shapeRemoved(shape);
     }
     if (shape->shapeId() == "AnnotationTextShapeID") {
@@ -324,13 +321,11 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     kDebug(32001) << "frameSet=" << fs;
     m_frameSets.removeAt(m_frameSets.indexOf(fs));
     setModified(true);
-    foreach (KWFrame *frame, fs->frames())
-        removeFrame(frame);
+    foreach (KoShape *shape, fs->shapes())
+        removeSequencedShape(shape);
 
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
-
-    disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
-    disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
+    disconnect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
+    disconnect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
 }
 
 void KWDocument::relayout(QList<KWFrameSet*> framesets)
@@ -340,33 +335,6 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
 
     kDebug(32001) << "frameSets=" << framesets;
 
-#if 0
-    foreach (KWFrameSet *fs, m_frameSets) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
-        if (tfs->textFrameSetType() != Words::MainTextFrameSet) continue;
-        QSet<KWPage> coveredPages;
-        QList<int> coveredPageNumbers;
-        foreach (KWFrame *frame, tfs->frames()) {
-            KWPage page = pageManager()->page(frame->shape());
-            if (page.isValid()) {
-                if (! coveredPages.contains(page)) {
-                    coveredPages += page;
-                    coveredPageNumbers << page.pageNumber();
-                    continue; // keep one frame per page.
-                }
-            }
-            kDebug(32001) << "Delete frame=" << frame << "pageNumber=" << page.pageNumber();
-            foreach (KoView *view, views()) {
-                KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-                canvas->shapeManager()->remove(frame->shape());
-            }
-            tfs->removeFrame(frame);
-            delete frame->shape();
-        }
-        kDebug(32001) << "coveredPageNumbers=" << coveredPageNumbers;
-    }
-#endif
 
     // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
     //KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
@@ -420,9 +388,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
     Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
-#if 0
-    m_frameSets.append(fs);
-#else
+
     // Be sure we add headers and footers to the beginning of the m_frameSets QList and every other KWFrameTextType
     // after them so future operations iterating over that QList always handle headers and footers first.
     int insertAt = m_frameSets.count();
@@ -438,9 +404,9 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
         }
     }
     m_frameSets.insert(insertAt, fs);
-#endif
-    foreach (KWFrame *frame, fs->frames())
-        addFrame(frame);
+
+    foreach (KoShape *shape, fs->shapes())
+        addSequencedShape(shape);
 
     if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
         Q_ASSERT(tfs->pageManager() == pageManager());
@@ -451,32 +417,30 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
         }
     }
 
-    connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
-    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
+    connect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
+    connect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
 }
 
-void KWDocument::addFrame(KWFrame *frame)
+void KWDocument::addSequencedShape(KoShape *shape)
 {
-    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+    kDebug(32001) << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
     //firePageSetupChanged();
-    emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
+    emit shapeAdded(shape, KoShapeManager::AddWithoutRepaint);
 }
 
-void KWDocument::removeFrame(KWFrame *frame)
+void KWDocument::removeSequencedShape(KoShape *shape)
 {
-    if (frame->shape() == 0) return;
-    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+    kDebug(32001) << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
 
-    emit shapeRemoved(frame->shape());
-    KWPage page = pageManager()->page(frame->shape());
+    emit shapeRemoved(shape);
+    KWPage page = pageManager()->page(shape);
     if (!page.isValid()) return;
     if (!page.isAutoGenerated()) return;
     if (page != pageManager()->last() || page == pageManager()->begin())
         return; // can only delete last page.
     foreach (KWFrameSet *fs, m_frameSets) {
-        foreach (KWFrame *f, fs->frames()) {
-            if (page == pageManager()->page(f->shape()))
+        foreach (KoShape *s, fs->shapes()) {
+            if (page == pageManager()->page(s))
                 return;
         }
     }
@@ -731,19 +695,19 @@ void KWDocument::saveConfig()
     interface.writeEntry("ResolutionY", gridData().gridY());
 }
 
-KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
+KoShape *KWDocument::findTargetTextShape(KoShape *shape) const
 {
-    KWFrame *result = 0;
+    KoShape *result = 0;
     int      area   = 0;
     QRectF   br     = shape->boundingRect();
 
     // now find the frame that is closest to the frame we want to inline.
-    foreach (KWFrame *frame, mainFrameSet()->frames()) {
-        QRectF intersection  = br.intersected(frame->shape()->boundingRect());
+    foreach (KoShape *shape, mainFrameSet()->shapes()) {
+        QRectF intersection  = br.intersected(shape->boundingRect());
         int    intersectArea = qRound(intersection.width() * intersection.height());
 
         if (intersectArea > area) {
-            result = frame;
+            result = shape;
             area   = intersectArea;
         } else if (result == 0) {
             // TODO check distance between frames or something.

@@ -63,7 +63,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
         KWTextFrameSet *fs = 0;
         KWFrame *previous = m_nextFrames.value(shape->name());
         if (previous)
-            fs = dynamic_cast<KWTextFrameSet*>(previous->frameSet());
+            fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(previous->shape()));
         if (fs == 0) {
             fs = new KWTextFrameSet(m_loader->document());
             fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
@@ -88,11 +88,10 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             }
 
             if (textBox.hasAttributeNS(KoXmlNS::fo, "min-height")) {
-                frame->setMinimumFrameHeight(KoUnit::parseValue(textBox.attributeNS(KoXmlNS::fo, "min-height")));
-                KoShape *shape = frame->shape();
+                shape->setMinimumHeight(KoUnit::parseValue(textBox.attributeNS(KoXmlNS::fo, "min-height")));
                 QSizeF newSize = shape->size();
-                if (newSize.height() < frame->minimumFrameHeight()) {
-                    newSize.setHeight(frame->minimumFrameHeight());
+                if (newSize.height() < shape->minimumHeight()) {
+                    newSize.setHeight(shape->minimumHeight());
                     shape->setSize(newSize);
                 }
             }
@@ -109,41 +108,9 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
 
 bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElement &style)
 {
-    frame->setFrameBehavior(Words::IgnoreContentFrameBehavior);
     KoXmlElement properties(KoXml::namedItemNS(style, KoXmlNS::style, "graphic-properties"));
     if (properties.isNull())
         return frame;
-
-    QString copy = properties.attributeNS(KoXmlNS::draw, "copy-of");
-    if (! copy.isEmpty()) {
-        //TODO "return false" and untested code...
-#if 0
-        // untested... No app saves this currently..
-        foreach (KWFrame *f, frame->frameSet()->frames()) {
-            if (f->shape()->name() == copy) {
-                KWCopyShape *shape = new KWCopyShape(f->shape());
-                new KWFrame(shape, frame->frameSet(), frame->anchoredPageNumber());
-                delete frame;
-                return false;
-            }
-        }
-#endif
-    }
-
-    QString overflow = properties.attributeNS(KoXmlNS::style, "overflow-behavior", QString());
-    if (overflow == "clip")
-        frame->setFrameBehavior(Words::IgnoreContentFrameBehavior);
-    else if (overflow == "auto-create-new-frame")
-        frame->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
-    else
-        frame->setFrameBehavior(Words::AutoExtendFrameBehavior);
-    QString newFrameBehavior = properties.attributeNS(KoXmlNS::calligra, "frame-behavior-on-new-page", QString());
-    if (newFrameBehavior == "followup")
-        frame->setNewFrameBehavior(Words::ReconnectNewFrame);
-    else if (newFrameBehavior == "copy")
-        frame->setNewFrameBehavior(Words::CopyNewFrame);
-    else
-        frame->setNewFrameBehavior(Words::NoFollowupFrame);
 
     return true;
 }

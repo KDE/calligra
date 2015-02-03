@@ -222,7 +222,7 @@ void FormPrivate::setColorProperty(KoProperty::Property& p,
         QColor oldColor(widgetPalette.color((widget->*roleMethod)()));
         widgetPalette.setColor((widget->*roleMethod)(), color);
         widget->setPalette(widgetPalette);
-        if (!isRedoing) {
+        if (!isRedoing && !isUndoing) {
             q->addPropertyCommand(widget->objectName().toLatin1(),
                 oldColor, color, p.name(), Form::DontExecuteCommand);
         }

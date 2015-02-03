@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -302,8 +302,7 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
     if (orientation() == Qt::Horizontal) {
         int width = 0;
         if (scrollArea()) {
-            //kDebug() << "scrollArea()->width():" << scrollArea()->width();
-            width = scrollArea()->width();
+            width = scrollArea()->viewport()->width() - 1;
         }
         int height = 0;
         for (int i = 0; i < count(); i++) {
@@ -321,10 +320,7 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
         initStyleOption(&opt);
         if (scrollArea()) {
             //kDebug() << "scrollArea()->width():" << scrollArea()->width();
-            height = scrollArea()->height()
-                     - scrollArea()->horizontalHeader()->height()
-                     - (scrollArea()->style()->pixelMetric(QStyle::PM_FocusFrameVMargin, &opt, this) + 2) * 2;
-            //kDebug() << "==============" << height;
+            height = scrollArea()->viewport()->height() - 1;
         }
         //kDebug() << scrollArea()->style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
         return QSize(scrollArea()->rowHeight()

@@ -162,12 +162,6 @@ KexiStartupDialog::~KexiStartupDialog()
     delete d;
 }
 
-bool KexiStartupDialog::shouldBeShown()
-{
-    KConfigGroup group = KGlobal::config()->group("Startup");
-    return group.readEntry("ShowStartupDialog", true);
-}
-
 void KexiStartupDialog::showEvent(QShowEvent *e)
 {
     KPageDialog::showEvent(e);

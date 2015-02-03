@@ -1255,6 +1255,22 @@ void Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
     }
 }
 
+void Container::startChangingGeometryPropertyForSelectedWidget()
+{
+    ++d->idOfPropertyCommand;
+}
+
+void Container::setGeometryPropertyForSelectedWidget(const QRect &newGeometry)
+{
+    QWidget *w = d->form->selectedWidget();
+    if (!w) {
+        return;
+    }
+    d->form->addPropertyCommand(w->objectName().toLatin1(), w->geometry(),
+                                newGeometry, "geometry", Form::ExecuteCommand,
+                                d->idOfPropertyCommand);
+}
+
 void Container::stopInlineEditing()
 {
     d->state = Private::DoingNothing;
