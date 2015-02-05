@@ -261,6 +261,22 @@ void ReportSection::unsetSectionCursor()
         m_sceneView->unsetCursor();
 }
 
+const QGraphicsItemList ReportSection::items()
+{
+    QGraphicsItemList _items;
+    
+    if (m_scene) {
+        foreach (QGraphicsItem *itm, m_scene->items()) {
+            if (itm->parentItem() == 0) {
+                _items << itm;
+            }
+        }
+    }
+    
+    return _items;
+}
+
+
 //
 // class ReportResizeBar
 //

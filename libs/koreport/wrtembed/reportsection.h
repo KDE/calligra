@@ -65,9 +65,7 @@ public:
     void initFromXML(QDomNode & section);
     virtual QSize sizeHint() const;
 
-    const QGraphicsItemList items() {
-        return m_scene->items();
-    };
+    const QGraphicsItemList items();
 
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
