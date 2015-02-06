@@ -216,7 +216,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     if (frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
         foreach(KWFrameSet* fs, kwdoc->frameSets()) {
             KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-            if (fs->type() != Words::OtherFrameSet && (!tfs || tfs->textFrameSetType() != Words::OtherTextFrameSet))
+            if (tfs && tfs->textFrameSetType() != Words::OtherTextFrameSet)
                 continue;
             foreach (KWFrame *frame, fs->frames()) {
                 KoShape *shape = frame->shape();
@@ -238,7 +238,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                     QPointF delta;
                     KWFrameLayout::proposeShapeMove(shape, delta, rootAreaPage->page);
                     shape->setPosition(shape->position() + delta);
-                }
+               }
             }
         }
     } else {
