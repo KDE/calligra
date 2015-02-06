@@ -234,6 +234,8 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 
+    sharedData->connectFlowingTextShapes();
+
     if (loadUpdater) {
         loadUpdater->setProgress(100);
     }
