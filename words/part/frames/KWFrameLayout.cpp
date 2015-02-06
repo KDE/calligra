@@ -575,7 +575,7 @@ void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const
         refRect.setHeight(page.height());
         break;
     case KoShapeAnchor::VPageContent:
-        refRect.setY(page.contentRect().x());
+        refRect.setY(page.contentRect().y());
         refRect.setHeight(page.contentRect().height());
         break;
     default:
@@ -595,6 +595,7 @@ void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const
     default:
         break;
     }
+
     switch (anchor->verticalPos()) {
     case KoShapeAnchor::VTop:
         newPos.setY(refRect.y());
