@@ -439,7 +439,7 @@ ConnectionDialog::removeItem()
               QString(),
               KGuiItem(i18n("&Delete Connection")),
               KStandardGuiItem::no(),
-              "dontAskBeforeDeleteConnection"/*config entry*/);
+              "AskBeforeDeleteConnection"/*config entry*/);
     if (confirm != KMessageBox::Yes)
         return;
 

@@ -1096,7 +1096,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
                     dynamic_cast<QWidget*>(this),
                     i18n("Do you want to delete selected record?"), QString(),
                     KGuiItem(i18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
-                    "dontAskBeforeDeleteRow"/*config entry*/,
+                    "AskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {
             return;

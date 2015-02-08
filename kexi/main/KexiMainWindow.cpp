@@ -1875,7 +1875,7 @@ void KexiMainWindow::setupProjectNavigator()
 
         if (!partManagerErrorMessages.isEmpty()) {
             showWarningContinueMessage(partManagerErrorMessages, QString(),
-                                       "dontShowWarningsRelatedToPluginsLoading");
+                                       "ShowWarningsRelatedToPluginsLoading");
         }
         d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
         
