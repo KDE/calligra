@@ -182,6 +182,12 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         kDebug() << "newEvent->globalPos():" << event->globalPos();
     }
 
+    // If the celltool is not active and we initiate a click on something that is not a flake element, we need
+    // to reactivate the cell tool. THis is a temporary solution, pending the flake updates.
+    if (KoToolManager::instance()->activeToolId() != "KSpreadCellToolId")
+        if (!shapeManager()->shapeAt (documentPosition, KoFlake::ShapeOnTop))
+            KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
+
     // flake
     if(d->toolProxy) {
         d->toolProxy->mousePressEvent(event, documentPosition);
