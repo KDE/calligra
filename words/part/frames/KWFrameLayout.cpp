@@ -206,7 +206,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     for (int c = 0; c < neededColumnsCount; ++c) {
         kDebug(32001) << "Creating KWFrame for MainTextFrame";
         KoShape * shape = createTextShape(page);
-        shape->setPosition(QPoint(c * colwidth, page.offsetInDocument()));
+        shape->setPosition(QPoint(c * colwidth+10.0, page.offsetInDocument()+10.0));
         shape->setSize(QSizeF(colwidth, colheight));
         new KWFrame(shape, fs);
     }
@@ -242,7 +242,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     /* assumes all frames are there and will do layouting of all the frames
         - headers/footers/main FS are positioned
         - normal frames are clipped to page */
-
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
     if (!page.isValid())
@@ -340,7 +339,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             minimumHeight[4] = pageStyle.footerDistance();
             minimumHeight[5] = qMax((qreal)10, pageStyle.footerMinimumHeight() - pageStyle.footerDistance());
             requestedHeight[5] = qMax(minimumHeight[5], textFrameSet->shapes().first()->minimumHeight());
-            if (pageStyle.headerDynamicSpacing()) {
+            if (pageStyle.footerDynamicSpacing()) {
                 minimumHeight[4] = qMax((qreal)0, minimumHeight[5] - requestedHeight[5]);
             }
             break;
@@ -391,8 +390,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     // spread space across items.
     qreal heightLeft = page.height();
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < 7; i++) {
         heightLeft -= qMax(minimumHeight[i], requestedHeight[i]);
+    }
     if (heightLeft >= 0) { // easy; plenty of space
         minimumHeight[3] += heightLeft; // add space to main text frame
         qreal y = page.offsetInDocument();
@@ -647,7 +647,8 @@ QList<KoShape *> KWFrameLayout::sequencedShapesOnPage(const QRectF &page) const
     QList<KoShape *> answer;
     foreach (KWFrameSet *fs, m_frameSets) {
         foreach (KoShape *shape, fs->shapes()) {
-            if (page.contains(shape->absolutePosition()))
+            // use TopLeftCorner as main,header,footer are not rotated, also see bug 275288
+            if (page.contains(shape->absolutePosition(KoFlake::TopLeftCorner)))
                 answer.append(shape);
         }
     }
@@ -803,7 +804,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
         KoShape *shape = createTextShape(page);
-        shape->setPosition(QPointF(0, page.offsetInDocument()));
+        shape->setPosition(QPointF(10.0, page.offsetInDocument()+10.0));
         shape->setSize(QSize(20, 10));
         KWFrame *frame = new KWFrame(shape, tfs);
         return frame;
