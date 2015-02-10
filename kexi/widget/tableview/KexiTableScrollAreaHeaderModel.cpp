@@ -96,12 +96,14 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
             if (col->field() && col->field()->isPrimaryKey()) {
                 return koSmallIcon("key");
             }
+            break;
         }
         case Qt::ToolTipRole: {
             KexiDB::Field *f = col->field();
             return f ? f->description() : QString();
         }
         }
+        break;
     }
     case Qt::Vertical: {
         switch (role) {
@@ -127,6 +129,7 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
 //        if (role == Qt::DisplayRole) {
 //            return QString::number(section + 1);
 //        }
+        break;
     }
     }
     return QVariant();
