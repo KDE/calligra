@@ -198,7 +198,6 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     d->diagonalGrayPattern = QBrush(d->appearance.gridColor, Qt::BDiagPattern);
 
     setLineWidth(1);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     horizontalScrollBar()->installEventFilter(this);
 
     //context menu
@@ -2220,6 +2219,7 @@ void KexiTableScrollArea::setAppearance(const Appearance& a)
         m_updateEntireRowWhenMovingToOtherRow = true;
     }
     navPanelWidget()->setVisible(a.navigatorEnabled);
+    setHorizontalScrollBarPolicy(a.navigatorEnabled ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAsNeeded);
     d->highlightedRow = -1;
 //! @todo is setMouseTracking useful for other purposes?
     viewport()->setMouseTracking(a.rowMouseOverHighlightingEnabled);
