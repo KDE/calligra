@@ -101,11 +101,6 @@ public:
 
     KexiTableScrollAreaHeader *verticalHeader;
 
-    /*! true, if certical header shouldn't be increased in
-     KexiTableView::slotRowInserted() because it was already done
-     in KexiTableView::createEditor(). */
-    bool verticalHeaderAlreadyAdded;
-
     /*! true if cursor should be moved on mouse release evenr rather than mouse press
      in handleContentsMousePressOrRelease().
      False by default. Used by KeixComboBoxPopup. */

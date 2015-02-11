@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -76,7 +76,6 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_contextMenuEnabled = true;
     m_rowWillBeDeleted = -1;
     m_alsoUpdateNextRow = false;
-    //m_verticalHeaderAlreadyAdded = false;
     m_vScrollBarValueChanged_enabled = true;
     m_scrollbarToolTipsEnabled = true;
     m_recentSearchDirection = KexiSearchAndReplaceViewInterface::Options::DefaultSearchDirection;
@@ -184,10 +183,6 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     if (m_navPanel) {
         m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
         m_navPanel->setInsertingButtonVisible(m_data && isInsertingEnabled());
-    }
-    if (verticalHeader()) {
-        //verticalHeader()->update(....)
-//! @todo tableview-port        verticalHeader()->showInsertRow(m_data && isInsertingEnabled());
     }
 
     initDataContents();
@@ -397,9 +392,6 @@ void KexiDataAwareObjectInterface::setInsertingEnabled(bool set)
         m_navPanel->setInsertingEnabled(set);
         m_navPanel->setInsertingButtonVisible(set);
     }
-    if (verticalHeader()) {
-//! @todo tableview-port        verticalHeader()->showInsertRow(set);
-    }
     if (set)
         setReadOnly(false);
     updateWidgetContents();
@@ -446,7 +438,7 @@ void KexiDataAwareObjectInterface::selectFirstRow()
 
 void KexiDataAwareObjectInterface::selectLastRow()
 {
-    selectRow(rowCount() - 1);
+    selectRow(rowCount() > 0 ? (rowCount() - 1) : 0);
 }
 
 void KexiDataAwareObjectInterface::selectRow(int row)
@@ -575,10 +567,6 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
             updateRow(oldRow);
         else
             updateCell(oldRow, oldCol);
-
-        if (verticalHeader() && (oldRow != m_curRow || forceSet)) {
-            //! @todo tableview-port verticalHeader()->setCurrentRow(m_curRow);
-        }
 
         if (m_updateEntireRowWhenMovingToOtherRow)
             updateRow(m_curRow);
@@ -725,7 +713,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         //editing is finished:
         if (m_newRowEditing) {
             //update current-item-iterator
-            setCursorPosition(-1, -1, ForceSetCursorPosition);
+            setCursorPosition(m_curRow, -1, ForceSetCursorPosition);
         }
         m_rowEditing = false;
         m_newRowEditing = false;
@@ -779,14 +767,13 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
     m_alsoUpdateNextRow = m_newRowEditing;
     if (m_newRowEditing) {
         m_newRowEditing = false;
+        beginRemoveItem(m_currentItem, m_curRow);
         //remove current edited row (it is @ the end of list)
         m_data->removeLast();
+        endRemoveItem(m_curRow);
         //current item is now empty, last row
         m_currentItem = m_insertItem;
         //update visibility
-        if (verticalHeader()) {
-            //! @todo tableview-port verticalHeader()->removeLabel(false); //-1 label
-        }
         updateWidgetContents();
         updateWidgetContentsSize();
         //--no cancel action is needed for datasource,
@@ -1062,7 +1049,9 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
         m_editor->clear();
         return;
     }
-    ensureCellVisible(m_curRow + 1, m_curCol);
+    if (m_curRow < (rowCount() - 1) || !spreadSheetMode()) {
+        ensureCellVisible(m_curRow + 1, m_curCol);
+    }
     createEditor(m_curRow, m_curCol);
     if (!m_editor)
         return;
@@ -1125,6 +1114,18 @@ KexiDB::RecordData* KexiDataAwareObjectInterface::insertEmptyRow(int pos)
     return newRecord;
 }
 
+void KexiDataAwareObjectInterface::beginInsertItem(KexiDB::RecordData *newRecord, int pos)
+{
+    Q_UNUSED(newRecord);
+    Q_UNUSED(pos);
+}
+
+void KexiDataAwareObjectInterface::endInsertItem(KexiDB::RecordData *newRecord, int pos)
+{
+    Q_UNUSED(newRecord);
+    Q_UNUSED(pos);
+}
+
 void KexiDataAwareObjectInterface::insertItem(KexiDB::RecordData *newRecord, int pos)
 {
     const bool changeCurrentRecord = pos == -1 || pos == m_curRow;
@@ -1136,11 +1137,14 @@ void KexiDataAwareObjectInterface::insertItem(KexiDB::RecordData *newRecord, int
     } else if (m_curRow >= pos) {
         m_curRow++;
     }
+
+    beginInsertItem(newRecord, pos);
     m_data->insertRow(*newRecord, pos, true /*repaint*/);
 
     // always update iterator since the list was modified...
     m_itemIterator = m_data->constBegin();
     m_itemIterator += m_curRow;
+    endInsertItem(newRecord, pos);
 }
 
 void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData* record, bool repaint)
@@ -1153,15 +1157,6 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record
     if (repaint && (int)pos < rowCount()) {
         updateWidgetContentsSize();
         updateAllVisibleRowsBelow(pos);
-        /*! @todo tableview-port
-        if (!m_verticalHeaderAlreadyAdded) {
-            if (verticalHeader()) {
-                //TODO verticalHeader()->addLabel();
-            }
-        }
-        else { //it was added because this inserting was interactive
-            m_verticalHeaderAlreadyAdded = false;
-        }*/
 
         //update navigator's data
         if (m_navPanel)
@@ -1336,9 +1331,6 @@ void KexiDataAwareObjectInterface::slotRowDeleted()
 
         if (!(m_spreadSheetMode && m_rowWillBeDeleted >= (rowCount() - 1)))
             setCursorPosition(m_rowWillBeDeleted, m_curCol, ForceSetCursorPosition);
-        if (verticalHeader()) {
-            //! @todo tableview-port verticalHeader()->removeLabel();
-        }
         updateAllVisibleRowsBelow(m_curRow); //needed for KexiTableView
 
         //update navigator's data
@@ -1355,25 +1347,34 @@ bool KexiDataAwareObjectInterface::beforeDeleteItem(KexiDB::RecordData*)
     return true;
 }
 
+void KexiDataAwareObjectInterface::beginRemoveItem(KexiDB::RecordData *record, int pos)
+{
+    Q_UNUSED(record);
+    Q_UNUSED(pos);
+}
+
+void KexiDataAwareObjectInterface::endRemoveItem(int pos)
+{
+    Q_UNUSED(pos);
+}
+
 bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
 {
     if (!record || !beforeDeleteItem(record))
         return false;
 
-    //we need to know this so we
-    //can return to the last row
-    //after reinserting it
-    const bool lastRowDeleted = m_spreadSheetMode && m_data->last() == record; 
-    if (!m_data->deleteRow(*record, true /*repaint*/)) {
-        /*const int button =*/
+    const int pos = m_data->indexOf(record);
+    beginRemoveItem(record, pos);
+    bool result = m_data->deleteRow(*record, true /*repaint*/);
+    endRemoveItem(pos);
+    if (!result) {
         showErrorMessageForResult(m_data->result());
         return false;
     }
 
     if (m_spreadSheetMode) { //append empty row for spreadsheet mode
-        m_data->append(m_data->createItem());
-        if (lastRowDeleted) //back to the last row
-            setCursorPosition(rowCount() - 1, m_curCol, ForceSetCursorPosition);
+        insertItem(m_data->createItem(), m_data->count());
+        setCursorPosition(m_curRow, m_curCol, ForceSetCursorPosition);
         /*emit*/ newItemAppendedForAfterDeletingInSpreadSheetMode();
     }
     return true;

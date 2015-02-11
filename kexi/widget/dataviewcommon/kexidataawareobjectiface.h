@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -745,6 +745,14 @@ protected:
 
     //! Handles TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint);
+
+    virtual void beginInsertItem(KexiDB::RecordData *newRecord, int pos);
+
+    virtual void endInsertItem(KexiDB::RecordData *newRecord, int pos);
+
+    virtual void beginRemoveItem(KexiDB::RecordData *record, int pos);
+
+    virtual void endRemoveItem(int pos);
 
     //! Like above, not db-aware version
     virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint);
