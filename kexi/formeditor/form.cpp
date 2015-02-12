@@ -456,8 +456,14 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
     }
 #endif
 
-    if (w && w != widget())
-        d->resizeHandles.insert(w->objectName(), new ResizeHandleSet(w, this));
+    if (w && w != widget()) {
+        ResizeHandleSet *handles = new ResizeHandleSet(w, this);
+        d->resizeHandles.insert(w->objectName(), handles);
+        connect(handles, SIGNAL(geometryChangeStarted()),
+                parentContainer(w), SLOT(startChangingGeometryPropertyForSelectedWidget()));
+        connect(handles, SIGNAL(geometryChanged(QRect)),
+                parentContainer(w), SLOT(setGeometryPropertyForSelectedWidget(QRect)));
+    }
 }
 
 void Form::selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags)
@@ -794,7 +800,7 @@ bool Form::addCommand(Command *command, AddCommandOption option)
 
     if (saveExecutingCommand)
         d->executingCommand = 0;
-    //kDebug() << "ADDED:" << command;
+    //kDebug() << "ADDED:" << *command;
     return true;
 }
 
@@ -1162,6 +1168,7 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
     d->insideAddPropertyCommand = true;
     d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
     d->lastCommand->setUniqueId(idOfPropertyCommand);
+    //kDebug() << "ADD:" << *d->lastCommand;
     if (!addCommand(d->lastCommand, addOption)) {
         d->lastCommand = 0;
     }
@@ -1258,7 +1265,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
 //! @todo add to merge in PropertyCommand if needed
         if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
             addPropertyCommand(d->selected.first()->objectName().toLatin1(),
-                d->selected.first()->property(property), value, property, DontExecuteCommand);
+                               p.oldValue(), value, property, DontExecuteCommand);
         }
 
         // If the property is changed, we add it in ObjectTreeItem modifProp
@@ -1385,6 +1392,11 @@ void Form::redo()
     if (saveExecutingCommand)
         d->executingCommand = 0;
     d->isRedoing = false;
+}
+
+bool Form::isRedoing() const
+{
+    return d->isRedoing;
 }
 
 void Form::setUndoing(bool undoing)

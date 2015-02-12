@@ -185,6 +185,12 @@ void KexiFormScrollView::ensureCellVisible(int row, int col)
     //! @todo
 }
 
+void KexiFormScrollView::ensureColumnVisible(int col)
+{
+    Q_UNUSED(col);
+    //! @todo
+}
+
 void KexiFormScrollView::moveToRecordRequested(uint r)
 {
     //! @todo
@@ -253,11 +259,11 @@ void KexiFormScrollView::updateGUIAfterSorting(int previousRow)
 }
 
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
-                                      bool removeOld)
+                                      CreateEditorFlags flags)
 {
     Q_UNUSED(row);
     Q_UNUSED(addText);
-    Q_UNUSED(removeOld);
+    Q_UNUSED(flags);
 
     if (isReadOnly()) {
         kWarning() << "DATA IS READ ONLY!";
@@ -308,7 +314,7 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
 {
     Q_UNUSED(ignoreMissingEditor);
 
-    if (!m_data || col < 0 || col >= columns())
+    if (!m_data || col < 0 || col >= columnCount())
         return 0;
 
     return dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at(col));
@@ -379,7 +385,7 @@ KexiDBForm* KexiFormScrollView::dbFormWidget() const
     return qobject_cast<KexiDBForm*>(d->preview ? widget() : mainAreaWidget());
 }
 
-int KexiFormScrollView::columns() const
+int KexiFormScrollView::columnCount() const
 {
     return dbFormWidget()->orderedDataAwareWidgets()->count(); //m_dataItems.count();
 }

@@ -105,7 +105,6 @@ const int KWAnchoringProperties::horizRels[4][20] = {
 
 KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     : m_state(state)
-    , m_shape(0)
 {
     widget.setupUi(this);
 
@@ -153,10 +152,10 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     connect(widget.cHOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
 }
 
-bool KWAnchoringProperties::open(const QList<KWFrame*> &frames)
+bool KWAnchoringProperties::open(const QList<KoShape *> &shapes)
 {
     m_state->addUser();
-    m_frames = frames;
+    m_shapes = shapes;
 
     GuiHelper::State anchorTypeHelper = GuiHelper::Unset;
     GuiHelper::State vertHelper = GuiHelper::Unset;
@@ -171,15 +170,16 @@ bool KWAnchoringProperties::open(const QList<KWFrame*> &frames)
 
     bool atLeastOne = false;
 
-    foreach (KWFrame *frame, frames) {
-        if (frame->frameSet()->type() == Words::TextFrameSet) {
-            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
-                continue;
+    foreach (KoShape *shape, shapes) {
+        KWFrameSet *fs = KWFrameSet::from(shape);
+        if (fs && fs->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(fs)->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue; // we don't change for main or headers or footers
             }
         }
         atLeastOne = true;
 
-        KoShapeAnchor *anchor = frame->shape()->anchor();
+        KoShapeAnchor *anchor = shape->anchor();
         KoShapeAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() : KoShapeAnchor::AnchorPage;
 
         // FIXME these should fetch correct values if anchor == 0
@@ -492,11 +492,10 @@ void KWAnchoringProperties::anchorTypeChanged(int type)
 
 void KWAnchoringProperties::open(KoShape *shape)
 {
-    m_state->addUser();
-    m_shape = shape;
-    KoShapeAnchor::AnchorType anchorTypeOfShape = KoShapeAnchor::AnchorPage;
-    // This method is only called when creating a new shape, so AnchorPage is what it is at this point
-    m_anchorTypeGroup->button(anchorTypeOfShape)->setChecked(true);
+    QList<KoShape *> list;
+    list.append(shape);
+
+    open(list);
 }
 
 void KWAnchoringProperties::save()
@@ -507,35 +506,36 @@ void KWAnchoringProperties::save()
 void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
 {
     Q_ASSERT(macro);
-    Q_ASSERT(m_frames.count() > 0);
+    Q_ASSERT(m_shapes.count() > 0);
 
     if (m_anchorTypeGroup->checkedId() != -1) {
-        foreach (KWFrame *frame, m_frames) {
-            if (frame->frameSet()->type() == Words::TextFrameSet) {
-                if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
-                    continue;
+        foreach (KoShape *shape, m_shapes) {
+            KWFrameSet *fs = KWFrameSet::from(shape);
+            if (fs && fs->type() == Words::TextFrameSet) {
+                if (static_cast<KWTextFrameSet *>(fs)->textFrameSetType() != Words::OtherTextFrameSet) {
+                    continue; // we don't change for main or headers or footers
                 }
             }
 
             KoShapeAnchor::AnchorType type = KoShapeAnchor::AnchorType(m_anchorTypeGroup->checkedId());
 
-            KoShapeAnchor *anchor = frame->shape()->anchor();
+            KoShapeAnchor *anchor = shape->anchor();
             if (!anchor) {
-                anchor = new KoShapeAnchor(frame->shape());
+                anchor = new KoShapeAnchor(shape);
                 anchor->setAnchorType(KoShapeAnchor::AnchorPage);
                 anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
                 anchor->setVerticalPos(KoShapeAnchor::VFromTop);
-                frame->shape()->setAnchor(anchor);
+                shape->setAnchor(anchor);
             }
             KoShapeContainer *container = 0;
             // we change from page anchored to text shape anchored.
             if (type != KoShapeAnchor::AnchorPage && anchor->anchorType() == KoShapeAnchor::AnchorPage) {
-                KWFrame *targetFrame = m_state->document()->findClosestFrame(anchor->shape());
+                KoShape *targetShape = m_state->document()->findTargetTextShape(anchor->shape());
 
-                if (targetFrame != 0) {
-                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetFrame->shape()->userData());
+                if (targetShape != 0) {
+                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetShape->userData());
                     if (textData) {
-                        container = static_cast<KoShapeContainer*>(targetFrame->shape());
+                        container = static_cast<KoShapeContainer*>(targetShape);
                     }
                 }
             }

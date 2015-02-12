@@ -97,7 +97,6 @@ set(kritaui_LIB_SRCS
     kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    kis_animation.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -131,7 +130,6 @@ set(kritaui_LIB_SRCS
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
-    kis_animation_doc.cpp
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
@@ -144,9 +142,6 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_savexml_visitor.cpp
-    kranim/kis_kranim_saver.cpp
-    kranim/kis_kranim_loader.cpp
-    kranimstore/kis_animation_store.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
@@ -189,7 +184,6 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
-    widgets/kis_animation_selector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -277,10 +271,6 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
     canvas/kis_mirror_axis.cpp
 
-    kis_animation_frame.cpp
-    kis_animation_layer.cpp
-    kis_animation_model.cpp
-
     kis_abstract_perspective_grid.cpp
 
     KisApplication.cpp
@@ -322,11 +312,12 @@ set(kritaui_LIB_SRCS
     KisViewManager.cpp
     kis_mirror_manager.cpp
 
-
     qtlockedfile/qtlockedfile.cpp
 
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
+
+    widgets/kis_url_requester.cpp
 )
 
 if(WIN32)
@@ -336,7 +327,6 @@ if(WIN32)
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
-        widgets/kis_url_requester_impl.cpp
         )
 endif(WIN32)
 
@@ -409,7 +399,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
-    forms/wdganimationselector.ui
     forms/wdgrectangleconstraints.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
@@ -421,14 +410,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.ui
     wdgsplash.ui
 	input/wintab/kis_screen_size_choice_dialog.ui
-	forms/kis_url_requester_impl.ui
+	forms/wdg_url_requester.ui
 )
-
-if(WIN32)
-    #kde4_add_ui_files(
-    #  forms/kis_url_requester_impl.ui
-    #)
-endif(WIN32)
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 

@@ -40,7 +40,7 @@ public:
 
     /// load all info from the argument frames into this widget
     /// returns true if at least one frame was accepted
-    bool open(const QList<KWFrame*> &frames);
+    bool open(const QList<KoShape *> &shapes);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -63,8 +63,7 @@ private:
     QButtonGroup *m_runAroundSide;
     QButtonGroup *m_runAround;
     QButtonGroup *m_runAroundContour;
-    QList<KWFrame*> m_frames;
-    KoShape *m_shape;
+    QList<KoShape *> m_shapes;
 };
 
 #endif // KWRUNAROUNDPROPERTIES_H

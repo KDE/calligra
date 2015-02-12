@@ -46,7 +46,6 @@ KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
     horizontalHeaderVisible = true;
     recentCellWithToolTip = QPoint(-1, -1);
     dragIndicatorRubberBand = 0;
-    firstTimeEnsureCellVisible = true;
     insideResizeEvent = false;
     firstShowEvent = true;
     scrollAreaWidget = 0;

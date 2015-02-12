@@ -56,7 +56,7 @@ int KexiTableScrollAreaHeaderModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
-    return scrollArea->rows()
+    return scrollArea->rowCount()
             + (scrollArea->isInsertingEnabled() ? 1 : 0)
             + (scrollArea->newRowEditing() ?  1 : 0);
 }
@@ -64,7 +64,7 @@ int KexiTableScrollAreaHeaderModel::rowCount(const QModelIndex& parent) const
 int KexiTableScrollAreaHeaderModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return qobject_cast<KexiTableScrollArea*>(QObject::parent())->columns();
+    return qobject_cast<KexiTableScrollArea*>(QObject::parent())->columnCount();
 }
 
 QVariant KexiTableScrollAreaHeaderModel::data(const QModelIndex& index, int role) const
@@ -108,7 +108,7 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
         case Qt::DecorationRole: {
             const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
             if (scrollArea->isInsertingEnabled()) {
-                const int plusRow = scrollArea->rows() + (scrollArea->newRowEditing() ?  1 : 0);
+                const int plusRow = scrollArea->rowCount() + (scrollArea->newRowEditing() ?  1 : 0);
                 if (section == plusRow) {
                     return d->plusPixmap;
                 }

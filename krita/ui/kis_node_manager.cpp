@@ -32,6 +32,7 @@
 #include <KoShapeLayer.h>
 #include <KisImportExportManager.h>
 #include <KoFileDialog.h>
+#include <KoToolManager.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -304,16 +305,16 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer..."),
                      "KisFileLayer", koIcon("document-open"));
 
-    NEW_MASK_ACTION("add_new_transparency_mask", i18n("&Transparency Mask"),
+    NEW_MASK_ACTION("add_new_transparency_mask", i18n("Add &Transparency Mask"),
                     "KisTransparencyMask", koIcon("edit-copy"));
 
-    NEW_MASK_ACTION("add_new_filter_mask", i18n("&Filter Mask..."),
+    NEW_MASK_ACTION("add_new_filter_mask", i18n("Add &Filter Mask..."),
                     "KisFilterMask", koIcon("bookmarks"));
 
-    NEW_MASK_ACTION("add_new_transform_mask", i18n("&Transform Mask..."),
+    NEW_MASK_ACTION("add_new_transform_mask", i18n("Add &Transform Mask..."),
                     "KisTransformMask", koIcon("bookmarks"));
 
-    NEW_MASK_ACTION("add_new_selection_mask", i18n("&Local Selection"),
+    NEW_MASK_ACTION("add_new_selection_mask", i18n("Add &Local Selection"),
                     "KisSelectionMask", koIcon("edit-paste"));
 
     connect(&m_d->nodeCreationSignalMapper, SIGNAL(mapped(const QString &)),
@@ -367,6 +368,7 @@ void KisNodeManager::updateGUI()
     // enable/disable all relevant actions
     m_d->layerManager->updateGUI();
     m_d->maskManager->updateGUI();
+
 }
 
 
@@ -560,7 +562,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
 void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 {
-    if(m_d->activateNodeImpl(node)) {
+    if (m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
         emit sigNodeActivated(node);
         nodesUpdated();
@@ -575,9 +577,37 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 
 void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
 {
-    if(m_d->activateNodeImpl(node)) {
+    if (m_d->activateNodeImpl(node)) {
         emit sigNodeActivated(node);
         nodesUpdated();
+    }
+
+    if (node) {
+        QStringList vectorTools = QStringList()
+                << "InteractionTool"
+                << "KarbonPatternTool"
+                << "KarbonGradientTool"
+                << "KarbonCalligraphyTool"
+                << "CreateShapesTool"
+                << "PathToolFactoryId";
+
+        QStringList pixelTools = QStringList()
+                << "KritaShape/KisToolBrush"
+                << "KritaShape/KisToolDyna"
+                << "KritaShape/KisToolMultiBrush"
+                << "KritaFill/KisToolFill"
+                << "KritaFill/KisToolGradient";
+
+        if (node->inherits("KisShapeLayer")) {
+            if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
+            }
+        }
+        else {
+            if (vectorTools.contains(KoToolManager::instance()->activeToolId())) {
+                KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+            }
+        }
     }
 }
 

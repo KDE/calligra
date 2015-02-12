@@ -407,6 +407,10 @@ public:
     //! @return class name of currently edited widget's
     QByteArray editedWidgetClass() const;
 
+    //! @return true if we're within redo(). Useful to check if command is being executed
+    //! in response of a redo or it is caused by some other event.
+    bool isRedoing() const;
+
 public slots:
     /*! Called when the user presses a widget item of the toolbox. 
       The form enters into "widget inserting" state.

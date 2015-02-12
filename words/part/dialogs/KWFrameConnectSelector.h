@@ -27,7 +27,6 @@
 
 #include <QList>
 
-class KWFrame;
 class KWTextFrame;
 class KWFrameSet;
 class KWDocument;
@@ -41,7 +40,7 @@ public:
     explicit KWFrameConnectSelector(FrameConfigSharedState *state);
 
     /// load all info from the argument frame into this widget
-    bool open(KWFrame *frame);
+    bool canOpen(KoShape *shape);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -62,7 +61,7 @@ private:
     QList<KWFrameSet*> m_frameSets;
     QList<QTreeWidgetItem *> m_items;
     FrameConfigSharedState *m_state;
-    KWFrame *m_frame;
+    KoShape *m_shape;
 };
 
 #endif

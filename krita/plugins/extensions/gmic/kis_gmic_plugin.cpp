@@ -269,6 +269,8 @@ void KisGmicPlugin::slotPreviewActiveLayer()
 
 void KisGmicPlugin::slotPreviewSmallWindow(KisPaintDeviceSP device)
 {
+    if (!device) return;
+
     QRect deviceRect = device->exactBounds();
     qreal aspectRatio = (qreal)deviceRect.width()/deviceRect.height();
 
@@ -393,10 +395,20 @@ void KisGmicPlugin::slotUpdateProgress()
     float progress = 0;
     if (m_currentActivity == SMALL_PREVIEW)
     {
+        if (!m_smallApplicator)
+        {
+            dbgPlugins << "WARNING: small applicator already deleted!!!";
+            return;
+        }
         progress = m_smallApplicator->getProgress();
     }
     else
     {
+        if (!m_gmicApplicator)
+        {
+            dbgPlugins << "WARNING: gmic applicator already deleted!!!";
+            return;
+        }
         progress = m_gmicApplicator->getProgress();
     }
 
@@ -476,8 +488,7 @@ void KisGmicPlugin::slotRequestFinishAndClose()
 
 void KisGmicPlugin::slotPreviewReady()
 {
-    if (m_currentActivity == SMALL_PREVIEW)
-    {
+    if (m_currentActivity == SMALL_PREVIEW && m_smallApplicator) {
         slotPreviewSmallWindow(m_smallApplicator->preview());
 
         dbgPlugins << "Deleting " << m_smallApplicator;

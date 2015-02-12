@@ -158,8 +158,8 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
+    /// loops over the selected shapes and returns the top level shapes.
+    QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;
 
 private slots:
@@ -181,12 +181,8 @@ private slots:
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// shows or hides the rulers
     void showRulers(bool visible);
-    /// creates a copy of the current frame
-    void createLinkedFrame();
     /// shows or hides the status bar
     void showStatusBar(bool);
-    /// selects all frames
-    void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */

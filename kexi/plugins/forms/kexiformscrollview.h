@@ -78,8 +78,8 @@ public:
 
     /*! \return number of visible columns in this view.
      There can be a number of duplicated columns defined,
-     so columns() can return greater or smaller number than dataColumns(). */
-    virtual int columns() const;
+     so columnCount() can return greater or smaller number than dataColumns(). */
+    virtual int columnCount() const;
 
     /*! \return column information for column number \a col.
      Reimplemented for KexiDataAwareObjectInterface:
@@ -152,6 +152,9 @@ public slots:
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void ensureCellVisible(int row, int col);
+
+    //! Implementation for KexiDataAwareObjectInterface
+    virtual void ensureColumnVisible(int col);
 
     virtual void moveToRecordRequested(uint r);
     virtual void moveToLastRecordRequested();
@@ -259,7 +262,7 @@ protected:
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false);
+                              CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false);

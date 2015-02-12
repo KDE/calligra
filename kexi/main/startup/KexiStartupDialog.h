@@ -83,10 +83,6 @@ public:
 
     ~KexiStartupDialog();
 
-    /*! \return true if startup dialog should be shown (info is taken from kexi config)
-    */
-    static bool shouldBeShown();
-
     /*! Executes dialog.
     \return one of Result values. Use this after dialog is closed. */
     int result() const;

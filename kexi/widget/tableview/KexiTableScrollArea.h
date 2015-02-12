@@ -186,6 +186,10 @@ public:
     int columnAt(int pos) const;
     int rowAt(int pos, bool ignoreEnd = false) const;
 
+    /*! \return true if the last visible column takes up all the available space.
+     @see setStretchLastColumn(bool). */
+    bool stretchLastColumn() const;
+
     /*! \return last row visible on the screen (counting from 0).
      The returned value is guaranteed to be smaller or equal to currentRow() or -1
      if there are no rows. */
@@ -202,12 +206,6 @@ public:
 
     bool editableOnDoubleClick() const;
     void setEditableOnDoubleClick(bool set);
-
-    //! @return horizontal header
-    virtual QHeaderView* horizontalHeader() const;
-
-    //! @return vertical header
-    virtual QHeaderView* verticalHeader() const;
 
     //! \return true if the vertical header is visible
     bool verticalHeaderVisible() const;
@@ -247,13 +245,6 @@ public:
 
     //! single shot after 1ms for contents updating
     void triggerUpdate();
-
-    enum ScrollDirection {
-        ScrollUp,
-        ScrollDown,
-        ScrollLeft,
-        ScrollRight
-    };
 
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
@@ -308,10 +299,12 @@ public slots:
      to resize columns. If this table view is not visible, resizing will be performed on showing. */
     void maximizeColumnsWidth(const QList<int> &columnList);
 
-    /*! Adjusts the size of the sections to fit the size of the horizontal header
-     as completely as possible. Only sections for which column stretch is enabled will be resized.
-     \sa setColumnStretchEnabled() QHeaderView::resizeSections() */
-    void adjustHorizontalHeaderSize();
+    /*! If \a set is true the last visible column takes up all the available space
+     ensuring that the available area is not wasted. Then it can't be resized by the user
+     (setColumnResizeEnabled(columnCount()-1, !set) is used for that).
+     The default value is false.
+     @note Calling setColumnResizeEnabled(columnCount()-1, bool) can override this property. */
+    void setStretchLastColumn(bool set);
 
     /*! Sets highlighted row number or -1 if no row has to be highlighted.
      Makes sense if row highlighting is enabled.
@@ -319,9 +312,14 @@ public slots:
     void setHighlightedRow(int row);
 
     /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col (if not -1) must
-     be between 0 and rows() (or cols() accordingly). */
+     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
+     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
     virtual void ensureCellVisible(int row, int col);
+
+    /*! Ensures that column \a col is visible.
+     If \a col is -1, current column number is used. \a col, if not -1, must be between
+     0 and columnCount()-1. */
+    virtual void ensureColumnVisible(int col);
 
     /*! Deletes currently selected row; does nothing if no row
      is currently selected. If row is in edit mode, editing
@@ -347,8 +345,9 @@ public slots:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString()) {
-        KexiDataAwareObjectInterface::startEditCurrentCell(setText);
+    virtual void startEditCurrentCell(const QString& setText = QString(),
+                                      CreateEditorFlags flags = DefaultCreateEditorFlags) {
+        KexiDataAwareObjectInterface::startEditCurrentCell(setText, flags);
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
@@ -580,7 +579,7 @@ protected:
 
     //! Creates editors and shows it, what usually means the beginning of a cell editing
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false);
+                              CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     bool focusNextPrevChild(bool next);
 
@@ -676,6 +675,12 @@ protected:
     /*! Called by KexiDataAwareObjectInterface::setCursorPosition()
       if cursor's position is really changed. */
     virtual void selectCellInternal(int previousRow, int previousColumn);
+
+    //! @return horizontal header
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return vertical header
+    virtual QHeaderView* verticalHeader() const;
 
     //! @return common model for header views of this area. @see KexiTableScrollAreaHeader
     QAbstractItemModel* headerModel() const;

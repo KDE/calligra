@@ -16,7 +16,6 @@
   <Action name="edit_paste"/>
   <Action name="edit_paste_text"/>
   <Action name="edit_select_all"/>
-  <Action name="edit_selectallframes"/>
   <Action name="edit_selectcurrentframe"/>
   <Action name="edit_delete"/>
   <Separator/>

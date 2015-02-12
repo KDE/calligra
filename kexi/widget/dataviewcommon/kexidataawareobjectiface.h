@@ -107,16 +107,14 @@ public:
     }
 
     /*! \return number of rows in this view. */
-    int rows() const;
+    int rowCount() const;
 
     /*! \return number of visible columns in this view.
      By default returns dataColumns(), what is proper table view.
      In case of form view, there can be a number of duplicated columns defined
-     (data-aware widgets, see KexiFormScrollView::columns()),
-     so columns() can return greater number than dataColumns(). */
-    virtual int columns() const {
-        return dataColumns();
-    }
+     (data-aware widgets, see KexiFormScrollView::columnCount()),
+     so columnCount() can return greater number than dataColumns(). */
+    virtual int columnCount() const;
 
     /*! Helper function.
      \return number of columns of data. */
@@ -313,12 +311,13 @@ public:
     virtual void selectLastRow();
     virtual void addNewRecordRequested();
 
+
     /*! Clears current selection. Current row and column will be now unspecified:
      currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
     virtual void clearSelection();
 
     //! Flags for setCursorPosition()
-    enum CursorPositionFlags {
+    enum CursorPositionFlag {
         NoCursorPositionFlags = 0,  //!< Default flag
         ForceSetCursorPosition = 1, //!< Update cursor position even if row and col doesn't
                                     //!< differ from actual position.
@@ -326,6 +325,7 @@ public:
                                                        //!< when position is unchanged and
                                                        //!< ForceSetCursorPosition is off.
     };
+    Q_DECLARE_FLAGS(CursorPositionFlags, CursorPositionFlag)
 
     /*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
      If forceSet is true, cursor position is updated even if \a row and \a col doesn't
@@ -334,9 +334,14 @@ public:
                                    CursorPositionFlags flags = NoCursorPositionFlags);
 
     /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col (if not -1) must
-     be between 0 and rows() (or cols() accordingly). */
+     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
+     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
     virtual void ensureCellVisible(int row, int col) = 0;
+
+    /*! Ensures that column \a col is visible.
+     If \a col is -1, current column number is used. \a col, if not -1, must be between
+     0 and columnCount()-1. */
+    virtual void ensureColumnVisible(int col) = 0;
 
     /*! Specifies, if this object automatically accepts
      row editing (using acceptRowEdit()) on accepting any cell's edit
@@ -396,9 +401,17 @@ public:
     //! \return true on success or false on failure (e.g. when editor does not exist or there is data validation error)
     virtual bool acceptEditor();
 
+    //! Flags for use in createEditor()
+    enum CreateEditorFlag {
+        ReplaceOldValue = 1,      //!< Remove old value replacing it with a new one
+        EnsureCellVisible = 2,    //!< Ensure the cell behind the editor is visible
+        DefaultCreateEditorFlags = EnsureCellVisible //!< Default flags.
+    };
+    Q_DECLARE_FLAGS(CreateEditorFlags, CreateEditorFlag)
+
     //! Creates editors and shows it, what usually means the beginning of a cell editing
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false) = 0;
+                              CreateEditorFlags flags = DefaultCreateEditorFlags) = 0;
 
     /*! Used when Return key is pressed on cell, the cell has been double clicked
      or "+" navigator's button is clicked.
@@ -406,7 +419,8 @@ public:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString());
+    virtual void startEditCurrentCell(const QString& setText = QString(),
+                                      CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     /*! Deletes currently selected cell's contents, if allowed.
      In most cases delete is not accepted immediately but "record editing" mode is just started. */
@@ -447,14 +461,8 @@ public:
     /*! Redraws the current cell. To be implemented. */
     virtual void updateCurrentCell() = 0;
 
-    //! @return horizontal header, 0 by default.
-    virtual QHeaderView* horizontalHeader() const;
-
     //! @return height of the horizontal header, 0 by default.
     virtual int horizontalHeaderHeight() const;
-
-    //! @return vertical header, 0 by default.
-    virtual QHeaderView* verticalHeader() const;
 
     //! signals
     virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
@@ -802,6 +810,12 @@ protected:
      @see find() */
     void updateIndicesForVisibleValues();
 
+    //! @return horizontal header, 0 by default.
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return vertical header, 0 by default.
+    virtual QHeaderView* verticalHeader() const;
+
     //! Update section of vertical header
     virtual void updateVerticalHeaderSection(int section) = 0;
 
@@ -964,7 +978,13 @@ private:
     bool m_rowEditing;
 
     bool m_lengthExceededMessageVisible;
+
+    //! true if acceptRowEdit() should be called in setCursorPosition() (true by default)
+    bool m_acceptRowEdit_in_setCursorPosition_enabled;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CreateEditorFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CursorPositionFlags)
 
 inline bool KexiDataAwareObjectInterface::hasData() const
 {

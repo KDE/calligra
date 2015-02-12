@@ -395,8 +395,8 @@ void TestFrameLayout::testCreateNewFrameForPage()
 
     frameLayout.createNewFramesForPage(pageNumber);
     QCOMPARE(tfs.frameCount(), expectedFrameCount);
-    foreach(KWFrame *frame, tfs.frames()) {
-        QVERIFY (page.rect().contains(frame->shape()->position()));
+    foreach(KoShape *shape, tfs.shapes()) {
+        QVERIFY (page.rect().contains(shape->position()));
     }
 }
 
@@ -475,7 +475,7 @@ void TestFrameLayout::testCopyFramesForPage()
     bfl.createNewFramesForPage(page2.pageNumber());
 
     QCOMPARE(copyShapeFrameSet->frameCount(), 2);
-    KWCopyShape *copy = dynamic_cast<KWCopyShape*>(copyShapeFrameSet->frames()[1]->shape());
+    KWCopyShape *copy = dynamic_cast<KWCopyShape*>(copyShapeFrameSet->shapes()[1]);
     QVERIFY(copy);
     QCOMPARE(copy->position().x(), 9.);
     QCOMPARE(copy->position().y(), 13. + page2.offsetInDocument());
@@ -485,16 +485,16 @@ void TestFrameLayout::testCopyFramesForPage()
 
     // textshapePlain
     QCOMPARE(textshapePlainFS->frameCount(), 2);
-    QVERIFY(!textshapePlainFS->frames()[1]->isCopy());
-    KoShape *shape = textshapePlainFS->frames()[1]->shape();
+    QVERIFY(!dynamic_cast<KWCopyShape*>(textshapePlainFS->shapes()[1]);
+    KoShape *shape = textshapePlainFS->shapes()[1];
     QCOMPARE(shape->position().x(), 11.);
     QCOMPARE(shape->position().y(), 15. + page2.offsetInDocument());
     // TODO test sizing
 
     // textShapeRotated
     QCOMPARE(textshapeRotFS->frameCount(), 2);
-    QVERIFY(!textshapeRotFS->frames()[1]->isCopy());
-    shape = textshapeRotFS->frames()[1]->shape();
+    QVERIFY(!dynamic_cast<KWCopyShape*>(textshapeRotFS->shapes()[1]);
+    shape = textshapeRotFS->shapes()[1];
     QCOMPARE(shape->position().x(), 13.);
     QCOMPARE(shape->position().y(), 107. + page2.offsetInDocument());
     QCOMPARE(shape->absolutePosition(KoFlake::TopRightCorner), QPointF(13 + 50, 107 + 50
@@ -502,8 +502,8 @@ void TestFrameLayout::testCopyFramesForPage()
 
     // textShapeGeometryProtected
     QCOMPARE(textshapeGeometryProtectedFS->frameCount(), 2);
-    QVERIFY(!textshapeGeometryProtectedFS->frames()[1]->isCopy());
-    shape = textshapeGeometryProtectedFS->frames()[1]->shape();
+    QVERIFY(!dynamic_cast<KWCopyShape*>(textshapeGeometryProtectedFS->shapes()[1]);
+    shape = textshapeGeometryProtectedFS->shapes()[1];
     QCOMPARE(shape->position().x(), 3.);
     QCOMPARE(shape->position().y(), 14. + page2.offsetInDocument());
     QCOMPARE(shape->isGeometryProtected(), true);
@@ -512,16 +512,16 @@ void TestFrameLayout::testCopyFramesForPage()
 
     // textShapeContentProtected
     QCOMPARE(textshapeContentProtectedFS->frameCount(), 2);
-    QVERIFY(!textshapeContentProtectedFS->frames()[1]->isCopy());
-    shape = textshapeContentProtectedFS->frames()[1]->shape();
+    QVERIFY(!dynamic_cast<KWCopyShape*>(textshapeContentProtectedFS->shapes()[1]);
+    shape = textshapeContentProtectedFS->shapes()[1];
     QCOMPARE(shape->isGeometryProtected(), false);
     QCOMPARE(shape->isContentProtected(), true);
     QCOMPARE(shape->isSelectable(), true);
 
     // textShapeUnselectable
     QCOMPARE(textshapeUnselectableFS->frameCount(), 2);
-    QVERIFY(!textshapeUnselectableFS->frames()[1]->isCopy());
-    shape = textshapeUnselectableFS->frames()[1]->shape();
+    QVERIFY(!dynamic_cast<KWCopyShape*>(textshapeUnselectableFS->shapes()[1]);
+    shape = textshapeUnselectableFS->shapes()[1];
     QCOMPARE(shape->isGeometryProtected(), false);
     QCOMPARE(shape->isContentProtected(), false);
     QCOMPARE(shape->isSelectable(), false);
@@ -541,18 +541,11 @@ void TestFrameLayout::testLargeHeaders()
 
     KWTextFrameSet *fs = bfl.getOrCreate(Words::OddPagesHeaderTextFrameSet, page);
     QVERIFY(fs);
-    QCOMPARE(fs->frameCount(), 0);
+    QCOMPARE(fs->shapeCount(), 0);
     bfl.createNewFramesForPage(page.pageNumber());
-    QCOMPARE(fs->frameCount(), 1);
+    QCOMPARE(fs->shapeCount(), 1);
 
-    // now we have to make sure the header looks pretty full
-    KWTextFrame *tf = dynamic_cast<KWTextFrame*>(fs->frames().at(0));
-    QVERIFY(tf);
-    tf->setMinimumFrameHeight(300);
-    bfl.layoutFramesOnPage(page.pageNumber());
-    QCOMPARE(fs->frameCount(), 1);
-
-    KoShape *shape = fs->frames()[0]->shape();
+    KoShape *shape = fs->shapes()[0];
     QVERIFY(shape->size().width() <= 200);
     // the header can never be bigger than a page.
     QVERIFY(shape->size().height() < 180);
@@ -560,8 +553,8 @@ void TestFrameLayout::testLargeHeaders()
     // the header can never force the main text fs to get too small
     KWTextFrameSet *mfs = bfl.getOrCreate(Words::MainTextFrameSet, page);
     QVERIFY(mfs);
-    QCOMPARE(mfs->frameCount(), 1);
-    shape = mfs->frames()[0]->shape();
+    QCOMPARE(mfs->shapeCount(), 1);
+    shape = mfs->shapes()[0];
     QVERIFY(shape->size().height() >= 10);
 }
 
@@ -591,10 +584,10 @@ void TestFrameLayout::testLayoutPageSpread()
     KWTextFrameSet *fs = bfl.getOrCreate(Words::MainTextFrameSet, spread);
     QCOMPARE(fs->frameCount(), 2);
     bfl.layoutFramesOnPage(spread.pageNumber());
-    QCOMPARE(fs->frames()[0]->shape()->position(), QPointF(20, 221)); // left
-    QCOMPARE(fs->frames()[0]->shape()->size(), QSizeF(155, 157));
-    QCOMPARE(fs->frames()[1]->shape()->position(), QPointF(225, 221)); // right
-    QCOMPARE(fs->frames()[1]->shape()->size(), QSizeF(155, 157));
+    QCOMPARE(fs->shapes()[0]->position(), QPointF(20, 221)); // left
+    QCOMPARE(fs->shapes()[0]->size(), QSizeF(155, 157));
+    QCOMPARE(fs->shapes()[1]->position(), QPointF(225, 221)); // right
+    QCOMPARE(fs->shapes()[1]->size(), QSizeF(155, 157));
 }
 
 void TestFrameLayout::testPageStyle()
@@ -722,8 +715,8 @@ void TestFrameLayout::testPageBackground()
     QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 2);
 
     KWFrameSet *bfs = bfl.m_backgroundFrameSet;
-    foreach (KWFrame *frame, bfs->frames()) {
-        QCOMPARE(frame->shape()->background(), page1.pageStyle().background());
+    foreach (KoShape *shape, bfs->shapes()) {
+        QCOMPARE(shape->background(), page1.pageStyle().background());
     }
 
     QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet,1)->shape()->position(), QPointF(0, 0)); //page 1 background position and size
@@ -742,9 +735,9 @@ void TestFrameLayout::addFS(KWFrameSet*fs)
 void TestFrameLayout::removeAllFrames()
 {
     foreach (KWFrameSet *fs, m_frames) {
-        foreach (KWFrame *frame, fs->frames()) {
-            fs->removeFrame(frame);
-            delete frame->shape();
+        foreach (KoShape *shape, fs->shapes()) {
+            fs->removeShape(shape);
+            delete shape;
         }
     }
 }

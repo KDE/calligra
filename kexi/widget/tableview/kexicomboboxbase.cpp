@@ -114,7 +114,7 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
                 const int rowToHighlight = rowToHighlightForLookupTable();
                 popup()->tableView()->setHighlightedRow(rowToHighlight);
 
-                const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnsCount());
+                const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnCount());
                 if (m_setVisibleValueOnSetValueInternal && -1 != visibleColumn) {
                     //only for table views
                     KexiDB::RecordData *record = popup()->tableView()->highlightedItem();
@@ -172,7 +172,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
     const bool valueIsText = v.type() == QVariant::String || v.type() == QVariant::ByteArray; //most common case
     const QString txt(valueIsText ? v.toString().trimmed() : QString());
     KexiDB::TableViewData *lookupData = popup()->tableView()->data();
-    const int visibleColumn = lookupFieldSchema->visibleColumn(lookupData->columnsCount());
+    const int visibleColumn = lookupFieldSchema->visibleColumn(lookupData->columnCount());
     if (-1 == visibleColumn)
         return 0;
     KexiDB::TableViewData::Iterator it(lookupData->constBegin());
@@ -277,7 +277,7 @@ QVariant KexiComboBoxBase::visibleValueForLookupField()
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
     if (!popup() || !lookupFieldSchema)
         return QVariant();
-    const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnsCount());
+    const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnCount());
     if (-1 == visibleColumn)
         return QVariant();
     KexiDB::RecordData *record = popup()->tableView()->selectedItem();
@@ -480,7 +480,7 @@ void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
             valueToSet = record->at(1);
     } else if (lookupFieldSchema) {
         KexiDB::RecordData *record = popup()->tableView()->selectedItem();
-        const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnsCount());
+        const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnCount());
         if (record && visibleColumn != -1 /* && (int)item->size() >= visibleColumn --already checked*/) {
             valueToSet = record->at(qMin(visibleColumn, record->count() - 1)/*sanity*/);
         }
@@ -553,7 +553,7 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
         return true;
     case Qt::Key_Down:
         popup()->tableView()->setHighlightedRow(
-            qMin(highlightedOrSelectedRow + 1, popup()->tableView()->rows() - 1));
+            qMin(highlightedOrSelectedRow + 1, popup()->tableView()->rowCount() - 1));
         updateTextForHighlightedRecord();
         return true;
     case Qt::Key_PageUp:
@@ -564,7 +564,7 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
     case Qt::Key_PageDown:
         popup()->tableView()->setHighlightedRow(
             qMin(highlightedOrSelectedRow + popup()->tableView()->rowsPerPage(),
-                 popup()->tableView()->rows() - 1));
+                 popup()->tableView()->rowCount() - 1));
         updateTextForHighlightedRecord();
         return true;
     case Qt::Key_Home:
@@ -572,7 +572,7 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
         updateTextForHighlightedRecord();
         return true;
     case Qt::Key_End:
-        popup()->tableView()->setHighlightedRow(popup()->tableView()->rows() - 1);
+        popup()->tableView()->setHighlightedRow(popup()->tableView()->rowCount() - 1);
         updateTextForHighlightedRecord();
         return true;
     case Qt::Key_Enter:

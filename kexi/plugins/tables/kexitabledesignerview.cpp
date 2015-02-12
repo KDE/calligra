@@ -277,7 +277,7 @@ void KexiTableDesignerView::initData()
     d->view->setColumnResizeEnabled(COLUMN_ID_ICON, false);
     d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
     d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
-    d->view->setColumnResizeEnabled(COLUMN_ID_DESC, true);   //last column occupies the rest of the area
+    d->view->setStretchLastColumn(true);
     const int minCaptionColumnWidth = d->view->fontMetrics().width("wwwwwwwwwww");
     if (minCaptionColumnWidth > d->view->columnWidth(COLUMN_ID_CAPTION))
         d->view->setColumnWidth(COLUMN_ID_CAPTION, minCaptionColumnWidth);
@@ -1125,7 +1125,62 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
     if (!d->view->acceptRowEdit())
         return cancelled;
 
-    tristate res = true;
+    //check for missing captions
+    KoProperty::Set *b = 0;
+    bool no_fields = true;
+    int i;
+    QSet<QString> names;
+    for (i = 0; i < (int)d->sets->size(); i++) {
+        b = d->sets->at(i);
+        if (b) {
+            no_fields = false;
+            const QString name((*b)["name"].value().toString().toLower());
+            if (name.isEmpty()) {
+                if (beSilent) {
+                    kWarning() << QString("no field caption entered at record %1...").arg(i + 1);
+                } else {
+                    d->view->setCursorPosition(i, COLUMN_ID_CAPTION);
+                    d->view->startEditCurrentCell();
+                    KMessageBox::information(this, i18n("You should enter field caption."));
+                }
+                return cancelled;
+            }
+            if (names.contains(name)) {
+                break;
+            }
+            names.insert(name);   //remember
+        }
+    }
+
+    //check for empty design
+    if (no_fields) {
+        if (beSilent) {
+            kWarning() << "no field defined...";
+        } else {
+            KMessageBox::sorry(this,
+                i18n("You have added no fields.\nEvery table should have at least one field."));
+        }
+        return cancelled;
+    }
+
+    //check for duplicates
+    if (b && i < (int)d->sets->size()) {
+        if (beSilent) {
+            kWarning() << QString("duplicated field name '%1'")
+                .arg((*b)["name"].value().toString());
+        } else {
+            d->view->setCursorPosition(i, COLUMN_ID_CAPTION);
+            d->view->startEditCurrentCell();
+//! @todo for "names hidden" mode we won't get this error because user is unable to change names
+            KMessageBox::sorry(this,
+            i18n(
+               "You have added \"%1\" field name twice.\nField names cannot be repeated. "
+               "Correct name of the field.",
+               (*b)["name"].value().toString()));
+        }
+        return cancelled;
+    }
+
     //check for pkey; automatically add a pkey if user wanted
     if (!d->primaryKeyExists) {
         if (beSilent) {
@@ -1187,94 +1242,40 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
         }
     }
 
-    //check for duplicates
-    KoProperty::Set *b = 0;
-    bool no_fields = true;
-    int i;
-    QSet<QString> names;
-    for (i = 0; i < (int)d->sets->size(); i++) {
-        b = d->sets->at(i);
-        if (b) {
-            no_fields = false;
-            const QString name((*b)["name"].value().toString().toLower());
-            if (name.isEmpty()) {
-                if (beSilent) {
-                    kWarning() << QString("no field caption entered at record %1...").arg(i + 1);
-                } else {
-                    d->view->setCursorPosition(i, COLUMN_ID_CAPTION);
-                    d->view->startEditCurrentCell();
-                    KMessageBox::information(this, i18n("You should enter field caption."));
-                }
-                res = cancelled;
-                break;
-            }
-            if (names.contains(name)) {
-                break;
-            }
-            names.insert(name);   //remember
-        }
-    }
-    if (res == true && no_fields) {//no fields added
-        if (beSilent) {
-            kWarning() << "no field defined...";
-        } else {
-            KMessageBox::sorry(this,
-                i18n("You have added no fields.\nEvery table should have at least one field."));
-        }
-        res = cancelled;
-    }
-    if (res == true && b && i < (int)d->sets->size()) {//found a duplicate
-        if (beSilent) {
-            kWarning() << QString("duplicated field name '%1'")
-                .arg((*b)["name"].value().toString());
-        } else {
-            d->view->setCursorPosition(i, COLUMN_ID_CAPTION);
-            d->view->startEditCurrentCell();
-//! @todo for "names hidden" mode we won't get this error because user is unable to change names
-            KMessageBox::sorry(this,
-            i18n(
-               "You have added \"%1\" field name twice.\nField names cannot be repeated. "
-               "Correct name of the field.",
-               (*b)["name"].value().toString()));
-        }
-        res = cancelled;
-    }
-    if (res == true) {
-        //for every field, create KexiDB::Field definition
-        for (i = 0;i < (int)d->sets->size();++i) {
-            KoProperty::Set *s = d->sets->at(i);
-            if (!s)
-                continue;
-            KexiDB::Field * f = buildField(*s);
-            if (!f)
-                continue; //hmm?
-            schema.addField(f);
-            if (   !(*s)["rowSource"].value().toString().isEmpty()
-                && !(*s)["rowSourceType"].value().toString().isEmpty())
-            {
-                //add lookup column
-                KexiDB::LookupFieldSchema *lookupFieldSchema = new KexiDB::LookupFieldSchema();
-                lookupFieldSchema->rowSource().setTypeByName((*s)["rowSourceType"].value().toString());
-                lookupFieldSchema->rowSource().setName((*s)["rowSource"].value().toString());
-                lookupFieldSchema->setBoundColumn((*s)["boundColumn"].value().toInt());
+    //we're ready...
+    for (i = 0;i < (int)d->sets->size();++i) {//for every field create Field definition
+        KoProperty::Set *s = d->sets->at(i);
+        if (!s)
+            continue;
+        KexiDB::Field * f = buildField(*s);
+        if (!f)
+            continue; //hmm?
+        schema.addField(f);
+        if (   !(*s)["rowSource"].value().toString().isEmpty()
+            && !(*s)["rowSourceType"].value().toString().isEmpty())
+        {
+            //add lookup column
+            KexiDB::LookupFieldSchema *lookupFieldSchema = new KexiDB::LookupFieldSchema();
+            lookupFieldSchema->rowSource().setTypeByName((*s)["rowSourceType"].value().toString());
+            lookupFieldSchema->rowSource().setName((*s)["rowSource"].value().toString());
+            lookupFieldSchema->setBoundColumn((*s)["boundColumn"].value().toInt());
 //! @todo this is backward-compatible code for "single visible column" implementation
 //!       for multiple columns, only the first is displayed, so there is a data loss is GUI is used
 //!       -- special koproperty editor needed
-                QList<uint> visibleColumns;
-                const int visibleColumn = (*s)["visibleColumn"].value().toInt();
-                if (visibleColumn >= 0)
-                    visibleColumns.append((uint)visibleColumn);
-                lookupFieldSchema->setVisibleColumns(visibleColumns);
+            QList<uint> visibleColumns;
+            const int visibleColumn = (*s)["visibleColumn"].value().toInt();
+            if (visibleColumn >= 0)
+                visibleColumns.append((uint)visibleColumn);
+            lookupFieldSchema->setVisibleColumns(visibleColumns);
 //! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
-                if (!schema.setLookupFieldSchema(f->name(), lookupFieldSchema)) {
-                    kWarning() << "!schema.setLookupFieldSchema()";
-                    delete lookupFieldSchema;
-                    return false;
-                }
+            if (!schema.setLookupFieldSchema(f->name(), lookupFieldSchema)) {
+                kWarning() << "!schema.setLookupFieldSchema()";
+                delete lookupFieldSchema;
+                return false;
             }
         }
     }
-    return res;
+    return true;
 }
 
 //! @internal
