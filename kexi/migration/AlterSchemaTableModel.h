@@ -40,6 +40,7 @@ class AlterSchemaTableModel : public QAbstractTableModel
 
         void setSchema(KexiDB::TableSchema*);
         void setData(const QList<KexiDB::RecordData>& data);
+        void setRowCount(const int i);
     private:
         //! Reimplemented just to avoid 'hidden' warnings
         virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) {
@@ -48,6 +49,7 @@ class AlterSchemaTableModel : public QAbstractTableModel
 
         KexiDB::TableSchema *m_schema;
         QList<KexiDB::RecordData> m_data; //Small amount of data to display to user
+        int m_rowCount;
 };
 
 #endif // ALTERSCHEMATABLEMODEL_H

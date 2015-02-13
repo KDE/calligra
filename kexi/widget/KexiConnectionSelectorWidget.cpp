@@ -291,6 +291,16 @@ QString KexiConnectionSelectorWidget::selectedFileName()
 {
     if (selectedConnectionType() != KexiConnectionSelectorWidget::FileBased)
         return QString();
+    else if (fileWidget->selectedFile().isEmpty()) {
+        KUrl path = fileWidget->baseUrl();
+        const QString firstUrl(fileWidget->locationEdit()->lineEdit()->text());
+        if (QDir::isAbsolutePath(firstUrl))
+            path = KUrl::fromPath(firstUrl);
+        else
+            path.addPath(firstUrl);
+        return path.toLocalFile();
+    }
+
     return fileWidget->highlightedFile(); //ok? fileWidget->selectedFile();
 }
 
