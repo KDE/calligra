@@ -37,3 +37,16 @@ bool Format::isFraction(Type fmt)
 {
     return ((fmt >= FractionsBegin) && (fmt <= FractionsEnd));
 }
+
+bool Format::isMoney(Type fmt)
+{
+    return (fmt == Money);
+}
+
+bool Format::isNumber(Type fmt)
+{
+    if (isFraction(fmt)) return true;
+    if ((fmt == Number) || (fmt == Percentage) || (fmt == Scientific)) return true;
+    return false;
+}
+

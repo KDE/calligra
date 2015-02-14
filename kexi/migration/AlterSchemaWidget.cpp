@@ -34,6 +34,9 @@
 #include <kexiproject.h>
 #include <db/connection.h>
 #include <KexiWindow.h>
+#include <kexiutils/identifier.h>
+#include <widget/KexiNameWidget.h>
+#include <klineedit.h>
 
 using namespace KexiMigration;
 
@@ -46,14 +49,12 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
     m_table = new QTableView(this);
     m_columnType = new QComboBox(this);
     m_columnPKey = new QCheckBox(this);
-    m_tableName = new QLineEdit(this);
+    m_tableNameWidget = new KexiNameWidget("",this);
 
     m_columnNumLabel = new QLabel(i18n("Column %1", 1), this);
     m_columnTypeLabel = new QLabel(i18n("Type"), this);
     m_columnPKeyLabel = new QLabel(i18n("Primary Key"), this);
-    m_tableNameLabel = new QLabel(i18n("Table Name"), this);
-    m_nameUsedLabel = new QLabel(this);
-    
+
     m_types = KexiDB::Field::typeNames();
     m_types.removeFirst(); //Remove InvalidTypes
 
@@ -61,22 +62,19 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
         m_columnType->addItem(KexiDB::Field::typeName(i), i);
     }
 
-    m_layout->addWidget(m_tableNameLabel, 0, 0, 1, 1);
-    m_layout->addWidget(m_tableName, 0, 1, 1, 1);
-    m_layout->addWidget(m_nameUsedLabel, 0, 2, 1, 1);
-    m_layout->addWidget(m_columnNumLabel, 1, 0, 1, 3);
-    m_layout->addWidget(m_columnTypeLabel, 2, 0, 1, 1);
-    m_layout->addWidget(m_columnPKeyLabel, 2, 1, 1, 2);
-    m_layout->addWidget(m_columnType, 3, 0, 1, 1);
-    m_layout->addWidget(m_columnPKey, 3, 1, 1, 2);
-    m_layout->addWidget(m_table, 4, 0, 1, 3);
+    m_layout->addWidget(m_tableNameWidget, 0, 0, 2, 3);
+    m_layout->addWidget(m_columnNumLabel, 2, 0, 1, 3);
+    m_layout->addWidget(m_columnTypeLabel, 3, 0, 1, 1);
+    m_layout->addWidget(m_columnPKeyLabel, 3, 1, 1, 2);
+    m_layout->addWidget(m_columnType, 4, 0, 1, 1);
+    m_layout->addWidget(m_columnPKey, 4, 1, 1, 2);
+    m_layout->addWidget(m_table, 5, 0, 1, 3);
 
     setLayout(m_layout);
 
     connect(m_table, SIGNAL(clicked(QModelIndex)), this, SLOT(tableClicked(QModelIndex)));
     connect(m_columnType, SIGNAL(activated(int)), this, SLOT(typeActivated(int)));
     connect(m_columnPKey, SIGNAL(clicked(bool)), this, SLOT(pkeyClicked(bool)));
-    connect(m_tableName, SIGNAL(textChanged(QString)), this, SLOT(nameChanged(QString)));
 
     m_model = new AlterSchemaTableModel();
     m_table->setModel(m_model);
@@ -84,20 +82,22 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 
 AlterSchemaWidget::~AlterSchemaWidget()
 {
-    if (m_model) {
-        delete m_model;
-    }
+    delete m_table;
+    delete m_model;
 }
 
-void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
+void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& suggestedCaption)
 {
     m_originalSchema = ts;
     m_newSchema = new KexiDB::TableSchema(*ts, false);
-    m_newSchema->setName(m_originalSchema->name().replace('.', '_')); //Handle case where a file has been imported
+    m_newSchema->setName(m_originalSchema->name());
 
-    m_tableName->setText(suggestedItemName(ts->name()));
-    m_tableName->selectAll();
-    
+    m_tableNameWidget->setCaptionText(suggestedItemCaption(suggestedCaption));
+    m_tableNameWidget->captionLineEdit()->selectAll();
+    m_tableNameWidget->captionLineEdit()->setFocus();
+
+    m_model->setRowCount(3); // default
+
     m_model->setSchema(m_newSchema);
     tableClicked(m_model->index(0,0));
 }
@@ -111,13 +111,13 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
     m_selectedColumn = idx.column();
     m_columnNumLabel->setText(i18n("Column %1", m_selectedColumn + 1));
-    if (m_newSchema && m_selectedColumn < int(m_newSchema->fieldCount())) {
+    if (m_newSchema && m_selectedColumn < int(m_newSchema->fieldCount()) && m_newSchema->field(m_selectedColumn)) {
         kDebug() << m_newSchema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName());
         m_columnType->setCurrentIndex(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName()));
 
         //Only set the pkey check enabled if the field type is integer
         m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName())).toInt())));
-        
+
         m_columnPKey->setChecked(m_newSchema->field(m_selectedColumn)->isPrimaryKey());
     }
 }
@@ -141,44 +141,59 @@ void AlterSchemaWidget::pkeyClicked(bool pkey){
 
 KexiDB::TableSchema* AlterSchemaWidget::newSchema()
 {
-    m_newSchema->setName(m_tableName->text());
+    m_newSchema->setName(m_tableNameWidget->nameText());
     return m_newSchema;
 }
 
-QString AlterSchemaWidget::suggestedItemName(const QString& base_name)
+KexiNameWidget* AlterSchemaWidget::nameWidget()
 {
-    QStringList storedNames = KexiMainWindowIface::global()->project()->dbConnection()->objectNames();
+    return m_tableNameWidget;
+}
+
+AlterSchemaTableModel* AlterSchemaWidget::model()
+{
+    return m_model;
+}
+
+QString AlterSchemaWidget::suggestedItemCaption(const QString& baseCaption)
+{
     unsigned int n = 0;
-    QString new_name;
+    QString newCaption;
     do {
-        new_name = base_name;
+        newCaption = baseCaption;
         if (n >= 1) {
-            new_name = base_name + QString::number(n);
+            newCaption = baseCaption + QString::number(n);
         }
-        
-        if (storedNames.contains(new_name, Qt::CaseInsensitive)) {
+
+        if (nameExists(KexiUtils::stringToIdentifier(newCaption))) {
             n++;
             continue; //stored exists!
         } else {
             break;
         }
     } while (n < 1000/*sanity*/);
-    
+
     if (n == 1000) {
-        new_name = QString(""); //unable to find a usable name
+        newCaption = QString(""); //unable to find a usable name
     }
-        
-    return new_name;
+
+    return newCaption;
 }
 
-void AlterSchemaWidget::nameChanged(const QString& tableName)
+bool AlterSchemaWidget::nameExists(const QString & name) const
 {
-    const char *const iconName =
-        (nameExists(tableName) ? koIconNameCStr("dialog-cancel") : koIconNameCStr("dialog-ok"));
-    m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon(QLatin1String(iconName), KIconLoader::Dialog, 24));
-}
+    KexiPart::ItemDict* list = KexiMainWindowIface::global()->project()->itemsForClass("org.kexi-project.table");
+    if (!list) {
+        return false;
+    }
 
-bool AlterSchemaWidget::nameExists(const QString& baseName)
-{
-    return KexiMainWindowIface::global()->project()->dbConnection()->objectNames().contains(baseName,Qt::CaseInsensitive);
+    QHash<int, KexiPart::Item*>::const_iterator it = list->constBegin();
+    while (it != list->constEnd()) {
+        if (QString::compare(name, it.value()->name(), Qt::CaseInsensitive) == 0) {
+            return true;
+        }
+        ++it;
+    }
+
+    return false;
 }

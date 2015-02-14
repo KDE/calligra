@@ -49,7 +49,6 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
@@ -60,32 +59,11 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
 
     KoTextShapeData *text = qobject_cast<KoTextShapeData*>(shape->userData());
     if (text) {
-        KWTextFrameSet *fs = 0;
-        KWFrame *previous = m_nextFrames.value(shape->name());
-        if (previous)
-            fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(previous->shape()));
-        if (fs == 0) {
-            fs = new KWTextFrameSet(m_loader->document());
-            fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
-            m_loader->document()->addFrameSet(fs);
-        }
-
-        KWFrame *frame = new KWFrame(shape, fs);
-        if (style) {
-            if (! fillFrameProperties(frame, *style))
-                return; // done
-        }
-
         KoXmlElement textBox(KoXml::namedItemNS(element, KoXmlNS::draw, "text-box"));
-        if (frame && !textBox.isNull()) {
-            QString nextFrame = textBox.attributeNS(KoXmlNS::draw, "chain-next-name");
-            if (! nextFrame.isEmpty()) {
-#ifndef NDEBUG
-                if (m_nextFrames.contains(nextFrame))
-                    kWarning(32001) << "Document has two frames with the same 'chain-next-name' value, strange things may happen";
-#endif
-                m_nextFrames.insert(nextFrame, frame);
-            }
+        if (!textBox.isNull()) {
+            QString nextName = textBox.attributeNS(KoXmlNS::draw, "chain-next-name");
+            m_nextShapeNames.insert(shape, nextName);
+            m_shapesToProcess.append(shape);
 
             if (textBox.hasAttributeNS(KoXmlNS::fo, "min-height")) {
                 shape->setMinimumHeight(KoUnit::parseValue(textBox.attributeNS(KoXmlNS::fo, "min-height")));
@@ -95,6 +73,11 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
                     shape->setSize(newSize);
                 }
             }
+            KWTextFrameSet *fs = new KWTextFrameSet(m_loader->document());
+            fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
+            KWFrame *frame = new KWFrame(shape, fs);
+            if (style)
+                fillFrameProperties(frame, *style);
         }
     } else {
         KWFrameSet *fs = new KWFrameSet();
@@ -113,4 +96,27 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
         return frame;
 
     return true;
+}
+
+void KWOdfSharedLoadingData::connectFlowingTextShapes()
+{
+    while (!m_shapesToProcess.isEmpty()) {
+        KoShape *shape = m_shapesToProcess.takeFirst();
+        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(KWFrameSet::from(shape));
+        m_loader->document()->addFrameSet(fs);
+
+        while (shape) {
+            QString nextName = m_nextShapeNames[shape];
+            shape = 0;
+
+            foreach (KoShape *s, m_shapesToProcess) {
+                if (s->name() == nextName) {
+                    shape = s;
+                    m_shapesToProcess.removeAll(shape);
+                    new KWFrame(shape, fs);
+                    break;
+                }
+            }
+        }
+    }
 }

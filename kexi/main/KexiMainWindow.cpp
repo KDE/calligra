@@ -1875,7 +1875,7 @@ void KexiMainWindow::setupProjectNavigator()
 
         if (!partManagerErrorMessages.isEmpty()) {
             showWarningContinueMessage(partManagerErrorMessages, QString(),
-                                       "dontShowWarningsRelatedToPluginsLoading");
+                                       "ShowWarningsRelatedToPluginsLoading");
         }
         d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
         
@@ -3494,14 +3494,22 @@ void KexiMainWindow::slotToolsImportProject()
 void KexiMainWindow::slotToolsImportTables()
 {
     if (project()) {
-        QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "importtable", this, 0);
+        QMap<QString, QString> args;
+        QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "importtable", this, 0, &args);
         if (!dlg)
             return; //error msg has been shown by KexiInternalPart
             
-            const int result = dlg->exec();
+        const int result = dlg->exec();
         delete dlg;
         if (result != QDialog::Accepted)
             return;
+
+        QString destinationTableName(args["destinationTableName"]);
+        if (!destinationTableName.isEmpty()) {
+            QString partClass = "org.kexi-project.table";
+            bool openingCancelled;
+            KexiMainWindow::openObject(partClass, destinationTableName, Kexi::DataViewMode, openingCancelled);
+        }
     }
 }
 

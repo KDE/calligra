@@ -198,7 +198,6 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     d->diagonalGrayPattern = QBrush(d->appearance.gridColor, Qt::BDiagPattern);
 
     setLineWidth(1);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     horizontalScrollBar()->installEventFilter(this);
 
     //context menu
@@ -781,10 +780,10 @@ void KexiTableScrollArea::paintCell(QPainter* p, KexiDB::RecordData *record, int
             p->drawRect(0, 0, x2, y2);
     }
 
-    if (   (!m_newRowEditing && record == m_insertItem)
+    if (   (record == m_insertItem)
         || (m_newRowEditing && record == m_currentItem && cellValue.isNull()))
     {
-        //we're in "insert record"
+        // this is an "insert record" or a newly edited record without altered value
         if (tvcol->field()->isAutoIncrement()) { // "autonumber" column
             KexiDisplayUtils::paintAutonumberSign(d->autonumberSignDisplayParameters, p,
                                                   x, y_offset, w - x - x - ((align & Qt::AlignLeft) ? 2 : 0),
@@ -2220,6 +2219,7 @@ void KexiTableScrollArea::setAppearance(const Appearance& a)
         m_updateEntireRowWhenMovingToOtherRow = true;
     }
     navPanelWidget()->setVisible(a.navigatorEnabled);
+    setHorizontalScrollBarPolicy(a.navigatorEnabled ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAsNeeded);
     d->highlightedRow = -1;
 //! @todo is setMouseTracking useful for other purposes?
     viewport()->setMouseTracking(a.rowMouseOverHighlightingEnabled);
