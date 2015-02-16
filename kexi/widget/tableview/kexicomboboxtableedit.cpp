@@ -400,7 +400,7 @@ QPoint KexiComboBoxTableEdit::mapFromParentToGlobal(const QPoint& pos) const
 
 int KexiComboBoxTableEdit::popupWidthHint() const
 {
-    return m_lineedit->width() + m_leftMargin + m_rightMarginWhenFocused;
+    return m_lineedit->width();
 }
 
 void KexiComboBoxTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

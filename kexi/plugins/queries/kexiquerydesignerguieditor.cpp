@@ -188,7 +188,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     d->dataTable = new KexiDataTableView(d->head, false);
     d->head->setWidget(d->dataTable);
     d->dataTable->setObjectName("guieditor_dataTable");
-    d->dataTable->dataAwareObject()->setSpreadSheetMode();
+    d->dataTable->dataAwareObject()->setSpreadSheetMode(true);
 
     d->data = new KexiDB::TableViewData(); //just empty data
     d->sets = new KexiDataAwarePropertySet(this, d->dataTable->dataAwareObject());

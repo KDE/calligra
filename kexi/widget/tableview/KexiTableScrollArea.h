@@ -171,9 +171,6 @@ public:
      \return field object that define column \a column or NULL if there is no such column */
     KexiDB::Field* field(int column) const;
 
-    /*! Reimplementation for KexiDataAwareObjectInterface */
-    virtual void setSpreadSheetMode();
-
     /*! \return maximum number of rows that can be displayed per one "page"
      for current table view's size. */
     virtual int rowsPerPage() const;
@@ -267,6 +264,9 @@ public slots:
     }
 
     virtual void clearColumnsInternal(bool repaint);
+
+    /*! Reimplementation for KexiDataAwareObjectInterface */
+    virtual void setSpreadSheetMode(bool set);
 
     /*! Adjusts \a column column's width to its (current) contents.
      If \a column == -1, all columns' width is adjusted. */
