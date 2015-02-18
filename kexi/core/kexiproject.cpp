@@ -704,7 +704,7 @@ bool KexiProject::retrieveItems()
         bool ok;
         int partId = cursor->value(3).toInt(&ok);
         if (!ok || partId <= 0) {
-            kWarning() << "object of unknown type: id=" << cursor->value(0)
+            kWarning() << "object of unknown type" << cursor->value(3) << "id=" << cursor->value(0)
                        << "name=" <<  cursor->value(1);
             continue;
         }
