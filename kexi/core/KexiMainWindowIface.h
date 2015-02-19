@@ -152,7 +152,7 @@ public:
      set before call, previously selected item will be preselected
      in the editor (if found). */
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, 
+                                     bool preservePrevSelection = true,
                                      bool sortedProperties = false,
                                      const QByteArray& propertyToSelect = QByteArray()) = 0;
 
@@ -187,6 +187,9 @@ public:
     /*! Find window for a given \a item.
      \return 0 if no windows found. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
+
+    /*! Parametrs for query with given id. */
+    virtual QList<QVariant> currentParametersForQuery(int queryId) const = 0;
 
     /*! Displays a dialog for entering object's name and title.
      Used on new object saving.
@@ -232,7 +235,7 @@ public:
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
 //! @todo temporary solution before the tabbed toolbar framework emerges
-    /*! Appends widget @a widget to tabbed toolbar declared as @a name. 
+    /*! Appends widget @a widget to tabbed toolbar declared as @a name.
      @a widget will be reparented but the ownership is not taken. */
     virtual void appendWidgetToToolbar(const QString& name, QWidget* widget) = 0;
 
@@ -255,10 +258,10 @@ public:
      hidden. */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString()) = 0;
 
-    /*! Add searchable model to the main window. This extends search to a new area. 
+    /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. */
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
-    
+
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
 
     //! Interface to the migrate manager
