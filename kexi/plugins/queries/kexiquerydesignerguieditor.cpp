@@ -494,7 +494,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                 }
             }
         } else {//!set
-            kDebug() << (**it)[COLUMN_ID_TABLE].toString();
+            //kDebug() << (**it)[COLUMN_ID_TABLE].toString();
         }
     }
     if (!fieldsFound) {
@@ -1290,27 +1290,46 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     //1. get token
     token = 0;
     //2-char-long tokens
-    if (str.startsWith(QLatin1String(">=")))
+    if (str.startsWith(QLatin1String(">="))) {
         token = GREATER_OR_EQUAL;
-    else if (str.startsWith(QLatin1String("<=")))
-        token = LESS_OR_EQUAL;
-    else if (str.startsWith(QLatin1String("<>")))
-        token = NOT_EQUAL;
-    else if (str.startsWith(QLatin1String("!=")))
-        token = NOT_EQUAL2;
-    else if (str.startsWith(QLatin1String("==")))
-        token = '=';
-
-    if (token != 0)
         len = 2;
-    else if (str.startsWith(QLatin1Char('=')) //1-char-long tokens
+    } else if (str.startsWith(QLatin1String("<="))) {
+        token = LESS_OR_EQUAL;
+        len = 2;
+    } else if (str.startsWith(QLatin1String("<>"))) {
+        token = NOT_EQUAL;
+        len = 2;
+    } else if (str.startsWith(QLatin1String("!="))) {
+        token = NOT_EQUAL2;
+        len = 2;
+    } else if (str.startsWith(QLatin1String("=="))) {
+        token = '=';
+        len = 2;
+    } else if (str.startsWith(QLatin1String("LIKE "),  Qt::CaseInsensitive)) {
+        token = LIKE;
+        len = 5;
+    }
+    else if (str.startsWith(QLatin1String("NOT "),  Qt::CaseInsensitive)) {
+        str = str.mid(4).trimmed();
+        if (str.startsWith(QLatin1String("LIKE "),  Qt::CaseInsensitive)) {
+            token = NOT_LIKE;
+            len = 5;
+        }
+        else {
+            return 0;
+        }
+    }
+    else {
+        if (str.startsWith(QLatin1Char('=')) //1-char-long tokens
              || str.startsWith(QLatin1Char('<'))
-             || str.startsWith(QLatin1Char('>'))) {
-        token = str[0].toLatin1();
-        len = 1;
-    } else {
-        if (allowRelationalOperator)
-            token = '=';
+             || str.startsWith(QLatin1Char('>')))
+        {
+            token = str[0].toLatin1();
+            len = 1;
+        } else {
+            if (allowRelationalOperator)
+                token = '=';
+        }
     }
 
     if (!allowRelationalOperator && token != 0)
