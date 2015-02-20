@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include <QDropEvent>
 #include <QSet>
 #include <QVBoxLayout>
+#include <QStyleOptionComboBox>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -83,10 +84,12 @@
 class KexiQueryDesignerGuiEditor::Private
 {
 public:
-    Private()
+    Private(KexiQueryDesignerGuiEditor *p)
+     : q(p)
     {
         droppedNewRecord = 0;
         slotTableAdded_enabled = true;
+        sortColumnPreferredWidth = 0;
     }
 
     bool changeSingleCellValue(KexiDB::RecordData &record, int columnNumber,
@@ -101,6 +104,7 @@ public:
         return true;
     }
 
+    KexiQueryDesignerGuiEditor *q;
     KexiDB::TableViewData *data;
     KexiDataTableView *dataTable;
     QPointer<KexiDB::Connection> conn;
@@ -127,6 +131,18 @@ public:
         fieldColumnIdentifiers.insert(id.toLower());
     }
 
+    int comboArrowWidth;
+    int sortColumnPreferredWidth;
+
+    void initSortColumnPreferredWidth(const QVector<QString> &items)
+    {
+        int maxw = -1;
+        foreach (const QString &text, items) {
+            maxw = qMax(maxw, q->fontMetrics().width(text + " "));
+        }
+        sortColumnPreferredWidth = maxw + KexiUtils::comboBoxArrowSize(q->style()).width();
+    }
+
     KexiDataAwarePropertySet* sets;
     KexiDB::RecordData *droppedNewRecord;
 
@@ -151,7 +167,7 @@ static bool sortingAllowed(const QString& fieldName, const QString& tableName)
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     QWidget *parent)
         : KexiView(parent)
-        , d(new Private())
+        , d(new Private(this))
 {
     d->conn = KexiMainWindowIface::global()->project()->dbConnection();
 
@@ -186,7 +202,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     c << COLUMN_ID_COLUMN << COLUMN_ID_TABLE << COLUMN_ID_CRITERIA;
     if (d->dataTable->tableView()/*sanity*/) {
         d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_VISIBLE);
-        d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_SORTING);
+        d->dataTable->tableView()->setColumnWidth(COLUMN_ID_SORTING, d->sortColumnPreferredWidth);
+        d->dataTable->tableView()->setStretchLastColumn(true);
         d->dataTable->tableView()->maximizeColumnsWidth(c);
         d->dataTable->tableView()->setDropsAtRowEnabled(true);
         connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiDB::RecordData*,int,QDragMoveEvent*)),
@@ -265,6 +282,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     sortTypes.append(i18n("Descending"));
     col5->field()->setEnumHints(sortTypes);
     d->data->addColumn(col5);
+    d->initSortColumnPreferredWidth(sortTypes);
 
     KexiDB::TableViewColumn *col6 = new KexiDB::TableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
             i18n("Describes the criteria for a given field or expression."));
@@ -688,6 +706,10 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
             d->dataTable->dataAwareObject()->ensureCellVisible(0, 0);
             d->dataTable->dataAwareObject()->setCursorPosition(0, 0);
         }
+    }
+    if (d->sets->size() > 0) {
+        d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_COLUMN);
+        d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_TABLE);
     }
     tempData()->setQueryChangedInPreviousView(false);
     setFocus(); //to allow shared actions proper update
