@@ -293,9 +293,6 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
             m_data->append(m_insertItem);
             //new empty insert item
             m_insertItem = m_data->createItem();
-            if (verticalHeader()) {
-                //! @todo tableview-port verticalHeader()->addLabel();
-            }
             updateWidgetContentsSize();
         }
     }

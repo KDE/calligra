@@ -40,7 +40,7 @@ KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
     contextMenuEnabled = true;
     skipKeyPress = false;
     ensureCellVisibleOnShow = QPoint(-1, -1);
-    internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height() / 2;
+    internal_bottomMargin = 0;
     highlightedRow = -1;
     moveCursorOnMouseRelease = false;
     horizontalHeaderVisible = true;

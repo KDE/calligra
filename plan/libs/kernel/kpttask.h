@@ -214,7 +214,7 @@ public:
     UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }
     const ResourceUsedEffortMap &usedEffortMap() const { return m_usedEffort; }
     
-    void changed( int propert = -1 );
+    void changed( int property = -1 );
     Node *node() const { return m_node; }
     void setNode( Node *node ) { m_node = node; }
     

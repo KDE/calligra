@@ -43,7 +43,7 @@ public:
     Private();
     ~Private();
 
-    //! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
+    //! Unique widget - we're using guarded ptr for the widget so can know if it has been closed
     QPointer<QWidget> uniqueWidget;
     bool uniqueWindow; //!< true if createWidgetInstance() should return only one window
     bool cancelled; //!< Used in cancelled()

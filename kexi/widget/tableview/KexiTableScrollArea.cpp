@@ -1351,12 +1351,12 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
             //we should know that we are in state "new record editing"
             m_newRowEditing = true;
+            beginInsertItem(m_currentItem, row);
             //'insert' row editing: show another row after that:
             m_data->append(m_insertItem);
             //new empty 'inserting' item
             m_insertItem = m_data->createItem();
-            //TODO d->verticalHeader->addLabel();
-            d->verticalHeaderAlreadyAdded = true;
+            endInsertItem(m_currentItem, row);
             updateWidgetContentsSize();
             //refr. current and next row
             d->scrollAreaWidget->update(columnPos(0), rowPos(row),
@@ -1706,6 +1706,12 @@ void KexiTableScrollArea::ensureCellVisible(int row, int col)
         r.setBottom(r.bottom() + navPanelWidget()->height());
     }
 
+    QSize tableSize(this->tableSize());
+    const int bottomBorder = r.bottom() + (isInsertingEnabled() ? rowHeight() : 0);
+    if (!spreadSheetMode() && (tableSize.height() - bottomBorder) < rowHeight()) {
+        // ensure the very bottom of scroll area is displayed to help the user see what's there
+        r.moveTop(tableSize.height() - r.height());
+    }
     QPoint pcenter = r.center();
 #ifdef KEXITABLEVIEW_DEBUG
     kDebug() << pcenter.x() << pcenter.y() << (r.width() / 2)  << (r.height() / 2);
@@ -1728,6 +1734,24 @@ void KexiTableScrollArea::ensureColumnVisible(int col)
     kDebug() << pcenter.x() << pcenter.y() << (r.width() / 2)  << (r.height() / 2);
 #endif
     ensureVisible(pcenter.x(), pcenter.y(), r.width() / 2, r.height() / 2);
+}
+
+void KexiTableScrollArea::deleteCurrentRow()
+{
+    KexiDataAwareObjectInterface::deleteCurrentRow();
+    ensureCellVisible(m_curRow, -1);
+}
+
+KexiDB::RecordData* KexiTableScrollArea::insertEmptyRow(int pos)
+{
+    const int previousRow = m_curRow;
+    KexiDB::RecordData* data = KexiDataAwareObjectInterface::insertEmptyRow(pos);
+    // update header selection
+    d->verticalHeader->setCurrentIndex(
+                d->verticalHeader->selectionModel()->model()->index(m_curRow, m_curCol));
+    d->verticalHeader->updateSection(previousRow);
+    d->verticalHeader->updateSection(m_curRow);
+    return data;
 }
 
 void KexiTableScrollArea::updateAfterCancelRowEdit()
@@ -2026,6 +2050,8 @@ void KexiTableScrollArea::setHBarGeometry(QScrollBar & hbar, int x, int y, int w
 void KexiTableScrollArea::setSpreadSheetMode()
 {
     KexiDataAwareObjectInterface::setSpreadSheetMode();
+    setBottomMarginInternal(
+        spreadSheetMode() ? 0 : horizontalScrollBar()->sizeHint().height() / 2);
     //copy m_navPanelEnabled flag
     Appearance a = d->appearance;
     a.navigatorEnabled = m_navPanelEnabled;
@@ -2045,8 +2071,6 @@ int KexiTableScrollArea::validRowNumber(const QString& text)
 
 void KexiTableScrollArea::moveToRecordRequested(uint r)
 {
-    if (r > uint(rowCount() + (isInsertingEnabled() ? 1 : 0)))
-        r = rowCount() + (isInsertingEnabled() ? 1 : 0);
     setFocus();
     selectRow(r);
 }
@@ -2054,7 +2078,7 @@ void KexiTableScrollArea::moveToRecordRequested(uint r)
 void KexiTableScrollArea::moveToLastRecordRequested()
 {
     setFocus();
-    selectRow(rowCount() > 0 ? (rowCount() - 1) : 0);
+    selectLastRow();
 }
 
 void KexiTableScrollArea::moveToPreviousRecordRequested()
@@ -2385,5 +2409,40 @@ QAbstractItemModel* KexiTableScrollArea::headerModel() const
 {
     return d->headerModel;
 }
+
+void KexiTableScrollArea::beginInsertItem(KexiDB::RecordData *newRecord, int pos)
+{
+    Q_UNUSED(newRecord);
+    KexiTableScrollAreaHeaderModel* headerModel
+            = static_cast<KexiTableScrollAreaHeaderModel*>(d->headerModel);
+    headerModel->beginInsertRows(headerModel->index(pos, 0).parent(), pos, pos);
+}
+
+void KexiTableScrollArea::endInsertItem(KexiDB::RecordData *newRecord, int pos)
+{
+    Q_UNUSED(newRecord);
+    Q_UNUSED(pos);
+    KexiTableScrollAreaHeaderModel* headerModel
+            = static_cast<KexiTableScrollAreaHeaderModel*>(d->headerModel);
+    headerModel->endInsertRows();
+}
+
+void KexiTableScrollArea::beginRemoveItem(KexiDB::RecordData *record, int pos)
+{
+    Q_UNUSED(record);
+    KexiTableScrollAreaHeaderModel* headerModel
+            = static_cast<KexiTableScrollAreaHeaderModel*>(d->headerModel);
+    headerModel->beginRemoveRows(headerModel->index(pos, 0).parent(), pos, pos);
+}
+
+void KexiTableScrollArea::endRemoveItem(int pos)
+{
+    Q_UNUSED(pos);
+    KexiTableScrollAreaHeaderModel* headerModel
+            = static_cast<KexiTableScrollAreaHeaderModel*>(d->headerModel);
+    headerModel->endRemoveRows();
+    updateWidgetContentsSize();
+}
+
 
 #include "KexiTableScrollArea.moc"
