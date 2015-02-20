@@ -63,6 +63,7 @@ public:
     QSize totalSize;
     KexiDB::TableViewColumn* visibleTableViewColumn;
     KexiTableEdit* internalEditor;
+    int arrowWidth;
 };
 
 //======================================================
@@ -85,6 +86,8 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QW
     m_rightMarginWhenFocused -= RIGHT_MARGIN_DELTA;
     updateLineEditStyleSheet();
     m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
+    //! @todo update when style changes
+    d->arrowWidth = KexiUtils::comboBoxArrowSize(style()).width();
 }
 
 KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
@@ -294,7 +297,7 @@ int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics
         // in 'lookupFieldSchema' or  or 'related table data' model
         // we're assuming val is already the text, not the index
 //! @todo ok?
-        return qMax(KEXITV_MINIMUM_COLUMN_WIDTH, fm.width(val.toString()));
+        return qMax(KEXITV_MINIMUM_COLUMN_WIDTH, fm.width(val.toString()) + d->arrowWidth);
     }
     //use 'enum hints' model
     QVector<QString> hints = field()->enumHints();
@@ -305,7 +308,7 @@ int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics
     QString txt = hints.value(idx);
     if (txt.isEmpty())
         return KEXITV_MINIMUM_COLUMN_WIDTH;
-    return fm.width(txt);
+    return fm.width(txt) + d->arrowWidth;
 }
 
 bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)

@@ -1900,13 +1900,14 @@ void KexiTableScrollArea::adjustColumnWidthToContents(int column)
 //! \todo js: this is NOT EFFECTIVE for big data sets!!!!
 
     KexiTableEdit *ed = tableEditorWidget(column/* not indexOfVisibleColumn*/);
+    const QFontMetrics fm(fontMetrics());
     if (ed) {
         for (it = m_data->constBegin(); it != m_data->constEnd(); ++it) {
-            const int wfw = ed->widthForValue((*it)->at(indexOfVisibleColumn), fontMetrics());
+            const int wfw = ed->widthForValue((*it)->at(indexOfVisibleColumn), fm);
             maxw = qMax(maxw, wfw);
         }
         const bool focused = currentColumn() == column;
-        maxw += (fontMetrics().width("  ") + ed->leftMargin() + ed->rightMargin(focused) + 2);
+        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused) + 2);
     }
     if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH)
         maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
