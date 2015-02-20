@@ -616,7 +616,7 @@ bool ImportTableWizard::doImport()
         msg.showErrorMessage(i18n("No table was selected to import."));
         return false;
     }
-    
+
     KexiPart::Item* partItemForSavedTable = project->createPartItem(part->info(), m_alterSchemaWidget->newSchema()->name());
     if (!partItemForSavedTable) {
         msg.showErrorMessage(project);
@@ -634,6 +634,11 @@ bool ImportTableWizard::doImport()
     QApplication::setOverrideCursor(Qt::BusyCursor);
     QList<QVariant> row;
     m_migrateDriver->moveFirst();
+    KexiDB::TransactionGuard tg(*m_currentDatabase);
+    if (m_currentDatabase->error()) {
+        QApplication::restoreOverrideCursor();
+        return false;
+    }
     do  {
         for (unsigned int i = 0; i < m_alterSchemaWidget->newSchema()->fieldCount(); ++i) {
             row.append(m_migrateDriver->value(i));
@@ -641,8 +646,12 @@ bool ImportTableWizard::doImport()
         m_currentDatabase->insertRecord(*(m_alterSchemaWidget->newSchema()), row);
         row.clear();
     } while (m_migrateDriver->moveNext());
+    if (!tg.commit()) {
+        QApplication::restoreOverrideCursor();
+        return false;
+    }
     QApplication::restoreOverrideCursor();
-    
+
     //Done so save part and update gui
     partItemForSavedTable->setIdentifier(m_alterSchemaWidget->newSchema()->id());
     project->addStoredItem(part->info(), partItemForSavedTable);
