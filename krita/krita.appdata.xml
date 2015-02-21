@@ -39,6 +39,7 @@
   <licence xml:lang="uk">CC0</licence>
   <licence xml:lang="x-test">xxCC0xx</licence>
   <summary>Digital Painting, Creative Freedom</summary>
+  <summary xml:lang="bs">Digitalno crtanje, kreativna sloboda</summary>
   <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
   <summary xml:lang="da">Digital tegning, Kreativ frihed</summary>
   <summary xml:lang="de">Digitales Malen, kreative Freiheit</summary>
@@ -58,6 +59,7 @@
   <summary xml:lang="x-test">xxDigital Painting, Creative Freedomxx</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
+    <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="da">Krita er et digitals kunststudie med fuld funktionalitet.</p>
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
@@ -95,6 +97,7 @@
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
     <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
     <p>Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
+    <p xml:lang="bs">Krita je odličan izbor za kreiranje konceptualne umjetnosti, stripove, teksture za obradu i mat slike. Krita podržava mnoge prostore boja kao RGB i CMIK na 8 i 16 bitnim cjelobrojnim kanalimaa, kao i 16 i 32 bita floating point kanalima.</p>
     <p xml:lang="ca">El Krita és una gran elecció per crear art conceptual, còmics, textures per renderitzar i pintures mates. El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colour spaces like RGB and CMYK at 8 and 16 bit integer channels, as well as 16 and 32 bit floating point channels.</p>
     <p xml:lang="es">Krita es una gran elección para crear arte conceptual, cómics, texturas para renderizado y pinturas mate. Krita soporta muchos espacios de color como RGB y CMYK en canales enteros de 8 y 16 bits, así como en canales de punto flotante de 16 y 32 bits.</p>
@@ -112,6 +115,7 @@
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
     <p xml:lang="x-test">xxKrita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.xx</p>
     <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
+    <p xml:lang="bs">Zabavite se kreirajući napredne pogone četki, filtere i mnoge praktične osobine koje čine Krita vrlo produktivnim.</p>
     <p xml:lang="ca">Gaudiu pintant amb els motors de pinzells avançats, els filtres impressionants i moltes funcionalitats útils que fan el Krita molt productiu.</p>
     <p xml:lang="en-GB">Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="es">Diviértase pintando con los avanzados motores de pincel, los increíbles filtros y muchas características prácticas que hacen que Krita sea enormemente productivo.</p>
