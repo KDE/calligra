@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/Tool
 Comment=Tool for Calligra Stage
+Comment[bs]=Alat za Calligra Stage
 Comment[ca]=Eina pel Stage del Calligra
 Comment[cs]=Nástroj pro Calligra Stage
 Comment[da]=Værktøj til Calligra Stage
