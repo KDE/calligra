@@ -1555,12 +1555,15 @@ void KexiTableScrollArea::slotColumnWidthChanged(int column, int oldSize, int ne
     //kDebug() << QRect(columnPos(column), 0, viewport()->width() - columnPos(column), viewport()->height());
 
     QWidget *editorWidget = dynamic_cast<QWidget*>(m_editor);
-    if (editorWidget) {
-        editorWidget->move(columnPos(column), rowPos(m_curRow));
-        editorWidget->resize(columnWidth(column), rowHeight());
+    if (editorWidget && editorWidget->isVisible()) {
+        editorWidget->move(columnPos(m_curCol), rowPos(m_curRow));
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
     }
     updateGeometries();
     editorShowFocus(m_curRow, m_curCol);
+    if (editorWidget && editorWidget->isVisible()) {
+        m_editor->setFocus();
+    }
 }
 
 void KexiTableScrollArea::slotSectionHandleDoubleClicked(int section)
