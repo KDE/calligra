@@ -224,13 +224,13 @@ public:
         return m_isFilteringEnabled;
     }
 
-    /*! Added for convenience: configure this object
-     to behave more like spreadsheet (it's used for things like alter-table view).
+    /*! Added for convenience: if @a set is true, this object
+     will behave more like a spreadsheet (it's used for things like table designer view):
      - hides navigator
      - disables sorting, inserting and filtering
      - enables accepting row after cell accepting; see setAcceptsRowEditAfterCellAccepting()
      - enables inserting empty row; see setEmptyRowInsertingEnabled() */
-    virtual void setSpreadSheetMode();
+    virtual void setSpreadSheetMode(bool set);
 
     /*! \return true id "spreadSheetMode" is enabled. It's false by default. */
     bool spreadSheetMode() const {

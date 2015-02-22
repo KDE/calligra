@@ -93,7 +93,7 @@ public:
     virtual bool isDirty() const;
 
     /*! @return true if data editing is in progress. This is useful to indicate
-     * to the master window that the view should save the before switching to 
+     * to the master window that the view should save the before switching to
      * other view. This information is used in KexiWindow::switchToViewMode().
      * Implement this in view that supports data editing, typically
      * of mode Kexi::DataViewMode. If you do this, also implement
@@ -141,6 +141,9 @@ public:
     QString defaultIconName() const;
 
     void setDefaultIconName(const QString& iconName);
+
+    /*! For KexiQueryView */
+    virtual QList<QVariant> currentParameters() const;
 
     Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 

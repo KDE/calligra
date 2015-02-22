@@ -266,7 +266,7 @@ void KexiMainWindowTabWidget::closeTab()
 
 tristate KexiMainWindowTabWidget::closeAllTabs()
 {
-    tristate alternateResult = true; 
+    tristate alternateResult = true;
     QList<KexiWindow*> windowList;
     for (int i = 0; i < count(); i++) {
         KexiWindow *window = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->windowForTab(i);
@@ -296,7 +296,7 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     menu.exec(point);
     KTabWidget::contextMenu(index, point);
 }
-    
+
 void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 {
     if (currentIndex() == -1) {
@@ -524,7 +524,7 @@ void KexiMainWindow::setupActions()
 
     // PROJECT MENU
     KAction *action;
-    
+
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
     addThreeDotsToActionText(action);
@@ -915,7 +915,7 @@ void KexiMainWindow::setupActions()
     //WINDOW MENU
     //additional 'Window' menu items
     d->action_window_next = addAction("window_next",
-                                      i18n("&Next Window"), 
+                                      i18n("&Next Window"),
 #ifdef Q_WS_WIN
         "Ctrl+Tab"
 #else
@@ -1108,7 +1108,7 @@ void KexiMainWindow::setupActions()
     acat->addAction("tools_import_project", Kexi::GlobalActionCategory);
 
     acat->addAction("tools_import_tables", Kexi::GlobalActionCategory);
-    
+
     acat->addAction("view_data_mode", Kexi::GlobalActionCategory);
 
     acat->addAction("view_design_mode", Kexi::GlobalActionCategory);
@@ -1434,7 +1434,7 @@ void KexiMainWindow::updateReadOnlyState()
     if (d->navigator) {
         d->navigator->setReadOnly(readOnly);
     }
-    
+
     // update "insert ....." actions for every part
     KexiPart::PartInfoList *plist = Kexi::partManager().infoList();
     if (plist) {
@@ -1670,7 +1670,7 @@ tristate KexiMainWindow::closeProject()
         d->navigator->setProject(0);
         slotProjectNavigatorVisibilityChanged(true); // hide side tab
     }
-    
+
     if (d->propEditorDockWidget)
         d->propEditorDockWidget->hide();
 
@@ -1741,7 +1741,7 @@ void KexiMainWindow::setupMainWidget()
 
     d->mainWidget = new KexiMainWidget();
     d->mainWidget->setParent(this);
-    
+
     d->mainWidget->tabWidget()->setTabsClosable(true);
     connect(d->mainWidget->tabWidget(), SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeWindowForTab(int)));
@@ -1878,13 +1878,13 @@ void KexiMainWindow::setupProjectNavigator()
                                        "ShowWarningsRelatedToPluginsLoading");
         }
         d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
-        
+
     }
     connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->navigator->model(), SLOT(slotAddItem(KexiPart::Item&)));
     connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
 
     d->navigator->setFocus();
-    
+
     if (d->forceShowProjectNavigatorOnCreation) {
         slotViewNavigator();
         d->forceShowProjectNavigatorOnCreation = false;
@@ -2037,7 +2037,7 @@ KexiMainWindow::storeSettings()
 
     if (d->navigator)
         mainWindowGroup.writeEntry("ProjectNavigatorSize", d->navigator->parentWidget()->size());
-    
+
     if (d->propEditorDockableWidget)
         mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
 
@@ -2281,9 +2281,9 @@ void KexiMainWindow::slotProjectOpen()
         return;
     d->tabbedToolBar->showMainMenu("project_open");
     KexiOpenProjectAssistant* assistant = new KexiOpenProjectAssistant;
-    connect(assistant, SIGNAL(openProject(KexiProjectData)), 
+    connect(assistant, SIGNAL(openProject(KexiProjectData)),
             this, SLOT(openProject(KexiProjectData)));
-    connect(assistant, SIGNAL(openProject(QString)), 
+    connect(assistant, SIGNAL(openProject(QString)),
             this, SLOT(openProject(QString)));
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
@@ -2400,7 +2400,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 {
     QString fileName(aFileName);
     QStringList args;
- 
+
     // open a file-based project or a server connection provided as a .kexic file
     // (we have no other simple way to provide the startup data to a new process)
     if (fileName.isEmpty()) { //try .kexic file
@@ -2443,7 +2443,7 @@ void KexiMainWindow::slotProjectWelcome()
     d->tabbedToolBar->showMainMenu("project_welcome");
     KexiWelcomeAssistant* assistant = new KexiWelcomeAssistant(
         Kexi::recentProjects(), this);
-    connect(assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)), 
+    connect(assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)),
             this, SLOT(openProject(KexiProjectData,QString,bool*)));
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
@@ -2830,7 +2830,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 #endif
     ///@note Q_UNUSED layoutTaskBar
     Q_UNUSED(layoutTaskBar);
-    
+
     if (!window)
         return true;
     if (d->insideCloseWindow)
@@ -2996,9 +2996,24 @@ QWidget* KexiMainWindow::findWindow(QWidget *w)
     return w;
 }
 
-KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item) 
+KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item)
 {
     return item ? d->openedWindowFor(item->identifier()) : 0;
+}
+
+QList<QVariant> KexiMainWindow::currentParametersForQuery(int queryId) const
+{
+    KexiWindow *queryWindow = d->openedWindowFor(queryId);
+    if (!queryWindow) {
+        return QList<QVariant>();
+    }
+
+    KexiView *view = queryWindow->viewForMode(Kexi::DataViewMode);
+    if (!view) {
+        return QList<QVariant>();
+    }
+
+    return view->currentParameters();
 }
 
 bool KexiMainWindow::acceptsSharedActions(QObject *w)
@@ -3498,7 +3513,7 @@ void KexiMainWindow::slotToolsImportTables()
         QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "importtable", this, 0, &args);
         if (!dlg)
             return; //error msg has been shown by KexiInternalPart
-            
+
         const int result = dlg->exec();
         delete dlg;
         if (result != QDialog::Accepted)
@@ -4106,10 +4121,10 @@ void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
         d->tabsToActivateOnShow.insert(itemId, currentTab);
     }
     switch (d->prj->idForClass(partClass)) {
-    case KexiPart::FormObjectType: 
+    case KexiPart::FormObjectType:
         d->tabbedToolBar->hideTab("form");
         break;
-    case KexiPart::ReportObjectType: 
+    case KexiPart::ReportObjectType:
         d->tabbedToolBar->hideTab("report");
         break;
     default:

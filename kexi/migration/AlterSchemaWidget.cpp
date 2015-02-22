@@ -135,8 +135,10 @@ void AlterSchemaWidget::typeActivated(int typ)
     }
 }
 
-void AlterSchemaWidget::pkeyClicked(bool pkey){
+void AlterSchemaWidget::pkeyClicked(bool pkey)
+{
     m_newSchema->field(m_selectedColumn)->setPrimaryKey(pkey);
+    m_newSchema->field(m_selectedColumn)->setAutoIncrement(pkey);
 }
 
 KexiDB::TableSchema* AlterSchemaWidget::newSchema()

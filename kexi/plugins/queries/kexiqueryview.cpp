@@ -38,10 +38,12 @@ class KexiQueryView::Private
 {
 public:
     Private()
-            : cursor(0)
+            : cursor(0),
+              currentParams()
     {}
     ~Private() {}
     KexiDB::Cursor *cursor;
+    QList<QVariant> currentParams;
     /*! Used in storeNewData(), storeData() to decide whether
      we should ask other view to save changes.
      Stores information about view mode. */
@@ -77,19 +79,19 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
     KexiDB::Cursor *oldCursor = d->cursor;
     KexiDB::debug(query->parameters());
     bool ok;
-    QList<QVariant> params;
+    KexiDB::Connection * conn = KexiMainWindowIface::global()->project()->dbConnection();
     {
         KexiUtils::WaitCursorRemover remover;
-        params = KexiQueryParameters::getParameters(this,
-                 *KexiMainWindowIface::global()->project()->dbConnection()->driver(), *query, ok);
+        d->currentParams = KexiQueryParameters::getParameters(this,
+                 *conn->driver(), *query, ok);
     }
     if (!ok) {//input cancelled
         return cancelled;
     }
-    d->cursor = KexiMainWindowIface::global()->project()->dbConnection()->executeQuery(*query, params);
+    d->cursor = conn->executeQuery(*query, d->currentParams);
     if (!d->cursor) {
         window()->setStatus(
-            KexiMainWindowIface::global()->project()->dbConnection(),
+            conn,
             i18n("Query executing failed."));
 //! @todo also provide server result and sql statement
         return false;
@@ -147,6 +149,11 @@ tristate KexiQueryView::storeData(bool dontAsk)
     if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
         return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeData(dontAsk);
     return false;
+}
+
+QList<QVariant> KexiQueryView::currentParameters() const
+{
+    return d->currentParams;
 }
 
 #include "kexiqueryview.moc"

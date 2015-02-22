@@ -81,8 +81,17 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     if (!conn)
         return false;
 
+    KexiDB::QuerySchema* query = tableOrQuery.query();
+    QList<QVariant> queryParams;
+    if (!query) {
+        query = tableOrQuery.table()->query();
+    }
+    else {
+        queryParams = KexiMainWindowIface::global()->currentParametersForQuery(query->id());
+    }
+
     if (rowCount == -1)
-        rowCount = KexiDB::rowCount(tableOrQuery);
+        rowCount = KexiDB::rowCount(tableOrQuery, queryParams);
     if (rowCount == -1)
         return false;
 
@@ -93,10 +102,6 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 
 //! @todo OPTIMIZATION: use fieldsExpanded(true /*UNIQUE*/)
 //! @todo OPTIMIZATION? (avoid multiple data retrieving) look for already fetched data within KexiProject..
-
-    KexiDB::QuerySchema* query = tableOrQuery.query();
-    if (!query)
-        query = tableOrQuery.table()->query();
 
     KexiDB::QueryColumnInfo::Vector fields(query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields));
     QString buffer;
@@ -207,7 +212,7 @@ kDebug() << 1;
     }
 
     KexiGUIMessageHandler handler;
-    KexiDB::Cursor *cursor = conn->executeQuery(*query);
+    KexiDB::Cursor *cursor = conn->executeQuery(*query, queryParams);
     if (!cursor) {
         handler.showErrorMessage(conn);
         _ERR;
@@ -260,7 +265,7 @@ kDebug() << 1;
         kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
 
     kDebug() << "Done";
-    
+
     if (kSaveFile) {
         stream->flush();
         if (!kSaveFile->finalize()) {

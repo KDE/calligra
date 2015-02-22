@@ -363,7 +363,7 @@ KoProperty::Set *KexiView::propertySet()
 void KexiView::propertySetSwitched()
 {
     if (window()) {
-        KexiMainWindowIface::global()->propertySetSwitched(window(), false/*force*/, 
+        KexiMainWindowIface::global()->propertySetSwitched(window(), false/*force*/,
             true/*preservePrevSelection*/, d->sortedProperties);
     }
 }
@@ -762,6 +762,11 @@ QString KexiView::defaultIconName() const
 void KexiView::setDefaultIconName(const QString& iconName)
 {
     d->defaultIconName = iconName;
+}
+
+QList<QVariant> KexiView::currentParameters() const
+{
+    return QList<QVariant>();
 }
 
 #include "KexiView.moc"

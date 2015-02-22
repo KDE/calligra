@@ -68,6 +68,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_cursorPositionSetExplicityBeforeShow = false;
     m_insertItem = 0;
     m_spreadSheetMode = false;
+    m_navPanelEnabled = true;
     m_dropsAtRowEnabled = false;
     m_updateEntireRowWhenMovingToOtherRow = false;
     m_dragIndicatorLine = -1;
@@ -398,15 +399,15 @@ void KexiDataAwareObjectInterface::setInsertingEnabled(bool set)
     /*emit*/ reloadActions();
 }
 
-void KexiDataAwareObjectInterface::setSpreadSheetMode()
+void KexiDataAwareObjectInterface::setSpreadSheetMode(bool set)
 {
-    m_spreadSheetMode = true;
-    setSortingEnabled(false);
-    setInsertingEnabled(false);
-    setAcceptsRowEditAfterCellAccepting(true);
-    setFilteringEnabled(false);
-    setEmptyRowInsertingEnabled(true);
-    m_navPanelEnabled = false;
+    m_spreadSheetMode = set;
+    setSortingEnabled(!set);
+    setInsertingEnabled(!set);
+    setAcceptsRowEditAfterCellAccepting(set);
+    setFilteringEnabled(!set);
+    setEmptyRowInsertingEnabled(set);
+    m_navPanelEnabled = !set;
 }
 
 void KexiDataAwareObjectInterface::selectNextRow()

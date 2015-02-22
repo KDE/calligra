@@ -156,7 +156,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     d->data->addColumn(col = new KexiDB::TableViewColumn("comments", KexiDB::Field::Text,
             i18n("Comments"), i18n("Describes additional comments for the field")));
 
-    d->view->setSpreadSheetMode();
+    d->view->setSpreadSheetMode(true);
 
     connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
             this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
