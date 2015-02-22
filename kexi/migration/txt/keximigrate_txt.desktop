@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=TSV
 Name[ca]=TSV
-Name[da]=TSV
 Name[de]=TSV
 Name[en_GB]=TSV
 Name[es]=TSV
@@ -21,7 +20,6 @@ Name[uk]=TSV
 Name[x-test]=xxTSVxx
 Comment="Tab Separated Values" Document Import Plugin for Kexi
 Comment[ca]=Connector d'importació de documents «Valors separats per tabulacions» (TSV) pel Kexi
-Comment[da]=Importplugin til "tabulatorseparerede værdier"-dokumenter (TSV) til Kexi
 Comment[de]=„Durch Tabulator getrennte Werte“-Dokument-Importmodul für Kexi
 Comment[en_GB]="Tab Separated Values" Document Import Plugin for Kexi
 Comment[es]=Complemento de importación de documentos de «valores separados por tabuladores» para Kexi

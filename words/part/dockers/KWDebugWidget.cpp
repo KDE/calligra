@@ -22,7 +22,6 @@
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
-#include <KoSectionUtils.h>
 
 #include <QHBoxLayout>
 #include <QTimer>
@@ -70,17 +69,30 @@ void KWDebugWidget::updateData()
     QTextBlock curBlock = editor->block();
     QTextBlockFormat fmt = curBlock.blockFormat();
 
-    QString willShow = "This sections starts here :";
-    foreach (const KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
-        willShow += " \"" + sec->name() + "\"";
+    QString willShow;
+    if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+        willShow = "This sections starts here :";
+        QVariant var = fmt.property(KoParagraphStyle::SectionStartings);
+        QList<QVariant> openList = var.value< QList<QVariant> >();
+        foreach (const QVariant &sv, openList)
+        {
+            KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+            willShow += sec->name() + " ";
+        }
+        willShow.append("\n");
     }
-    willShow.append("\n");
 
-    willShow += "This sections end here :";
-    foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(fmt)) {
-        willShow += " \"" + sec->name() + "\"";
+    if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+        willShow += "This sections end here :";
+        QVariant var = fmt.property(KoParagraphStyle::SectionEndings);
+        QList<QVariant> closeList = var.value< QList<QVariant> >();
+        foreach (const QVariant &sv, closeList)
+        {
+            KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+            willShow += sec->name() + " ";
+        }
+        willShow.append("\n");
     }
-    willShow.append("\n");
 
     willShow += "block number is " + QString::number(editor->constCursor().block().blockNumber()) + "\n";
     willShow += "cur pos " + QString::number(editor->constCursor().position()) + "\n";
