@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Kexi</name>
+  <name xml:lang="bs">Kexi</name>
   <name xml:lang="ca">Kexi</name>
   <name xml:lang="cs">Kexi</name>
   <name xml:lang="da">Kexi</name>
@@ -24,6 +25,7 @@
   <name xml:lang="uk">Kexi</name>
   <name xml:lang="x-test">xxKexixx</name>
   <summary>Database Creator</summary>
+  <summary xml:lang="bs">Kreator baze podataka</summary>
   <summary xml:lang="ca">Generador de bases de dades</summary>
   <summary xml:lang="cs">Tvůrce databází</summary>
   <summary xml:lang="de">Datenbank-Erstellung</summary>
@@ -49,6 +51,7 @@
       Forms can be created to provide a custom interface to your data.
       All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.
     </p>
+    <p xml:lang="bs">Kexi je vizualni kreator baze podataka , dio Calligra Suite . Može se koristiti za izradu aplikacije baze podataka , umetanje i uređivanje podataka , obavljanje upita i obradu podataka. Obrasci se mogu kreirati da  pružite prilagođeno sučelje vašim podacima . Svi objekti baze podataka - tablice , upiti , obrazaci , izvještaji - čuvaju se u bazi podataka , što ih čini lakim za  dijeljenje  podataka i dizajn.</p>
     <p xml:lang="ca">El Kexi és un generador visual de base de dades, part del paquet ofimàtic Calligra. Es pot utilitzar per dissenyar aplicacions de bases de dades, inserció i edició de dades, execució de consultes, i procés de dades. Es poden generar formularis per proporcionar una interfície personalitzada a les dades. Tots els objecte de les bases de dades -taules, consultes, formularis, informes- s'emmagatzemen en la base de dades, facilitant compartir les dades i el disseny.</p>
     <p xml:lang="en-GB">Kexi is a visual database creator, part of the Calligra Suite. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.</p>
     <p xml:lang="es">Kexi es un creador visual de bases de datos, que forma parte de la suite Calligra. Se puede utilizar para diseñar aplicaciones de bases de datos, insertar y editar datos, realizar consultas y procesar datos. Se pueden crear formularios para proporcionar una interfaz personalizada para sus datos. Todos los objetos de la base de datos - tablas, consultas, formularios, informes - se almacenan en la base de datos, facilitando el intercambio de datos y diseños.</p>
@@ -64,6 +67,7 @@
     <p xml:lang="uk">Kexi — програма для створення баз даних у візуальному режимі, частина комплексу програм Calligra. Цією програмою можна скористатися для створень мініпрограм для роботи з базами даних, додавання та редагування даних, виконання запитів та обробки даних. За допомогою створених програмою форм ви можете отримати потрібний вам режим доступу до ваших даних. Всі об’єкти баз даних — таблиці, запити, форми, звіти, — зберігаються у самій базі даних, що спрощує поширення даних та представлення даних.</p>
     <p xml:lang="x-test">xxKexi is a visual database creator, part of the Calligra Suite. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.xx</p>
     <p>Features:</p>
+    <p xml:lang="bs">Osobine:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
@@ -84,6 +88,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Full visual designers for tables, queries, forms and reports</li>
+      <li xml:lang="bs">Potpuni vizualni dizajneri za tablice , upite , obrasce i izvještaje</li>
       <li xml:lang="ca">Dissenyadors visuals complets per taules, consultes, formularis i informes</li>
       <li xml:lang="en-GB">Full visual designers for tables, queries, forms and reports</li>
       <li xml:lang="es">Herramientas de diseño completamente visuales para las tablas, consultas, formularios e informes.</li>
@@ -92,7 +97,7 @@
       <li xml:lang="it">Progettazione completamente visuale di tabelle, query e report</li>
       <li xml:lang="ja">テーブル、クエリー、フォームおよびレポートをすべて視覚的にでデザインできます</li>
       <li xml:lang="nl">Volledige visueel ontwerpen van tabellen, zoekopdrachten, formulieren en rapporten</li>
-      <li xml:lang="pl">W pełni wizualna możliwość tworzenia tabel, zapytań, formularzy i sprawozdań</li>
+      <li xml:lang="pl">W pełni wizualna możliwość tworzenia tabel, zapytań, formularzy i raportów</li>
       <li xml:lang="pt">Desenhadores visuais completos para tabelas, pesquisas, formulários e relatórios</li>
       <li xml:lang="pt-BR">Desenhos visuais completos para tabelas, pesquisas, formulários e relatórios</li>
       <li xml:lang="sk">Plne vizuálny návrh pre tabuľky, dotazy, formuláre a správy</li>
@@ -100,6 +105,7 @@
       <li xml:lang="uk">Повноцінне візуальне середовище для створення таблиць, запитів, форм та звітів.</li>
       <li xml:lang="x-test">xxFull visual designers for tables, queries, forms and reportsxx</li>
       <li>Running queries, support for parametrized queries</li>
+      <li xml:lang="bs">Potrebno upite , podršku za parametrizovan upite</li>
       <li xml:lang="ca">Execució de consultes, implementació de consultes paramètriques</li>
       <li xml:lang="de">Ausführung von Abfragen, Unterstützung für parametrisierte Abfragen</li>
       <li xml:lang="en-GB">Running queries, support for parametrised queries</li>
@@ -117,6 +123,7 @@
       <li xml:lang="uk">Виконання запитів, підтримка параметризованих запитів.</li>
       <li xml:lang="x-test">xxRunning queries, support for parametrized queriesxx</li>
       <li>Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
+      <li xml:lang="bs">Podržava SQLite, MySQL, PostgreSQL i MS SQL baze podataka</li>
       <li xml:lang="ca">Permet bases de dades SQLite, MySQL, PostgreSQL i MS SQL Server</li>
       <li xml:lang="de">Unterstützt Datenbanken wie SQLite, MySQL, PostgreSQL und MS SQL Server</li>
       <li xml:lang="en-GB">Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
@@ -134,6 +141,7 @@
       <li xml:lang="uk">Підтримка баз даних SQLite, MySQL, PostgreSQL та MS SQL.</li>
       <li xml:lang="x-test">xxSupports SQLite, MySQL, PostgreSQL and MS SQL Server databasesxx</li>
       <li>The only multiplatform graphical tool importing data from MS Access databases</li>
+      <li xml:lang="bs">Jedini Multiplatform grafički alat koji uvozi podatke  iz MS Access baze podataka</li>
       <li xml:lang="ca">L'única eina gràfica multiplataforma d'importació de dades des de les bases de dades MS Access</li>
       <li xml:lang="en-GB">The only multiplatform graphical tool importing data from MS Access databases</li>
       <li xml:lang="es">La única herramienta gráfica multiplataforma que importa datos de bases de datos MS Access</li>
@@ -150,6 +158,7 @@
       <li xml:lang="uk">Єдиний графічний багатоплатформовий інструмент, здатний імпортувати дані з баз даних MS Access.</li>
       <li xml:lang="x-test">xxThe only multiplatform graphical tool importing data from MS Access databasesxx</li>
       <li>Supports query design in dedicated SQL view</li>
+      <li xml:lang="bs">Podržava dizajn upita u posvećenom SQL view-u</li>
       <li xml:lang="ca">Permet el disseny de consultes en vistes SQL dedicades</li>
       <li xml:lang="en-GB">Supports query design in dedicated SQL view</li>
       <li xml:lang="es">Soporta el diseño de consultas en una vista SQL dedicada</li>
@@ -166,6 +175,7 @@
       <li xml:lang="uk">Підтримка створення запитів за допомогою спеціальної панелі SQL.</li>
       <li xml:lang="x-test">xxSupports query design in dedicated SQL viewxx</li>
       <li>Designing and displaying relational data using combo boxes (lookup columns)</li>
+      <li xml:lang="bs">Izrada i prikazivanje relacijskih podataka pomoću combo kutije ( pregledavanje kolone)</li>
       <li xml:lang="ca">Disseny i visualització de dades relacionals usant quadres combinats (columnes de cerca)</li>
       <li xml:lang="en-GB">Designing and displaying relational data using combo boxes (lookup columns)</li>
       <li xml:lang="es">Diseño y presentación de datos relacionales utilizando listas desplegables (columnas de búsqueda)</li>
@@ -182,6 +192,7 @@
       <li xml:lang="uk">Створення та показ пов’язаних даних за допомогою спадних списків (стовпчики пошуку).</li>
       <li xml:lang="x-test">xxDesigning and displaying relational data using combo boxes (lookup columns)xx</li>
       <li>Direct data entry or import using CSV format</li>
+      <li xml:lang="bs">Unos podataka direktno  ili uvoz pomoću CSV formata</li>
       <li xml:lang="ca">Entrada directa de dades o importació usant el format CSV</li>
       <li xml:lang="de">Direkte Dateneingabe oder Import aus dem CSV-Format</li>
       <li xml:lang="en-GB">Direct data entry or import using CSV format</li>
@@ -199,6 +210,7 @@
       <li xml:lang="uk">Безпосереднє введення даних або імпортування даних у форматі CSV.</li>
       <li xml:lang="x-test">xxDirect data entry or import using CSV formatxx</li>
       <li>Locked down User Mode, allowing you to switch off all commands related to editing your project's design</li>
+      <li xml:lang="bs">Zatvoreni  korisnički režim, omogućavajući vam da isključite sve naredbe koje se odnose na uređivanje dizajna vašeg projekta</li>
       <li xml:lang="ca">Mode reduït d'usuari, que permet deshabilitar totes les ordres relacionades amb l'edició del disseny del projecte</li>
       <li xml:lang="en-GB">Locked down User Mode, allowing you to switch off all commands related to editing your project's design</li>
       <li xml:lang="es">Modo de usuario limitado, que permite desactivar todas las ordenes relacionadas con la edición del diseño de su proyecto</li>
@@ -215,6 +227,7 @@
       <li xml:lang="uk">Заблокований режим користувача, у якому можна вимкнути усі пов’язані з командами редагування компонування вашого проекту команди.</li>
       <li xml:lang="x-test">xxLocked down User Mode, allowing you to switch off all commands related to editing your project's designxx</li>
       <li>Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
+      <li xml:lang="bs">Scripting koristeći JavaScript, Python ili Ruby programskim jezicima (eksperimentalno)</li>
       <li xml:lang="ca">Crear scripts usant els llenguatges de programació JavaScript, Python o Ruby (experimental)</li>
       <li xml:lang="en-GB">Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
       <li xml:lang="es">Programación de scripts escritos en los lenguajes de programación JavaScript, Python o Ruby (experimental)</li>
@@ -241,6 +254,7 @@
     </screenshot>
     <screenshot>
       <caption>Table View storing images</caption>
+      <caption xml:lang="bs">Tabela View čuvanje slika</caption>
       <caption xml:lang="ca">Vista de taula emmagatzemant imatges</caption>
       <caption xml:lang="en-GB">Table View storing images</caption>
       <caption xml:lang="es">Una vista de tabla para almacenar imágenes</caption>
@@ -260,6 +274,7 @@
     </screenshot>
     <screenshot>
       <caption>Form Designer</caption>
+      <caption xml:lang="bs">Obrazac Designer</caption>
       <caption xml:lang="ca">Dissenyador de formularis</caption>
       <caption xml:lang="de">Formular-Designer</caption>
       <caption xml:lang="en-GB">Form Designer</caption>

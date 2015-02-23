@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Sheets</name>
+  <name xml:lang="bs">Listovi</name>
   <name xml:lang="ca">Sheets</name>
   <name xml:lang="cs">Sheets</name>
   <name xml:lang="da">Sheets</name>
@@ -24,6 +25,7 @@
   <name xml:lang="uk">Sheets</name>
   <name xml:lang="x-test">xxSheetsxx</name>
   <summary>Spreadsheet</summary>
+  <summary xml:lang="bs">Tablica</summary>
   <summary xml:lang="ca">Full de càlcul</summary>
   <summary xml:lang="cs">Sešit</summary>
   <summary xml:lang="de">Tabellenkalkulation</summary>
@@ -47,6 +49,7 @@
       Calligra Sheets is a fully-featured calculation and spreadsheet tool.
       Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.
     </p>
+    <p xml:lang="bs">Calligra ListoviSheets je kompletno opremljen kalkulacijski i tabelarni alat. Koristite ga da brzo kreirate i izračunati različite poslovne vezane tabele, kao što su prihodi i rashodi, radno vrijeme, itd</p>
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos full de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
@@ -63,6 +66,7 @@
     <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
     <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
     <p>Features:</p>
+    <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
@@ -83,6 +87,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
+      <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
       <li xml:lang="ca">Usa formes per prendre notes o mapes mentals</li>
       <li xml:lang="en-GB">Use shapes to take notes or mind maps</li>
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
@@ -99,6 +104,7 @@
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
       <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
       <li>Large range of pre-defined templates</li>
+      <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
       <li xml:lang="de">Viele vordefinierte Vorlagen</li>
       <li xml:lang="en-GB">Large range of pre-defined templates</li>
@@ -116,6 +122,7 @@
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
       <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
       <li>Powerful and comprehensive formula list</li>
+      <li xml:lang="bs">Moćna i kompaktna lista formula</li>
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
       <li xml:lang="de">Leistungsfähige und umfassende Liste von Formeln</li>
       <li xml:lang="en-GB">Powerful and comprehensive formula list</li>
@@ -133,6 +140,7 @@
       <li xml:lang="uk">Потужний і повний список функцій.</li>
       <li xml:lang="x-test">xxPowerful and comprehensive formula listxx</li>
       <li>Work in a familiar environment</li>
+      <li xml:lang="bs">Rad u poznatom okruženju</li>
       <li xml:lang="ca">Treball en un entorn familiar</li>
       <li xml:lang="en-GB">Work in a familiar environment</li>
       <li xml:lang="es">Funciona en un entorno familiar</li>
