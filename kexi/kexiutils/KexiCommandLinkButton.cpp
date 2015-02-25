@@ -66,7 +66,7 @@
 class KexiCommandLinkButtonPrivate
 {
 public:
-    KexiCommandLinkButtonPrivate(KexiCommandLinkButton *qq)
+    explicit KexiCommandLinkButtonPrivate(KexiCommandLinkButton *qq)
      : isArrowVisible(false), q(qq) {}
 
     void init();

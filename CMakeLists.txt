@@ -20,14 +20,14 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9 Pre-Alpha")
+set(CALLIGRA_VERSION_STRING "2.9 Beta 3")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
-#set(CALLIGRA_BETA 1) # uncomment only for Beta
+set(CALLIGRA_VERSION_RELEASE 92)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+set(CALLIGRA_BETA 3) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
-set(CALLIGRA_YEAR 2014) # update every year
+set(CALLIGRA_YEAR 2015) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
@@ -89,7 +89,7 @@ endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
-option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
 # TODO: remove option and migration code below before 3.0 release
@@ -145,11 +145,7 @@ calligra_set_productset(${PRODUCTSET})
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus Qt3Support)
-else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
-endif (QT3SUPPORT)
+find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
 
 if (USEOPENGL)
     find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
@@ -250,7 +246,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.6)
+set(SQLITE_RECOMMENDED_VERSION 3.8.7)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
@@ -342,8 +338,8 @@ endif(NOT Soprano_FOUND)
 ##
 ## Test for marble
 ##
-macro_optional_find_package(Marble)
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
+set(MARBLE_MIN_VERSION "0.19.2")
+macro_optional_find_package(CalligraMarble)
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)
     set(MARBLE_INCLUDE_DIR "")
@@ -351,23 +347,27 @@ else(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE TRUE)
 endif(NOT MARBLE_FOUND)
 if( MARBLE_FOUND )
-    add_definitions( -DCAN_USE_MARBLE )
-    ##
-    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-    ## with commit ea177ca. This is for compatibility with older versions.
-    ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-    if( MARBLECONTROLBOX_H )
-    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-        if( SETMARBLEWIDGET )
-            add_definitions(-DHAVE_SETMARBLEWIDGET)
-        endif( SETMARBLEWIDGET)
-    else( MARBLECONTROLBOX_H )
-        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
-    endif( MARBLECONTROLBOX_H )
+    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        set(MARBLE_FOUND FALSE)
+    else(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        add_definitions( -DCAN_USE_MARBLE )
+        ##
+        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+        ## with commit ea177ca. This is for compatibility with older versions.
+        ##
+        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+        if( MARBLECONTROLBOX_H )
+        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+            if( SETMARBLEWIDGET )
+                add_definitions(-DHAVE_SETMARBLEWIDGET)
+            endif( SETMARBLEWIDGET)
+        else( MARBLECONTROLBOX_H )
+            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+        endif( MARBLECONTROLBOX_H )
+    endif(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
 endif( MARBLE_FOUND )
-
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 ##
 ## Test for lcms
 ##
@@ -404,12 +404,12 @@ if(HAVE_VC)
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
         message(STATUS "Vc version is greater than 0.7, enabling AVX2 support")
 
-        if(Vc_COMPILER_IS_GCC)
+        if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
             AddCompilerFlag("-std=c++11" _ok)
             if(NOT _ok)
                 AddCompilerFlag("-std=c++0x" _ok)
             endif()
-        endif(Vc_COMPILER_IS_GCC)
+        endif(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
@@ -864,10 +864,6 @@ calligra_drop_product_on_bad_condition( APP_ACTIVE
 calligra_drop_product_on_bad_condition( LIB_CALLIGRADB
     HAVE_ICU "ICU devel not found"
     HAVE_SQLITE "sqlite devel not found"
-)
-
-calligra_drop_product_on_bad_condition( APP_KEXI
-    QT3SUPPORT "Qt3Support not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP

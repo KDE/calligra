@@ -40,7 +40,7 @@
 class Menu : public KMenu
 {
 public:
-    Menu(QWidget *parent) : KMenu(parent) {}
+    explicit Menu(QWidget *parent) : KMenu(parent) {}
 protected:
     void mouseReleaseEvent(QMouseEvent* e);
 };

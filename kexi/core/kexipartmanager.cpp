@@ -50,7 +50,7 @@ typedef QHash<QString, KexiInternalPart*> KexiInternalPartDict;
 class Manager::Private
 {
 public:
-    Private(Manager *manager_);
+    explicit Private(Manager *manager_);
     ~Private();
 
     template <typename PartClass>

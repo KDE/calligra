@@ -45,7 +45,7 @@ class ScriptManager : public QObject
     Q_OBJECT
 
 public:
-    ScriptManager(QObject *parent = 0, const char *name = 0);
+    explicit ScriptManager(QObject *parent = 0, const char *name = 0);
     ~ScriptManager();
 
     /*! \return The FormScript object associated to this Form. */

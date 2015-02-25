@@ -59,7 +59,7 @@ class Container;
  One KexiFormView object is instantiated for data view mode
  and a second KexiFormView object is instantiated for design view mode.
 
- @see KexiDataTable
+ @see KexiDataTableView
 */
 class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 {

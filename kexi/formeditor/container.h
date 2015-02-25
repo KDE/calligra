@@ -163,6 +163,12 @@ public slots:
      or added to update the layout. */
     void reloadLayout();
 
+    //! Used by handler-based resizing.
+    void startChangingGeometryPropertyForSelectedWidget();
+
+    //! Used by handler-based resizing.
+    void setGeometryPropertyForSelectedWidget(const QRect &newGeometry);
+
 protected slots:
     /*! This slot is called when the watched widget is deleted. Deletes the Container too. */
     void widgetDeleted();

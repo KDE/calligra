@@ -135,7 +135,7 @@ protected slots:
     void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
 
     //! Called on selecting another cell in a tableview.
-    void slotCellSelected(int, int row);
+    void slotCellSelected(int row, int col);
 
     //! Called on clearing tableview's data: just clears all property sets.
     void slotReloadRequested();

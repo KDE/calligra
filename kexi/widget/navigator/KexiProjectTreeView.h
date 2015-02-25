@@ -33,19 +33,21 @@ namespace KexiPart
 }
 class KexiProjectModel;
 
-/*! @internal */
+/*! @internal A tree view for project navigator widget */
 class KexiProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit KexiProjectTreeView(QWidget *parent);
+    explicit KexiProjectTreeView(QWidget *parent = 0);
     virtual ~KexiProjectTreeView();
 
     using QTreeView::setModel;
     void setModel(KexiProjectModel *model);
 
-    bool nameEndsWithAsterisk;
-
+protected:
+    virtual void drawBranches(QPainter *painter,
+                              const QRect &rect,
+                              const QModelIndex &index) const;
 protected slots:
     void slotHighlightSearchedItem(const QModelIndex &index);
     void slotActivateSearchedItem(const QModelIndex &index);

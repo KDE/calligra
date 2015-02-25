@@ -389,10 +389,33 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
     return needRect;
 }
 
+KisNode::PositionToFilthy calculatePositionToFilthy(KisNodeSP nodeInQuestion,
+                                           KisNodeSP filthy,
+                                           KisNodeSP parent)
+{
+    if (parent == filthy || parent != filthy->parent()) {
+        return KisNode::N_ABOVE_FILTHY;
+    }
+
+    if (nodeInQuestion == filthy) {
+        return KisNode::N_FILTHY;
+    }
+
+    KisNodeSP node = nodeInQuestion->prevSibling();
+    while (node) {
+        if (node == filthy) {
+            return KisNode::N_ABOVE_FILTHY;
+        }
+        node = node->prevSibling();
+    }
+
+    return KisNode::N_BELOW_FILTHY;
+}
+
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                            const KisPaintDeviceSP destination,
                            const QRect &requestedRect,
-                           PositionToFilthy pos,
+                           KisNodeSP filthyNode,
                            KisNodeSP lastNode) const
 {
     Q_ASSERT(source);
@@ -442,7 +465,8 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                 const QRect maskNeedRect =
                     applyRects.isEmpty() ? needRect : applyRects.top();
 
-                mask->apply(destination, maskApplyRect, maskNeedRect, pos);
+                PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
+                mask->apply(destination, maskApplyRect, maskNeedRect, maskPosition);
             }
             Q_ASSERT(applyRects.isEmpty());
         } else {
@@ -460,7 +484,8 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             QRect maskNeedRect = needRect;
 
             foreach(const KisEffectMaskSP& mask, masks) {
-                mask->apply(tempDevice, maskApplyRect, maskNeedRect, pos);
+                PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
+                mask->apply(tempDevice, maskApplyRect, maskNeedRect, maskPosition);
 
                 if (!applyRects.isEmpty()) {
                     maskNeedRect = maskApplyRect;
@@ -478,7 +503,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
-QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
+QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
@@ -495,18 +520,29 @@ QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
                 m_d->safeProjection.getDeviceLazy(originalDevice);
 
             updatedRect = applyMasks(originalDevice, projection,
-                                     updatedRect, pos, 0);
+                                     updatedRect, filthyNode, 0);
         }
     }
 
     return updatedRect;
 }
 
-void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos)
+QRect KisLayer::partialChangeRect(KisNodeSP lastNode, const QRect& rect)
 {
     bool changeRectVaries = false;
-    QRect changeRect = masksChangeRect(effectMasks(lastNode), rect,
-                                       changeRectVaries);
+    QRect changeRect = outgoingChangeRect(rect);
+    changeRect = masksChangeRect(effectMasks(lastNode), changeRect,
+                                 changeRectVaries);
+
+    return changeRect;
+}
+
+/**
+ * \p rect is a dirty rect in layer's original() coordinates!
+ */
+void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect)
+{
+    QRect changeRect = partialChangeRect(lastNode, rect);
 
     KisPaintDeviceSP originalDevice = original();
 
@@ -514,7 +550,7 @@ void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP la
 
     if (!changeRect.isEmpty()) {
         applyMasks(originalDevice, projection,
-                   changeRect, pos, lastNode);
+                   changeRect, this, lastNode);
     }
 }
 
@@ -544,13 +580,30 @@ KisPaintDeviceSP KisLayer::projection() const
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect changeRect = rect;
+    changeRect = incomingChangeRect(changeRect);
 
     if(pos == KisNode::N_FILTHY) {
         bool changeRectVaries;
-        changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
+        changeRect = outgoingChangeRect(changeRect);
+        changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+    }
+
+    // TODO: string comparizon: optimize!
+    if (compositeOpId() != COMPOSITE_COPY) {
+        changeRect |= rect;
     }
 
     return changeRect;
+}
+
+QRect KisLayer::incomingChangeRect(const QRect &rect) const
+{
+    return rect;
+}
+
+QRect KisLayer::outgoingChangeRect(const QRect &rect) const
+{
+    return rect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

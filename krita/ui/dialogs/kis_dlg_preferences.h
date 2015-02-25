@@ -69,8 +69,12 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
+    bool hideSplashScreen();
     int mdiMode();
     int favoritePresets();
+private slots:
+    void getBackgroundImage();
+    void clearBackgroundImage();
 
 };
 
@@ -105,6 +109,8 @@ public:
     void setDefault();
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
+    QList<QLabel*> m_monitorProfileLabels;
+    QList<SqueezedComboBox*> m_monitorProfileWidgets;
 };
 
 //=======================

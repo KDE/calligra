@@ -31,7 +31,6 @@
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 # include "editlistviewdialog.h"
 #endif
-#include "resizehandle.h"
 
 #include "form.h"
 #include "container.h"

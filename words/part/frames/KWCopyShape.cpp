@@ -169,11 +169,9 @@ bool KWCopyShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &co
 {
     Q_UNUSED(element);
     Q_UNUSED(context);
-#ifdef __GNUC__
-    #warning TODO: implement KWCopyShape::loadOdf
-#endif
 
-    return false; // TODO
+    return false; // TODO well not really as we only use copy shapes for headers and footers and
+                  // those copies are not saved
 }
 
 KoShape *KWCopyShape::original() const

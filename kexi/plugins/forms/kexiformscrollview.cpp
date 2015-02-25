@@ -25,7 +25,6 @@
 #include <formeditor/form.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/commands.h>
-#include <widget/utils/kexirecordmarker.h>
 #include <utils/kexirecordnavigator.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
@@ -41,6 +40,7 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QBoxLayout>
+#include <QHeaderView>
 
 class KexiFormScrollView::Private
 {
@@ -54,7 +54,7 @@ public:
         , scrollViewNavPanelVisible(false)
         , mainAreaWidget(0)
         , currentLocalSortColumn(-1) /* no column */
-        , localSortingOrder(-1) /* no sorting */
+        , localSortOrder(Qt::AscendingOrder)
         , previousRecord(0)
     {
     }
@@ -82,7 +82,8 @@ public:
     QWidget *mainAreaWidget;
 
     KFormDesigner::Form *form;
-    int currentLocalSortColumn, localSortingOrder;
+    int currentLocalSortColumn;
+    Qt::SortOrder localSortOrder;
     //! Used in selectCellInternal() to avoid fetching the same record twice
     KexiDB::RecordData *previousRecord;
 };
@@ -116,9 +117,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
     connect(&(d->delayedResize), SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
     if (d->preview) {
 //! @todo allow to hide navigator
-        d->scrollViewNavPanel = new KexiRecordNavigator(this, this);
-        d->scrollViewNavPanel->setLeftMargin(viewportMargins().left());
-        d->scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        d->scrollViewNavPanel = new KexiRecordNavigator(*this, this);
     }
     else {
         KexiFormScrollAreaWidget *scrollAreaWidget = new KexiFormScrollAreaWidget(this);
@@ -150,8 +149,11 @@ int KexiFormScrollView::rowsPerPage() const
     return 10;
 }
 
-void KexiFormScrollView::selectCellInternal()
+void KexiFormScrollView::selectCellInternal(int previousRow, int previousColumn)
 {
+    Q_UNUSED(previousRow);
+    Q_UNUSED(previousColumn);
+
     //m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
     if (m_currentItem) {
         if (m_currentItem != d->previousRecord) {
@@ -179,6 +181,12 @@ void KexiFormScrollView::selectCellInternal()
 void KexiFormScrollView::ensureCellVisible(int row, int col)
 {
     Q_UNUSED(row);
+    Q_UNUSED(col);
+    //! @todo
+}
+
+void KexiFormScrollView::ensureColumnVisible(int col)
+{
     Q_UNUSED(col);
     //! @todo
 }
@@ -219,21 +227,10 @@ void KexiFormScrollView::clearColumnsInternal(bool repaint)
     //! @todo
 }
 
-void KexiFormScrollView::addHeaderColumn(const QString& caption, const QString& description,
-        const QIcon& icon, int width)
-{
-    Q_UNUSED(caption);
-    Q_UNUSED(description);
-    Q_UNUSED(icon);
-    Q_UNUSED(width);
-
-    //! @todo
-}
-
-int KexiFormScrollView::currentLocalSortingOrder() const
+Qt::SortOrder KexiFormScrollView::currentLocalSortOrder() const
 {
     //! @todo
-    return d->localSortingOrder;
+    return d->localSortOrder;
 }
 
 int KexiFormScrollView::currentLocalSortColumn() const
@@ -241,11 +238,11 @@ int KexiFormScrollView::currentLocalSortColumn() const
     return d->currentLocalSortColumn;
 }
 
-void KexiFormScrollView::setLocalSortingOrder(int col, int order)
+void KexiFormScrollView::setLocalSortOrder(int column, Qt::SortOrder order)
 {
     //! @todo
-    d->currentLocalSortColumn = col;
-    d->localSortingOrder = order;
+    d->currentLocalSortColumn = column;
+    d->localSortOrder = order;
 }
 
 void KexiFormScrollView::sortColumnInternal(int col, int order)
@@ -255,17 +252,18 @@ void KexiFormScrollView::sortColumnInternal(int col, int order)
     //! @todo
 }
 
-void KexiFormScrollView::updateGUIAfterSorting()
+void KexiFormScrollView::updateGUIAfterSorting(int previousRow)
 {
+    Q_UNUSED(previousRow);
     //! @todo
 }
 
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
-                                      bool removeOld)
+                                      CreateEditorFlags flags)
 {
     Q_UNUSED(row);
     Q_UNUSED(addText);
-    Q_UNUSED(removeOld);
+    Q_UNUSED(flags);
 
     if (isReadOnly()) {
         kWarning() << "DATA IS READ ONLY!";
@@ -285,8 +283,9 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 
         setRowEditing(true);
         //indicate on the vheader that we are editing:
-        if (m_verticalHeader)
-            m_verticalHeader->setEditRow(m_curRow);
+        if (verticalHeader()) {
+            updateVerticalHeaderSection(currentRow());
+        }
         if (isInsertingEnabled() && m_currentItem == m_insertItem) {
             //we should know that we are in state "new record editing"
             m_newRowEditing = true;
@@ -294,8 +293,6 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
             m_data->append(m_insertItem);
             //new empty insert item
             m_insertItem = m_data->createItem();
-            if (m_verticalHeader)
-                m_verticalHeader->addLabel();
             updateWidgetContentsSize();
         }
     }
@@ -314,7 +311,7 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
 {
     Q_UNUSED(ignoreMissingEditor);
 
-    if (!m_data || col < 0 || col >= columns())
+    if (!m_data || col < 0 || col >= columnCount())
         return 0;
 
     return dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at(col));
@@ -354,11 +351,6 @@ void KexiFormScrollView::updateWidgetContentsSize()
     //! @todo
 }
 
-void KexiFormScrollView::updateWidgetScrollBars()
-{
-    //! @todo
-}
-
 void KexiFormScrollView::slotRowRepaintRequested(KexiDB::RecordData& record)
 {
     Q_UNUSED(record);
@@ -390,7 +382,7 @@ KexiDBForm* KexiFormScrollView::dbFormWidget() const
     return qobject_cast<KexiDBForm*>(d->preview ? widget() : mainAreaWidget());
 }
 
-int KexiFormScrollView::columns() const
+int KexiFormScrollView::columnCount() const
 {
     return dbFormWidget()->orderedDataAwareWidgets()->count(); //m_dataItems.count();
 }
@@ -672,7 +664,6 @@ void KexiFormScrollView::setRecordNavigatorVisible(bool visible)
         d->scrollViewNavPanel->setVisible(visible);
         d->scrollViewNavPanelVisible = visible;
     }
-    updateNavPanelGeometry();
 }
 
 bool KexiFormScrollView::isOuterAreaVisible() const
@@ -706,14 +697,6 @@ void KexiFormScrollView::refreshContentsSizeLater()
     d->setHorizontalScrollBarPolicyDependingOnNavPanel();
     updateScrollBars();
     d->delayedResize.start(100);
-}
-
-void KexiFormScrollView::updateNavPanelGeometry()
-{
-    if (d->scrollViewNavPanel) {
-        d->scrollViewNavPanel->setLeftMargin(leftMargin());
-        d->scrollViewNavPanel->insertAsideOfHorizontalScrollBar(this);
-    }
 }
 
 void KexiFormScrollView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
@@ -760,6 +743,17 @@ void KexiFormScrollView::setMainAreaWidget(QWidget* widget)
 QWidget* KexiFormScrollView::mainAreaWidget() const
 {
     return d->mainAreaWidget;
+}
+
+QRect KexiFormScrollView::viewportGeometry() const
+{
+    return viewport()->geometry();
+}
+
+void KexiFormScrollView::updateVerticalHeaderSection(int section)
+{
+    Q_UNUSED(section);
+    //! @todo implement when header is used
 }
 
 #include "kexiformscrollview.moc"

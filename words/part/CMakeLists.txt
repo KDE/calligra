@@ -29,6 +29,8 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
+    KWRootAreaProviderBase.cpp
+    KWRootAreaProviderTextBox.cpp
     KWRootAreaProvider.cpp
 
     pagetool/KWPageTool.cpp
@@ -41,11 +43,9 @@ set(wordsprivate_LIB_SRCS
     frames/KWFrameSet.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
-    frames/KWOutlineShape.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWRunAroundProperties.cpp
-    dialogs/KWGeneralFrameProperties.cpp
     dialogs/KWAnchoringProperties.cpp
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
@@ -67,9 +67,6 @@ set(wordsprivate_LIB_SRCS
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWNewPageStyleCommand.cpp
-    commands/KWFrameDeleteCommand.cpp
-    commands/KWFrameCreateCommand.cpp
-    commands/KWFrameCreateCommand.cpp
     commands/KWChangePageStyleCommand.cpp
     commands/KWShapeCreateCommand.cpp
 
@@ -98,7 +95,6 @@ endif( SHOULD_BUILD_FEATURE_RDF )
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWRunAroundProperties.ui
-    dialogs/KWGeneralFrameProperties.ui
     dialogs/KWAnchoringProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui

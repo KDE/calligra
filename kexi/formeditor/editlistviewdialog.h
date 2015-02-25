@@ -54,7 +54,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    EditListViewDialog(QWidget *parent);
+    explicit EditListViewDialog(QWidget *parent);
     ~EditListViewDialog() {}
 
     int exec(QListView *listview);

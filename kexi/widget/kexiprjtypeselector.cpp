@@ -30,9 +30,9 @@ KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)
 {
     setupUi(this);
     setObjectName("KexiPrjTypeSelector");
-    icon_file->setPixmap(KIcon(KexiDB::defaultFileBasedDriverIconName()).pixmap(48,48));
+    icon_file->setPixmap(Kexi::defaultFileBasedDriverIcon().pixmap(48,48));
     icon_file->setFixedSize(icon_file->pixmap()->size() / 2);
-    icon_server->setPixmap(KIcon(KEXI_DATABASE_SERVER_ICON_NAME).pixmap(48,48));
+    icon_server->setPixmap(Kexi::serverIcon().pixmap(48,48));
     icon_server->setFixedSize(icon_server->pixmap()->size() / 2);
 
     connect(buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),

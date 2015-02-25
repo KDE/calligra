@@ -77,7 +77,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 {
     setupUi(this);
     setObjectName("KexiConnectionSelectorWidget");
-    iconLabel->setPixmap(DesktopIcon(KEXI_DATABASE_SERVER_ICON_NAME));
+    iconLabel->setPixmap(DesktopIcon(Kexi::serverIconName()));
 
     QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
     driversComboLyr->setMargin(0);

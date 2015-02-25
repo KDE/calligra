@@ -38,11 +38,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/libs
 )
 
-IF(KEXI_MOBILE)
-ELSE(KEXI_MOBILE)
-  add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-ENDIF(KEXI_MOBILE)
-
 add_subdirectory( kexiutils )
 
 macro_optional_find_package(MySQL)

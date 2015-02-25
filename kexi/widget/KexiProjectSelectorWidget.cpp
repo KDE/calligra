@@ -40,7 +40,7 @@
 class KexiProjectSelectorWidget::Private
 {
 public:
-    Private(KexiProjectSet *prj_set_)
+    explicit Private(KexiProjectSet *prj_set_)
          : prj_set(prj_set_)
     {
         selectable = true;
@@ -120,7 +120,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     d->showConnectionColumns = showConnectionColumns;
     list()->installEventFilter(this);
 
-    d->fileicon = KIcon(KexiDB::defaultFileBasedDriverIconName());
+    d->fileicon = Kexi::defaultFileBasedDriverIcon();
     setWindowIcon(d->fileicon);
     d->dbicon = koIcon("server-database");
 

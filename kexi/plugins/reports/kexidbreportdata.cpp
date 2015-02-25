@@ -26,7 +26,7 @@
 class KexiDBReportData::Private
 {
 public:
-    Private(KexiDB::Connection *pDb)
+    explicit Private(KexiDB::Connection *pDb)
       : cursor(0), connection(pDb), originalSchema(0), copySchema(0)
     {
     }

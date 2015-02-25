@@ -47,7 +47,7 @@ using namespace KoProperty;
 class EditorViewStyle : public KexiUtils::StyleProxy
 {
 public:
-    EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    explicit EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
     {
     }
 
@@ -81,7 +81,7 @@ static bool computeAutoSync(Property *property, bool defaultAutoSync)
 class ItemDelegate : public QItemDelegate
 {
 public:
-    ItemDelegate(QWidget *parent);
+    explicit ItemDelegate(QWidget *parent);
     virtual ~ItemDelegate();
     virtual void paint(QPainter *painter, 
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -554,15 +554,29 @@ void EditorView::slotPropertyChanged(Set& set, Property& property)
     const QModelIndex parentIndex( d->model->indexForPropertyName(realProperty->name()) );
     if (parentIndex.isValid()) {
         QModelIndex index = findChildItem(property, parentIndex);
-        if (index.isValid()) {
-            update(index);
-        }
-        index = d->model->indexForColumn(index, 1);
-        if (index.isValid()) {
-            update(index);
-        }
+        updateSubtree(index);
     }
     d->slotPropertyChangedEnabled = true;
+}
+
+void EditorView::updateSubtree(const QModelIndex &index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+    update(index);
+    QModelIndex valueIndex = d->model->indexForColumn(index, 1);
+    if (valueIndex.isValid()) {
+        update(valueIndex);
+    }
+    Property *property = static_cast<Property*>(index.internalPointer());
+    if (property->children()) {
+        int row = 0;
+        foreach (Property* p, *property->children()) {
+            updateSubtree(d->model->createIndex(row, 0, p));
+            ++row;
+        }
+    }
 }
 
 void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)

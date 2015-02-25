@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2010-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include <kexipartmanager.h>
 #include <db/utils.h>
 
+#include <KLocale>
 #include <kdebug.h>
 
 #include "KexiProjectModelItem.h"
@@ -40,9 +41,10 @@ public:
     KexiProjectModelItem *rootItem;
     QPersistentModelIndex searchHighlight;
     QPointer<KexiProject> project;
+    int objectsCount;
 };
 
-KexiProjectModel::Private::Private() : rootItem(0)
+KexiProjectModel::Private::Private() : rootItem(0), objectsCount(0)
 {
     
 }
@@ -76,6 +78,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     KexiPart::PartInfoList* plist = Kexi::partManager().infoList();
     if (!plist)
         return;
+
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
@@ -83,13 +86,12 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         if (!d->itemsPartClass.isEmpty() && info->partClass() != d->itemsPartClass)
             continue;
 
-
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
         //kDebug() << info->partClass() << info->objectName();
         KexiProjectModelItem *groupItem = 0;
         if (d->itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->partClass()*/) {
-            groupItem = addGroup(*info, d->rootItem);
+            groupItem = addGroup(info, d->rootItem);
             if (!groupItem) {
                 continue;
             } else {
@@ -108,10 +110,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         }
 
         foreach(KexiPart::Item *item, *item_dict) {
-            KexiProjectModelItem *itm = addItem(*item, *info, groupItem);
-            if (itm && groupItem) {
-                groupItem->appendChild(itm);
-            }
+            addItem(info, item, groupItem);
         }
 
         groupItem->sortChildren();
@@ -122,6 +121,8 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");
 }
+
+
 
 KexiProjectModel::~KexiProjectModel()
 {
@@ -250,14 +251,12 @@ Qt::ItemFlags KexiProjectModel::flags(const QModelIndex& index) const
     if (!index.isValid())
          return QAbstractItemModel::flags(index);
 
-     KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
-
-     if (item)
-         return item->flags();
-
-     return QAbstractItemModel::flags(index);
+    KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    if (item) {
+        return item->flags();
+    }
+    return QAbstractItemModel::flags(index);
 }
-
 
 void KexiProjectModel::clear()
 {
@@ -272,12 +271,13 @@ QString KexiProjectModel::itemsPartClass() const
     return d->itemsPartClass;
 }
 
-KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProjectModelItem *p) const
+KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info *info,
+                                                 KexiProjectModelItem *parent) const
 {
-    if (!info.isVisibleInNavigator())
+    if (!info->isVisibleInNavigator())
         return 0;
 
-    KexiProjectModelItem *item = new KexiProjectModelItem(info, p);
+    KexiProjectModelItem *item = new KexiProjectModelItem(*info, parent);
     return item;
 }
 
@@ -292,12 +292,8 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
         //kDebug() << "Got Parent" << parent->data(0);
         idx = indexFromItem(parent);
         beginInsertRows(idx, 0,0);
-        KexiProjectModelItem *itm = new KexiProjectModelItem(*(parent->partInfo()), item, parent);
-        if (itm) {
-            //kDebug() << "Appending";
-            parent->appendChild(itm);
-            parent->sortChildren();
-        }
+        addItem(parent->partInfo(), &item, parent);
+        parent->sortChildren();
         endInsertRows();
     }
     else {
@@ -305,9 +301,13 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
     }
 }
 
-KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p) const
+KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Info *info, KexiPart::Item *item,
+                                                KexiProjectModelItem *parent) const
 {
-    return new KexiProjectModelItem(info, item, p);
+    d->objectsCount++;
+    KexiProjectModelItem *i = new KexiProjectModelItem(*info, *item, parent);
+    parent->appendChild(i);
+    return i;
 }
 
 void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
@@ -327,6 +327,7 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
         idx = indexFromItem(parent);
         beginRemoveRows(idx, 0,0);
         parent->removeChild(item);
+        d->objectsCount--;
         endRemoveRows();
     } else {
         //kDebug() << "Unable to find parent item!";
@@ -457,4 +458,9 @@ bool KexiProjectModel::activateSearchableObject(const QModelIndex &index)
     }
     emit activateSearchedItem(index);
     return true;
+}
+
+int KexiProjectModel::objectsCount() const
+{
+    return d->objectsCount;
 }

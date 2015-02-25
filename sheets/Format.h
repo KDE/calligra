@@ -127,6 +127,8 @@ enum Type {
 CALLIGRA_SHEETS_ODF_EXPORT bool isDate(Type type);
 CALLIGRA_SHEETS_ODF_EXPORT bool isTime(Type type);
 CALLIGRA_SHEETS_ODF_EXPORT bool isFraction(Type type);
+CALLIGRA_SHEETS_ODF_EXPORT bool isMoney(Type type);
+CALLIGRA_SHEETS_ODF_EXPORT bool isNumber(Type type);
 
 } // namespace Format
 } // namespace Sheets

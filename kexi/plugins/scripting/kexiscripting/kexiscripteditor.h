@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      */
-    KexiScriptEditor(QWidget *parent);
+    explicit KexiScriptEditor(QWidget *parent);
 
     /**
      * Destructor.

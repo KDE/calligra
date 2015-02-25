@@ -246,7 +246,7 @@ QFont Theme::font(const QString& name)
         QDir fontDir(d->basePath + '/' + d->fontPath);
         QStringList entries = fontDir.entryList(QDir::Files);
         QFontDatabase db;
-        Q_FOREACH(QString entry, entries) {
+        Q_FOREACH(const QString &entry, entries) {
             d->addedFonts.append(db.addApplicationFont(fontDir.absoluteFilePath(entry)));
         }
         d->fontsAdded = true;

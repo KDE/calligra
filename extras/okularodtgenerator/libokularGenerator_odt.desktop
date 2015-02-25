@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Text Document
+Name[bs]=OtvoriDokument tekstualni dokument
 Name[ca]=Document de text OpenDocument
 Name[cs]=Textový dokument OpenDocument
 Name[da]=OpenDocument tekstdokument
@@ -22,6 +23,7 @@ Name[sv]=OpenDocument textdokument
 Name[uk]=Текстовий документ OpenDocument
 Name[x-test]=xxOpenDocument Text Documentxx
 Comment=Odt for okular
+Comment[bs]=Odt za okular
 Comment[ca]=ODT per a l'Okular
 Comment[cs]=Odt pro Okular
 Comment[da]=Odt til okular
@@ -40,6 +42,7 @@ Comment[pt]=ODT para o Okular
 Comment[pt_BR]=ODT para o Okular
 Comment[sk]=Odc pre okular
 Comment[sv]=Odt för Okular
+Comment[tr]=Okular için Odt
 Comment[uk]=ODT для Okular
 Comment[x-test]=xxOdt for okularxx
 ServiceTypes=okular/Generator

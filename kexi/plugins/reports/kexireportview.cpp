@@ -71,10 +71,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
 
 #ifndef KEXI_MOBILE
-    m_pageSelector = new KexiRecordNavigator(m_reportView, m_reportView);
-    m_pageSelector->setLeftMargin(0);
-    m_pageSelector->insertAsideOfHorizontalScrollBar(m_reportView);
-    m_pageSelector->setRecordCount(0);
+    m_pageSelector = new KexiRecordNavigator(*m_reportView, m_reportView);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setInsertingEnabled(false);
     m_pageSelector->setLabelText(i18n("Page"));

@@ -32,7 +32,7 @@
 class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
 {
 public:
-    KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
+    explicit KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
             : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }

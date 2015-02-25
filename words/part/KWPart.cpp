@@ -76,16 +76,16 @@ void KWPart::setupViewInstance(KoDocument *document, KWView *view)
 
     bool switchToolCalled = false;
     foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
-        if (fs->frameCount() == 0)
+        if (fs->shapeCount() == 0)
             continue;
-        foreach (KWFrame *frame, fs->frames())
-            view->canvasBase()->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
+        foreach (KoShape *shape, fs->shapes())
+            view->canvasBase()->shapeManager()->addShape(shape, KoShapeManager::AddWithoutRepaint);
         if (switchToolCalled)
             continue;
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs && tfs->textFrameSetType() == Words::MainTextFrameSet) {
             KoSelection *selection = view->canvasBase()->shapeManager()->selection();
-            selection->select(fs->frames().first()->shape());
+            selection->select(fs->shapes().first());
 
             KoToolManager::instance()->switchToolRequested(
                 KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
@@ -101,11 +101,11 @@ QGraphicsItem *KWPart::createCanvasItem(KoDocument *document)
     // caller owns the canvas item
     KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument*>(document));
     foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
-        if (fs->frameCount() == 0) {
+        if (fs->shapeCount() == 0) {
             continue;
         }
-        foreach (KWFrame *frame, fs->frames()) {
-            item->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
+        foreach (KoShape *shape, fs->shapes()) {
+            item->shapeManager()->addShape(shape, KoShapeManager::AddWithoutRepaint);
         }
     }
     return item;

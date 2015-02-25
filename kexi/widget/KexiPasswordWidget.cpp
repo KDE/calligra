@@ -41,7 +41,7 @@
 class KexiPasswordWidget::KexiPasswordWidgetPrivate
 {
 public:
-    KexiPasswordWidgetPrivate(KexiPasswordWidget *q)
+    explicit KexiPasswordWidgetPrivate(KexiPasswordWidget *q)
         : q(q),
           userEditCombo(0),
           pixmapLabel(0),

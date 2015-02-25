@@ -242,7 +242,10 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 
 void KisScratchPad::pick(KoPointerEvent *event)
 {
-    emit colorSelected(KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint()));
+    KoColor color;
+    if (KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint(), &color)) {
+        emit colorSelected(color);
+    }
 }
 
 void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
@@ -295,7 +298,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
     QPointF offset = alignedImageRect.topLeft();
 
-    m_paintLayer->updateProjection(alignedImageRect, KisNode::N_FILTHY);
+    m_paintLayer->updateProjection(alignedImageRect, m_paintLayer);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
     QImage image = projection->convertToQImage(m_displayProfile,

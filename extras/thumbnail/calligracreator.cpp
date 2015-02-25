@@ -105,6 +105,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     url.setPath(path);
     if (!m_doc->openUrl(url)) {
         delete m_doc;
+        m_doc = 0;
         return false;
     }
 
@@ -125,6 +126,8 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     }
 
     m_doc->closeUrl();
+    delete m_doc;
+    m_doc = 0;
 
     return m_loadingCompleted;
 }

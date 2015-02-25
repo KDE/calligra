@@ -29,7 +29,7 @@ class ToolManager : public QDeclarativeItem
     Q_OBJECT
     Q_PROPERTY(QObject* currentTool READ currentTool NOTIFY currentToolChanged);
 public:
-    ToolManager(QDeclarativeItem* parent = 0);
+    explicit ToolManager(QDeclarativeItem* parent = 0);
     virtual ~ToolManager();
 
     QObject* currentTool() const;

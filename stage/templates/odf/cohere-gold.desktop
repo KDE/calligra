@@ -1,10 +1,12 @@
 [Desktop Entry]
 Icon=cohere-gold
 Name=Cohere
+Name[bs]=Cohere
 Name[ca]=Cohere
 Name[da]=Cohere
 Name[de]=Cohere
 Name[en_GB]=Cohere
+Name[es]=Cohere
 Name[it]=Cohere
 Name[nl]=Cohere
 Name[pl]=Cohere
@@ -15,9 +17,11 @@ Name[sv]=Sammanfoga
 Name[uk]=Cohere
 Name[x-test]=xxCoherexx
 Comment=Cohere designed presentation template
+Comment[bs]=Cohere dizajnirani predložak prezentacije
 Comment[ca]=Plantilles de presentacions dissenyades pel Cohere
 Comment[da]=Cohere-designet præsentationsskabelon
 Comment[en_GB]=Cohere designed presentation template
+Comment[es]=Plantilla de presentación diseñada por Cohere
 Comment[it]=Modello di presentazione progettato da Cohere
 Comment[nl]=Met Cohere ontworpen presentatiesjabloon
 Comment[pl]=Szablon prezentacji Cohere

@@ -55,46 +55,6 @@ public:
     virtual ~KWFrame();
 
     /**
-     * This property what should happen when the frame is full
-     */
-    Words::FrameBehavior frameBehavior() const {
-        return m_frameBehavior;
-    }
-    /**
-     * Set what should happen when the frame is full
-     * @param fb the new FrameBehavior
-     */
-    void setFrameBehavior(Words::FrameBehavior fb) {
-        m_frameBehavior = fb;
-    }
-
-    /**
-     * For frame duplication policy on new page creation.
-     */
-    Words::NewFrameBehavior newFrameBehavior() const {
-        return m_newFrameBehavior;
-    }
-    /**
-     * For frame duplication policy on new page creation.
-     * Altering this does not change the frames placed until a new page is created.
-     * @param nf the NewFrameBehavior.
-     */
-    void setNewFrameBehavior(Words::NewFrameBehavior nf) {
-        m_newFrameBehavior = nf;
-    }
-
-    /**
-     * Set the minimum height of the frame.
-     * @param minimumFrameHeight the minimum height of the frame.
-     */
-    void setMinimumFrameHeight(qreal minimumFrameHeight);
-    /**
-     * Return the minimum height of the frame.
-     * @return the minimum height of the frame. Default is 0.0.
-     */
-    qreal minimumFrameHeight() const;
-
-    /**
      * Each frame will be rendered by a shape which also holds the position etc.
      * @return the shape that represents this frame.
      */
@@ -106,28 +66,10 @@ public:
      * Return the parent frameset.
      * @return the parent frameset
      */
-    KWFrameSet *frameSet() const {
+    KWFrameSet *frameSetxx() const {
         return m_frameSet;
     }
-    /**
-     * Set the frameset this frame will work on.
-     * Altering the frameset requires you to remove this frame on the old and add the frame on the
-     * new frameset
-     * @param newFrameSet the new frameset
-     */
-    virtual void setFrameSet(KWFrameSet *newFrameSet);
 
-    void cleanupShape(KoShape* shape);
-
-    /*
-    void clearLoadingData() {
-        m_anchoredPageNumber = -1;
-    }
-    */
-
-    int anchoredPageNumber() const {
-        return m_shape->anchor() ? m_shape->anchor()->pageNumber() : -1;
-    }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
     }
@@ -135,44 +77,11 @@ public:
         m_anchoredFrameOffset = offset;
     }
 
-    /**
-     * Returns the list of copy-shapes, see @a KWCopyShape , that
-     * are copies of this KWFrame.
-     */
-    QList<KWFrame*> copies() const;
-
-    void addCopy(KWFrame* frame);
-    void removeCopy(KWFrame* frame);
-
-    /**
-     * States if this frame is a copy of the previous one.
-     * If this frame is a copy, then this frame is drawn with the same content as the
-     * previous frame in this frameset.
-     * @return true if this is a copy
-     */
-    bool isCopy() const;
-
-    /**
-     * Copy all the settings from the parameter frame and apply them to this frame.
-     * @param frame the frame to use as original
-     */
-    void copySettings(const KWFrame *frame);
-
-    /**
-     * Save the frame as ODF
-     * @param context the context for saving.
-     */
-    void saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset = 0) const;
 
 private:
     KoShape *m_shape;
-    Words::FrameBehavior m_frameBehavior;
-    bool m_copyToEverySheet;
-    Words::NewFrameBehavior m_newFrameBehavior;
     qreal m_anchoredFrameOffset;
     KWFrameSet *m_frameSet;
-    qreal m_minimumFrameHeight;
-    QList<KWFrame*> m_copyShapes;
 };
 
 #endif

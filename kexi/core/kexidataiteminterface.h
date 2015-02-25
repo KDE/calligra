@@ -45,7 +45,7 @@ public:
     virtual void valueChanged(KexiDataItemInterface* item) = 0;
 
     /*! Implement this to return information whether we're currently at new row or not.
-     This can be used e.g. by data-aware widgets to determine if "(autonumber)"
+     This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const = 0;
 

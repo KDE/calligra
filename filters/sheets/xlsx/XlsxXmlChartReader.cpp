@@ -3413,7 +3413,7 @@ QString convertToFormat( KoGenStyle::Type formatType, const QString& formatStrin
         }
         case KoGenStyle::NumericTimeStyle: {
             QTime t(0,0,0,0);
-            t.addSecs( value.toInt() );
+            t = t.addSecs( value.toInt() );
             return t.toString( Qt::ISODate );
         }
         case KoGenStyle::NumericPercentageStyle: {

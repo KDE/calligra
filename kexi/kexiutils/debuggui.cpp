@@ -183,7 +183,7 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
     KexiDB::setAlterTableActionDebugHandler(addAlterTableActionDebug);
 
     // (this is internal code - do not use i18n() here)
-    debugWindow = new DebugWindow();
+    debugWindow = new DebugWindow(parent);
     QBoxLayout *lyr = new QVBoxLayout(debugWindow);
     debugWindowTab = new KTabWidget(debugWindow);
     debugWindowTab->setObjectName("debugWindowTab");

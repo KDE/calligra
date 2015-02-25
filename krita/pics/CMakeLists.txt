@@ -66,6 +66,9 @@ width.png
 workspace-chooser.png
 onionA.png
 onionB.png
+mirrorAxis-HorizontalMove.png
+mirrorAxis-VerticalMove.png
+
 
 dark_select.png
 dark_pattern.png
@@ -84,6 +87,8 @@ dark_selection-mode_invisible.png
 dark_selection-mode_mask.png
 dark_symmetry-horizontal.png
 dark_symmetry-vertical.png
+dark_krita_tool_editpath.png
+
 
 light_select.png
 light_pattern.png
@@ -102,6 +107,8 @@ light_selection-mode_invisible.png
 light_selection-mode_mask.png
 light_symmetry-vertical.png
 light_symmetry-horizontal.png
+light_krita_tool_editpath.png
+
 
 
 tool_transform/dark_transform_icons_cage.png
@@ -111,6 +118,7 @@ tool_transform/dark_transform_icons_liquify_move.png
 tool_transform/dark_transform_icons_liquify_offset.png
 tool_transform/dark_transform_icons_liquify_resize.png
 tool_transform/dark_transform_icons_liquify_rotate.png
+tool_transform/dark_transform_icons_liquify_rotateCCW.png
 tool_transform/dark_transform_icons_main.png
 tool_transform/dark_transform_icons_perspective.png
 tool_transform/dark_transform_icons_warp.png
@@ -123,6 +131,7 @@ tool_transform/light_transform_icons_liquify_move.png
 tool_transform/light_transform_icons_liquify_offset.png
 tool_transform/light_transform_icons_liquify_resize.png
 tool_transform/light_transform_icons_liquify_rotate.png
+tool_transform/light_transform_icons_liquify_rotateCCW.png
 tool_transform/light_transform_icons_main.png
 tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png

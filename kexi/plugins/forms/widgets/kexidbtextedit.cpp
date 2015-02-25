@@ -36,7 +36,7 @@
 class DataSourceLabel : public QLabel
 {
 public:
-    DataSourceLabel(QWidget *parent) : QLabel(parent)
+    explicit DataSourceLabel(QWidget *parent) : QLabel(parent)
     {
     }
 protected:

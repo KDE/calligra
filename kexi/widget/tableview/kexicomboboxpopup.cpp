@@ -19,8 +19,8 @@
 
 #include "kexicomboboxpopup.h"
 
-#include "kexidatatableview.h"
-#include "kexitableview_p.h"
+#include "KexiDataTableScrollArea.h"
+#include "KexiTableScrollArea_p.h"
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
@@ -31,17 +31,17 @@
 
 #include <kdebug.h>
 
-#include <QLayout>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QScrollBar>
 
 /*! @internal
  Helper for KexiComboBoxPopup. */
-class KexiComboBoxPopup_KexiTableView : public KexiDataTableView
+class KexiComboBoxPopup_KexiTableView : public KexiDataTableScrollArea
 {
 public:
     KexiComboBoxPopup_KexiTableView(QWidget* parent = 0)
-            : KexiDataTableView(parent) {
+            : KexiDataTableScrollArea(parent) {
         init();
     }
     void init() {
@@ -49,18 +49,19 @@ public:
         setReadOnly(true);
         setLineWidth(0);
         d->moveCursorOnMouseRelease = true;
-        KexiTableView::Appearance a(appearance());
+        KexiTableScrollArea::Appearance a(appearance());
         a.navigatorEnabled = false;
 //! @todo add option for backgroundAltering??
         a.backgroundAltering = false;
-        a.fullRecordSelection = true;
-        a.recordHighlightingEnabled = true;
-        a.recordMouseOverHighlightingEnabled = true;
+        a.fullRowSelection = true;
+        a.rowHighlightingEnabled = true;
+        a.rowMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.recordMouseOverHighlightingColor = palette().highlight().color();
-        a.recordMouseOverHighlightingTextColor = palette().highlightedText().color();
-        a.recordHighlightingTextColor = a.recordMouseOverHighlightingTextColor;
-        a.gridEnabled = false;
+        a.rowMouseOverHighlightingColor = palette().highlight().color();
+        a.rowMouseOverHighlightingTextColor = palette().highlightedText().color();
+        a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
+        a.horizontalGridEnabled = false;
+        a.verticalGridEnabled = false;
         setAppearance(a);
         setInsertingEnabled(false);
         setSortingEnabled(false);
@@ -69,13 +70,13 @@ public:
         setContextMenuEnabled(false);
         setScrollbarToolTipsEnabled(false);
         installEventFilter(this);
-        setBottomMarginInternal(- horizontalScrollBar()->sizeHint().height());
+        setBottomMarginInternal(0);
     }
     virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
-        KexiTableView::setData(data, owner);
+        KexiTableScrollArea::setData(data, owner);
     }
     bool setData(KexiDB::Cursor *cursor) {
-        return KexiDataTableView::setData(cursor);
+        return KexiDataTableScrollArea::setData(cursor);
     }
 };
 
@@ -166,7 +167,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
 
     // case 1: simple related data
     if (column && column->relatedData()) {
-        d->tv->setColumnStretchEnabled(true, -1);   //only needed when using single column
+        d->tv->setColumnsResizeEnabled(true); //only needed when using single column
         setDataInternal(column->relatedData(), false /*!owner*/);
         return;
     }
@@ -274,7 +275,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
     kWarning() << "no column relatedData \n - moving to setData(KexiDB::Field &)";
 
     // case 3: enum hints
-    d->tv->setColumnStretchEnabled(true, -1);   //only needed when using single column
+    d->tv->setColumnsResizeEnabled(true);   //only needed when using single column
 
 //! @todo THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
     d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
@@ -288,6 +289,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         data->append(record);
     }
     setDataInternal(data, true);
+    d->tv->setColumnWidth(0, d->tv->width() - 1);
 }
 
 void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
@@ -302,22 +304,20 @@ void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
 
 void KexiComboBoxPopup::updateSize(int minWidth)
 {
-    const int rows = qMin(d->max_rows, d->tv->rows());
-
-    d->tv->adjustColumnWidthToContents(-1);
+    const int rows = qMin(d->max_rows, d->tv->rowCount());
 
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
     //kDebug() << "size=" << size();
-    resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
+    resize(qMax(minWidth, width)/*+(d->tv->columnCount()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
     //kDebug() << "size after=" << size();
 
     //stretch the last column
-    d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);
+    d->tv->setColumnResizeEnabled(d->tv->columnCount() - 1, true);
 }
 
-KexiTableView* KexiComboBoxPopup::tableView()
+KexiTableScrollArea* KexiComboBoxPopup::tableView()
 {
     return d->tv;
 }
@@ -326,8 +326,8 @@ void KexiComboBoxPopup::resize(int w, int h)
 {
     d->tv->horizontalScrollBar()->hide();
     d->tv->verticalScrollBar()->hide();
-    d->tv->move(1, 1);
-    d->tv->resize(w - 2, h - 2);
+    d->tv->move(0, 0);
+    d->tv->resize(w - 1, h - 1);
     QFrame::resize(w, h);
     update();
     updateGeometry();
