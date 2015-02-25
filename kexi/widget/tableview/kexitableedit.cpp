@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 
 #include "kexitableedit.h"
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <widget/tableview/KexiTableScrollArea.h>
 #include <db/field.h>
 #include <db/utils.h>
 
@@ -40,9 +41,8 @@ KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         , m_view(0)
 #else
         KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
-        : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
+        : QWidget(parent)
         , m_column(&column)
-        , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
         , m_usesSelectedTextColor(true)
         , m_view(0)
 #endif
@@ -82,6 +82,72 @@ KexiTableEdit::~KexiTableEdit()
 {
 }
 
+KexiDB::Field *KexiTableEdit::field() const
+{
+    return m_column->field();
+}
+
+KexiDB::QueryColumnInfo *KexiTableEdit::columnInfo() const
+{
+    return m_column->columnInfo();
+}
+
+void KexiTableEdit::setColumnInfo(KexiDB::QueryColumnInfo *)
+{
+}
+
+KexiDB::TableViewColumn *KexiTableEdit::column() const
+{
+    return m_column;
+}
+
+QWidget* KexiTableEdit::widget()
+{
+    return m_view;
+}
+
+void KexiTableEdit::hideWidget()
+{
+    hide();
+}
+
+void KexiTableEdit::showWidget()
+{
+    show();
+}
+
+bool KexiTableEdit::usesSelectedTextColor() const
+{
+    return m_usesSelectedTextColor;
+}
+
+int KexiTableEdit::leftMargin() const
+{
+    return m_leftMargin;
+}
+
+bool KexiTableEdit::handleKeyPress(QKeyEvent* ke, bool editorActive)
+{
+    Q_UNUSED(ke);
+    Q_UNUSED(editorActive);
+    return false;
+}
+
+bool KexiTableEdit::handleDoubleClick()
+{
+    return false;
+}
+
+QSize KexiTableEdit::totalSize() const
+{
+    return QWidget::size();
+}
+
+void KexiTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+{
+    Q_UNUSED(schema);
+}
+
 KexiDB::Field *KexiTableEdit::displayedField() const
 {
     if (m_column->visibleLookupColumnInfo())
@@ -100,8 +166,7 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 void KexiTableEdit::moveChild(QWidget * child, int x, int y)
 {
 #ifndef KEXI_MOBILE
-    if (m_scrollView)
-        m_scrollView->moveChild(child, x, y);
+    child->move(x, y);
 #endif
 }
 
@@ -204,8 +269,9 @@ int KexiTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)
 void KexiTableEdit::repaintRelatedCell()
 {
 #ifndef KEXI_MOBILE
-    if (dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView))
-        dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
+    if (dynamic_cast<KexiDataAwareObjectInterface*>(parentWidget())) {
+        dynamic_cast<KexiDataAwareObjectInterface*>(parentWidget())->updateCurrentCell();
+    }
 #endif
 }
 

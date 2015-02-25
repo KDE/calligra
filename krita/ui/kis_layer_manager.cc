@@ -30,7 +30,7 @@
 
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kfilewidget.h>
 #include <kurl.h>
 #include <kdiroperator.h>
@@ -279,41 +279,45 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 }
 
 
-void KisLayerManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
+void KisLayerManager::setup(KisActionManager* actionManager)
 {
-    m_imageFlatten  = new KisAction(i18n("&Flatten image"), this);
-    actionManager->addAction("flatten_image", m_imageFlatten, actionCollection);
+    m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
+    m_imageFlatten->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("flatten_image", m_imageFlatten);
     m_imageFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
-    m_imageMergeLayer  = new KisAction(i18n("&Merge with Layer Below"), this);
-    actionManager->addAction("merge_layer", m_imageMergeLayer, actionCollection);
+    m_imageMergeLayer = new KisAction(i18n("&Merge with Layer Below"), this);
+    m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("merge_layer", m_imageMergeLayer);
     m_imageMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_flattenLayer  = new KisAction(i18n("&Flatten Layer"), this);
-    actionManager->addAction("flatten_layer", m_flattenLayer, actionCollection);
+    m_flattenLayer = new KisAction(i18n("&Flatten Layer"), this);
+    m_flattenLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
     KisAction * action = new KisAction(i18n("Rename current layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("RenameCurrentLayer", action, actionCollection);
+    actionManager->addAction("RenameCurrentLayer", action);
     action->setShortcut(KShortcut(Qt::Key_F2));
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
-    m_rasterizeLayer  = new KisAction(i18n("Rasterize Layer"), this);
+    m_rasterizeLayer = new KisAction(i18n("Rasterize Layer"), this);
     m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("rasterize_layer", m_rasterizeLayer, actionCollection);
+    actionManager->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
     m_groupLayersSave = new KisAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
-    actionManager->addAction("save_groups_as_images", m_groupLayersSave, actionCollection);
+    m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
-    m_imageResizeToLayer  = new KisAction(i18n("Size Canvas to Size of Current Layer"), this);
+    m_imageResizeToLayer = new KisAction(i18n("Trim to Current Layer"), this);
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer, actionCollection);
+    actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 }
 
@@ -344,7 +348,15 @@ void KisLayerManager::imageResizeToActiveLayer()
     KisImageWSP image = m_view->image();
 
     if (image && (layer = activeLayer())) {
-        image->cropImage(layer->exactBounds());
+        QRect cropRect = layer->projection()->nonDefaultPixelArea();
+        if (!cropRect.isEmpty()) {
+            image->cropImage(cropRect);
+        } else {
+            m_view->showFloatingMessage(
+                i18nc("floating message in layer manager",
+                      "Layer is empty "),
+                QIcon(), 2000, KisFloatingMessage::Low);
+        }
     }
 }
 
@@ -366,7 +378,7 @@ void KisLayerManager::layerProperties()
 
 
         KisSafeFilterConfigurationSP configBefore(alayer->filter());
-        Q_ASSERT(configBefore);
+        KIS_ASSERT_RECOVER_RETURN(configBefore);
         QString xmlBefore = configBefore->toXML();
 
 
@@ -380,7 +392,7 @@ void KisLayerManager::layerProperties()
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                    = new KisChangeFilterCmd(alayer,
+                   = new KisChangeFilterCmd(alayer,
                                              configBefore->name(),
                                              xmlBefore,
                                              configAfter->name(),
@@ -423,7 +435,7 @@ void KisLayerManager::layerProperties()
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                    = new KisChangeFilterCmd(alayer,
+                   = new KisChangeFilterCmd(alayer,
                                              configBefore->name(),
                                              xmlBefore,
                                              configAfter->name(),
@@ -453,7 +465,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     if (!image) return;
 
     KisPaintDeviceSP srcDevice =
-        source->paintDevice() ? source->paintDevice() : source->projection();
+        source->paintDevice() ? source->projection() : source->original();
 
     if (!srcDevice) return;
 
@@ -550,13 +562,9 @@ void KisLayerManager::addShapeLayer(KisNodeSP activeNode)
     if (!m_view->document()) return;
 
     KisImageWSP image = m_view->image();
-    KisShapeLayerSP layer = new KisShapeLayer(0, m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+    KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
 
     addLayerCommon(activeNode, layer);
-
-    KoShapeContainer *parentContainer =
-        dynamic_cast<KoShapeContainer*>(m_view->document()->shapeForNode(static_cast<KisNode*>(layer.data())->parent()));
-    static_cast<KoShapeContainer*>(layer.data())->setParent(parentContainer);
 }
 
 void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
@@ -576,11 +584,13 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
     // when it is not needed anymore
     previewDevice = 0;
 
-    if (dlg.exec() != QDialog::Accepted) {
+    if (dlg.exec() != QDialog::Accepted || adjl->filter().isNull()) {
+        // XXX: add messagebox warning if there's no filter set!
         m_commandsAdapter->undoLastCommand();
     } else {
         adjl->setName(dlg.layerName());
     }
+
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,
@@ -628,7 +638,9 @@ void KisLayerManager::layerDuplicate()
     if (dup) {
         activateLayer(dup);
     } else {
-        KMessageBox::error(m_view->mainWindow(), i18n("Could not add layer to image."), i18n("Layer Error"));
+        QMessageBox::critical(m_view->mainWindow(),
+                              i18nc("@title:window", "Krita"),
+                              i18n("Could not add layer to image."));
     }
 }
 
@@ -713,13 +725,13 @@ void KisLayerManager::flattenImage()
         bool doIt = true;
 
         if (image->nHiddenLayers() > 0) {
-            int answer = KMessageBox::warningYesNo(m_view->mainWindow(),
-                                                   i18n("The image contains hidden layers that will be lost."),
-                                                   i18n("Flatten Image"),
-                                                   KGuiItem(i18n("&Flatten Image")),
-                                                   KStandardGuiItem::cancel());
+            int answer = QMessageBox::warning(m_view->mainWindow(),
+                                              i18nc("@title:window", "Flatten Image"),
+                                              i18n("The image contains hidden layers that will be lost. Do you want to flatten the image?"),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::No);
 
-            if (answer != KMessageBox::Yes) {
+            if (answer != QMessageBox::Yes) {
                 doIt = false;
             }
         }
@@ -878,7 +890,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
         QString fileName = dlg.fileName();
 
         if(fileName.isEmpty()){
-            KMessageBox::error(m_view->mainWindow(), i18n("No file name specified."), i18n("No file specified"));
+            QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
             return;
         }
 

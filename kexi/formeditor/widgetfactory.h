@@ -156,7 +156,7 @@ public:
     };
     Q_DECLARE_FLAGS(CreateWidgetOptions, CreateWidgetOption)
 
-    WidgetFactory(QObject *parent, const char *name);
+    explicit WidgetFactory(QObject *parent, const char *name = 0);
     virtual ~WidgetFactory();
 
     /*! Adds a new class described by \a w. */

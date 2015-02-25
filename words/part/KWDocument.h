@@ -43,6 +43,7 @@
 class KWView;
 class KWPage;
 class KWFrameSet;
+class KWFrame;
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
@@ -190,8 +191,8 @@ public:
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
 
-    /// find the frame closest to the given shape or return 0
-    KWFrame *findClosestFrame(KoShape *shape) const;
+    /// find the textshape closest to the given shape or return 0
+    KoShape *findTargetTextShape(KoShape *shape) const;
 
     KoShapeAnchor *anchorOfShape(KoShape *shape) const;
 
@@ -239,12 +240,6 @@ signals:
     /// emitted whenever a shape is added.
     void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
-    /// emitted whenever an annotation shape is added.
-    void annotationShapeAdded(bool);
-
-    /// emitted whenever an annotation shape is removed
-    void annotationShapeRemoved(KoShape *);
-
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
 
@@ -252,9 +247,9 @@ signals:
     void resourceChanged(int key, const QVariant &value);
 
 private slots:
-    /// Frame maintenance on already registered framesets
-    void addFrame(KWFrame *frame);
-    void removeFrame(KWFrame *frame);
+    /// Shape maintenance on already registered framesets
+    void addSequencedShape(KoShape *shape);
+    void removeSequencedShape(KoShape *shape);
     /// Called after the constructor figures out there is an install problem.
     void mainTextFrameSetLayoutDone();
 

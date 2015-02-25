@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Plan</name>
+  <name xml:lang="bs">Plan</name>
   <name xml:lang="ca">Plan</name>
   <name xml:lang="cs">Plan</name>
   <name xml:lang="da">Plan</name>
@@ -23,6 +24,7 @@
   <name xml:lang="uk">Plan</name>
   <name xml:lang="x-test">xxPlanxx</name>
   <summary>Project Management</summary>
+  <summary xml:lang="bs">Upravljanje projektom</summary>
   <summary xml:lang="ca">Gestió de projectes</summary>
   <summary xml:lang="cs">Správa projektů</summary>
   <summary xml:lang="de">Projektverwaltung</summary>
@@ -44,6 +46,7 @@
     <p>
       Plan is a project management application. It is intended for managing moderately large projects with multiple resources.
     </p>
+    <p xml:lang="bs">Plan je program za upravljanje projektima. Namijenjen je za upravljanje umjereno velikim projektima sa više resursa.</p>
     <p xml:lang="ca">El Plan és una aplicació de gestió de projectes. Està pensat per gestionar projectes moderadament grans amb múltiples recursos.</p>
     <p xml:lang="en-GB">Plan is a project management application. It is intended for managing moderately large projects with multiple resources.</p>
     <p xml:lang="es">Plan es una aplicación para gestionar proyectos. Está enfocada a la gestión de proyectos moderadamente grandes con varios recursos.</p>
@@ -60,6 +63,7 @@
     <p xml:lang="uk">Plan — програма для керування проектами. Її призначено для керування помірно великими проектами з декількома ресурсами або виконавцями.</p>
     <p xml:lang="x-test">xxPlan is a project management application. It is intended for managing moderately large projects with multiple resources.xx</p>
     <p>Features:</p>
+    <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
@@ -79,6 +83,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Multiple views: Gant Charts, Resource View, Accounts View</li>
+      <li xml:lang="bs">Višestruki pogledi: Gantovi dijagrami, pogled resursa, pogled računa</li>
       <li xml:lang="ca">Vistes múltiples: Diagrames de Gant, vista de recursos, vista de comptes</li>
       <li xml:lang="de">Mehrere Ansichten: Gant-Diagramme, Ressourcen-Ansicht und Kontenansicht</li>
       <li xml:lang="en-GB">Multiple views: Gant Charts, Resource View, Accounts View</li>
@@ -96,6 +101,7 @@
       <li xml:lang="uk">Декілька режимів перегляду: діаграми Ґанта, перегляд виконавців, перегляд рахунків.</li>
       <li xml:lang="x-test">xxMultiple views: Gant Charts, Resource View, Accounts Viewxx</li>
       <li>Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li xml:lang="bs">Koristi standardne strukture: Struktura prekida rada (WBS), Struktura prekida resursa (RBS), Struktura prekida troška (CBS)</li>
       <li xml:lang="ca">Usa estructures estàndard: Estructura de descomposició de treballs (WBS), Estructura de descomposició de recursos (RBS), Estructura de descomposició de costos (CBS)</li>
       <li xml:lang="en-GB">Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="es">Utiliza estructuras estándar: estructura de desglose del trabajo (WBS), estructura de desglose de los recursos (RBS), estructura de desglose de los costes (CBS)</li>
@@ -111,6 +117,7 @@
       <li xml:lang="uk">Використання стандартних структур: структури рознарядки робіт (СРР або WBS), структури розподілу вартості (СРВ або CBS) та структури розподілу ресурсів (СРР або RBS).</li>
       <li xml:lang="x-test">xxUses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)xx</li>
       <li>Configurable level of detail on Gantt Chart</li>
+      <li xml:lang="bs">Konfigurabilan nivo detalja na Gantt Chart</li>
       <li xml:lang="ca">Es pot configurar el nivell de detall en el diagrama de Gantt</li>
       <li xml:lang="en-GB">Configurable level of detail on Gantt Chart</li>
       <li xml:lang="es">Nivel de detalles configurable en el diagrama de Gantt</li>
@@ -127,6 +134,7 @@
       <li xml:lang="uk">Налаштовуваний рівень деталізації у діаграмах Ґанта.</li>
       <li xml:lang="x-test">xxConfigurable level of detail on Gantt Chartxx</li>
       <li>Supports Summarytasks, Tasks, and milestones</li>
+      <li xml:lang="bs">Podržava rezime zadataka, zadatke i prekretnice</li>
       <li xml:lang="ca">Permet resums de tasques, tasques i fites</li>
       <li xml:lang="en-GB">Supports Summarytasks, Tasks, and milestones</li>
       <li xml:lang="es">Soporta tareas de resumen, tareas e hitos</li>
@@ -142,6 +150,7 @@
       <li xml:lang="uk">Підтримка підсумкових завдань, завдань та етапів.</li>
       <li xml:lang="x-test">xxSupports Summarytasks, Tasks, and milestonesxx</li>
       <li>Configurable Scheduling Constraints</li>
+      <li xml:lang="bs">Konfigurabilna ograničenja rasporeda</li>
       <li xml:lang="ca">Es poden configurar restriccions de planificació</li>
       <li xml:lang="en-GB">Configurable Scheduling Constraints</li>
       <li xml:lang="es">Restricciones de planificación configurables</li>

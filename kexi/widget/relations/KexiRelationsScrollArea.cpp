@@ -72,7 +72,7 @@ public:
 class KexiRelationsScrollAreaWidget : public QWidget
 {
 public:
-    KexiRelationsScrollAreaWidget(KexiRelationsScrollArea* parent);
+    explicit KexiRelationsScrollAreaWidget(KexiRelationsScrollArea* parent);
     ~KexiRelationsScrollAreaWidget();
 
 protected:

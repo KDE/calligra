@@ -44,8 +44,7 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
 {
     d->startCell = Cell();
 
-    //const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
+    const QPointF position = documentPos;
     Sheet *const sheet = this->selection()->activeSheet();
     Selection *const selection = this->selection();
 

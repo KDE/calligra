@@ -261,7 +261,7 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
 class ScrollArea : public QScrollArea
 {
 public:
-    ScrollArea(QWidget *parent = 0) : QScrollArea(parent)
+    explicit ScrollArea(QWidget *parent = 0) : QScrollArea(parent)
     {
         setFrameShape(QFrame::NoFrame);
         setBackgroundRole(QPalette::Base);
@@ -361,7 +361,7 @@ protected:
 class KexiWelcomeStatusBar::Private
 {
 public:
-    Private(KexiWelcomeStatusBar* _q)
+    explicit Private(KexiWelcomeStatusBar* _q)
      : statusWidget(0), helpAction(0), shareAction(0), cancelAction(0),
        q(_q)
     {

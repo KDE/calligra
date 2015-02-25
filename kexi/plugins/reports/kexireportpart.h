@@ -56,7 +56,7 @@ public:
     class TempData : public KexiWindowData
     {
     public:
-        TempData(QObject* parent);
+        explicit TempData(QObject* parent);
         QDomElement reportDefinition;
         QDomElement connectionDefinition;
 

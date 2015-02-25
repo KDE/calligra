@@ -30,7 +30,7 @@
 class QTextDocument;
 class KWPageManager;
 class KWDocument;
-class KWRootAreaProvider;
+class KWRootAreaProviderBase;
 class KWTextFrame;
 
 /**
@@ -58,7 +58,7 @@ public:
     }
 
     /// return the rootAreaProvider that is responsible for providing rootArea's to the KoTextDocumentLayout for this frameset.
-    KWRootAreaProvider *rootAreaProvider() const {
+    KWRootAreaProviderBase *rootAreaProvider() const {
         return m_rootAreaProvider;
     }
 
@@ -78,7 +78,8 @@ protected:
     friend class TestTextFrameSorting;
     friend class TestTextFrameManagement;
 
-    virtual void setupFrame(KWFrame *frame);
+    virtual void setupShape(KoShape *shape);
+    virtual void cleanupShape(KoShape *shape);
 
 private:
     void setupDocument();
@@ -89,7 +90,7 @@ private:
     KWPageManager *m_pageManager;
     KWDocument *m_wordsDocument;
     KWPageStyle m_pageStyle; // the page Style this frameset is associated with.
-    KWRootAreaProvider *m_rootAreaProvider;
+    KWRootAreaProviderBase *m_rootAreaProvider;
 };
 
 #endif

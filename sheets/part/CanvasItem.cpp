@@ -221,7 +221,7 @@ void CanvasItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event)
 
 void CanvasItem::dragMoveEvent(QGraphicsSceneDragDropEvent* event)
 {
-    if (CanvasBase::dragMove(event->mimeData(), event->pos())) {
+    if (CanvasBase::dragMove(event->mimeData(), event->pos(), event->source())) {
         event->acceptProposedAction();
     } else {
         event->ignore();
@@ -235,7 +235,7 @@ void CanvasItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *)
 
 void CanvasItem::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    if (CanvasBase::drop(event->mimeData(), event->pos())) {
+    if (CanvasBase::drop(event->mimeData(), event->pos(), event->source())) {
         event->setAccepted(true);
     } else {
         event->ignore();

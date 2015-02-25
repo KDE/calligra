@@ -80,7 +80,7 @@ public:
 class KexiView::Private
 {
 public:
-    Private(KexiView *qq)
+    explicit Private(KexiView *qq)
             : q(qq)
             , viewWidget(0)
             , parentView(0)
@@ -236,7 +236,7 @@ KexiView::KexiView(QWidget *parent)
     installEventFilter(this);
 
     d->mainLyr = new QVBoxLayout(this);
-    d->mainLyr->setContentsMargins(0, KDialog::marginHint() / 3, 0, 0);
+    d->mainLyr->setContentsMargins(0, 0, 0, 0);
 
     if (parentWidget()->inherits("KexiWindow")) {
         d->topBarHWidget = new QWidget(this);
@@ -245,7 +245,7 @@ KexiView::KexiView(QWidget *parent)
         QHBoxLayout *topBarHLyr = new QHBoxLayout(d->topBarHWidget); //needed unless KexiFlowLayout properly handles contents margins
         topBarHLyr->setContentsMargins(0, 0, 0, 0);
         topBarHLyr->addSpacing(KDialog::marginHint() / 2);
-        d->topBarLyr = new KexiFlowLayout(topBarHLyr, KDialog::marginHint() / 2, 2);
+        d->topBarLyr = new KexiFlowLayout(topBarHLyr, 0, 2);
 
         const bool userMode = KexiMainWindowIface::global()->userMode();
 
@@ -363,7 +363,7 @@ KoProperty::Set *KexiView::propertySet()
 void KexiView::propertySetSwitched()
 {
     if (window()) {
-        KexiMainWindowIface::global()->propertySetSwitched(window(), false/*force*/, 
+        KexiMainWindowIface::global()->propertySetSwitched(window(), false/*force*/,
             true/*preservePrevSelection*/, d->sortedProperties);
     }
 }
@@ -762,6 +762,11 @@ QString KexiView::defaultIconName() const
 void KexiView::setDefaultIconName(const QString& iconName)
 {
     d->defaultIconName = iconName;
+}
+
+QList<QVariant> KexiView::currentParameters() const
+{
+    return QList<QVariant>();
 }
 
 #include "KexiView.moc"

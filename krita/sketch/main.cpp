@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -48,16 +48,29 @@
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
+#include <calligraversion.h>
+#include <calligragitversion.h>
 
 int main( int argc, char** argv )
 {
+    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString version;
+
+
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+#else
+    version = calligraVersion;
+#endif
+
     KAboutData aboutData("kritasketch",
                          "krita",
                          ki18n("Krita Sketch"),
                          "0.1",
                          ki18n("Krita Sketch: Painting on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-2014 The Krita team and KO GmbH.\n"),
+                         ki18n("(c) 1999-%1 The Krita team.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
                          "http://www.krita.org",
                          "submit@bugs.kde.org");
@@ -90,7 +103,7 @@ int main( int argc, char** argv )
 #ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
+    //QMessageBox::information(0, i18nc("@title:window", "Krita sketch", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }

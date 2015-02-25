@@ -1845,60 +1845,49 @@ void View::calcStatusBarOp()
     Sheet * sheet = activeSheet();
     ValueCalc* calc = doc()->map()->calc();
     Value val;
+    QString prefix = "";
+
     MethodOfCalc tmpMethod = doc()->map()->settings()->getTypeOfCalc();
     if (sheet && tmpMethod != NoneCalc) {
         Value range = sheet->cellStorage()->valueRegion(*d->selection);
         switch (tmpMethod) {
         case SumOfNumber:
             val = calc->sum(range);
+            prefix = i18n("Sum: ");
             break;
         case Average:
             val = calc->avg(range);
+            prefix = i18n("Average: ");
             break;
         case Min:
             val = calc->min(range);
+            prefix = i18n("Min: ");
             break;
         case Max:
             val = calc->max(range);
+            prefix = i18n("Max: ");
             break;
         case CountA:
             val = Value(calc->count(range));
+            prefix = i18n("Count: ");
             break;
         case Count:
             val = Value(calc->count(range, false));
+            prefix = i18n("CountA: ");
         case NoneCalc:
             break;
         default:
             break;
         }
-
+        if ((range.columns() > 1) || (range.rows() > 1)) {
+            QString size = i18n("%1x%2").arg(range.columns()).arg(range.rows());
+            prefix = prefix.size() ? size + ", " + prefix : size;
+        }
     }
 
     QString res = doc()->map()->converter()->asString(val).asString();
     QString tmp;
-    switch (tmpMethod) {
-    case SumOfNumber:
-        tmp = i18n("Sum: ") + res;
-        break;
-    case Average:
-        tmp = i18n("Average: ") + res;
-        break;
-    case Min:
-        tmp = i18n("Min: ") + res;
-        break;
-    case Max:
-        tmp = i18n("Max: ") + res;
-        break;
-    case Count:
-        tmp = i18n("Count: ") + res;
-        break;
-    case CountA:
-        tmp = i18n("CountA: ") + res;
-        break;
-    case NoneCalc:
-        tmp = "";
-        break;
-    }
+    if (res.length()) tmp = prefix + res;
 
     if (d->calcLabel)
         d->calcLabel->setText(QString(' ') + tmp + ' ');

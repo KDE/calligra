@@ -42,7 +42,7 @@ public:
         Position,
         Expanded
     };
-    explicit CQTextDocumentNotesModel(QObject* parent);
+    explicit CQTextDocumentNotesModel(QObject* parent = 0);
     virtual ~CQTextDocumentNotesModel();
 
     virtual QVariant data(const QModelIndex& index, int role) const;

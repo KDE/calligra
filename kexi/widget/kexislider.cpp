@@ -41,7 +41,7 @@ public:
 class Slider : public QSlider
 {
 public:
-    Slider(QWidget *parent) :
+    explicit Slider(QWidget *parent) :
         QSlider(parent)
     {
 

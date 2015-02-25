@@ -89,13 +89,14 @@ public:
      */
     QString dateTimeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
 
-protected:
     /**
      * Determines the formatting type that should be used to format this value
      * in a cell with a given format type
      * \param formatType the value format, e.g. number, date
      */
     Format::Type determineFormatting(const Value& value, Format::Type formatType);
+
+protected:
 
     /**
      * Creates a number format.

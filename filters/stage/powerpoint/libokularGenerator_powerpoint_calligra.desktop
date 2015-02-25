@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft PowerPoint Presentation
+Name[bs]=Microsoft PowerPoint prezentacija
 Name[ca]=Presentacions del Microsoft PowerPoint
 Name[cs]=Prezentace Microsoft PowerPoint
 Name[da]=Microsoft Powerpoint-præsentation
@@ -21,6 +22,7 @@ Name[sv]=Microsoft Powerpoint-presentation
 Name[uk]=Презентація Microsoft PowerPoint
 Name[x-test]=xxMicrosoft PowerPoint Presentationxx
 Comment=PPT for Okular
+Comment[bs]=PPT za Okular
 Comment[ca]=PPT per a l'Okular
 Comment[cs]=PPT pro Okular
 Comment[da]=PPT til Okular
@@ -39,6 +41,7 @@ Comment[pt]=PPT para o Okular
 Comment[pt_BR]=PPT para o Okular
 Comment[sk]=PPT pre Okular
 Comment[sv]=PPT för Okular
+Comment[tr]=Okular için PPT
 Comment[uk]=PPT для Okular
 Comment[x-test]=xxPPT for Okularxx
 ServiceTypes=okular/Generator

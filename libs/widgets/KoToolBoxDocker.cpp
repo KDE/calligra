@@ -30,7 +30,6 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(toolBox);
-    setWindowTitle(i18n("Tools"));
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
@@ -38,20 +37,18 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
             this, SLOT(updateFloating(bool)));
     KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
     titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
-    titleBar->setToolTip(windowTitle());
+    titleBar->setToolTip(i18n("Tools"));
     setTitleBarWidget(titleBar);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
-    m_toolBox->setCanvas(canvas);
 }
 
 void KoToolBoxDocker::unsetCanvas()
 {
     setEnabled(false);
-    m_toolBox->unsetCanvas();
 }
 
 void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)

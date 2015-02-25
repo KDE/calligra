@@ -49,7 +49,7 @@
 class KexiWindow::Private
 {
 public:
-    Private(KexiWindow *window)
+    explicit Private(KexiWindow *window)
             : win(window)
             , schemaData(0)
             , schemaDataOwned(false)

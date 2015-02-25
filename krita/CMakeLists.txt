@@ -28,7 +28,8 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     if (USE_BREAKPAD)
         include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
     endif (USE_BREAKPAD)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000") # for g'mic...
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:16777216") # for g'mic...
+    set(CMAKE_CXX_STACK_SIZE "999999999")
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 if(NOT WIN32)
@@ -92,6 +93,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
     ${CMAKE_SOURCE_DIR}/krita/libbrush
+    ${CMAKE_SOURCE_DIR}/krita/libcolor
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/ui/canvas
     ${CMAKE_SOURCE_DIR}/krita/ui/tool
@@ -127,11 +129,13 @@ endif(HAVE_OPENGL)
 
 add_subdirectory( image )
 add_subdirectory( libbrush )
+add_subdirectory( libcolor )
 add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
+add_subdirectory( integration )
 
 if (WIN32 AND USE_BREAKPAD)
         add_subdirectory( crashreporter )
@@ -141,20 +145,17 @@ if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
 
-set(kritapart_PART_SRCS krita_part_init.cc)
-kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
-target_link_libraries(kritapart kritaui)
-install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
-
-set(krita_KDEINIT_SRCS main.cc)
+set(krita_SRCS main.cc)
 
 if(WIN32 AND USE_BREAKPAD)
-    set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
+    set(krita_SRCS ${krita_SRCS} kis_crash_handler.cpp)
     set(BREAKPAD_LIBS breakpad)
 endif(WIN32 AND USE_BREAKPAD)
 
-kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
-kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
+kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+
+kde4_add_executable(krita ${krita_SRCS})
+target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
 
 if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -162,17 +163,13 @@ if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
-target_link_libraries(krita kdeinit_krita kritaui)
-
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
-install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
-#    add_subdirectory(sketch)
+    add_subdirectory(sketch)
 #    add_subdirectory(gemini)
 endif (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)

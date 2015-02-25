@@ -735,7 +735,7 @@ void PivotMain::clean(Sheet* sheet)
   for(int i=d->mainWidget.Rows->count()+1;i<=lastRow+1;i++){
     int temp=0;
     for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-	if(!conv->toInteger(Cell(sheet,j,i).value())==0){
+    if(conv->toInteger(Cell(sheet,j,i).value()) != 0){
 	  temp=1;
 	  break;
 	}
@@ -754,7 +754,7 @@ void PivotMain::clean(Sheet* sheet)
   for(int i=d->mainWidget.Columns->count()+1;i<=lastColumn;i++){
     int temp=0;
     for(int j=d->mainWidget.Rows->count()+1;j<=lastRow;j++){
-	if(!conv->toInteger(Cell(sheet,i,j).value())==0){
+    if(conv->toInteger(Cell(sheet,i,j).value()) != 0){
 	  temp=1;
 	  break;
 	}

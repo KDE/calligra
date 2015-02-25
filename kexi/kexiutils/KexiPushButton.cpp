@@ -25,7 +25,7 @@
 class KexiPushButtonPrivate
 {
 public:
-    KexiPushButtonPrivate(KexiPushButton *qq)
+    explicit KexiPushButtonPrivate(KexiPushButton *qq)
         : hyperlinkType(KexiPushButton::NoHyperlink)
         , hyperlinkTool(KexiUtils::OpenHyperlinkOptions::DefaultHyperlinkTool)
         , executable(false)

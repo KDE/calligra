@@ -42,9 +42,9 @@ class MessageHandler;
  * internally by application when needed. Example of such part is Relations Window.
  * The internal part instance is unique and has no explicitly stored data.
  * Parts may be able to create widgets or/and dialogs, depending on implementation
- * (createWidgetInstance(), createDialogInstance()).
- * Parts can have unique flag set for dialogs (true by default)
- * - then a dialog created by createDialogInstance() is unique.
+ * (createWidgetInstance(), createKexiWindowInstance(), createModalDialogInstance()).
+ * Parts can have unique flag set for windows (true by default)
+ * - then a dialog created by createModalDialogInstance() is unique.
  */
 class KEXICORE_EXPORT KexiInternalPart : public KexiPart::PartBase
 {
@@ -71,18 +71,18 @@ public:
                                          KexiDB::MessageHandler *msgHdr,
                                          QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
-    /*! Creates a new dialog instance. If such instance already exists,
-     and is unique (see uniqueDialog()) it is just returned.
-     The part knows about destroying its dialog instance, (if it is uinque),
-     so on another call the dialog will be created again.
+    /*! Creates a new KexiWindow instance. If such instance already exists,
+     and is unique (see uniqueWindow()) it is just returned.
+     The part knows about destroying its window instance (if it is uinque),
+     so on another call the window will be created again.
      \a msgHdr is a message handler for displaying error messages.
-     The dialog is assigned to the main window,
+     The window is assigned to the main window,
      and \a objName name is set. */
     static KexiWindow* createKexiWindowInstance(const QString &className,
             KexiDB::MessageHandler *msgHdr, const char *objName = 0);
 
     /*! Creates a new modal dialog instance (QDialog or a subclass).
-     If such instance already exists, and is unique (see uniqueDialog())
+     If such instance already exists, and is unique (see uniqueWindow())
      it is just returned.
      \a dialogClass is a pseudo class used in case when the part offers more
      than one dialog type.
@@ -111,7 +111,7 @@ public:
     /*! \return internal part pointed by \a className. Shouldn't be usable. */
     static KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const QString &className);
 
-    /*! \return true if the part can create only one (unique) dialog. */
+    /*! \return true if the part can create only one (unique) window. */
     bool uniqueWindow() const;
 
     void setUniqueWindow(bool set);

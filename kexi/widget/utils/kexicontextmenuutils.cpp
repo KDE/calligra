@@ -37,7 +37,7 @@
 class KexiImageContextMenu::Private
 {
 public:
-    Private(QWidget *parent)
+    explicit Private(QWidget *parent)
             : actionCollection(parent) {
     }
 

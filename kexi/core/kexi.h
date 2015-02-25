@@ -143,10 +143,32 @@ protected:
     KexiDB::MessageHandler* msgHandler;
 };
 
+/*! \return icon name for default file-based driver
+ (typically icon for something like "application/x-kexiproject-sqlite").
+ @see KexiDB::defaultFileBasedDriverMimeType() */
+KEXICORE_EXPORT QString defaultFileBasedDriverIconName();
+
+/*! \return icon for default file-based driver
+ (typically icon for something like "application/x-kexiproject-sqlite").
+ If contains special workaround to properly load mimetype icon according to current theme,
+ at least needed for Breeze.
+ @see KexiDB::defaultFileBasedDriverIconName() */
+KEXICORE_EXPORT KIcon defaultFileBasedDriverIcon();
+
+/*! \return icon name for database servers. */
+KEXICORE_EXPORT QString serverIconName();
+
+/*! \return icon for database servers. */
+KEXICORE_EXPORT KIcon serverIcon();
+
 }//namespace Kexi
 
-//! Icon name for database servers
-#define KEXI_DATABASE_SERVER_ICON_NAME (koIconName("network-server-database"))
+//! @return icon name as understood by Kexi. Icon theme support is improved this way.
+KEXICORE_EXPORT QString KexiIconName(const QString &baseName);
+
+//! @return icon as understood by Kexi. Icon theme support is improved this way.
+KEXICORE_EXPORT KIcon KexiIcon(const QString &baseName);
+
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 

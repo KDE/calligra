@@ -25,6 +25,7 @@
 #include <kexiutils/identifier.h>
 #include <db/msghandler.h>
 #include <db/drivermanager.h>
+#include <db/utils.h>
 
 #include <KoIcon.h>
 
@@ -38,6 +39,8 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <KIconTheme>
+#include <KMimeType>
 
 using namespace Kexi;
 
@@ -274,7 +277,7 @@ void ObjectStatus::append(const ObjectStatus& otherStatus)
 class ObjectStatusMessageHandler : public KexiDB::MessageHandler
 {
 public:
-    ObjectStatusMessageHandler(ObjectStatus *status)
+    explicit ObjectStatusMessageHandler(ObjectStatus *status)
             : KexiDB::MessageHandler()
             , m_status(status) {
     }
@@ -345,3 +348,55 @@ QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_
     label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     return label;
 }
+
+//--------------------------------------------------------------------------------
+
+static bool isSpecialIconTheme()
+{
+    const QString theme(KIconTheme::current().toLower());
+    return theme.contains(QLatin1String("breeze"))
+           || theme.contains(QLatin1String("highcontrast"));
+}
+
+QString KexiIconName(const QString &baseName)
+{
+    if (isSpecialIconTheme()) {
+        //! @todo use prefix based on KIconTheme::current()?
+        return QLatin1String("breeze-") + baseName;
+    }
+    return baseName;
+}
+
+KIcon KexiIcon(const QString &baseName)
+{
+    return KIcon(KexiIconName(baseName));
+}
+
+QString Kexi::defaultFileBasedDriverIconName()
+{
+    if (!isSpecialIconTheme()) {
+        KMimeType::Ptr mimeType(KMimeType::mimeType(
+                                    KexiDB::defaultFileBasedDriverMimeType()));
+        if (!mimeType.isNull()) {
+            return mimeType->iconName();
+        }
+        KexiDBWarn << KexiDB::defaultFileBasedDriverMimeType() << "mimetype not installed!";
+    }
+    return koIconName("breeze-kexi-file-database");
+}
+
+KIcon Kexi::defaultFileBasedDriverIcon()
+{
+    return KIcon(defaultFileBasedDriverIconName());
+}
+
+QString Kexi::serverIconName()
+{
+    return KexiIconName("network-server-database");
+}
+
+KIcon Kexi::serverIcon()
+{
+    return KIcon(serverIconName());
+}
+

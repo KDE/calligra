@@ -870,6 +870,7 @@ CellToolBase::~CellToolBase()
 {
     delete d->formulaDialog;
     delete d->popupListChoose;
+    delete d->cellEditor;
     qDeleteAll(d->popupMenuActions);
     qDeleteAll(actions());
     delete d;
@@ -1185,6 +1186,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
     return widgets;
 }
 
+// TODO: while this event sends the offset-adjusted position, the subsequent handleMouseMove calls do not. This means that they all contain the offset adjustment themselves, which is a needless duplication. Should be improved.
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 {
     // Get info about where the event occurred.
@@ -1193,14 +1195,14 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     // Autofilling or merging, if the selection handle was hit.
     if (SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
         if (event->button() == Qt::LeftButton)
-            return new AutoFillStrategy(this, event->point, event->modifiers());
+            return new AutoFillStrategy(this, position, event->modifiers());
         else if (event->button() == Qt::MidButton)
-            return new MergeStrategy(this, event->point, event->modifiers());
+            return new MergeStrategy(this, position, event->modifiers());
     }
 
     // Pasting with the middle mouse button.
     if (event->button() == Qt::MidButton) {
-        return new PasteStrategy(this, event->point, event->modifiers());
+        return new PasteStrategy(this, position, event->modifiers());
     }
 
     // Check, if the selected area was hit.
@@ -1263,19 +1265,23 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
                 url = cellView.testAnchor(sheetView, cell, position.x() - xpos, position.y() - ypos);
             }
             if (!url.isEmpty()) {
-                return new HyperlinkStrategy(this, event->point,
+                return new HyperlinkStrategy(this, position,
                                              event->modifiers(), url, cellView.textRect());
             }
         }
     }
 
-    // Drag & drop, if the selected area was hit.
-    const bool controlPressed = event->modifiers() & Qt::ControlModifier;
-    if (hitSelection && !controlPressed && !selection()->referenceSelectionMode()) {
-        return new DragAndDropStrategy(this, event->point, event->modifiers());
-    }
+    // Do we want to drag and drop the selection?
+    bool wantDragDrop = hitSelection;
+    if (event->modifiers() & Qt::ControlModifier) wantDragDrop = false;   // no drag&drop if Ctrl is pressed
+    QRect selRect = selection()->boundingRect();
+    // no drag&drop if it's a single cell, assume they want a selection
+    if ((selRect.width() <= 1) && (selRect.height() <= 1)) wantDragDrop = false;
+    if (selection()->referenceSelectionMode()) wantDragDrop = false;
+    if (wantDragDrop)
+        return new DragAndDropStrategy(this, position, event->modifiers());
 
-    return new SelectionStrategy(this, event->point, event->modifiers());
+    return new SelectionStrategy(this, position, event->modifiers());
 }
 
 void CellToolBase::selectionChanged(const Region& region)
@@ -2794,8 +2800,8 @@ void CellToolBase::insertFromDatabase()
 
     QStringList str = QSqlDatabase::drivers();
     if (str.isEmpty()) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("No database drivers available.  To use this feature you need "
-                           "to install the necessary Qt 3 database drivers."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("No database drivers available. To use this feature you need "
+                           "to install the necessary Qt database drivers."));
         return;
     }
 
@@ -3280,10 +3286,10 @@ Cell CellToolBase::findNextCell()
     int col = d->findPos.x();
     int row = d->findPos.y();
     int maxRow = sheet->cellStorage()->rows();
-    // kDebug() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
+//     kWarning() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
 
     if (d->directionValue == FindOption::Row) {
-        while (!cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0)) {
+        while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
             while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
                 cell = nextFindValidCell(col, row);
                 if (forw) ++col;
@@ -3299,11 +3305,11 @@ Cell CellToolBase::findNextCell()
                 col = d->findRightColumn;
                 --row;
             }
-            //kDebug() <<"next row:" << col << ',' << row;
+            //kWarning() <<"next row:" << col << ',' << row;
         }
     } else {
         while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
-            while (!cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0)) {
+            while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
                 cell = nextFindValidCell(col, row);
                 if (forw) ++row;
                 else --row;
@@ -3324,7 +3330,9 @@ Cell CellToolBase::findNextCell()
     // if (!cell)
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make d->findEnd(max, max) in that case...)
-    // kDebug() <<" returning" << cell;
+//    if (cell.isNull()) kWarning()<<"returning null"<<endl;
+//    else kWarning() <<" returning" << cell;
+
     return cell;
 }
 

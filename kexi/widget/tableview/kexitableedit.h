@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,10 +26,6 @@
 #include <db/tableviewdata.h>
 
 #include <QVariant>
-#ifndef KEXI_MOBILE
-#include <q3scrollview.h>
-#endif
-
 #include <QKeyEvent>
 #include <QEvent>
 
@@ -53,25 +49,19 @@ public:
 
     //! Implemented for KexiDataItemInterface.
     //! \return field information for this item
-    virtual KexiDB::Field *field() const {
-        return m_column->field();
-    }
+    virtual KexiDB::Field *field() const;
 
     /*! A rich field information for db-aware data.
      For not-db-aware data it is always 0 (use field() instead. */
-    virtual KexiDB::QueryColumnInfo *columnInfo() const {
-        return m_column->columnInfo();
-    }
+    virtual KexiDB::QueryColumnInfo *columnInfo() const;
 
     //! Implemented for KexiDataItemInterface.
     //! Does nothing because instead KexiDB::TableViewColumn is used to get field's schema.
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo *) { }
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *);
 
     //! \return column information for this item
     //! (extended information, comparing to field()).
-    inline KexiDB::TableViewColumn *column() const {
-        return m_column;
-    }
+    KexiDB::TableViewColumn *column() const;
 
     /*! \return displayed field. This is equal to field() in typical case but can return a different field
      definition if the column contains a lookup field. This distiction is especially used for
@@ -84,19 +74,13 @@ public:
     virtual void resize(int w, int h);
 
     /*! \return the view widget of this editor, e.g. line edit widget. */
-    virtual QWidget* widget() {
-        return m_view;
-    }
+    virtual QWidget* widget();
 
     /*! Hides item's widget, if available. */
-    inline virtual void hideWidget() {
-        hide();
-    }
+    virtual void hideWidget();
 
     /*! Shows item's widget, if available. */
-    inline virtual void showWidget() {
-        show();
-    }
+    virtual void showWidget();
 
     /*! Paints a border for the cell described by \a x, \a y, \a w, \a h on \a p painter.
      The cell's value is \a val (may be useful if you want to reimplement this method).
@@ -128,23 +112,20 @@ public:
      This flag is set in editor's constructor and checked in KexiTableView::paintCell().
      Depending on it, appropriate ("text" or "selected text" color is set for painter) before
      setupContents() is called. */
-    bool usesSelectedTextColor() const {
-        return m_usesSelectedTextColor;
-    }
+    bool usesSelectedTextColor() const;
 
     /*! For reimplementation.
      Paints selection's background using \a p. Most parameters are similar to these from
      setupContents(). */
     virtual void paintSelectionBackground(QPainter *p, bool focused, const QString& txt,
-                                          int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-                                          const QFontMetrics &fm, bool readOnly, bool fullRecordSelection);
+                                          int align, int x, int y_offset, int w, int h,
+                                          const QColor& fillColor, const QFontMetrics &fm,
+                                          bool readOnly, bool fullRecordSelection);
 
     /*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
      dropdown button at the right side. \return left margin's size;
      0 by default. For reimplementation.  */
-    int leftMargin() const {
-        return m_leftMargin;
-    }
+    int leftMargin() const;
 
     /*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
      dropdown button at the right side. THe dropdown button's width is counted only if \a focused is true.
@@ -155,16 +136,12 @@ public:
      For implementation: true should be returned if \a ke should be accepted.
      If \a editorActive is true, this editor is currently active, i.e. the table view is in edit mode.
      By default false is returned. */
-    virtual bool handleKeyPress(QKeyEvent* ke, bool editorActive) {
-        Q_UNUSED(ke); Q_UNUSED(editorActive); return false;
-    }
+    virtual bool handleKeyPress(QKeyEvent* ke, bool editorActive);
 
     /*! Handles double click request coming from the table view.
      \return true if it has been consumed.
      Reimplemented in KexiBlobTableEdit (to execute "insert file" action. */
-    virtual bool handleDoubleClick() {
-        return false;
-    }
+    virtual bool handleDoubleClick();
 
     /*! Handles copy action for value. The \a value is copied to clipboard in format appropriate
      for the editor's impementation, e.g. for image cell it can be a pixmap.
@@ -180,9 +157,7 @@ public:
     /*! \return total size of this editor, including any buttons, etc. (if present).
      Reimplement this if you want to return more appropriate size. This impelmentation just
      returns QWidget::size(). */
-    virtual QSize totalSize() const {
-        return QWidget::size();
-    }
+    virtual QSize totalSize() const;
 
     /*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit inside \a rect
      for a given font metrics \a fm.
@@ -196,9 +171,7 @@ public:
     /*! Created internal editor for this editor is needed. This method is only implemented
      in KexiComboBoxTableEdit since it's visible value differs from internal value,
      so a different KexiTableEdit object is used to displaying the data. */
-    virtual void createInternalEditor(KexiDB::QuerySchema& schema) {
-        Q_UNUSED(schema);
-    }
+    virtual void createInternalEditor(KexiDB::QuerySchema& schema);
 
 signals:
     void editRequested();
@@ -221,12 +194,10 @@ protected:
     KexiDB::TableViewColumn *m_column;
     int m_leftMargin;
     int m_rightMargin, m_rightMarginWhenFocused;
-#ifndef KEXI_MOBILE
-    Q3ScrollView* m_scrollView; //!< may be 0 if the parent is not a scrollview
-#endif
     bool m_usesSelectedTextColor; //!< set in ctor, @see usesSelectedTextColor()
 
 private:
+    //! @see widget()
     QWidget* m_view;
 };
 

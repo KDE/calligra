@@ -707,7 +707,6 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (!dstColorSpace) return;
-    if (*m_d->colorSpace == *dstColorSpace) return;
 
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
 
@@ -1491,6 +1490,15 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
+{
+    KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
+    }
+}
+
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
     if (m_d->scheduler) {
@@ -1595,7 +1603,7 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
-bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 {
     KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
     if (mask &&
@@ -1608,7 +1616,7 @@ bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
     KisNodeSP node = root->firstChild();
 
     while (node) {
-        if (checkMasksNeedConersion(node, bounds)) {
+        if (checkMasksNeedConversion(node, bounds)) {
             return true;
         }
 
@@ -1623,7 +1631,7 @@ void KisImage::setWrapAroundModePermitted(bool value)
     m_d->wrapAroundModePermitted = value;
 
     if (m_d->wrapAroundModePermitted &&
-        checkMasksNeedConersion(root(), bounds())) {
+        checkMasksNeedConversion(root(), bounds())) {
 
         KisProcessingApplicator applicator(this, root(),
                                            KisProcessingApplicator::RECURSIVE,

@@ -125,7 +125,7 @@ public:
 class KexiMenuWidgetPrivate // : public QWidgetPrivate
 {
 public:
-    KexiMenuWidgetPrivate(KexiMenuWidget *menu) : q(menu), itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
+    explicit KexiMenuWidgetPrivate(KexiMenuWidget *menu) : q(menu), itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
                       collapsibleSeparators(true), activationRecursionGuard(false), hasHadMouse(0), aboutToHide(0), motions(0),
                       currentAction(0),
                       scroll(0), eventLoop(0), /*tearoff(0),*/ /*tornoff(0),*/ /*tearoffHighlighted(0),*/

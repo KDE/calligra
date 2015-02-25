@@ -55,7 +55,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     tabWidget->setDocumentMode(true);
 
     m_fileSelectorWidget = new QWidget;
-    tabWidget->addTab(m_fileSelectorWidget, KIcon(KexiDB::defaultFileBasedDriverIconName()),
+    tabWidget->addTab(m_fileSelectorWidget, Kexi::defaultFileBasedDriverIcon(),
                       i18nc("@title:tab", "Projects Stored in File"));
     fileSelector = new KexiConnectionSelectorWidget(
         Kexi::connset(),
@@ -71,7 +71,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
             this, SLOT(next()));
                       
     m_connSelectorWidget = new QWidget;
-    tabWidget->addTab(m_connSelectorWidget, KIcon(KEXI_DATABASE_SERVER_ICON_NAME),
+    tabWidget->addTab(m_connSelectorWidget, Kexi::serverIcon(),
                       i18nc("@title:tab", "Projects Stored on Database Server"));
 
     setFocusWidget(tabWidget);
@@ -203,7 +203,7 @@ bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* dat
 class KexiOpenProjectAssistant::Private
 {
 public:
-    Private(KexiOpenProjectAssistant *qq)
+    explicit Private(KexiOpenProjectAssistant *qq)
      : q(qq)
     {
     }

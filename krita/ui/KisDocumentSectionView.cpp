@@ -128,6 +128,11 @@ void KisDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &
     }
 }
 
+void KisDocumentSectionView::updateNode(const QModelIndex &index)
+{
+    dataChanged(index, index);
+}
+
 bool KisDocumentSectionView::viewportEvent(QEvent *e)
 {
     if (model()) {
@@ -215,7 +220,7 @@ void KisDocumentSectionView::showContextMenu(const QPoint &globalPos, const QMod
 void KisDocumentSectionView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     QTreeView::currentChanged(current, previous);
-    if (current != previous /*&& current.isValid()*/) { //hack?
+    if (current != previous) {
         Q_ASSERT(!current.isValid() || current.model() == model());
         model()->setData(current, true, Model::ActiveRole);
     }

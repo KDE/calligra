@@ -247,7 +247,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     QMap<QString, QString> nativeNames;
     foreach(const QString& tableCaption, tables) {
         if (destDriver->isSystemObjectName(tableCaption)   //"kexi__objects", etc.
-                || tableCaption.toLower().startsWith("kexi__")) //tables at KexiProject level, e.g. "kexi__blobs"
+                || tableCaption.startsWith(QLatin1String("kexi__"), Qt::CaseInsensitive)) //tables at KexiProject level, e.g. "kexi__blobs"
             continue;
         // this is a non-KexiDB table: generate schema from native data source
         const QString tableIdentifier(KexiUtils::stringToIdentifier(tableCaption.toLower()));

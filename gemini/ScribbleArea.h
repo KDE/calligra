@@ -31,7 +31,7 @@ class ScribbleArea : public QDeclarativeItem
     Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
-    ScribbleArea(QDeclarativeItem* parent = 0);
+    explicit ScribbleArea(QDeclarativeItem* parent = 0);
     virtual ~ScribbleArea();
 
     Q_INVOKABLE void clear();

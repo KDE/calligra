@@ -132,8 +132,6 @@ public:
         insertRect.setBottomRight( QPoint(
             qMax(insertBegin.x(), end.x()) - 1,
             qMax(insertBegin.y(), end.y()) - 1) ); // minus 1 to make the size correct
-        QRegion region(oldInsertRect);
-        region.unite(insertRect);
         QRect toUpdate( oldInsertRect.united(insertRect) );
         toUpdate.setWidth(toUpdate.width()+1);
         toUpdate.setHeight(toUpdate.height()+1);
@@ -1255,6 +1253,22 @@ void Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             }
         }
     }
+}
+
+void Container::startChangingGeometryPropertyForSelectedWidget()
+{
+    ++d->idOfPropertyCommand;
+}
+
+void Container::setGeometryPropertyForSelectedWidget(const QRect &newGeometry)
+{
+    QWidget *w = d->form->selectedWidget();
+    if (!w) {
+        return;
+    }
+    d->form->addPropertyCommand(w->objectName().toLatin1(), w->geometry(),
+                                newGeometry, "geometry", Form::ExecuteCommand,
+                                d->idOfPropertyCommand);
 }
 
 void Container::stopInlineEditing()

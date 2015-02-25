@@ -149,7 +149,7 @@ public:
 
     protected:
         //! Constructs a handle based on \a item. Null handle is constructed for null \a item.
-        Handle(Item* item);
+        explicit Handle(Item* item);
     private:
         Item* m_item;
         friend class KexiBLOBBuffer;

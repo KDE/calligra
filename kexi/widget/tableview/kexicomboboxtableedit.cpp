@@ -27,12 +27,14 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QClipboard>
+#include <QScrollBar>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include <kexiutils/utils.h>
 #include "kexicomboboxpopup.h"
-#include "kexitableview.h"
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaWidget.h"
 #include "kexi.h"
 
 #include <klineedit.h>
@@ -61,6 +63,7 @@ public:
     QSize totalSize;
     KexiDB::TableViewColumn* visibleTableViewColumn;
     KexiTableEdit* internalEditor;
+    int arrowWidth;
 };
 
 //======================================================
@@ -83,6 +86,8 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QW
     m_rightMarginWhenFocused -= RIGHT_MARGIN_DELTA;
     updateLineEditStyleSheet();
     m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
+    //! @todo update when style changes
+    d->arrowWidth = KexiUtils::comboBoxArrowSize(style()).width();
 }
 
 KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
@@ -143,8 +148,11 @@ void KexiComboBoxTableEdit::resize(int w, int h)
     updateLineEditStyleSheet();
     m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
-    if (m_scrollView)
-        r.translate(m_scrollView->contentsX(), m_scrollView->contentsY());
+    if (qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())) {
+        r.translate(
+            qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
+            qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->verticalScrollBar()->value());
+    }
     updateFocus(r);
     if (popup()) {
         popup()->updateSize();
@@ -289,7 +297,7 @@ int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics
         // in 'lookupFieldSchema' or  or 'related table data' model
         // we're assuming val is already the text, not the index
 //! @todo ok?
-        return qMax(KEXITV_MINIMUM_COLUMN_WIDTH, fm.width(val.toString()));
+        return qMax(KEXITV_MINIMUM_COLUMN_WIDTH, fm.width(val.toString()) + d->arrowWidth);
     }
     //use 'enum hints' model
     QVector<QString> hints = field()->enumHints();
@@ -300,7 +308,7 @@ int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics
     QString txt = hints.value(idx);
     if (txt.isEmpty())
         return KEXITV_MINIMUM_COLUMN_WIDTH;
-    return fm.width(txt);
+    return fm.width(txt) + d->arrowWidth;
 }
 
 bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
@@ -317,15 +325,16 @@ bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
         kDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
-    KexiTableView *tv = dynamic_cast<KexiTableView*>(m_scrollView);
+    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
     if (tv && e->type() == QEvent::KeyPress) {
         if (tv->eventFilter(o, e)) {
             return true;
         }
     }
-    if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress && m_scrollView) {
-        QPoint gp = static_cast<QMouseEvent*>(e)->globalPos()
-                    + QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
+    if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress
+        && qobject_cast<KexiTableScrollAreaWidget*>(parentWidget()))
+    {
+        QPoint gp = static_cast<QMouseEvent*>(e)->globalPos() + d->button->pos();
         QRect r(d->button->mapToGlobal(d->button->geometry().topLeft()),
                 d->button->mapToGlobal(d->button->geometry().bottomRight()));
         if (o == popup() && popup()->isVisible() && r.contains(gp)) {
@@ -383,7 +392,7 @@ QVariant KexiComboBoxTableEdit::valueFromInternalEditor()
 
 QPoint KexiComboBoxTableEdit::mapFromParentToGlobal(const QPoint& pos) const
 {
-    KexiTableView *tv = dynamic_cast<KexiTableView*>(m_scrollView);
+    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
     if (!tv)
         return QPoint(-1, -1);
     return tv->viewport()->mapToGlobal(pos);
@@ -391,7 +400,7 @@ QPoint KexiComboBoxTableEdit::mapFromParentToGlobal(const QPoint& pos) const
 
 int KexiComboBoxTableEdit::popupWidthHint() const
 {
-    return m_lineedit->width() + m_leftMargin + m_rightMarginWhenFocused;
+    return m_lineedit->width();
 }
 
 void KexiComboBoxTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

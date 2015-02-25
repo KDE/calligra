@@ -286,7 +286,9 @@ void KWStatusBar::gotoPage(int pagenumber)
 void KWStatusBar::updatePageStyle()
 {
     KWPage page = m_currentView ? m_currentView->currentPage() : KWPage();
-    QString name = page.isValid() && page.pageStyle().isValid() ? page.pageStyle().name() : QString();
+    QString name = (page.isValid() && page.pageStyle().isValid() 
+		    ? page.pageStyle().displayName()
+		    : QString());
     m_pageStyleLabel->m_label->setText(name);
     m_pageStyleLabel->m_button->setText(name);
 }

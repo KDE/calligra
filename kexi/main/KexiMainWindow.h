@@ -134,7 +134,7 @@ public:
     /*! \return currently active window or 0 if there is no active window.
      Implemented for KexiWindow. */
     virtual KexiWindow* currentWindow() const;
-    
+
     /*! @return window for tab @a tabIndex or 0 if there is no such tab. */
     KexiWindow* windowForTab(int tabIndex) const;
 
@@ -223,6 +223,9 @@ public slots:
     /*! Implemented for KexiMainWindowIface. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
 
+    /*! Implemented for KexiMainWindowIface */
+    virtual QList<QVariant> currentParametersForQuery(int queryId) const;
+
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
                                       const QString &originalName,
@@ -267,7 +270,7 @@ public slots:
 
     /*! Opens project referenced by @a data.
      If @a shortcutPath is a empty .kexis filename and there is another project opened,
-     a new instance of Kexi is started with the .kexis file as argument. 
+     a new instance of Kexi is started with the .kexis file as argument.
      Value pointed by @a opened is set to true if the database has been opened successfully.
      @return true on successful opening, cancelled if the operation was cancelled
      and false on failure.*/
@@ -301,7 +304,7 @@ public slots:
      Also used by KexiFormEventAction. */
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
 
-    /*! Add searchable model to the main window. This extends search to a new area. 
+    /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. @see KexiMainWindowIface */
     virtual void addSearchableModel(KexiSearchableModel *model);
 
@@ -428,7 +431,7 @@ protected:
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
 protected slots:
-    tristate createNewProject(KexiProjectData* projectData);
+    tristate createNewProject(const KexiProjectData &projectData);
 
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
@@ -438,8 +441,8 @@ protected slots:
 
     void slotPartLoaded(KexiPart::Part* p);
 
-    //! internal - creates and initializes kexi project
-    void createKexiProject(const KexiProjectData& new_data);
+    //! Internal - creates and initializes Kexi project object based on @a data.
+    KexiProject* createKexiProjectObject(const KexiProjectData &data);
 
     /*! Handles event when user double clicked (or single -depending on settings)
      or pressed Return key on the part item in the navigator.
@@ -550,7 +553,7 @@ protected slots:
     virtual void acceptPropertySetEditing();
 
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, 
+                                     bool preservePrevSelection = true,
                                      bool sortedProperties = false,
                                      const QByteArray& propertyToSelect = QByteArray());
 
