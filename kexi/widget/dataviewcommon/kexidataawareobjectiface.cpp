@@ -145,7 +145,7 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
 //!Change the following:
     if (m_data && m_data->count() == 0 && m_navPanel)
         m_navPanel->setCurrentRecordNumber(0 + 1);
-    
+
     if (m_data && !theSameData) {
 //! @todo: store sorting settings?
         setSorting(-1);
@@ -968,7 +968,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         }
         //should be also added to the buffer
         if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
-                                           newval, /*allowSignals*/true, 
+                                           newval, /*allowSignals*/true,
                                            currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0))
         {
             kDebug() << "------ EDIT BUFFER CHANGED TO:";
@@ -1844,7 +1844,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
                 col = forward ? (col + 1) : (col - 1)) {
             const QVariant cell(record->at(m_indicesForVisibleValues[ col ]));
             if (findInString(stringValue, stringLength, cell.toString(), firstCharacter,
-                             matchAnyPartOfField, matchWholeField, caseSensitivity, 
+                             matchAnyPartOfField, matchWholeField, caseSensitivity,
                              wholeWordsOnly, forward))
             {
                 setCursorPosition(row, col, ForceSetCursorPosition);
@@ -1862,8 +1862,12 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
             ++it;
             ++row;
         } else {
-            --it;
-            --row;
+            if (m_data->constBegin() == it) {
+                break;
+            } else {
+                --it;
+                --row;
+            }
         }
         col = firstColumn;
     }//while
