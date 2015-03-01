@@ -52,9 +52,7 @@
 
 #include <QWeakPointer>
 
-
-//FIXME: on next lines we see: define then ifdef?? What?
-#define DEBUG_RDF
+// #define DEBUG_RDF
 
 #ifdef DEBUG_RDF
 #define RDEBUG kDebug(30015)

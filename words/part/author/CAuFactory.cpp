@@ -104,7 +104,8 @@ const KComponentData &CAuFactory::componentData()
 #ifdef SHOULD_BUILD_RDF
 // TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
-        dockRegistry->add(new CAuOutlinerDockerFactory());
+// FIXME: hidden from users until completely implemented
+//         dockRegistry->add(new CAuOutlinerDockerFactory());
 #endif
 
     }

@@ -25,7 +25,6 @@ CAuDocument::CAuDocument(KoPart *part)
     : KWDocument(part)
     , m_metaManager(new CAuMetaDataManager(this))
 {
-
 }
 
 void CAuDocument::setCoverImage(QPair<QString, QByteArray> cover)
