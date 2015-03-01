@@ -171,9 +171,6 @@ public:
      \return field object that define column \a column or NULL if there is no such column */
     KexiDB::Field* field(int column) const;
 
-    /*! Reimplementation for KexiDataAwareObjectInterface */
-    virtual void setSpreadSheetMode();
-
     /*! \return maximum number of rows that can be displayed per one "page"
      for current table view's size. */
     virtual int rowsPerPage() const;
@@ -268,6 +265,9 @@ public slots:
 
     virtual void clearColumnsInternal(bool repaint);
 
+    /*! Reimplementation for KexiDataAwareObjectInterface */
+    virtual void setSpreadSheetMode(bool set);
+
     /*! Adjusts \a column column's width to its (current) contents.
      If \a column == -1, all columns' width is adjusted. */
     void adjustColumnWidthToContents(int column = -1);
@@ -324,9 +324,7 @@ public slots:
     /*! Deletes currently selected row; does nothing if no row
      is currently selected. If row is in edit mode, editing
      is cancelled before deleting.  */
-    virtual void deleteCurrentRow() {
-        KexiDataAwareObjectInterface::deleteCurrentRow();
-    }
+    virtual void deleteCurrentRow();
 
     /*! Inserts one empty row above row \a row. If \a row is -1 (the default),
      new row is inserted above the current row (or above 1st row if there is no current).
@@ -336,9 +334,7 @@ public slots:
      -read-only flag is set (see isReadOnly())
      \ return inserted row's data
     */
-    virtual KexiDB::RecordData *insertEmptyRow(int pos = -1) {
-        return KexiDataAwareObjectInterface::insertEmptyRow(pos);
-    }
+    virtual KexiDB::RecordData *insertEmptyRow(int pos = -1);
 
     /*! Used when Return key is pressed on cell or "+" nav. button is clicked.
      Also used when we want to continue editing a cell after "invalid value" message
@@ -689,6 +685,14 @@ protected:
 
     //! Update section of vertical header
     virtual void updateVerticalHeaderSection(int section);
+
+    virtual void beginInsertItem(KexiDB::RecordData *newRecord, int pos);
+
+    virtual void endInsertItem(KexiDB::RecordData *newRecord, int pos);
+
+    virtual void beginRemoveItem(KexiDB::RecordData *record, int pos);
+
+    virtual void endRemoveItem(int pos);
 
     class Private;
     Private * const d;

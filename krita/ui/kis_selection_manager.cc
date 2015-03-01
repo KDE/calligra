@@ -125,6 +125,16 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_copy = actionManager->createStandardAction(KStandardAction::Copy, this, SLOT(copy()));
     m_paste = actionManager->createStandardAction(KStandardAction::Paste, this, SLOT(paste()));
 
+    KisAction *copySharp = new KisAction(i18n("Copy (sharp)"), this);
+    copySharp->setActivationFlags(KisAction::PIXELS_SELECTED);
+    actionManager->addAction("copy_sharp", copySharp);
+    connect(copySharp, SIGNAL(triggered()), this, SLOT(copySharp()));
+
+    KisAction *cutSharp = new KisAction(i18n("Cut (sharp)"), this);
+    cutSharp->setActivationFlags(KisAction::PIXELS_SELECTED);
+    actionManager->addAction("cut_sharp", cutSharp);
+    connect(cutSharp, SIGNAL(triggered()), this, SLOT(cutSharp()));
+
     m_pasteNew  = new KisAction(i18n("Paste into &New Image"), this);
     actionManager->addAction("paste_new", m_pasteNew);
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
@@ -145,6 +155,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
     m_deselect = new KisAction(koIcon("edit-select-all"), i18n("Deselect"), this);
+    m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     actionManager->addAction("deselect", m_deselect);
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
@@ -383,13 +394,25 @@ void KisSelectionManager::selectionChanged()
 void KisSelectionManager::cut()
 {
     KisCutCopyActionFactory factory;
-    factory.run(true, m_view);
+    factory.run(true, false, m_view);
 }
 
 void KisSelectionManager::copy()
 {
     KisCutCopyActionFactory factory;
-    factory.run(false, m_view);
+    factory.run(false, false, m_view);
+}
+
+void KisSelectionManager::cutSharp()
+{
+    KisCutCopyActionFactory factory;
+    factory.run(true, true, m_view);
+}
+
+void KisSelectionManager::copySharp()
+{
+    KisCutCopyActionFactory factory;
+    factory.run(false, true, m_view);
 }
 
 void KisSelectionManager::copyMerged()

@@ -43,7 +43,7 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
         w = new KexiMigration::ImportWizard(parent, args);
     }
     else if (QString(widgetClass) == "importtable") {
-        w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent);
+        w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent, args);
     }
     else
         return 0;

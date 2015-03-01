@@ -707,7 +707,6 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (!dstColorSpace) return;
-    if (*m_d->colorSpace == *dstColorSpace) return;
 
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
 
@@ -1488,6 +1487,15 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 
     if (m_d->scheduler) {
         m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
+    }
+}
+
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
+{
+    KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
     }
 }
 

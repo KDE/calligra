@@ -31,7 +31,6 @@
 
 #include <kdebug.h>
 
-#include <QLayout>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QScrollBar>
@@ -71,7 +70,7 @@ public:
         setContextMenuEnabled(false);
         setScrollbarToolTipsEnabled(false);
         installEventFilter(this);
-        setBottomMarginInternal(- horizontalScrollBar()->sizeHint().height());
+        setBottomMarginInternal(0);
     }
     virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiTableScrollArea::setData(data, owner);
@@ -290,6 +289,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         data->append(record);
     }
     setDataInternal(data, true);
+    d->tv->setColumnWidth(0, d->tv->width() - 1);
 }
 
 void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
@@ -305,8 +305,6 @@ void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
 void KexiComboBoxPopup::updateSize(int minWidth)
 {
     const int rows = qMin(d->max_rows, d->tv->rowCount());
-
-    d->tv->adjustColumnWidthToContents(-1);
 
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
@@ -328,8 +326,8 @@ void KexiComboBoxPopup::resize(int w, int h)
 {
     d->tv->horizontalScrollBar()->hide();
     d->tv->verticalScrollBar()->hide();
-    d->tv->move(1, 1);
-    d->tv->resize(w - 2, h - 2);
+    d->tv->move(0, 0);
+    d->tv->resize(w - 1, h - 1);
     QFrame::resize(w, h);
     update();
     updateGeometry();

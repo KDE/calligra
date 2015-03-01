@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -57,8 +57,7 @@ int KexiTableScrollAreaHeaderModel::rowCount(const QModelIndex& parent) const
     Q_UNUSED(parent);
     const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
     return scrollArea->rowCount()
-            + (scrollArea->isInsertingEnabled() ? 1 : 0)
-            + (scrollArea->newRowEditing() ?  1 : 0);
+            + (scrollArea->isInsertingEnabled() ? 1 : 0);
 }
 
 int KexiTableScrollAreaHeaderModel::columnCount(const QModelIndex& parent) const
@@ -96,19 +95,21 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
             if (col->field() && col->field()->isPrimaryKey()) {
                 return koSmallIcon("key");
             }
+            break;
         }
         case Qt::ToolTipRole: {
             KexiDB::Field *f = col->field();
             return f ? f->description() : QString();
         }
         }
+        break;
     }
     case Qt::Vertical: {
         switch (role) {
         case Qt::DecorationRole: {
             const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
             if (scrollArea->isInsertingEnabled()) {
-                const int plusRow = scrollArea->rowCount() + (scrollArea->newRowEditing() ?  1 : 0);
+                const int plusRow = scrollArea->rowCount();
                 if (section == plusRow) {
                     return d->plusPixmap;
                 }
@@ -123,11 +124,32 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
             }
         }
         }
-        //! @todo ??
+        //! @todo add option to display row numbers or other data in headers?
 //        if (role == Qt::DisplayRole) {
 //            return QString::number(section + 1);
 //        }
+        break;
     }
     }
     return QVariant();
+}
+
+void KexiTableScrollAreaHeaderModel::beginInsertRows(const QModelIndex &parent, int first, int last)
+{
+    QAbstractTableModel::beginInsertRows(parent, first, last);
+}
+
+void KexiTableScrollAreaHeaderModel::endInsertRows()
+{
+    QAbstractTableModel::endInsertRows();
+}
+
+void KexiTableScrollAreaHeaderModel::beginRemoveRows(const QModelIndex &parent, int first, int last)
+{
+    QAbstractTableModel::beginRemoveRows(parent, first, last);
+}
+
+void KexiTableScrollAreaHeaderModel::endRemoveRows()
+{
+    QAbstractTableModel::endRemoveRows();
 }

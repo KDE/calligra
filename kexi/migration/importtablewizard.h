@@ -28,6 +28,7 @@ class KexiConnectionSelectorWidget;
 class QListWidget;
 class QLabel;
 class QProgressBar;
+class QCheckBox;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
 
@@ -49,7 +50,7 @@ class KEXIMIGR_EXPORT ImportTableWizard : public KAssistantDialog
 {
 Q_OBJECT
     public:
-        explicit ImportTableWizard( KexiDB::Connection* curDB, QWidget* parent = 0, Qt::WFlags flags = 0 );
+        explicit ImportTableWizard(KexiDB::Connection* curDB, QWidget* parent = 0, QMap<QString, QString>* args = 0, Qt::WFlags flags = 0);
         virtual ~ImportTableWizard( );
 
         virtual void back();
@@ -71,6 +72,7 @@ Q_OBJECT
         KexiProjectSelectorWidget *m_srcDBName;
         KexiProjectSet* m_prjSet;
         QString m_importTableName;
+        QMap<QString, QString>* m_args;
         
         bool fileBasedSrcSelected() const;
         QString driverNameForSelectedSource();
@@ -78,6 +80,7 @@ Q_OBJECT
 
         QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
         QProgressBar *m_progressBar;
+        QCheckBox *m_finishCheckBox;
         KPushButton* m_importOptionsButton;
         bool m_importComplete;
         bool doImport();
@@ -103,13 +106,14 @@ Q_OBJECT
         //Page Arrival
         void arriveSrcConnPage();
         void arriveSrcDBPage();
-        void arriveTableSelectPage();
+        void arriveTableSelectPage(KPageWidgetItem *prevPage);
         void arriveAlterTablePage();
         void arriveImportingPage();
         void arriveFinishPage();
     private slots:
         void slotConnPageItemSelected(bool isSelected);
         void slotTableListWidgetSelectionChanged();
+        void slotNameChanged();
 };
 }
 #endif // IMPORTTABLEWIZARD_H

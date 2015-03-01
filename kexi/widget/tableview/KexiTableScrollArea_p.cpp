@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -40,7 +40,7 @@ KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
     contextMenuEnabled = true;
     skipKeyPress = false;
     ensureCellVisibleOnShow = QPoint(-1, -1);
-    internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height() / 2;
+    internal_bottomMargin = 0;
     highlightedRow = -1;
     moveCursorOnMouseRelease = false;
     horizontalHeaderVisible = true;
@@ -63,4 +63,13 @@ KexiTableScrollArea::Private::~Private()
 void KexiTableScrollArea::Private::clearVariables()
 {
     // Initialize variables
+}
+
+void KexiTableScrollArea::Private::setSpreadSheetMode(bool set)
+{
+    tv->setBottomMarginInternal(set ? 0 : tv->rowHeight() / 2);
+    //copy the m_navPanelEnabled flag
+    Appearance a = appearance;
+    a.navigatorEnabled = tv->m_navPanelEnabled;
+    tv->setAppearance(a);
 }

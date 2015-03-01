@@ -38,7 +38,10 @@
        <item>
         <widget class="QLabel" name="searchLbl">
          <property name="text">
-          <string>Search:</string>
+          <string>&amp;Search:</string>
+         </property>
+         <property name="buddy">
+          <cstring>searchBox</cstring>
          </property>
         </widget>
        </item>
@@ -55,7 +58,7 @@
       </widget>
      </item>
      <item row="0" column="2" colspan="2">
-      <widget class="QWidget" name="m_filterOptions" native="true">
+      <widget class="QScrollArea" name="m_filterScrollArea" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>

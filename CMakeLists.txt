@@ -20,12 +20,12 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9 Beta 2")
+set(CALLIGRA_VERSION_STRING "2.9 Beta 3")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 91)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_VERSION_RELEASE 92)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
-set(CALLIGRA_BETA 2) # uncomment only for Beta
+set(CALLIGRA_BETA 3) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
 
@@ -338,8 +338,8 @@ endif(NOT Soprano_FOUND)
 ##
 ## Test for marble
 ##
+set(MARBLE_MIN_VERSION "0.19.2")
 macro_optional_find_package(CalligraMarble)
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)
     set(MARBLE_INCLUDE_DIR "")
@@ -347,23 +347,27 @@ else(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE TRUE)
 endif(NOT MARBLE_FOUND)
 if( MARBLE_FOUND )
-    add_definitions( -DCAN_USE_MARBLE )
-    ##
-    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-    ## with commit ea177ca. This is for compatibility with older versions.
-    ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-    if( MARBLECONTROLBOX_H )
-    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-        if( SETMARBLEWIDGET )
-            add_definitions(-DHAVE_SETMARBLEWIDGET)
-        endif( SETMARBLEWIDGET)
-    else( MARBLECONTROLBOX_H )
-        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
-    endif( MARBLECONTROLBOX_H )
+    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        set(MARBLE_FOUND FALSE)
+    else(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        add_definitions( -DCAN_USE_MARBLE )
+        ##
+        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+        ## with commit ea177ca. This is for compatibility with older versions.
+        ##
+        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+        if( MARBLECONTROLBOX_H )
+        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+            if( SETMARBLEWIDGET )
+                add_definitions(-DHAVE_SETMARBLEWIDGET)
+            endif( SETMARBLEWIDGET)
+        else( MARBLECONTROLBOX_H )
+            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+        endif( MARBLECONTROLBOX_H )
+    endif(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
 endif( MARBLE_FOUND )
-
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 ##
 ## Test for lcms
 ##
@@ -400,12 +404,12 @@ if(HAVE_VC)
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
         message(STATUS "Vc version is greater than 0.7, enabling AVX2 support")
 
-        if(Vc_COMPILER_IS_GCC)
+        if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
             AddCompilerFlag("-std=c++11" _ok)
             if(NOT _ok)
                 AddCompilerFlag("-std=c++0x" _ok)
             endif()
-        endif(Vc_COMPILER_IS_GCC)
+        endif(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)

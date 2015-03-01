@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Flow</name>
+  <name xml:lang="bs">Flow</name>
   <name xml:lang="ca">Flow</name>
   <name xml:lang="cs">Flow</name>
   <name xml:lang="da">Flow</name>
@@ -24,6 +25,7 @@
   <name xml:lang="uk">Flow</name>
   <name xml:lang="x-test">xxFlowxx</name>
   <summary>Flowchart &amp; Diagram Editing</summary>
+  <summary xml:lang="bs">Uređivanje dijagrama i organigrama</summary>
   <summary xml:lang="ca">Edició de diagrames de fluxos i diagrames</summary>
   <summary xml:lang="de">Programm zum Erstellen von Diagrammen</summary>
   <summary xml:lang="en-GB">Flowchart &amp; Diagram Editing</summary>
@@ -46,6 +48,7 @@
       Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications.
       It enables you to create network diagrams, organisation charts, flowcharts and more.
     </p>
+    <p xml:lang="bs">Calligra Flow je jednostavan alat za crtanje dijagrama i organigrama sa bliskom integracijom s drugim  Calligra aplikacijama. Omogućava vam da crtate mrežne dijagrame, organizacione dijagrame, dijagrame toka i drugo.</p>
     <p xml:lang="ca">El Calligra Flow és una aplicació fàcil d'utilitzar per fer diagrames i diagrames de flux amb una estreta integració amb altres aplicacions del Calligra. Permet crear diagrames de xarxa, diagrames d'organització, diagrames de flux i més.</p>
     <p xml:lang="en-GB">Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications. It enables you to create network diagrams, organisation charts, flowcharts and more.</p>
     <p xml:lang="es">Calligra Flow es una aplicación de fácil uso que sirve para crear diagramas de flujo y gráficos, y que goza de una alta integración con el resto de aplicaciones de Calligra. Le permite crear diagramas de red, gráficos de organización, gráficos de flujo y más.</p>
@@ -63,6 +66,7 @@
     <p xml:lang="uk">Calligra Flow — проста у користуванні програма для створення діаграм та блок-схем з тісною інтеграцією з іншими програмами Calligra. За її допомогою ви можете створювати мережеві діаграми, організаційні діаграми, блок-схеми тощо.</p>
     <p xml:lang="x-test">xxCalligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications. It enables you to create network diagrams, organisation charts, flowcharts and more.xx</p>
     <p>Features:</p>
+    <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
@@ -83,6 +87,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Create network diagrams, organisation charts, flowcharts and more</li>
+      <li xml:lang="bs">Kreirajte mrežne dijagrame, organizacione dijagrame, dijagrame toka i drugo</li>
       <li xml:lang="ca">Crea diagrames de xarxa, diagrames d'organització, diagrames de flux i més</li>
       <li xml:lang="de">Erstellung von Netzwerkdiagrammen, Organisationsdiagrammen, Flussdiagramme und mehr</li>
       <li xml:lang="en-GB">Create network diagrams, organisation charts, flowcharts and more</li>
@@ -101,6 +106,7 @@
       <li xml:lang="uk">Створення мережевих діаграм, організаційних діаграм, блок-схем тощо.</li>
       <li xml:lang="x-test">xxCreate network diagrams, organisation charts, flowcharts and morexx</li>
       <li>Scriptable stencil creation using Python</li>
+      <li xml:lang="bs">Skriptno kreiranje likova za crtanje koristeći Python</li>
       <li xml:lang="ca">Creació de patrons amb scripts usant el Python</li>
       <li xml:lang="de">Skriptfähige Erstellung von Schablonen mittels Python</li>
       <li xml:lang="en-GB">Scriptable stencil creation using Python</li>
@@ -119,6 +125,7 @@
       <li xml:lang="uk">Створення шаблонів на основі скриптів мовою Python.</li>
       <li xml:lang="x-test">xxScriptable stencil creation using Pythonxx</li>
       <li>Support for Dia stencils.</li>
+      <li xml:lang="bs">Podrška za Dia šablone.</li>
       <li xml:lang="ca">Implementació de patrons del Dia</li>
       <li xml:lang="de">Unterstützung für Dia-Schablonen.</li>
       <li xml:lang="en-GB">Support for Dia stencils.</li>

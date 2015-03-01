@@ -21,10 +21,13 @@
 #include <db/tableschema.h>
 #include <kdebug.h>
 
+#define ROWS_FOR_PREVIEW 3
+
 AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent )
 {
     kDebug();
     m_schema = 0;
+    m_rowCount = ROWS_FOR_PREVIEW;
 }
 
 AlterSchemaTableModel::~AlterSchemaTableModel()
@@ -68,7 +71,7 @@ QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientat
         }
         return QString("Column %1").arg(section);
     }
-    return QString("Record %1").arg(section);
+    return QString("Record %1").arg(section + 1);
 }
 
 int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
@@ -83,7 +86,7 @@ int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
 int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
 {
     Q_UNUSED(parent);
-    return 3;
+    return m_rowCount;
 }
 
 void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
@@ -93,9 +96,19 @@ void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
 
     beginInsertColumns(QModelIndex(), 0, m_schema->fieldCount() - 1);
     endInsertColumns();
+
+    emit layoutChanged();
 }
 
 void AlterSchemaTableModel::setData(const QList<KexiDB::RecordData>& data)
 {
     m_data = data;
+}
+
+void AlterSchemaTableModel::setRowCount(const int i)
+{
+    if (i != m_rowCount) {
+        m_rowCount = i;
+        emit layoutChanged();
+    }
 }
