@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -653,12 +653,17 @@ void KexiWindow::dirtyChanged(KexiView* view)
     emit dirtyChanged(this);
 }
 
+//static
+QString KexiWindow::windowTitleForItem(const KexiPart::Item &item)
+{
+    return item.name();
+}
+
 void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    //! @todo use d->item->captionOrName() if defined in settings
-    QString fullCapt(d->item->name());
+    const QString fullCapt(windowTitleForItem(*d->item));
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 
