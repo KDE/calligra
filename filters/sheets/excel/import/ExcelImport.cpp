@@ -69,7 +69,7 @@
 #include <Util.h>
 
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <NumberFormatParser.h>
 
 #include <iostream>
@@ -163,7 +163,7 @@ public:
     QHash<int, QRegion> columnStyles;
     QList<QPair<QRegion, Calligra::Sheets::Conditions> > cellConditions;
 
-    QList<ChartExport*> charts;
+    QList<KoOdfChartWriter*> charts;
     void processCharts(KoXmlWriter* manifestWriter);
 
     void addManifestEntries(KoXmlWriter* ManifestWriter);
@@ -1011,7 +1011,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Sheets::Cell o
             hasObjects = true;
         }
 
-        ChartExport *c = new ChartExport(chart->m_chart);
+        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
         c->setSheetReplacement( false );
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = Swinder::encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
@@ -1067,7 +1067,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Sheets::Cell o
 
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
-    foreach(ChartExport *c, this->charts) {
+    foreach(KoOdfChartWriter *c, this->charts) {
         c->set2003ColorPalette( workbook->colorTable() );
         c->saveContent(this->storeout, manifestWriter);
     }

@@ -3,7 +3,8 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
 include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for the XlsxChartReader
     ${KOMAIN_INCLUDES}
 )
 
@@ -21,9 +22,9 @@ set(docx2odt_PART_SRCS
     DocxXmlEndnoteReader.cpp
     DocxXmlSettingsReader.cpp
     DocxImport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
 kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
@@ -31,6 +32,7 @@ kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
 target_link_libraries(
     calligra_filter_docx2odt
     komsooxml
+    mso
     koodf2
     koodf
     komain

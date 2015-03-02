@@ -29,7 +29,7 @@
 #include "MsooXmlSchemas.h"
 #include "MsooXmlContentTypes.h"
 #include "MsooXmlRelationships.h"
-#include "MsooXmlThemesReader.h"
+#include "MsooXmlTheme.h"
 #include "ooxml_pole.h"
 
 #include <QColor>
