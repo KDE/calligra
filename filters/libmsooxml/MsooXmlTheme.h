@@ -31,10 +31,8 @@
 
 #include <KoGenStyles.h>
 
-//#include "MsooXmlCommonReader.h"
-//#include "MsooXmlImport.h"
-
 #include "komsooxml_export.h"
+
 
 namespace MSOOXML
 {
@@ -194,7 +192,7 @@ public:
 
     QMap<int, DrawingMLFillBase*> fillStyles;
 
-    // Stores the three line styles for use within a theme.
+    //! Stores the three line styles for use within a theme.
     QList<KoGenStyle> lnStyleLst;
 };
 

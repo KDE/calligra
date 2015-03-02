@@ -26,7 +26,7 @@
 #include <QMap>
 #include <QColor>
 #include <QDebug>
-//#include <MsooXmlGlobal.h>
+
 
 namespace KoChart
 {

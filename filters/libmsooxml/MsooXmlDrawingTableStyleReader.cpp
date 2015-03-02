@@ -18,7 +18,7 @@
  */
 
 #include "MsooXmlDrawingTableStyleReader.h"
-#include <MsooXmlTheme.h>
+#include "MsooXmlTheme.h"
 
 
 #include <KoGenStyles.h>
