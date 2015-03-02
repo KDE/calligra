@@ -803,5 +803,11 @@ QSize KexiUtils::comboBoxArrowSize(QStyle *style)
     return style->subControlRect(QStyle::CC_ComboBox, &cbOption, QStyle::SC_ComboBoxArrow).size();
 }
 
+void KexiUtils::addDirtyFlag(QString *text)
+{
+    Q_ASSERT(text);
+    *text = i18nc("'Dirty (modified) object' flag", "%1*", *text);
+}
+
 #include "moc_utils.cpp"
 #include "utils_p.moc"

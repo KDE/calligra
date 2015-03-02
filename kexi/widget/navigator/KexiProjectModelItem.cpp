@@ -21,8 +21,8 @@
 
 #include "KexiProjectModelItem.h"
 
-
 #include <core/kexipartinfo.h>
+#include <kexiutils/utils.h>
 #include <kicon.h>
 #include <QtAlgorithms>
 #include <kdebug.h>
@@ -137,7 +137,7 @@ QVariant KexiProjectModelItem::data(int column) const
 #else
         QString result = d->item->name();
         if (d->dirty) {
-            result.append(QLatin1Char('*'));
+            KexiUtils::addDirtyFlag(&result);
         }
         return result;
 #endif

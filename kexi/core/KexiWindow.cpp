@@ -663,8 +663,11 @@ void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    const QString fullCapt(windowTitleForItem(*d->item));
-    setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
+    QString fullCaption(windowTitleForItem(*d->item));
+    if (isDirty()) {
+        KexiUtils::addDirtyFlag(&fullCaption);
+    }
+    setWindowTitle(fullCaption);
 }
 
 bool KexiWindow::neverSaved() const
