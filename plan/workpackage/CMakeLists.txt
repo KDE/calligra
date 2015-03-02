@@ -119,5 +119,5 @@ install(TARGETS calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES  planworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  planwork.rc planwork_readonly.rc planwork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/planwork)
 install( FILES  planworkrc DESTINATION ${CONFIG_INSTALL_DIR})
-install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
