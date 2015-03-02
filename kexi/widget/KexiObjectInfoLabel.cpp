@@ -40,6 +40,7 @@ KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
         : QWidget(parent)
         , d( new Private )
 {
+    QWidget::setObjectName("KexiObjectInfoLabel");
     QHBoxLayout *hlyr = new QHBoxLayout(this);
     hlyr->setContentsMargins(0, 0, 0, 0);
     hlyr->setSpacing(2);
