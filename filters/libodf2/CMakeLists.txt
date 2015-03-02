@@ -15,6 +15,8 @@ include_directories(${KOODF_INCLUDES}
 set(koodf2_LIB_SRCS
     # Storage objects, using old DOM based loading
     KoXmlStreamReader.cpp
+    KoXmlUtils.cpp
+
     KoTable.cpp
     KoRow.cpp
     KoColumn.cpp

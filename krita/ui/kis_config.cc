@@ -1039,6 +1039,16 @@ void KisConfig::setHideDockersFullscreen(const int value) const
     m_cfg.writeEntry("hideDockersFullScreen", value);
 }
 
+bool KisConfig::showDockerTitleBars() const
+{
+    return m_cfg.readEntry("showDockerTitleBars", true);
+}
+
+void KisConfig::setShowDockerTitleBars(const bool value) const
+{
+    m_cfg.writeEntry("showDockerTitleBars", value);
+}
+
 int KisConfig::hideMenuFullscreen() const
 {
     return m_cfg.readEntry("hideMenuFullScreen", (int)Qt::Checked);
@@ -1453,6 +1463,15 @@ bool KisConfig::useVerboseOpenGLDebugOutput() const
 int KisConfig::workaroundX11SmoothPressureSteps() const
 {
     return m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0);
+}
+
+bool KisConfig::showCanvasMessages() const
+{
+    return m_cfg.readEntry("showOnCanvasMessages", true);
+}
+void KisConfig::setShowCanvasMessages(bool show)
+{
+    m_cfg.writeEntry("showOnCanvasMessages", show);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const

@@ -36,5 +36,5 @@ endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
+    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif(SHOULD_BUILD_OKULAR_GENERATOR_DOC)

@@ -210,7 +210,7 @@ install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
 install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 endif (SHOULD_BUILD_APP_AUTHOR)
