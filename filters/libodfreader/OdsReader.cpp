@@ -20,7 +20,7 @@
 
 
 // Own
-#include "OdtReader.h"
+#include "OdsReader.h"
 
 // Qt
 #include <QStringList>
@@ -34,9 +34,11 @@
 #include <KoStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>  // For copyXmlElement
+#include <KoOdfReadStore.h>
 
 // Reader library
-#include "OdtReaderBackend.h"
+#include "OdsReaderBackend.h"
 #include "OdfReaderContext.h"
 #include "OdfTextReader.h"
 
@@ -63,12 +65,12 @@ static int debugIndent = 0;
 #endif
 
 
-OdtReader::OdtReader()
+OdsReader::OdsReader()
     : OdfReader()
 {
 }
 
-OdtReader::~OdtReader()
+OdsReader::~OdsReader()
 {
 }
 
@@ -76,7 +78,7 @@ OdtReader::~OdtReader()
 #if 0
 // This is a template function for the reader library.
 // Copy this one and change the name and fill in the code.
-void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
+void OdsReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 { 
    DEBUGSTART();
 
@@ -108,19 +110,14 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 
 
 // Reimplemented from OdfReader
-void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
+void OdsReader::readElementOfficeSpreadsheet(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
-    OdtReaderBackend *backend = dynamic_cast<OdtReaderBackend *>(m_backend);
-    backend->elementOfficeText(reader, m_context);
+    OdsReaderBackend *backend = dynamic_cast<OdsReaderBackend *>(m_backend);
+    backend->elementOfficeSpreadsheet(reader, m_context);
 
-    // <office:text> has the following children in ODF 1.2:
+    // <office:spreadsheet> has the following children in ODF 1.2:
     //
-    // In addition to the text level tags like <text:p> etc that can
-    // be found in any textbox, table cell or similar, it has the
-    // following text document children:
-    //
-    //          <office:forms> 13.2
     //          <table:calculation-settings> 9.4.1
     //          <table:consolidation> 9.7
     //          <table:content-validations> 9.4.4
@@ -129,24 +126,31 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     //          <table:dde-links> 9.8
     //          <table:label-ranges> 9.4.10
     //          <table:named-expressions> 9.4.11
+    //   [done] <table:table> 9.1.2
+    //          <table:tracked-changes> 9.9.2
     //          <text:alphabetical-index-auto-mark-file> 8.8.3
     //          <text:dde-connection-decls> 14.6.2
-    //          <text:page-sequence> 5.2
     //          <text:sequence-decls> 7.4.11
-    //          <text:tracked-changes> 5.5.1
     //          <text:user-field-decls> 7.4.7
     //          <text:variable-decls> 7.4.2
+
     //
-    // FIXME: For now, none of these are handled
+    // FIXME: For now, only very few of these are handled.
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
         
         QString tagName = reader.qualifiedName().toString();
-        if (tagName == "office:forms") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+        if (tagName == "table:table") {
+            if (m_textReader) {
+		// <table:table> is handled in the text reader even in spreadsheets.
+                m_textReader->readElementTableTable(reader);
+            }
+            else {
+                reader.skipCurrentElement();
+            }
         }
         else if (tagName == "table:calculation-settings") {
+            // FIXME: NYI
             reader.skipCurrentElement();
         }
         else if (tagName == "table:consolidation") {
@@ -170,19 +174,16 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
         else if (tagName == "table:named-expressions") {
             reader.skipCurrentElement();
         }
+        else if (tagName == "table:tracked-changes") {
+            reader.skipCurrentElement();
+        }
         else if (tagName == "text:alphabetical-index-auto-mark-file") {
             reader.skipCurrentElement();
         }
         else if (tagName == "text:dde-connection-decls") {
             reader.skipCurrentElement();
         }
-        else if (tagName == "text:page-sequence") {
-            reader.skipCurrentElement();
-        }
         else if (tagName == "text:sequence-decls") {
-            reader.skipCurrentElement();
-        }
-        else if (tagName == "text:tracked-changes") {
             reader.skipCurrentElement();
         }
         else if (tagName == "text:user-field-decls") {
@@ -192,17 +193,12 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
             reader.skipCurrentElement();
         }
         else {
-            if (m_textReader) {
-                m_textReader->readTextLevelElement(reader);
-            }
-            else {
-                reader.skipCurrentElement();
-            }
+	    reader.skipCurrentElement();
         }
         DEBUG_READING("loop-end");
     }
 
-    backend->elementOfficeText(reader, m_context);
+    backend->elementOfficeSpreadsheet(reader, m_context);
     DEBUGEND();
 }
 

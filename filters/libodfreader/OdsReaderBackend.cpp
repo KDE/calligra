@@ -20,7 +20,7 @@
 
 
 // Own
-#include "OdtReaderBackend.h"
+#include "OdsReaderBackend.h"
 
 // Calligra
 #include <KoXmlReader.h>
@@ -30,10 +30,10 @@
 
 
 // ================================================================
-//             class OdtReaderBackend::Private
+//             class OdsReaderBackend::Private
 
 
-class OdtReaderBackend::Private
+class OdsReaderBackend::Private
 {
  public:
     Private();
@@ -44,32 +44,32 @@ class OdtReaderBackend::Private
                                 // needed for forward binary compatibility.
 };
 
-OdtReaderBackend::Private::Private()
+OdsReaderBackend::Private::Private()
 {
 }
 
-OdtReaderBackend::Private::~Private()
+OdsReaderBackend::Private::~Private()
 {
 }
 
 
 // ================================================================
-//                 class OdtReaderBackend
+//                 class OdsReaderBackend
 
 
-OdtReaderBackend::OdtReaderBackend()
-    : d(new OdtReaderBackend::Private)
+OdsReaderBackend::OdsReaderBackend()
+    : d(new OdsReaderBackend::Private)
 {
 }
 
-OdtReaderBackend::~OdtReaderBackend()
+OdsReaderBackend::~OdsReaderBackend()
 {
     delete d;
 }
 
 
 // ----------------------------------------------------------------
-//                 ODT document level functions
+//                 ODS document level functions
 
 
-IMPLEMENT_BACKEND_FUNCTION(OdtReader, OfficeText)
+IMPLEMENT_BACKEND_FUNCTION(OdsReader, OfficeSpreadsheet)

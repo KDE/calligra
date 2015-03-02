@@ -219,4 +219,4 @@ class KOODF2_EXPORT KoXmlStreamAttributes
 void KOODF2_EXPORT prepareForOdf(KoXmlStreamReader &reader);
 
 
-#endif /* KOGENCHANGES_H */
+#endif /* KOXMLSTREAMREADER_H */

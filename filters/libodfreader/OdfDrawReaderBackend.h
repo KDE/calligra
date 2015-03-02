@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ODTREADERBACKEND_H
-#define ODTREADERBACKEND_H
+#ifndef ODFDRAWREADERBACKEND_H
+#define ODFDRAWREADERBACKEND_H
 
 // Calligra
 #include <KoXmlStreamReader.h>
@@ -27,9 +27,7 @@
 
 // this library
 #include "koodfreader_export.h"
-#include "OdtReader.h"
-#include "OdfReaderBackend.h"
-#include "OdfReaderInternals.h"
+#include "OdfDrawReader.h"
 
 
 class QByteArray;
@@ -39,10 +37,10 @@ class KoStore;
 class OdfReaderContext;
 
 
-/** @brief A default backend for the OdtReader class.
+/** @brief A default backend for the OdfDrawReader class.
  *
  * This class defines an interface and the default behaviour for the
- * backend to the ODT reader (@see OdtReader). When the
+ * backend to the ODF draw reader (@see OdfDrawReader). When the
  * reader is called upon to traverse a certain XML tree, there will
  * be two parameters to the root traverse function: a pointer to a
  * backend object and a pointer to a context object.
@@ -55,30 +53,46 @@ class OdfReaderContext;
  * callback function will be called twice: once when the tag is first
  * encountered anc once when the tag is closed.  This means that an
  * element with no child elements will be called twice in succession.
- *
- * The callback function receives as parameter a reference to the XML
- * stream reader. From this parameter it can be deduced if the call is
- * for a start element or an end element and also access the
- * attributes of the element.
- *
- * This class defines a virtual function for every supported
- * element. It also implements a default behaviour for every element
- * which is to ignore the parameters and do nothing.
- *
- * When this class is used e.g. in a filter it is recommended to
- * inherit this class and only reimplement those functions that are
- * actually needed.
  */
-class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
+class KOODFREADER_EXPORT OdfDrawReaderBackend
 {
  public:
-    explicit OdtReaderBackend();
-    virtual ~OdtReaderBackend();
+    explicit OdfDrawReaderBackend();
+    virtual ~OdfDrawReaderBackend();
 
     // ----------------------------------------------------------------
-    // ODT document level functions
+    // Dr3d functions
 
-    DECLARE_BACKEND_FUNCTION(OfficeText);
+    DECLARE_BACKEND_FUNCTION(Dr3dScene);   // ODF 1.2  10.5.2
+    DECLARE_BACKEND_FUNCTION(Dr3dLight);   // ODF 1.2  10.5.3
+    DECLARE_BACKEND_FUNCTION(Dr3dCube);    // ODF 1.2  10.5.4
+    DECLARE_BACKEND_FUNCTION(Dr3dSphere);  // ODF 1.2  10.5.5
+    DECLARE_BACKEND_FUNCTION(Dr3dExtrude); // ODF 1.2  10.5.6
+    DECLARE_BACKEND_FUNCTION(Dr3dRotate);  // ODF 1.2  10.5.7
+
+    // ----------------------------------------------------------------
+    // Draw functions
+
+    DECLARE_BACKEND_FUNCTION(DrawA);
+
+    DECLARE_BACKEND_FUNCTION(DrawRect);            // ODF 1.2  10.3.2
+    DECLARE_BACKEND_FUNCTION(DrawLine);            // ODF 1.2  10.3.3
+    DECLARE_BACKEND_FUNCTION(DrawPolyline);        // ODF 1.2  10.3.4
+    DECLARE_BACKEND_FUNCTION(DrawPolygon);         // ODF 1.2  10.3.5
+    DECLARE_BACKEND_FUNCTION(DrawRegularPolygon);  // ODF 1.2  10.3.6
+    DECLARE_BACKEND_FUNCTION(DrawPath);            // ODF 1.2  10.3.7
+    DECLARE_BACKEND_FUNCTION(DrawCircle);          // ODF 1.2  10.3.8
+    DECLARE_BACKEND_FUNCTION(DrawEllipse);         // ODF 1.2  10.3.9
+    DECLARE_BACKEND_FUNCTION(DrawConnector);       // ODF 1.2  10.3.10
+    DECLARE_BACKEND_FUNCTION(DrawCaption);         // ODF 1.2  10.3.11
+    DECLARE_BACKEND_FUNCTION(DrawMeasure);         // ODF 1.2  10.3.12
+
+    // ----------------------------------------------------------------
+    // Frames
+
+    DECLARE_BACKEND_FUNCTION(DrawFrame);
+    DECLARE_BACKEND_FUNCTION(DrawObject);
+    DECLARE_BACKEND_FUNCTION(DrawObjectOle);
 
  private:
     class Private;
@@ -86,4 +100,4 @@ class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
 };
 
 
-#endif // ODTREADERBACKEND_H
+#endif // ODFDRAWREADERBACKEND_H

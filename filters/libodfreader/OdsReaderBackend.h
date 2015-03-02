@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ODTREADERBACKEND_H
-#define ODTREADERBACKEND_H
+#ifndef ODSREADERBACKEND_H
+#define ODSREADERBACKEND_H
 
 // Calligra
 #include <KoXmlStreamReader.h>
@@ -27,7 +27,7 @@
 
 // this library
 #include "koodfreader_export.h"
-#include "OdtReader.h"
+#include "OdsReader.h"
 #include "OdfReaderBackend.h"
 #include "OdfReaderInternals.h"
 
@@ -39,10 +39,10 @@ class KoStore;
 class OdfReaderContext;
 
 
-/** @brief A default backend for the OdtReader class.
+/** @brief A default backend for the OdsReader class.
  *
  * This class defines an interface and the default behaviour for the
- * backend to the ODT reader (@see OdtReader). When the
+ * backend to the ODS reader (@see OdsReader). When the
  * reader is called upon to traverse a certain XML tree, there will
  * be two parameters to the root traverse function: a pointer to a
  * backend object and a pointer to a context object.
@@ -69,16 +69,16 @@ class OdfReaderContext;
  * inherit this class and only reimplement those functions that are
  * actually needed.
  */
-class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
+class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
 {
  public:
-    explicit OdtReaderBackend();
-    virtual ~OdtReaderBackend();
+    explicit OdsReaderBackend();
+    virtual ~OdsReaderBackend();
 
     // ----------------------------------------------------------------
-    // ODT document level functions
+    // ODS document level functions
 
-    DECLARE_BACKEND_FUNCTION(OfficeText);
+    DECLARE_BACKEND_FUNCTION(OfficeSpreadsheet);
 
  private:
     class Private;
@@ -86,4 +86,4 @@ class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
 };
 
 
-#endif // ODTREADERBACKEND_H
+#endif // ODSREADERBACKEND_H
