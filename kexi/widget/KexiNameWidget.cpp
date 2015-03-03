@@ -106,6 +106,7 @@ void KexiNameWidget::init(
     QSizePolicy le_captionSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
     d->le_caption->setSizePolicy(le_captionSizePolicy);
+    d->le_caption->setClearButtonShown(true);
     d->lyr->addWidget(d->le_caption, 1, 1);
 
     d->le_name = new KLineEdit(this);
@@ -113,6 +114,7 @@ void KexiNameWidget::init(
     QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
     d->le_name->setSizePolicy(le_captionSizePolicy);
+    d->le_name->setClearButtonShown(true);
     KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(0);
     idValidator->setLowerCaseForced(true);
     d->le_name->setValidator(d->validator = new KexiUtils::MultiValidator(idValidator, this));
