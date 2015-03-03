@@ -156,7 +156,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     d->data->addColumn(col = new KexiDB::TableViewColumn("comments", KexiDB::Field::Text,
             i18n("Comments"), i18n("Describes additional comments for the field")));
 
-    d->view->setSpreadSheetMode();
+    d->view->setSpreadSheetMode(true);
 
     connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
             this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
@@ -1193,7 +1193,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                      "for creating relations between database tables. "
                      "Do you want a primary key to be automatically added now?</note></para>"
                      "<para>If you want to add a primary key by hand, press <interface>Cancel</interface> "
-                     "to cancel saving table design.</para></note>", schema.name()),
+                     "to cancel saving table design.</para>", schema.name()),
                 QString(),
                 KGuiItem(i18nc("Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
                 KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()),

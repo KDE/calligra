@@ -32,7 +32,7 @@ public:
         Identifier = KoProperty::UserDefined + 1 //!< string allowing nonempty identifiers
     };
 
-    //! Called once to register all propert and editor types provided by this factory.
+    //! Called once to register all property and editor types provided by this factory.
     static void init();
 
     KexiCustomPropertyFactory();

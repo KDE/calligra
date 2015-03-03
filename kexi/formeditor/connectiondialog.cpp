@@ -105,7 +105,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     // And the KexiTableView ////////
     d->data = new KexiDB::TableViewData();
     d->table = new KexiTableView(0, frame, "connections_tableview");
-    d->table->setSpreadSheetMode();
+    d->table->setSpreadSheetMode(true);
     d->table->setInsertingEnabled(true);
     initTable();
     d->table->setData(d->data, false);

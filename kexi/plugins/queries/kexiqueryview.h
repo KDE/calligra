@@ -36,6 +36,9 @@ public:
     explicit KexiQueryView(QWidget *parent);
     virtual ~KexiQueryView();
 
+    /*! \return curent parameters for parametrized query */
+    virtual QList<QVariant> currentParameters() const;
+
 protected:
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 

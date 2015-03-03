@@ -51,7 +51,6 @@ KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
 
     //add object class info
     d->infoLabel = new KexiObjectInfoLabel(this);
-    d->infoLabel->setObjectName("KexiObjectInfoLabel");
     lyr->addWidget(d->infoLabel);
 }
 
