@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -175,6 +175,11 @@ public:
     /*! Called primarily by KexiMainWindow to deactivate dialog.
      Selected view (if present) is also informed about deactivation. */
     void deactivate();
+
+    //! Helper, returns consistent window title for \a item.
+    //! Used both for setting window's title and tab names in the main window.
+    //! @todo Use Item::captionOrName() if this is defined in settings?
+    static QString windowTitleForItem(const KexiPart::Item &item);
 
 public slots:
     virtual void setFocus();

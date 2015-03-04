@@ -312,6 +312,9 @@ public:
     int hideDockersFullscreen() const;
     void setHideDockersFullscreen(const int value) const;
 
+    bool showDockerTitleBars() const;
+    void setShowDockerTitleBars(const bool value) const;
+
     int hideMenuFullscreen() const;
     void setHideMenuFullscreen(const int value) const;
 
@@ -459,6 +462,9 @@ public:
     bool useVerboseOpenGLDebugOutput() const;
 
     int workaroundX11SmoothPressureSteps() const;
+
+    bool showCanvasMessages() const;
+    void setShowCanvasMessages(bool show);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

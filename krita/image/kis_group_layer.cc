@@ -23,6 +23,8 @@
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColor.h>
+
 
 #include "kis_types.h"
 #include "kis_node_visitor.h"
@@ -133,6 +135,27 @@ void KisGroupLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
+KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
+
+    if (prevGroup) {
+        KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
+
+        KisNodeSP child, cloned;
+
+        for (child = firstChild(); child; child = child->nextSibling()) {
+            cloned = child->clone();
+            image()->addNode(cloned, merged);
+        }
+
+        image()->refreshGraphAsync(merged);
+
+        return merged;
+    } else
+        return KisLayer::createMergedLayer(prevLayer);
+}
+
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
     if (!colorSpace)
@@ -226,6 +249,18 @@ KisPaintDeviceSP KisGroupLayer::original() const
     }
 
     return realOriginal;
+}
+
+void KisGroupLayer::setDefaultProjectionColor(KoColor color)
+{
+    color.convertTo(m_d->paintDevice->colorSpace());
+    m_d->paintDevice->setDefaultPixel(color.data());
+}
+
+KoColor KisGroupLayer::defaultProjectionColor() const
+{
+    KoColor color(m_d->paintDevice->defaultPixel(), m_d->paintDevice->colorSpace());
+    return color;
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

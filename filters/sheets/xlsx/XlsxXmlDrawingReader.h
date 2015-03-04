@@ -25,10 +25,12 @@
 #ifndef XLSXXMLDRAWINGREADER_H
 #define XLSXXMLDRAWINGREADER_H
 
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 #include <MsooXmlCommonReader.h>
 
 #include <KoXmlWriter.h>
+#include <KoBorder.h>     // Needed in DrawingMLMethods.h
+
 
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;
@@ -41,8 +43,6 @@ namespace MSOOXML
     class MsooXmlDiagramReaderContext;
 }
 
-//#include <KoGenStyle.h>
-//#include <styles/KoCharacterStyle.h>
 
 class XlsxShape {
 };

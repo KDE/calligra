@@ -208,8 +208,6 @@ void KexiLookupColumnPage::setProject(KexiProject *prj)
 
 void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 {
-    if (!d->hasPropertySet() && !propertySet)
-        return;
     if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt())
         return; //already assigned
 

@@ -38,7 +38,7 @@ class Value;
 
 /**
  * \ingroup Value
- * Generates a Value by parsing an user input text.
+ * Generates a Value by parsing a user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */
 class CALLIGRA_SHEETS_ODF_EXPORT ValueParser

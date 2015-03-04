@@ -31,5 +31,5 @@ endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULARGENERATOR_PPT)
     install( FILES libokularGenerator_powerpoint_calligra.desktop okularPowerpoint_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-    install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
+    install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif(SHOULD_BUILD_OKULARGENERATOR_PPT)

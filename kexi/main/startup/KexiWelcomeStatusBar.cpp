@@ -248,7 +248,7 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
     QString dir(KStandardDirs::locateLocal("data", basePath() + '/', true /*create*/));
     kDebug() << dir;
     foreach (const QString &fname, d->fileNamesToUpdate) {
-        if (0 != KDE::rename(d->tempDir + fname, dir + fname)) {
+        if (!QFile::rename(d->tempDir + fname, dir + fname)) {
             kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
         }
     }

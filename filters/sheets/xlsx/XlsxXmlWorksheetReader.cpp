@@ -22,7 +22,9 @@
  *
  */
 
+// Own
 #include "XlsxXmlWorksheetReader.h"
+
 #include "XlsxXmlCommentsReader.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlDocumentReader.h"
@@ -31,7 +33,7 @@
 #include "XlsxXmlTableReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartOdfWriter.h"
 #include "FormulaParser.h"
 
 #include <MsooXmlRelationships.h>

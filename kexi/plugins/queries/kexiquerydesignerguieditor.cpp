@@ -645,7 +645,6 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    const bool was_dirty = isDirty();
     if (mode == Kexi::NoViewMode || (mode == Kexi::DataViewMode && !tempData()->query())) {
         //this is not a SWITCH but a fresh opening in this view mode
         if (!window()->neverSaved()) {
@@ -713,8 +712,6 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
     }
     tempData()->setQueryChangedInPreviousView(false);
     setFocus(); //to allow shared actions proper update
-    if (!was_dirty)
-        setDirty(false);
     return true;
 }
 

@@ -941,67 +941,14 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
-    QRect layerProjectionExtent = layer->projection()->extent();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
+    QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
-    bool alphaDisabled = layer->alphaChannelDisabled();
-    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
-    KisPaintDeviceSP mergedDevice;
-
-    if (layer->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
-
-        mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
-        KisPainter gc(mergedDevice);
-
-        //Copy the pixels of previous layer with their actual alpha value
-        prevLayer->disableAlphaChannel(false);
-
-        gc.setChannelFlags(prevLayer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
-        gc.setOpacity(prevLayer->opacity());
-
-        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
-
-        //Restore the previous prevLayer disableAlpha status for correct undo/redo
-        prevLayer->disableAlphaChannel(prevAlphaDisabled);
-
-        //Paint the pixels of the current layer, using their actual alpha value
-        if (alphaDisabled == prevAlphaDisabled) {
-            layer->disableAlphaChannel(false);
-        }
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-        gc.setOpacity(layer->opacity());
-
-        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        layer->disableAlphaChannel(alphaDisabled);
-    }
-    else {
-        //Copy prevLayer
-        lock();
-        mergedDevice = new KisPaintDevice(*prevLayer->projection());
-        unlock();
-
-        //Paint layer on the copy
-        KisPainter gc(mergedDevice);
-        if (alphaDisabled == prevAlphaDisabled) {
-            layer->disableAlphaChannel(false);
-        }
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-        gc.setOpacity(layer->opacity());
-
-        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        layer->disableAlphaChannel(alphaDisabled);
-    }
-
-
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
+    // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
+    KisLayerSP mergedLayer = layer->createMergedLayer(prevLayer);
     Q_CHECK_PTR(mergedLayer);
+
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
     mergedLayer->disableAlphaChannel(prevAlphaDisabled);
@@ -1224,13 +1171,10 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
-void KisImage::setDefaultProjectionColor(KoColor color)
+void KisImage::setDefaultProjectionColor(const KoColor &color)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
-
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    color.convertTo(original->colorSpace());
-    original->setDefaultPixel(color.data());
+    m_d->rootLayer->setDefaultProjectionColor(color);
 }
 
 KoColor KisImage::defaultProjectionColor() const
@@ -1239,9 +1183,7 @@ KoColor KisImage::defaultProjectionColor() const
         return KoColor(Qt::transparent, m_d->colorSpace);
     }
 
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    KoColor color(original->defaultPixel(), original->colorSpace());
-    return color;
+    return m_d->rootLayer->defaultProjectionColor();
 }
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)

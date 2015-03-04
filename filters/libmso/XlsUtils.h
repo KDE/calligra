@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef XLSUTILS_H
+#define XLSUTILS_H
 
 #include <QDebug>
 #include <math.h>

@@ -572,6 +572,10 @@ KEXIUTILS_EXPORT void openHyperLink(const KUrl &url, QWidget *parent, const Open
 /*! Application's style is the default. \see QStyle::SC_ComboBoxArrow */
 KEXIUTILS_EXPORT QSize comboBoxArrowSize(QStyle *style = 0);
 
+//! Adds a dirty ("document modified") flag to @a text according to current locale.
+//! It is usually "*" character appended.
+KEXIUTILS_EXPORT void addDirtyFlag(QString *text);
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H

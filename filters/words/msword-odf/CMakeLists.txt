@@ -16,7 +16,6 @@ set(doc2odt_PART_SRCS
    tablehandler.cpp
    graphicshandler.cpp
    drawclient.cpp
-   ../../sheets/xlsx/NumberFormatParser.cpp
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
@@ -37,5 +36,5 @@ endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
+    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
