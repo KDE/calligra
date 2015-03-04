@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 if(MARBLE_FOUND)
   add_subdirectory(widgets/mapbrowser)
-endif(MARBLE_FOUND)
+endif()
 
 
 
@@ -15,7 +15,7 @@ endif(MARBLE_FOUND)
 
 if(QT_QTWEBKIT_FOUND)
   add_subdirectory(widgets/webbrowser)
-endif(QT_QTWEBKIT_FOUND)
+endif()
 
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
 

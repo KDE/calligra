@@ -14,7 +14,7 @@ if (Q_WS_MAC)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} komain )
 

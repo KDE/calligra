@@ -2,7 +2,7 @@ include_directories (${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
-SET (webshape_LIB_SRCS
+set (webshape_LIB_SRCS
     WebShape.cpp
     WebShapeFactory.cpp
     WebShapePlugin.cpp

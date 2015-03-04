@@ -52,12 +52,12 @@ set(kformdesigner_LIBS
 )
 
 if(KFD_SIGSLOTS)
-  ADD_DEFINITIONS( 
+  add_definitions( 
     -DKFD_SIGSLOTS=1
   )
   list(APPEND kformdesigner_LIB_SRCS connectiondialog.cpp)
   list(APPEND kformdesigner_LIBS kexiextendedwidgets kexidatatable)
-endif(KFD_SIGSLOTS)
+endif()
 
 kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 

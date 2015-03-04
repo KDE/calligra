@@ -1,9 +1,9 @@
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  ${CMAKE_SOURCE_DIR}/stage/part)
 if(NOT QT_MAC_USE_COCOA)
     include_directories(${PHONON_INCLUDE_DIR}/phonon)
-else(NOT QT_MAC_USE_COCOA)
+else()
     include_directories(${PHONON_INCLUDE_DIR})
-endif(NOT QT_MAC_USE_COCOA)
+endif()
 
 set(calligrastageeventactions_PART_SRCS
     sound/KPrSoundEventAction.cpp

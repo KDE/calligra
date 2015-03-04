@@ -22,11 +22,11 @@ set_target_properties(kexidb PROPERTIES
 if(MSVC)
    # avoid LNK1169 errors
    set_target_properties(kexidb PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
-endif(MSVC)
+endif()
 
 install(TARGETS kexidb ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(FALSE) # TODO: install when we move to independent place
    install( FILES
    DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb COMPONENT Devel)
-endif(FALSE)
+endif()

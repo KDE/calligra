@@ -1,6 +1,6 @@
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-error)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 set(CMAKE_THREAD_PREFER_PTHREAD 1)
 
@@ -8,7 +8,7 @@ macro_optional_find_package(Threads)
 
 if(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT AND CMAKE_THREAD_LIBS_INIT)
     set(HAVE_PTHREADS 1)
-endif(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT AND CMAKE_THREAD_LIBS_INIT)
+endif()
 
 set(librcps_LIB_SRCS
     decode.c
@@ -28,9 +28,9 @@ endif()
 
 if(WIN32)
     kde4_add_library(rcps_plan STATIC ${librcps_LIB_SRCS})
-else(WIN32)
+else()
     kde4_add_library(rcps_plan SHARED ${librcps_LIB_SRCS})
-endif(WIN32)
+endif()
 
 target_link_libraries(
     rcps_plan
