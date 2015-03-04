@@ -46,7 +46,8 @@ class KoFindStyle;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
-#include <RdfForward.h>
+class KoRdfBasicSemanticItem;
+typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 #endif
 
 class KToggleAction;
