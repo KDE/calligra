@@ -28,7 +28,6 @@
 class QWidget;
 class KPrPresentationTool;
 class KPrPresenterViewWidget;
-class KPrViewModePresenterView;
 class KPrEndOfSlideShowPage;
 class KPrView;
 

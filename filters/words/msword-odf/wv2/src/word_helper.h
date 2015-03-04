@@ -40,7 +40,6 @@ namespace wvWare
 
     class OLEStreamReader;
     class OLEStreamWriter;
-    class ParagraphProperties;
     class UString;
 
     class STTBF

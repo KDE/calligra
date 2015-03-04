@@ -37,12 +37,10 @@ class KUndo2Command;
 
 namespace KPlato {
     class MainDocument;
-    class NamedCommand;
 }
 
 namespace Scripting {
 
-    class Project;
 
     /**
     * The Module class enables access to the KPlato functionality

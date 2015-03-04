@@ -24,7 +24,6 @@
 #include <db/utils.h>
 #include <koproperty/Set.h>
 
-class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
 class KexiFieldComboBox;
 class KexiFieldListView;

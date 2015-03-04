@@ -25,7 +25,6 @@
 #include "MsooXmlDrawingTableStyle.h"
 #include "MsooXmlCommonReader.h"
 
-class KoGenStyles;
 
 #include <QMap>
 

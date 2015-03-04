@@ -38,11 +38,8 @@ class KoShape;
 struct KoPageLayout;
 
 class KoReportPage;
-class KoReportData;
 class KoReportPreRenderer;
 class ORODocument;
-class ReportViewPageSelect;
-class ScriptAdaptor;
 class KoReportDesigner;
 class KoReportRendererBase;
 
@@ -55,12 +52,10 @@ namespace KoProperty
 class QGraphicsView;
 class QGraphicsScene;
 class QDomElement;
-class QDockWidget;
 class QStackedWidget;
 class QDomElement;
 class QScrollArea;
 class QStandardItemModel;
-class QActionGroup;
 class KUndo2Command;
 
 namespace KPlato
@@ -74,7 +69,6 @@ class ReportData;
 class ReportSourceEditor;
 class ReportNavigator;
 class ReportDesignPanel;
-class ReportSourceModel;
 class GroupSectionEditor;
 
 class ReportPrintingDialog : public KoPrintingDialog

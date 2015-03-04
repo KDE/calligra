@@ -29,7 +29,6 @@
 #include <QFileInfo>
 #include <QProcess>
 
-class KoView;
 class KoStore;
 
 class QDomDocument;
@@ -47,7 +46,6 @@ using namespace KPlato;
 namespace KPlatoWork
 {
 
-class View;
 class Part;
 class WorkPackage;
 class DocumentChild;

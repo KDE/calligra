@@ -33,11 +33,9 @@
 #include <QWidget>
 
 class QRect;
-class QPainter;
 
 class KWGui;
 class KWView;
-class KoToolProxy;
 
 
 /**

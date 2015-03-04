@@ -38,7 +38,6 @@ namespace Sheets
 {
 class Damage;
 class Sheet;
-class CellProxy;
 
 class CALLIGRA_SHEETS_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {

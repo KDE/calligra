@@ -22,13 +22,11 @@
 
 #include "CellToolBase.h"
 
-class KoInteractionStrategy;
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Region;
 
 class TableTool : public CellToolBase
 {

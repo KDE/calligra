@@ -34,7 +34,6 @@
 #include "OdfReaderInternals.h"
 
 
-class QSizeF;
 
 class OdtReaderBackend;
 class OdfReaderContext;

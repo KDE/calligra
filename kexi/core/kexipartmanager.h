@@ -27,7 +27,6 @@
 
 namespace KexiDB
 {
-class Connection;
 }
 
 namespace KexiPart

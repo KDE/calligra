@@ -32,7 +32,6 @@ class QDomDocument;
 
 namespace KFormDesigner
 {
-class WidgetLibrary;
 class Form;
 class WidgetTreeWidget;
 }

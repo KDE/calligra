@@ -53,7 +53,6 @@
 #ifndef QT_NO_COMPLETER
 
 class QAbstractItemView;
-class QAbstractProxyModel;
 class QWidget;
 class QItemSelection;
 

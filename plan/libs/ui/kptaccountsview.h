@@ -37,7 +37,6 @@ namespace KPlato
 
 class Account;
 class Project;
-class Resource;
 class ScheduleManager;
 class CostBreakdownItemModel;
 

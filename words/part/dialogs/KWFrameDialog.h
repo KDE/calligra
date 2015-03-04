@@ -28,11 +28,9 @@
 #include <QCheckBox>
 
 class KWFrameConnectSelector;
-class KWFrameGeometry;
 class KWRunAroundProperties;
 class KWAnchoringProperties;
 class KWFrame;
-class KWFrameSet;
 class KWDocument;
 class FrameConfigSharedState;
 class KWCanvas;

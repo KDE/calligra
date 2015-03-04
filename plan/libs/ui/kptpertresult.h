@@ -42,8 +42,6 @@ namespace KPlato
 {
 
 class DateTime;
-class Duration;
-class Estimate;
 class Node;
 class Project;
 class ScheduleManager;

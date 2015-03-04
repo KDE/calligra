@@ -23,8 +23,6 @@
 
 #include <QToolBar>
 
-class QVBoxLayout;
-class QPushButton;
 class KexiRecordNavigatorHandler;
 
 class KexiMobileToolbar : public QToolBar

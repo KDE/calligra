@@ -60,7 +60,6 @@ struct ViewInfo;
 class AccountsView;
 class GanttView;
 class PertEditor;
-class ResourceView;
 class AccountsEditor;
 class TaskEditor;
 class CalendarEditor;
@@ -69,7 +68,6 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
-class TaskModuleModel;
 class Calendar;
 class MainDocument;
 class Part;
@@ -85,7 +83,6 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
-class ReportWidget;
 
 class ReportDesignDialog;
 

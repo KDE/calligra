@@ -35,7 +35,6 @@ namespace Scripting {
 namespace KPlato
 {
 
-class Task;
 
 class ScriptingTester : public QObject
 {

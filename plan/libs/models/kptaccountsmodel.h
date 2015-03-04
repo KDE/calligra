@@ -32,7 +32,6 @@ namespace KPlato
 class Project;
 class Account;
 class ScheduleManager;
-class Node;
 class AccountItemModel;
 
 class KPLATOMODELS_EXPORT AccountModel : public QObject

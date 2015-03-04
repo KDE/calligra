@@ -27,8 +27,6 @@
 
 #include "../calligra_sheets_export.h"
 
-class QRect;
-class QWidget;
 
 class KoXmlWriter;
 
@@ -36,7 +34,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Cell;
 class Filter;
 class Map;
 class Region;

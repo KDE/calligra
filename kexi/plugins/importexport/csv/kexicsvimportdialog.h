@@ -47,7 +47,6 @@
 #include <QModelIndex>
 #include "kexicsvimportoptionsdlg.h"
 
-class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QCheckBox;

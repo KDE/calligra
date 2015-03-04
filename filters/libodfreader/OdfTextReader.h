@@ -33,7 +33,6 @@
 #include "OdfReaderInternals.h"
 
 
-class QSizeF;
 
 class OdfReader;
 class OdfReaderContext;

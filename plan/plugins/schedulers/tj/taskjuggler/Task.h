@@ -45,7 +45,6 @@ class ShiftSelection;
 class TaskList;
 class Allocation;
 class Interval;
-class UsageLimits;
 
 /**
  * This class stores all task related information and provides methods to

@@ -32,7 +32,6 @@
 #include <QDeclarativeItem>
 
 class CAAbstractDocumentHandler;
-class CADocumentController;
 class CACanvasItem;
 class KoCanvasBase;
 class KoZoomController;

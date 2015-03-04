@@ -28,9 +28,7 @@
 
 #include <QMetaEnum>
 
-class KoDocument;
 
-class QMimeData;
 class QModelIndex;
 class QAbstractItemDelegate;
 

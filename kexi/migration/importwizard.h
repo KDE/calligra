@@ -31,17 +31,6 @@
 #include <QLabel>
 
 class QLabel;
-class QCheckBox;
-class QRadioButton;
-class QHBoxLayout;
-class QVBoxLayout;
-class QGroupBox;
-class KexiConnectionSelectorWidget;
-class KexiProjectSelectorWidget;
-class KexiProjectSet;
-class KexiDBTitlePage;
-class KexiDBDriverComboBox;
-class KexiPrjTypeSelector;
 class KPageWidgetItem;
 
 namespace Kexi
@@ -51,7 +40,6 @@ class ObjectStatus;
 
 namespace KexiDB
 {
-class ConnectionData;
 }
 
 namespace KexiMigration

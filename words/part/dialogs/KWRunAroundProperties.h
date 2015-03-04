@@ -27,7 +27,6 @@
 
 #include <QList>
 
-class KWFrame;
 class KoShape;
 
 /// A widget that is shown to allow the user to select the run around properties

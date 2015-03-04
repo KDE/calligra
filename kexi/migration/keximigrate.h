@@ -31,7 +31,6 @@
 #include <QByteArray>
 #include <QPointer>
 
-class KexiProject;
 namespace Kexi
 {
 class ObjectStatus;

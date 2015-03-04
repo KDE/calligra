@@ -27,7 +27,6 @@
 #include "XlsxXmlCommonReader.h"
 #include <MsooXmlTheme.h>
 
-class XlsxXmlWorksheetReaderContext;
 class XlsxComments;
 class XlsxComment
 {

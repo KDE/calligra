@@ -23,17 +23,14 @@
 #include <QWidget>
 #include "Headers.h"
 
-class QLabel;
 class QRubberBand;
 
-class KoCanvasBase;
 
 namespace Calligra
 {
 namespace Sheets
 {
 class Canvas;
-class Selection;
 class View;
 
 /**

@@ -26,13 +26,11 @@
 #include <kexi_export.h>
 
 class QTreeWidgetItem;
-class QCheckBox;
 
 namespace KFormDesigner
 {
 
 class Form;
-class WidgetTreeWidget;
 
 //! A dialog to edit Form tab stops
 /*! The user can change the order by dragging list items or using buttons at the right.

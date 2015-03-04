@@ -30,7 +30,6 @@
 #include <kdialog.h>
 #include <QVariantList>
 
-class KarbonView;
 class RoundCornersDlg;
 
 class RoundCornersPlugin : public QObject, public KXMLGUIClient

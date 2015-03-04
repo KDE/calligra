@@ -35,22 +35,16 @@
 #include <kparts/mainwindow.h>
 
 namespace KParts {
-    class PartManager;
 }
 namespace KPlatoWork {
-    class DocumentChild;
     class Part;
 }
 namespace KPlato {
     class Document;
 }
 
-class KComponentData;
-class QSplitter;
 class KoDocumentEntry;
-class KoView;
 
-class KPlatoWork_MainGUIClient;
 
 /////// class KPlatoWork_MainWindow ////////
 

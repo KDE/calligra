@@ -26,7 +26,6 @@
 
 #include <QVariantList>
 
-class PlanTJScheduler;
 
 namespace KPlato
 {

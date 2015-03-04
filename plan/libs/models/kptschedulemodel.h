@@ -32,13 +32,10 @@
 namespace KPlato
 {
 
-class View;
 class Project;
 class ScheduleManager;
 class MainSchedule;
 class Schedule;
-class Node;
-class Resource;
 
 class KPLATOMODELS_EXPORT ScheduleModel : public QObject
 {

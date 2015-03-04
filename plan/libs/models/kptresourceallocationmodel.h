@@ -27,7 +27,6 @@
 #include <QMetaEnum>
 #include <QMap>
 
-class QPoint;
 
 
 namespace KPlato

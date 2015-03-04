@@ -47,7 +47,6 @@ namespace QTest
 namespace KPlato
 {
 
-class Task;
 
 class ScheduleTester : public QObject
 {

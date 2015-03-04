@@ -26,8 +26,6 @@
 
 #include <QVariantList>
 
-class KJob;
-class KPlatoRCPSScheduler;
 
 namespace KPlato
 {

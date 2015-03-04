@@ -31,7 +31,6 @@
 #include <QPointer>
 
 class KexiProjectData;
-class KexiProjectSelectorWidget;
 class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
 class KexiWelcomeStatusBar;

@@ -27,8 +27,6 @@
 #include <KoZoomMode.h>
 
 class KoDocument;
-class QGraphicsItem;
-class KoCanvasController;
 class KoCanvasBase;
 class CADocumentController;
 

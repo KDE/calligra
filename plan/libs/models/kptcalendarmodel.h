@@ -28,8 +28,6 @@
 
 #include "kcalendar/kdatetable.h"
 
-class QPoint;
-class QDragMoveEvent;
 class QPainter;
 
 namespace KPlato

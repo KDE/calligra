@@ -22,7 +22,6 @@
 
 #include <QWidget>
 
-class QUrl;
 
 //! Status sidebar for the welcome page
 class KexiWelcomeStatusBar : public QWidget

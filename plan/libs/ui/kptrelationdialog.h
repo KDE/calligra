@@ -31,7 +31,6 @@ namespace KPlato
 {
 
 class RelationPanel;
-class DurationWidget;
 
 class Relation;
 class Project;

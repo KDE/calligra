@@ -34,7 +34,6 @@
 #include "KexiRelationsConnection.h"
 #include "KexiRelationsTableContainer.h"
 
-class KexiRelationViewTable;
 
 namespace KexiDB
 {

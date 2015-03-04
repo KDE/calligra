@@ -25,7 +25,6 @@
 #include <kexi_export.h>
 
 class QTextCharFormat;
-class QActionGroup;
 
 namespace KFormDesigner
 {

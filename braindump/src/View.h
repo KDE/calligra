@@ -30,7 +30,6 @@ class Canvas;
 class MainWindow;
 class KAction;
 class KoZoomAction;
-class KoViewConverter;
 class KoZoomController;
 class RootSection;
 class Section;

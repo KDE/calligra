@@ -30,8 +30,6 @@ namespace KPlato
 
 class DateTime;
 class Task;
-class StandardWorktime;
-class MacroCommand;
 
 
 class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase

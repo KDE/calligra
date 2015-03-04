@@ -28,10 +28,6 @@
 #include <OdfTextReaderBackend.h>
 
 
-class QByteArray;
-class QSizeF;
-class QStringList;
-class KoStore;
 class OdfReaderContext;
 class OdfReaderWikiContext;
 

@@ -25,10 +25,8 @@
 #include <kexi_export.h>
 
 class QToolButton;
-class QIntValidator;
 class QAbstractScrollArea;
 class QScrollBar;
-class QLabel;
 class QEvent;
 class QPaintEvent;
 class KGuiItem;

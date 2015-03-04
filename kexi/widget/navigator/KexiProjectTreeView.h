@@ -27,7 +27,6 @@
 
 namespace KexiPart
 {
-    class Info;
     class Item;
     class Part;
 }

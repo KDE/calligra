@@ -25,7 +25,6 @@
 #include <KoDocumentSectionView.h>
 #include <KoCanvasObserverBase.h>
 
-class KoShapeBasedDocumentBase;
 class KoShape;
 class KoShapeLayer;
 class KoShapeGroup;

@@ -33,18 +33,11 @@
 #include <QMap>
 #include <QAction>
 
-class KoReportData;
-class ORPreRender;
-class ORODocument;
 class ReportSectionDetailGroup;
-class ReportViewPageSelect;
-class RecordNavigator;
-class ScriptAdaptor;
 class KoReportDesigner;
 
 class KToolBar;
 
-class QScrollArea;
 class QDomElement;
 class QActionGroup;
 

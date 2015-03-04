@@ -25,7 +25,6 @@
 
 namespace KexiDB
 {
-class TableOrQuerySchema;
 }
 class KexiProject;
 

@@ -57,7 +57,6 @@ namespace KFormDesigner
 class Form;
 class ObjectTreeItem;
 class Container;
-class WidgetLibrary;
 
 //! KFormDesigner API version number. Increased on every breaking of backward compatibility.
 //! Use KFormDesigner::version() to get real version number of the library.

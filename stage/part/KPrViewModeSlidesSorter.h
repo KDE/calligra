@@ -31,7 +31,6 @@ class KoPAPageBase;
 class KoViewItemContextBar;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
-class KPrSelectionManager;
 class KPrCustomSlideShowsModel;
 class KPrCustomSlideShows;
 class QToolButton;

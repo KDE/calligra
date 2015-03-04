@@ -29,7 +29,6 @@ class GradientStrategy;
 class KarbonGradientEditWidget;
 class KUndo2Command;
 class KoShape;
-class QTableWidgetItem;
 class KoResource;
 
 /**

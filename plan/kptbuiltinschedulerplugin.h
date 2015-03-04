@@ -41,8 +41,6 @@ namespace KPlato
 class KPlatoScheduler;
 class Project;
 class ScheduleManager;
-class Node;
-class XMLLoaderObject;
 
 class KPLATO_EXPORT BuiltinSchedulerPlugin : public SchedulerPlugin
 {

@@ -26,7 +26,6 @@
 
 #include "calligra_sheets_export.h"
 
-class QPainter;
 
 namespace Calligra
 {

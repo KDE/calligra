@@ -36,7 +36,6 @@
 
 #include "karbonui_export.h"
 
-class QGraphicsItem;
 class KoView;
 class KoDocument;
 

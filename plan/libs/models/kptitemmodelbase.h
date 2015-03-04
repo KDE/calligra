@@ -33,13 +33,10 @@
 
 #include <KoXmlReaderForward.h>
 
-class KoDocument;
-class QDomElement;
 class KUndo2Command;
 class QPainter;
 class QModelIndex;
 
-class QItemSelection;
 
 /// The main namespace
 namespace KPlato

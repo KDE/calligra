@@ -26,7 +26,6 @@
 
 class CollectionItemModel;
 class CollectionTreeWidget;
-class KoShape;
 
 class KLineEdit;
 

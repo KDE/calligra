@@ -21,12 +21,10 @@
 #define KPRANIMATIONSTIMELINEVIEW_H
 
 #include <QWidget>
-class QTableView;
 class KPrShapeAnimations;
 class KPrTimeLineView;
 class QScrollArea;
 class QModelIndex;
-class TimeLineWidget;
 class KPrTimeLineHeader;
 class QColor;
 class KPrAnimationGroupProxyModel;

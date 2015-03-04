@@ -38,9 +38,7 @@ class KoPAPageBase;
 class KoPAView;
 class KPrPageEffect;
 class KPrPageEffectRunner;
-class KPrAnimationData;
 class KPrPage;
-class KPrPageData;
 class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject

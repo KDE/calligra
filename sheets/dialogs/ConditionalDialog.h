@@ -36,7 +36,6 @@ namespace Calligra
 namespace Sheets
 {
 class Selection;
-class Style;
 
 /**
  * \ingroup UI

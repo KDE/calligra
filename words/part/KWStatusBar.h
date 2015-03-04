@@ -34,9 +34,7 @@ class KSqueezedTextLabel;
 
 class KoCanvasController;
 class KoCanvasControllerProxyObject;
-class KoCanvasBase;
 
-class KWDocument;
 class KWView;
 class KWStatusBarEditItem;
 class KWStatusBarButtonItem;

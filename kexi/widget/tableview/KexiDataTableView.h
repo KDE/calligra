@@ -24,7 +24,6 @@
 
 #include <widget/dataviewcommon/kexidataawareview.h>
 
-class KexiDataTableScrollArea;
 class KexiTableScrollArea;
 
 namespace KexiDB

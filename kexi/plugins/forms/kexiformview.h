@@ -39,11 +39,8 @@
 
 class KexiFormPart;
 class KexiFormPartTempData;
-class KexiDBForm;
-class KexiFormScrollView;
 namespace KexiDB
 {
-class Cursor;
 }
 namespace KFormDesigner
 {

@@ -39,12 +39,10 @@
 
 class KUndo2QStack;
 
-class KoView;
 class KoStore;
 
 class KProcess;
 
-class QAction;
 class QFileSystemWatcher;
 
 namespace KPlato
@@ -60,7 +58,6 @@ using namespace KPlato;
 namespace KPlatoWork
 {
 
-class View;
 class Part;
 class WorkPackage;
 

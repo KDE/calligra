@@ -30,7 +30,6 @@
 #include <QPointF>
 #include <QVariantList>
 
-class KarbonView;
 class WhirlPinchDlg;
 
 class WhirlPinchPlugin : public QObject, public KXMLGUIClient

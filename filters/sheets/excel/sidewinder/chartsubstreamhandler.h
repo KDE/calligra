@@ -42,7 +42,6 @@ namespace Swinder
 {
 
 class GlobalsSubStreamHandler;
-class WorksheetSubStreamHandler;
 
 class BRAIRecord;
 class CrtMlFrtRecord;

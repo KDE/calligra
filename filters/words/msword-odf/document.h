@@ -61,7 +61,6 @@ class MSWordOdfImport;
 /* class KoFilterChain; */
 class WordsReplacementHandler;
 class WordsTableHandler;
-class WordsPictureHandler;
 class WordsTextHandler;
 class WordsGraphicsHandler;
 

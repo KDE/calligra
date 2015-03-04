@@ -49,11 +49,8 @@ class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoShapeAnchor;
-class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-class KLocalizedString;
-class QIODevice;
 class KoAnnotationLayoutManager;
 class KoDocumentInfoDlg;
 

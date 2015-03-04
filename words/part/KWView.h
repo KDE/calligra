@@ -42,7 +42,6 @@ class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
-class KoFindStyle;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
