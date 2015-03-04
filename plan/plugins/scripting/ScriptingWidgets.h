@@ -30,7 +30,6 @@
 #include "ui_ScriptingDataQueryView.h"
 
 class QTreeView;
-class QStandardItemModel;
 class QListWidget;
 
 namespace Scripting {

@@ -26,7 +26,6 @@ class QComboBox;
 class QString;
 class KoShape;
 class KoEventAction;
-class KoEventActionData;
 class KPrEventActionData;
 class KPrSoundCollection;
 

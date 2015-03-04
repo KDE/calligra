@@ -42,24 +42,16 @@
 #include <karbonui_export.h>
 #include "KarbonBooleanCommand.h"
 
-class QLabel;
 class QDropEvent;
 class QResizeEvent;
-class QRectF;
-class QPrinter;
 
 class KarbonDocument;
 
-class KoCanvasController;
-class KoRuler;
 class KoColor;
 
-class KarbonLayerDocker;
-class KarbonZoomController;
 
 class KarbonPart;
 class KarbonCanvas;
-class KarbonStylePreviewDocker;
 
 class KARBONUI_EXPORT KarbonView : public KoView
 {

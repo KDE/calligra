@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QHash>
 
-class QDataStream;
 
 class CADocumentInfo : public QObject
 {

@@ -31,7 +31,6 @@
 #include <QString>
 
 class GfxPath;
-class QColor;
 class QMatrix;
 class GooString;
 

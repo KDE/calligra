@@ -27,7 +27,6 @@
 
 #include <QSortFilterProxyModel>
 
-class QItemSelection;
 class QTreeView;
 
 namespace KPlato

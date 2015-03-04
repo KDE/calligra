@@ -44,7 +44,6 @@ class Effort;
 class Appointment;
 class Node;
 class Resource;
-class ResourceRequest;
 class EffortCost;
 class EffortCostMap;
 class Schedule;

@@ -25,7 +25,6 @@
 
 #define WEBSHAPEID "WebShape"
 
-class QSvgRenderer;
 class QWebPage;
 
 class WebShape : public QObject, public KoShape

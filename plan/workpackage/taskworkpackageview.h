@@ -30,17 +30,14 @@
 
 #include <QSplitter>
 
-class QTextBrowser;
 class QItemSelection;
 
-class KoDocument;
 
 namespace KPlato
 {
 
 class Project;
 class Node;
-class ScheduleManager;
 class Document;
 
 }

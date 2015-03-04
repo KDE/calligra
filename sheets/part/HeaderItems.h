@@ -25,18 +25,13 @@
 
 #include "calligra_sheets_export.h"
 
-class QLabel;
-class QRubberBand;
 
-class KoCanvasBase;
 
 namespace Calligra
 {
 namespace Sheets
 {
 class CanvasItem;
-class Selection;
-class View;
 
 /**
  * The widget above the cells showing the column headers.

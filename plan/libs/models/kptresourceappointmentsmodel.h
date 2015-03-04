@@ -29,7 +29,6 @@
 namespace KPlato
 {
 
-class View;
 class Project;
 class Node;
 class Appointment;

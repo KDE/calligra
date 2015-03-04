@@ -28,7 +28,6 @@
 
 class QCheckBox;
 class QGroupBox;
-class QHBoxLayout;
 class KPushButton;
 class KexiFileWidget;
 class KexiCSVDelimiterWidget;

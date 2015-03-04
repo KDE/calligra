@@ -24,7 +24,6 @@
 
 #include <QWidget>
 
-class QPaintEvent;
 class KarbonFillStyleWidget;
 class KarbonStrokeStyleWidget;
 class KoCanvasBase;

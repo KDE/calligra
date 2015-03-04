@@ -24,7 +24,6 @@
 #include <QObject>
 #include <kexi_export.h>
 
-class QEvent;
 class KUrl;
 class KFileDialog;
 class KUrlRequester;

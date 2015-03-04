@@ -24,7 +24,6 @@
 #include <QStackedWidget>
 #include <core/kexiproject.h>
 
-class KexiMobileOpenFileWidget;
 class KexiMobileNavigator;
 class KexiProject;
 

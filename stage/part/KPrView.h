@@ -35,7 +35,6 @@ class KPrViewAdaptor;
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
 class KPrViewModePresentation;
-class KPrViewModePresenterView;
 class KActionMenu;
 class KoPAPageBase;
 

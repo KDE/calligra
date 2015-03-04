@@ -27,10 +27,7 @@
 #include <QMap>
 #include <QPair>
 
-class KoShape;
-class KoTextShapeData;
 class KWTextFrameSet;
-class KWFrame;
 class KWPage;
 
 class KWRootAreaProviderBase : public KoTextLayoutRootAreaProvider

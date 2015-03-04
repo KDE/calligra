@@ -52,7 +52,6 @@ namespace KPlato
     class Schedule;
     class MainSchedule;
     class Resource;
-    class ResourceRequest;
     class Task;
     class Node;
     class Relation;

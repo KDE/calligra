@@ -31,7 +31,6 @@ class KPrCollectionItemModel;
 class QListWidgetItem;
 class QListWidget;
 class KoShape;
-class KPrShapeAnimationDocker;
 
 /** This class holds the data model for predefined animations
   parsed from the animations.xml file*/

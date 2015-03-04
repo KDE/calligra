@@ -28,7 +28,6 @@
 #include <QMetaEnum>
 
 class QByteArray;
-class QPoint;
 
 namespace KIO {
     class Job;

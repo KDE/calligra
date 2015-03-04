@@ -26,7 +26,6 @@
 
 #include <QWidget>
 
-class KoView;
 
 namespace KPlato
 {

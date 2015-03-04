@@ -25,7 +25,6 @@
 #include <KoPADocumentModel.h>
 
 class KoPADocument;
-class CADocumentController;
 
 class CAPADocumentModel : public KoPADocumentModel
 {

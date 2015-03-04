@@ -26,7 +26,6 @@
 #include <KoCheckerBoardPainter.h>
 #include <QWidget>
 
-class KarbonGradientWidget;
 class KoSliderCombo;
 class KComboBox;
 class KDoubleNumInput;

@@ -26,8 +26,6 @@
 #include <QSlider>
 
 class Slider;
-class QSpinBox;
-class QBoxLayout;
 
 
 /**

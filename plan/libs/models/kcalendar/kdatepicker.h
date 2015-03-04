@@ -28,12 +28,10 @@
 #include <QFrame>
 
 class QLineEdit;
-class QToolButton;
 
 namespace KPlato
 {
 
-class KDateValidator;
 class KDateTable;
 
 /**

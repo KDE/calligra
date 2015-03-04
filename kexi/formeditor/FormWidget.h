@@ -30,8 +30,6 @@
 namespace KFormDesigner
 {
 
-class Container;
-class WidgetLibrary;
 class FormPrivate;
 class Form;
 

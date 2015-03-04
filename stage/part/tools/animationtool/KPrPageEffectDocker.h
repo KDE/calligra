@@ -23,13 +23,10 @@
 #include <QWidget>
 #include <QPixmap>
 
-class QLabel;
 class QComboBox;
 class QDoubleSpinBox;
 class QPushButton;
-class QTimer;
 class KPrPageEffect;
-class KPrPageEffectRunner;
 class KPrPageEffectFactory;
 class KoPAViewBase;
 class KPrViewModePreviewPageEffect;

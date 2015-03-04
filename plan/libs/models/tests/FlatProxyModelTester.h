@@ -29,7 +29,6 @@
 namespace KPlato
 {
 
-class Task;
 
 class FlatProxyModelTester : public QObject
 {

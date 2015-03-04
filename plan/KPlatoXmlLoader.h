@@ -29,7 +29,6 @@
 
 namespace KPlato
 {
-    class Config;
     class Package;
     class XMLLoaderObject;
     class Project;

@@ -29,7 +29,6 @@
 #include <kstatusbar.h>
 
 class KMenu;
-class QCheckBox;
 
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
 namespace KTextEditor

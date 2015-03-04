@@ -31,7 +31,6 @@
 
 #include "calligra_sheets_export.h"
 
-class QDomElement;
 
 namespace Calligra
 {

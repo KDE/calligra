@@ -28,9 +28,7 @@
 
 class KoReportPreRenderer;
 class ORODocument;
-class QScrollArea;
 class KoReportPage;
-class KexiReportViewPageSelect;
 class KexiScriptAdaptor;
 class KRScriptFunctions;
 #ifndef KEXI_MOBILE

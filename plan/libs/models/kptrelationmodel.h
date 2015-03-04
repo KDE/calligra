@@ -24,7 +24,6 @@
 #include "kptschedule.h"
 
 
-class QMimeData;
 class QModelIndex;
 class KUndo2Command;
 

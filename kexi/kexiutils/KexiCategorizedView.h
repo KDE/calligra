@@ -25,10 +25,7 @@
 #include <kcategorydrawer.h>
 #include <kcategorizedview.h>
 
-class QModelIndex;
 class QAbstractItemModel;
-class QRect;
-class QMouseEvent;
 
 typedef KCategoryDrawerV3 KexiCategoryDrawerBase;
 

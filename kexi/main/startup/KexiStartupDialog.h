@@ -27,7 +27,6 @@
 #include <core/kexiprojectdata.h>
 
 class KexiProjectData;
-class KexiProjectSet;
 class KexiDBConnectionSet;
 class ConnectionDataLVItem;
 class QEvent;

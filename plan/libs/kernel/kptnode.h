@@ -51,7 +51,6 @@ class ResourceGroup;
 class Resource;
 class ResourceGroupRequest;
 class Estimate;
-class WBSDefinition;
 class EffortCostMap;
 class EffortCost;
 class Calendar;

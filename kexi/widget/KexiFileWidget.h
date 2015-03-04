@@ -24,7 +24,6 @@
 #include <kfilewidget.h>
 #include <kexi_export.h>
 
-class QEvent;
 
 //! @short Widget for opening/saving files supported by Kexi
 /*! For simplicity, initially the widget has hidden the preview pane. */

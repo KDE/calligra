@@ -35,7 +35,6 @@
 #include "Module.h"
 #include "TextCursor.h"
 
-class KWDocument;
 
 namespace Scripting
 {

@@ -38,7 +38,6 @@ class VPath;
 class KarbonDocument;
 class VFill;
 class VGroup;
-class VLayer;
 class VSubpath;
 class VStroke;
 class VText;

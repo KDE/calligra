@@ -55,7 +55,6 @@ class ResourceRequest;
 class ResourceGroupRequest;
 class ResourceRequestCollection;
 class Schedule;
-class NodeSchedule;
 class ResourceSchedule;
 class Schedule;
 class XMLLoaderObject;

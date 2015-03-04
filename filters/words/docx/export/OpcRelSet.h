@@ -29,11 +29,8 @@
 
 
 class QString;
-class QByteArray;
 
-class KoStore;
 
-class OdtTraverserDocxContext;
 
 /**
  * @brief this class manages a set of relationships in a file in the OPC format

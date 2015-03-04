@@ -23,14 +23,12 @@
 #include <QWidget>
 #include <animations/KPrShapeAnimation.h>
 
-class QListWidget;
 class QToolButton;
 class KoPAViewBase;
 class KPrView;
 class QTreeView;
 class KPrAnimationGroupProxyModel;
 class KPrShapeAnimations;
-class KPrAnimationsDataModel;
 class KPrViewModePreviewShapeAnimations;
 class KPrEditAnimationsWidget;
 class QModelIndex;

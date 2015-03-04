@@ -27,7 +27,6 @@
 class KoMainWindow;
 class KWDocument;
 class KWView;
-class KComponentData;
 class QGraphicsItem;
 
 class WORDS_EXPORT KWPart : public KoPart

@@ -40,12 +40,10 @@
 class QHeaderView;
 class QScrollBar;
 class KMenu;
-class KexiTableScrollAreaHeader;
 class KexiRecordNavigatorIface;
 
 namespace KexiDB
 {
-class RowEditBuffer;
 class RecordData;
 class TableViewData;
 }

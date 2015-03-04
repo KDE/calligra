@@ -23,11 +23,6 @@
 #include <QWidget>
 
 class KPrAnimationsTimeLineView;
-class QGraphicsView;
-class QGraphicsScene;
-class KPrTimeLineHeader;
-class TimeLineItem;
-class QAbstractItemModel;
 class QModelIndex;
 
 /**

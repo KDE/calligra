@@ -35,7 +35,6 @@
 
 #include <QFileInfo>
 
-class KoView;
 
 #define PLAN_MIME_TYPE "application/x-vnd.kde.plan"
 
@@ -46,7 +45,6 @@ namespace KPlato
 class DocumentChild;
 class Project;
 class Context;
-class GanttView;
 class SchedulerPlugin;
 class ViewListItem;
 class View;

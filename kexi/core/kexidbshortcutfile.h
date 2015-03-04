@@ -24,7 +24,6 @@
 
 #include <kexi_export.h>
 
-class KexiProjectData;
 namespace KexiDB
 {
 class ConnectionData;

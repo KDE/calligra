@@ -30,7 +30,6 @@
 // #include "Journal.h"
 
 class QStringList;
-class QDomElement;
 
 namespace TJ
 {

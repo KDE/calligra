@@ -41,13 +41,10 @@
 #include <KoPart.h>
 #include <sheets/calligra_sheets_export.h>
 
-class QAction;
 class QKeyEvent;
-class QResizeEvent;
 class QScrollBar;
 
 class KoCanvasController;
-class KoDocumentEntry;
 class KoZoomHandler;
 
 namespace Calligra

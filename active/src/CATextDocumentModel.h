@@ -24,8 +24,6 @@
 
 #include <KWDocument.h>
 
-class KWPageManager;
-class CADocumentController;
 
 class CATextDocumentModel : public QAbstractListModel
 {

@@ -26,7 +26,6 @@
 #include <KoDocumentRdf.h>
 #include <KoCanvasObserverBase.h>
 
-class QTimer;
 class QTextDocument;
 class KoSelection;
 class KWDocument;

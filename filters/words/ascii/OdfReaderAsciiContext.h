@@ -32,10 +32,7 @@
 #include "OdfReaderContext.h"
 
 
-class QByteArray;
-class QSizeF;
 class QFile;
-class QStringList;
 class KoStore;
 
 

@@ -32,11 +32,9 @@ class KWDocument;
 class KoOdfWriteStore;
 class KoShapeSavingContext;
 class KoEmbeddedDocumentSaver;
-class KoGenStyles;
 class KWTextFrameSet;
 class KWPage;
 
-class KoGenChanges;
 class KoStore;
 
 /**

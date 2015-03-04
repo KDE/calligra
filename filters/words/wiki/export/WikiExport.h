@@ -27,7 +27,6 @@
 #include <QVariantList>
 
 class QByteArray;
-class QTextStream;
 
 
 class WikiExport : public KoFilter

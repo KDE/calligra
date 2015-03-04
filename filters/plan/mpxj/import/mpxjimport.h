@@ -27,7 +27,6 @@
 #include <QObject>
 #include <QVariantList>
 
-class QFile;
 class QByteArray;
 class QStringList;
 

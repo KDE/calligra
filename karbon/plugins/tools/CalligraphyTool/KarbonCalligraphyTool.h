@@ -25,10 +25,7 @@
 #include <QPointer>
 
 class KoPathShape;
-class KoShapeGroup;
-class KoPathPoint;
 class KarbonCalligraphicShape;
-class KarbonCalligraphyOptionWidget;
 
 class KarbonCalligraphyTool : public KoToolBase
 {

@@ -25,13 +25,11 @@
 #include <QSet>
 #include <QMap>
 
-class KoShape;
 class KoFilterEffect;
 class KoFilterEffectStack;
 class QGraphicsItem;
 class EffectItemBase;
 class EffectItem;
-class DefaultInputItem;
 class ConnectionItem;
 
 class ConnectionSource

@@ -25,7 +25,6 @@
 #include <koproperty/Set.h>
 
 class KexiProject;
-class QLabel;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
 /*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does

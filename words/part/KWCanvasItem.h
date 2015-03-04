@@ -31,10 +31,7 @@
 class QRect;
 class QPainter;
 
-class KWGui;
 class KWView;
-class KoToolProxy;
-class KoShape;
 
 /**
  * This class is responsible for the rendering of the frames to

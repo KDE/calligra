@@ -26,7 +26,6 @@ class KoFilterEffect;
 class CompositeEffect;
 class KDoubleNumInput;
 class KComboBox;
-class QStackedWidget;
 
 class CompositeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {

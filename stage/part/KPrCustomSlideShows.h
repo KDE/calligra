@@ -31,7 +31,6 @@ class KoPAPageBase;
 #include "KoXmlReaderForward.h"
 class KoPASavingContext;
 class KoPALoadingContext;
-class KPrDocument;
 
 #include "stage_export.h"
 

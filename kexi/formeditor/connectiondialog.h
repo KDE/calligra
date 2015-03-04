@@ -30,7 +30,6 @@ namespace KexiDB
 {
 class ResultInfo;
 class RecordData;
-class TableViewData;
 }
 
 class QLabel;
@@ -41,7 +40,6 @@ namespace KFormDesigner
 {
 
 class Form;
-class ConnectionBuffer;
 class Connection;
 
 

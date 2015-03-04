@@ -48,7 +48,6 @@
 
 class QPrinter;
 class QPrintDialog;
-class QHelpEvent;
 class QAbstractItemModel;
 class KexiTableEdit;
 

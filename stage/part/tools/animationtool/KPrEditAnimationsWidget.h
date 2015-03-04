@@ -26,7 +26,6 @@ class KPrAnimationsTimeLineView;
 class KPrView;
 class KoPAViewBase;
 class QModelIndex;
-class KoShape;
 class QModelIndex;
 class QComboBox;
 class QTimeEdit;
