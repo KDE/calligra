@@ -61,7 +61,7 @@ public:
     KexiDBSchema(QObject* parent, const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist, bool owner);
     virtual ~KexiDBSchema();
 
-public slots:
+public Q_SLOTS:
 
     /** Returns the name of the schema. */
     const QString name() const;
@@ -98,7 +98,7 @@ public:
     virtual ~KexiDBTableSchema();
     ::KexiDB::TableSchema* tableschema();
 
-public slots:
+public Q_SLOTS:
     /** Return the \a KexiDBQuerySchema object that represents a
     "SELECT * FROM this_KexiDBTableSchema_object" SQL-statement. */
     QObject* query();

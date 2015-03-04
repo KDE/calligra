@@ -83,10 +83,10 @@ public:
     Relation *relation( const QModelIndex &index ) const;
     QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
-signals:
+Q_SIGNALS:
     void executeCommand( KUndo2Command* );
     
-protected slots:
+protected Q_SLOTS:
     void slotNodeChanged( Node* );
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );

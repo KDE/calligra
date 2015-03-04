@@ -59,10 +59,10 @@ public:
     explicit ImportWizard(QWidget *parent = 0, QMap<QString, QString>* args = 0);
     virtual ~ImportWizard();
 
-public slots:
+public Q_SLOTS:
     void progressUpdated(int percent);
 
-protected slots:
+protected Q_SLOTS:
     virtual void next();
     virtual void back();
     void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);

@@ -62,10 +62,10 @@ public:
     /// Sets the pattern size
     void setPatternSize(const QSize &size);
 
-signals:
+Q_SIGNALS:
     /// is emitted whenever an option has changed
     void patternChanged();
-private slots:
+private Q_SLOTS:
     void updateControls();
 private:
     class Private;

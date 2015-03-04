@@ -164,7 +164,7 @@ public:
      */
     QStringList namesByPage(KoPAPageBase *page);
 
-signals:
+Q_SIGNALS:
     void updated();
 
 private:

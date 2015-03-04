@@ -54,7 +54,7 @@ public:
 
     bool cancelled() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void next();
     virtual void done(int result);
     void slotShowOptionsButtonClicked();

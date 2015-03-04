@@ -80,7 +80,7 @@ public:
     int getMessageCount() const { return messages.count(); }
     QString getMessage( int pos ) const { return messages.value( pos ); }
 
-signals:
+Q_SIGNALS:
     void printWarning(const QString& msg, const QString& file, int line);
     void printError(const QString& msg, const QString& file, int line);
     void printFatal(const QString& msg, const QString& file, int line);

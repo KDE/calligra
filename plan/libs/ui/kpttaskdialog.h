@@ -56,7 +56,7 @@ public:
 
     virtual MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotButtonClicked(int button);
     void slotTaskRemoved( Node *node );
     void slotCurrentChanged( KPageWidgetItem*, KPageWidgetItem* );
@@ -80,7 +80,7 @@ public:
 
     virtual MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotNodeRemoved( Node* );
 
 private:
@@ -95,7 +95,7 @@ public:
 
     virtual MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotNodeRemoved( Node* );
 
 private:

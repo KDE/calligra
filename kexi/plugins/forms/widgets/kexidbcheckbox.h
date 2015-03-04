@@ -81,7 +81,7 @@ public:
 
     virtual void paintEvent(QPaintEvent* e);
 
-public slots:
+public Q_SLOTS:
     void setDataSource(const QString &ds);
     inline void setDataSourcePartClass(const QString &ds) {
         KexiFormDataItemInterface::setDataSourcePartClass(ds);

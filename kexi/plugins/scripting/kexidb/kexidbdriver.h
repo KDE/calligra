@@ -61,7 +61,7 @@ public:
     KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver);
     virtual ~KexiDBDriver();
 
-public slots:
+public Q_SLOTS:
 
     /** Returns true if this driver is valid else false is returned. */
     bool isValid();

@@ -59,7 +59,7 @@ public:
 
     int exec(QListView *listview);
 
-public slots:
+public Q_SLOTS:
     // Columns page
     void updateItemProperties(QListBoxItem*);
     void newItem();

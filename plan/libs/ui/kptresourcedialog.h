@@ -44,7 +44,7 @@ class ResourceDialogImpl : public QWidget, public Ui_ResourceDialogBase {
 public:
     explicit ResourceDialogImpl( const Project &m_project, Resource &resource, bool baselined, QWidget *parent );
 
-public slots:
+public Q_SLOTS:
     void slotChanged();
     void slotTypeChanged(int);
     void slotCalculationNeeded(const QString&);
@@ -52,11 +52,11 @@ public slots:
     
     void setCurrentIndexes( const QModelIndexList &lst );
 
-signals:
+Q_SIGNALS:
     void changed();
     void calculate();
 
-protected slots:
+protected Q_SLOTS:
     void slotAvailableFromChanged(const QDateTime& dt);
     void slotAvailableUntilChanged(const QDateTime& dt);
     
@@ -81,7 +81,7 @@ public:
     
     static MacroCommand *buildCommand(Resource *original, Resource &resource);
     
-protected slots:
+protected Q_SLOTS:
     void enableButtonOk();
     void slotCalculationNeeded();
     void slotOk();

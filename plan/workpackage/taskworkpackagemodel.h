@@ -122,11 +122,11 @@ public:
     bool isNode( const QModelIndex &idx ) const;
     bool isDocument( const QModelIndex &idx ) const;
 
-public slots:
+public Q_SLOTS:
     void addWorkPackage( WorkPackage *package, int row );
     void removeWorkPackage( WorkPackage *package, int row );
 
-protected slots:
+protected Q_SLOTS:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
     void slotNodeInserted( Node *node );

@@ -135,7 +135,7 @@ public:
 
     virtual int sortRole( int column ) const;
 
-protected slots:
+protected Q_SLOTS:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
     void slotResourceGroupToBeInserted( const ResourceGroup *group, int row );
@@ -230,15 +230,15 @@ public:
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
     QVariant data( const QModelIndex &idx, int role ) const;
 
-public slots:
+public Q_SLOTS:
     void setProject( Project *project );
     void setTask( Task *task );
 
-signals:
+Q_SIGNALS:
     void expandAll();
     void resizeColumnToContents( int );
 
-protected slots:
+protected Q_SLOTS:
     void slotNodeChanged( Node *n );
 
 protected:

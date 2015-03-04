@@ -59,7 +59,7 @@ class ScriptingScheduleListView : public QWidget
         */
         virtual ~ScriptingScheduleListView();
 
-    public slots:
+    public Q_SLOTS:
         /// Return the selected schedule
         QVariant currentSchedule() const;
 
@@ -91,7 +91,7 @@ class ScriptingNodePropertyListView : public KActionSelector
          */
         virtual ~ScriptingNodePropertyListView();
 
-    public slots:
+    public Q_SLOTS:
         /// Return the selected node properties
         QVariant selectedProperties() const;
 
@@ -121,7 +121,7 @@ class ScriptingDataQueryView : public QWidget, Ui::ScriptingDataQueryView
          */
         virtual ~ScriptingDataQueryView();
 
-    public slots:
+    public Q_SLOTS:
         /// If true, include header texts
         QVariant includeHeaders() const;
         /// The type of object (Node, Resource, Account)
@@ -130,7 +130,7 @@ class ScriptingDataQueryView : public QWidget, Ui::ScriptingDataQueryView
         QVariant selectedProperties() const;
 
 
-    private slots:
+    private Q_SLOTS:
         void slotObjectTypeChanged( int index );
         
     private:

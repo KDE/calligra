@@ -54,10 +54,10 @@ public:
 
     static void addViewControls(KStatusBar *statusBar, KWView *view);
 
-public slots:
+public Q_SLOTS:
     void setText(const QString &text);
 
-private slots:
+private Q_SLOTS:
     void setModified(bool modified);
     void updatePageCount();
     void gotoPage(int pagenumber = -1);

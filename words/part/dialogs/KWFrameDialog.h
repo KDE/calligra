@@ -55,7 +55,7 @@ public:
      */
     static QList<KoShapeConfigFactoryBase *> panels(KWDocument *document);
 
-private slots:
+private Q_SLOTS:
     void okClicked();
     void cancelClicked();
 

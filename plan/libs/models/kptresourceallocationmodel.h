@@ -128,10 +128,10 @@ public:
     void setRequired( const QModelIndex &idx, const QList<Resource*> &lst );
     QList<Resource*> required( const QModelIndex &idx ) const;
 
-public slots:
+public Q_SLOTS:
     void setTask( Task *task );
 
-protected slots:
+protected Q_SLOTS:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
     void slotResourceGroupToBeInserted( const ResourceGroup *group, int row );

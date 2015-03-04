@@ -58,7 +58,7 @@ public:
     
     Form *form() const;
 
-signals:
+Q_SIGNALS:
     void geometryChangeStarted();
     void geometryChanged(const QRect &newGeometry);
 

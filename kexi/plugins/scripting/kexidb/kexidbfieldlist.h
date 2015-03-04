@@ -64,7 +64,7 @@ public:
         return m_fieldlist;
     }
 
-public slots:
+public Q_SLOTS:
 
     /** Returns the number of fields. */
     uint fieldCount();

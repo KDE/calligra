@@ -43,7 +43,7 @@ public:
     
     bool ok();
 
-signals:
+Q_SIGNALS:
     void changed();
 
 private:

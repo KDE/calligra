@@ -42,10 +42,10 @@ class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPacka
 public:
     explicit WorkPackageSendPanel( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *parent=0 );
 
-signals:
+Q_SIGNALS:
     void sendWorkpackages( const QList<Node*>&, Resource* );
 
-protected slots:
+protected Q_SLOTS:
     void slotSendClicked();
 
 protected:

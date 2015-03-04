@@ -55,10 +55,10 @@ public:
         int m_column;
     };
     
-signals:
+Q_SIGNALS:
     void enableButtonOk( bool );
     
-public slots:
+public Q_SLOTS:
     void slotChanged();
     void slotOk();
     void setDefault();
@@ -77,7 +77,7 @@ public:
     KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
     void addPrintingOptions();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
 
 protected:
@@ -98,7 +98,7 @@ public:
     KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
     void addPrintingOptions();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
 
 private:

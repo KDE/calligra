@@ -48,10 +48,10 @@ public:
     
     void updateRecentProjects();
 
-signals:
+Q_SIGNALS:
     void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
 
-private slots:
+private Q_SLOTS:
     void slotItemClicked(const QModelIndex& index);
     void loadProjects();
 private:
@@ -74,13 +74,13 @@ public:
 
     KexiRecentProjects* projects();
     
-public slots:
+public Q_SLOTS:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
     void cancelActionTriggered();
 
-signals:
+Q_SIGNALS:
     /*! Emitted if project @a data was selected to open.
      @a shortcutPath can be non empty to indicate .kexis filename useful for opening new
      instance of Kexi. Receiver should set value pointed by @a opened to true if the

@@ -87,11 +87,11 @@ public:
      (i.e. text) to the original state. */
     virtual void undoChanges();
 
-public slots:
+public Q_SLOTS:
     virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
     virtual void slotItemSelected(KexiDB::RecordData *record);
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotInternalEditorValueChanged(const QVariant& v);
     void slotPopupHidden();
 

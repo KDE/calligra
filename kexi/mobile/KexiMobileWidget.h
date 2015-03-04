@@ -39,7 +39,7 @@ public:
     void setActiveObject(KexiWindow* win);
     KexiWindow* activeObject();
 
-public slots:
+public Q_SLOTS:
     void showNavigator();
 
 private:

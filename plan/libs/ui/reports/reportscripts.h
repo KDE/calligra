@@ -36,7 +36,7 @@ class ProjectAccess : public QObject
 public:
     explicit ProjectAccess(ReportData *rd);
 
-public slots:
+public Q_SLOTS:
     QVariant Name() const;
     QVariant Manager() const;
     QVariant Plan() const;

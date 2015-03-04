@@ -284,10 +284,10 @@ private:
     class Private;
     Private * const d;
 
-public slots:
+public Q_SLOTS:
     virtual void next();
 
-private slots:
+private Q_SLOTS:
     void fillTable();
     void fillTableLater();
     void initLater();

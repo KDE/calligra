@@ -66,7 +66,7 @@ public:
      */
     void setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage );
 
-public slots:
+public Q_SLOTS:
     /**
      * @brief Activate the saved view mode
      *
@@ -75,7 +75,7 @@ public slots:
      */
     void activateSavedViewMode();
 
-protected slots:
+protected Q_SLOTS:
     void animate();
 
 private:

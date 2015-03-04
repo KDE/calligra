@@ -112,12 +112,12 @@ public:
 
     bool hasSelectedConnection() const;
 
-signals:
+Q_SIGNALS:
     void connectionItemExecuted(ConnectionDataLVItem *item);
     void connectionItemHighlighted(ConnectionDataLVItem *item);
     void connectionSelected(bool hasSelected);
 
-public slots:
+public Q_SLOTS:
     void showSimpleConn();
     void showAdvancedConn();
     virtual void setFocus();
@@ -131,7 +131,7 @@ public slots:
     void hideConnectonIcon();
     void hideDescription();
 
-protected slots:
+protected Q_SLOTS:
     void slotConnectionItemExecuted(QTreeWidgetItem *item);
     void slotConnectionItemExecuted();
     void slotRemoteAddBtnClicked();

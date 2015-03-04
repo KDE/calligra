@@ -68,10 +68,10 @@ public:
     Node *currentNode() const;
     QList<Node*> selectedNodes() const;
 
-signals:
+Q_SIGNALS:
     void sectionsMoved();
 
-protected slots:
+protected Q_SLOTS:
     void slotActivated( const QModelIndex &index );
     void setSortOrder( int col, Qt::SortOrder order );
 
@@ -103,11 +103,11 @@ public:
     /// reimplement
     virtual KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void requestPopupMenu( const QString& name, const QPoint &pos );
     void selectionChanged();
 
-protected slots:
+protected Q_SLOTS:
     /// Builds menu from action list
     virtual void slotHeaderContextMenuRequested( const QPoint &pos );
 
@@ -149,7 +149,7 @@ public:
 
     using AbstractView::slotContextMenuRequested;
 
-protected slots:
+protected Q_SLOTS:
     void slotOptions();
     void slotSplitView();
 
@@ -202,13 +202,13 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &context ) const;
 
-signals:
+Q_SIGNALS:
     void headerContextMenuRequested( const QPoint& );
     void contextMenuRequested( const QModelIndex&, const QPoint& );
     void selectionChanged( const QModelIndexList& );
     void sectionsMoved();
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged( const QItemSelection &selected, const QItemSelection &deselelected );
     void slotRowsInserted( const QModelIndex &parent, int start, int end );
     void slotRowsRemoved( const QModelIndex &parent, int start, int end );
@@ -243,7 +243,7 @@ public:
 
     using AbstractView::slotContextMenuRequested;
 
-protected slots:
+protected Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotSelectionChanged( const QModelIndexList &lst );
     void slotOptions();

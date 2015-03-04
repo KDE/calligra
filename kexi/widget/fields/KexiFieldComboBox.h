@@ -39,7 +39,7 @@ public:
     explicit KexiFieldComboBox(QWidget *parent = 0);
     virtual ~KexiFieldComboBox();
 
-public slots:
+public Q_SLOTS:
     //! \return global project that is used to retrieve schema informationm for this combo box.
     KexiProject* project() const;
 
@@ -59,10 +59,10 @@ public slots:
      of project is not assigned or table or query is not assigned. */
     int indexOfField() const;
 
-signals:
+Q_SIGNALS:
     void selected();
 
-protected slots:
+protected Q_SLOTS:
     void slotActivated(int);
     void slotReturnPressed(const QString & text);
 

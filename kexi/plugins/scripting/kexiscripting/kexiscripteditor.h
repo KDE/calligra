@@ -64,7 +64,7 @@ public:
      */
     void initialize(Kross::Action* scriptaction);
 
-public slots:
+public Q_SLOTS:
     void slotTextChanged();
     void setLineNo(long);
 

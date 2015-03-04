@@ -53,11 +53,11 @@ public:
 
     void setValues( const ResourceAppointmentsItemModel &del );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void setDefault();
 
-signals:
+Q_SIGNALS:
     void changed();
 
 private:
@@ -70,7 +70,7 @@ class ResourceAppointmentsSettingsDialog : public KPageDialog
 public:
     explicit ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent = 0 );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
 
 private:
@@ -101,7 +101,7 @@ public:
     virtual void saveContext( QDomElement &context ) const;
     using DoubleTreeViewBase::saveContext;
 
-protected slots:
+protected Q_SLOTS:
     void slotRefreshed();
 
 private:
@@ -135,24 +135,24 @@ public:
     
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void requestPopupMenu( const QString&, const QPoint& );
     void addResource( ResourceGroup* );
     void deleteObjectList( const QObjectList& );
     
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     
     void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled(  bool on = true );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     
     void slotSelectionChanged( const QModelIndexList& );

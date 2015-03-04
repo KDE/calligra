@@ -61,10 +61,10 @@ public:
 
     Ui::InsertFilePanel ui;
 
-signals:
+Q_SIGNALS:
     void enableButtonOk( bool );
 
-protected slots:
+protected Q_SLOTS:
     void changed( const QString& );
 
     void slotOpenFileDialog( KUrlRequester * );

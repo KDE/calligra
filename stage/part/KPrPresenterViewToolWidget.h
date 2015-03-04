@@ -39,12 +39,12 @@ public:
     explicit KPrPresenterViewToolWidget(QWidget *parent = 0);
     void toggleSlideThumbnails( bool toggle );
 
-signals:
+Q_SIGNALS:
     void slideThumbnailsToggled( bool toggle );
     void previousSlideClicked();
     void nextSlideClicked();
 
-private slots:
+private Q_SLOTS:
     void updateClock();
 
 private:

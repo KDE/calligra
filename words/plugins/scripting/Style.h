@@ -40,7 +40,7 @@ public:
     KoCharacterStyle* style() const {
         return m_style;
     }
-public slots:
+public Q_SLOTS:
 
     /** Return the user-visible name the character-style has. */
     QString name() const {
@@ -240,7 +240,7 @@ public:
         BoxItem = KoListStyle::BoxItem
     };
 
-public slots:
+public Q_SLOTS:
 
     /***** Name *****/
 

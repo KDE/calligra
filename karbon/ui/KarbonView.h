@@ -78,7 +78,7 @@ public:
     virtual KoZoomController *zoomController() const;
 
 
-public slots:
+public Q_SLOTS:
     // editing:
     void editSelectAll();
     void editDeselectAll();
@@ -127,7 +127,7 @@ public slots:
     void snapToGrid();
     void showPalette();
 
-protected slots:
+protected Q_SLOTS:
     // Object related operations.
 
     // View

@@ -81,10 +81,10 @@ public:
     QString delimiter() const;
     void setDelimiter(const QString& delimiter);
 
-signals:
+Q_SIGNALS:
     void delimiterChanged(const QString& delimiter);
 
-protected slots:
+protected Q_SLOTS:
     //! only called when a delimiter was set by user directly
     void slotDelimiterChanged(int idx);
     void slotDelimiterChangedInternal(int idx);

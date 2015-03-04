@@ -55,7 +55,7 @@ class KexiMainWindowTabWidget : public KTabWidget
 public:
     KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget *mainWidget);
     virtual ~KexiMainWindowTabWidget();
-public slots:
+public Q_SLOTS:
     void closeTab();
     tristate closeAllTabs();
 
@@ -173,7 +173,7 @@ public:
     /*! Implemented for KexiMainWindow */
     virtual KexiMigrateManagerInterface* migrateManager();
 
-public slots:
+public Q_SLOTS:
     /*! Implemented for KexiMainWindow */
     virtual tristate closeWindow(KexiWindow *window);
 
@@ -317,7 +317,7 @@ public slots:
      Sets reasonable dialog size based on main window size, that is 80% of its size. */
     virtual void setReasonableDialogSize(QDialog *dialog);
 
-signals:
+Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     void acceptProjectClosingRequested(bool& cancel);
@@ -430,7 +430,7 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
-protected slots:
+protected Q_SLOTS:
     tristate createNewProject(const KexiProjectData &projectData);
 
     /*! Called once after timeout (after ctors are executed). */

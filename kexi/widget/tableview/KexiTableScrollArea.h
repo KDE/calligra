@@ -257,7 +257,7 @@ public:
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-public slots:
+public Q_SLOTS:
     virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiDataAwareObjectInterface::setData(data, owner);
     }
@@ -394,7 +394,7 @@ public slots:
      of the sorting flag. */
     virtual void setSortingEnabled(bool set);
 
-signals:
+Q_SIGNALS:
     void dataSet(KexiDB::TableViewData *data);
 
     void itemSelected(KexiDB::RecordData *);
@@ -432,7 +432,7 @@ signals:
     //! You should remove existing actions and add them again.
     void reloadActions();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotDataDestroying() {
         KexiDataAwareObjectInterface::slotDataDestroying();
     }

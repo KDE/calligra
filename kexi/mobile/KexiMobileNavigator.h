@@ -39,10 +39,10 @@ public:
     
     void setProject(KexiProject*);
 
-private slots:
+private Q_SLOTS:
     void slotOpenItem(KexiPart::Item *item);
     
-signals:
+Q_SIGNALS:
     void openItem(KexiPart::Item *item);
     
 private:

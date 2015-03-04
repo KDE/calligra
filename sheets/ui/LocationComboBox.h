@@ -60,7 +60,7 @@ public:
      */
     void updateAddress();
 
-public slots:
+public Q_SLOTS:
     void slotAddAreaName(const QString &);
     void slotRemoveAreaName(const QString &);
 

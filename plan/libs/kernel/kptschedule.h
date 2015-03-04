@@ -677,7 +677,7 @@ public:
     /// Set current index of supported granularities of the selected scheduler
     void setGranularity( int duration );
 
-public slots:
+public Q_SLOTS:
     /// Set maximum progress. Emits signal maxProgressChanged
     void setMaxProgress( int value );
     /// Set progress. Emits signal progressChanged
@@ -688,7 +688,7 @@ public slots:
 
     void setPhaseNames( const QMap<int, QString> &phasenames );
 
-signals:
+Q_SIGNALS:
     void maxProgressChanged( int );
     void progressChanged( int );
 

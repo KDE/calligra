@@ -76,7 +76,7 @@ class AlterSchemaWidget : public QWidget
         //! @todo Something like this could go in kexi utils/project?
         QString suggestedItemCaption(const QString& baseCaption);
 
-    private slots:
+    private Q_SLOTS:
         void tableClicked(const QModelIndex& idx);
         void typeActivated(int typ);
         void pkeyClicked(bool pkey);

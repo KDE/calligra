@@ -94,14 +94,14 @@ public:
     Node *currentNode() const;
     Document *currentDocument() const;
 
-signals:
+Q_SIGNALS:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     void openInternalDocument( KoStore * );
     void sigUpdateReadWrite( bool );
 
     void viewDocument( Document *doc );
 
-public slots:
+public Q_SLOTS:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -113,7 +113,7 @@ public slots:
     void slotTaskProgress();
     void slotTaskCompletion();
 
-protected slots:
+protected Q_SLOTS:
     void slotCurrentChanged( int index );
     void slotProgressChanged( int value );
 

@@ -123,7 +123,7 @@ public:
      */
     bool isActivated();
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted when the presentation is activated.

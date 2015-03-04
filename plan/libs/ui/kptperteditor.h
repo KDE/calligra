@@ -76,7 +76,7 @@ public:
     void setAvailableItemEnabled( QTreeWidgetItem *item );
     void setAvailableItemEnabled( Node *node );
     
-signals:
+Q_SIGNALS:
     void executeCommand( KUndo2Command* );
 
 protected:
@@ -84,7 +84,7 @@ protected:
     QTreeWidgetItem *findNodeItem( Node *node, QTreeWidgetItem *item );
     QTableWidgetItem *findRequiredItem( Node *node );
     
-private slots:
+private Q_SLOTS:
     void slotNodeAdded( Node* );
     void slotNodeRemoved( Node* );
     void slotNodeMoved( Node* );

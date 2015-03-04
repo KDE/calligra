@@ -64,7 +64,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-public slots:
+public Q_SLOTS:
     virtual void setFocus();
 
 protected:
@@ -111,7 +111,7 @@ protected:
 
     void updatePropertiesVisibility(KoProperty::Set& buf);
 
-protected slots:
+protected Q_SLOTS:
     void slotDragOverTableRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
     void slotDroppedAtRow(KexiDB::RecordData *record, int row,
                           QDropEvent *ev, KexiDB::RecordData*& newRecord);

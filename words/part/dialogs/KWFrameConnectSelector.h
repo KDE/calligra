@@ -49,7 +49,7 @@ public:
         return true;
     }
 
-private slots:
+private Q_SLOTS:
     void frameSetSelected();
     void nameChanged(const QString &text);
 

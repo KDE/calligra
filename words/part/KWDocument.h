@@ -207,7 +207,7 @@ public:
 
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Relayout the pages or frames within the framesets.
      * @param framesets The framesets that should be relayouted. If no framesets are
@@ -230,7 +230,7 @@ public slots:
      */
     void removeFrameSet(KWFrameSet *fs);
 
-signals:
+Q_SIGNALS:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
@@ -243,7 +243,7 @@ signals:
     /// emitted wheneve a resources needs to be set on the canvasResourceManager
     void resourceChanged(int key, const QVariant &value);
 
-private slots:
+private Q_SLOTS:
     /// Shape maintenance on already registered framesets
     void addSequencedShape(KoShape *shape);
     void removeSequencedShape(KoShape *shape);

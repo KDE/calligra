@@ -39,7 +39,7 @@ public:
     RoundCornersPlugin(QObject * parent, const QVariantList &);
     virtual ~RoundCornersPlugin();
 
-private slots:
+private Q_SLOTS:
     void slotRoundCorners();
 
 private:

@@ -44,7 +44,7 @@ public:
 
     void setView( KoPAViewBase* view );
 
-public slots:
+public Q_SLOTS:
     void slotActivePageChanged();
     void slotApplyToAllSlides();
     void slotEffectChanged( int index );
@@ -54,7 +54,7 @@ protected:
     KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType, double time );
     KUndo2Command * applyToAllSlidesCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotSubTypeChanged( int index );
     void slotDurationChanged( double duration );
 

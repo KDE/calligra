@@ -95,20 +95,20 @@ public:
     */
     virtual QMenu* defaultContextMenu();
 
-public slots:
+public Q_SLOTS:
     /*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
     void setText(const QString &text);
     /*! Display the configuration-dialog. Only avaiable if isAdvancedEditor() returns true. */
     void slotConfigureEditor();
 
-protected slots:
+protected Q_SLOTS:
     void slotTextChanged(KTextEditor::Document *);
 
 protected:
     /*! Update the actions. This call is redirected to \a KexiView::updateActions */
     virtual void updateActions(bool activated);
 
-signals:
+Q_SIGNALS:
     /*! Emitted if the text displayed in the editor changed. */
     void textChanged();
 

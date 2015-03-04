@@ -63,7 +63,7 @@ public:
     int showMode() const;
     void setShowMode( int show );
 
-protected slots:
+protected Q_SLOTS:
     void slotModelReset();
 
 };
@@ -87,10 +87,10 @@ public:
 
     KoPrintJob *createPrintJob();
     
-public slots:
+public Q_SLOTS:
     void setScheduleManager( ScheduleManager *sm );
     
-protected slots:
+protected Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     virtual void slotOptions();

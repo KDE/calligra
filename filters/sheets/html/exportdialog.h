@@ -63,7 +63,7 @@ public:
     bool separateFiles() const;
 
     int pixelsBetweenCells() const;
-protected slots:
+protected Q_SLOTS:
     void selectAll();
 private:
     ExportWidget *m_mainwidget;

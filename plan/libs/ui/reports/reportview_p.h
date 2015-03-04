@@ -64,10 +64,10 @@ public:
 
     QStandardItemModel *createSourceModel( QObject *parent = 0 ) const;
 
-signals:
+Q_SIGNALS:
     void insertItem( const QString &name );
 
-public slots:
+public Q_SLOTS:
     void slotPropertySetChanged();
     void slotInsertAction();
     
@@ -94,7 +94,7 @@ public:
     void clear();
     void setData( KoReportDesigner *designer, ReportData *rd );
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged(const QItemSelection &sel );
     void slotAddRow();
     void slotRemoveRows();

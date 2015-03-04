@@ -104,10 +104,10 @@ public:
 
     //! Updates the requested URL based on specified name. Performs any necessary character conversions.
     void updateUrl(const QString &name);
-signals:
+Q_SIGNALS:
     void askForOverwriting(const KexiContextMessage& message);
 
-protected slots:
+protected Q_SLOTS:
     void slotAccepted();
     void saveRecentDir();
     

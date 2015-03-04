@@ -40,7 +40,7 @@ public:
             : QObject(parent), m_table(table) {}
     virtual ~TextTable() {}
 
-public slots:
+public Q_SLOTS:
 
     /** Return the table content as plain text. */
     QString text() {

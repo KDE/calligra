@@ -45,7 +45,7 @@ class PackageInfoWidget : public QFrame
 public:
     explicit PackageInfoWidget( Package *package, QWidget *parent = 0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotUsedEffortChanged( int state );
     void slotProgressChanged( int state );
     void slotDocumentsChanged( int state );
@@ -72,7 +72,7 @@ public:
 
     QList<int> checkedList() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotActivated( const QModelIndex &idx );
     void slotChanged();
 

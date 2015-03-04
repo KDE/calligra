@@ -322,11 +322,11 @@ public Q_SLOTS:
      */
     void calcStatusBarOp();
 
-protected slots:
+protected Q_SLOTS:
     /** Renames the active sheet. */
     void slotRename();
 
-public slots:
+public Q_SLOTS:
     /** Reacts on selection changes. */
     void slotChangeSelection(const Region&);
 

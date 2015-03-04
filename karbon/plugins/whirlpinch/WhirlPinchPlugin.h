@@ -39,7 +39,7 @@ public:
     WhirlPinchPlugin(QObject *parent, const QVariantList &);
     virtual ~WhirlPinchPlugin() {}
 
-private slots:
+private Q_SLOTS:
     void slotWhirlPinch();
 
 private:

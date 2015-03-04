@@ -98,10 +98,10 @@ public:
     
     void setFlat( bool flat );
 
-signals:
+Q_SIGNALS:
     void scheduleManagerAdded( ScheduleManager* );
 
-protected slots:
+protected Q_SLOTS:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );
 
@@ -190,7 +190,7 @@ public:
     
     QString identity( const QModelIndex &idx ) const;
 
-protected slots:
+protected Q_SLOTS:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );
 

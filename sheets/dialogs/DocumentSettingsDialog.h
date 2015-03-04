@@ -78,7 +78,7 @@ class parameterLocale :  public QObject
 public:
     parameterLocale(Selection* selection, KVBox *box);
     void apply();
-public slots:
+public Q_SLOTS:
     void updateDefaultSystemConfig();
 protected:
     /**

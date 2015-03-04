@@ -59,7 +59,7 @@ public:
     Calendar *selectedCalendar() const;
     QList<Calendar*> selectedCalendars() const;
 
-signals:
+Q_SIGNALS:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     void selectionChanged( const QModelIndexList& );
@@ -67,7 +67,7 @@ signals:
     void contextMenuRequested( const QModelIndex&, const QPoint& );
     void focusChanged();
 
-protected slots:
+protected Q_SLOTS:
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
@@ -99,7 +99,7 @@ public:
     void setReadWrite( bool on ) { m_readwrite = on; }
     bool isReadWrite() const { return m_readwrite; }
 
-signals:
+Q_SIGNALS:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     void selectionChanged( const QModelIndexList& );
@@ -109,10 +109,10 @@ signals:
     
     void executeCommand( KUndo2Command *cmd );
     
-public slots:
+public Q_SLOTS:
     void setCurrentCalendar( Calendar *calendar );
     
-protected slots:
+protected Q_SLOTS:
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
@@ -153,11 +153,11 @@ public:
 
     virtual Calendar *currentCalendar() const;
     
-signals:
+Q_SIGNALS:
     void addCalendar( Calendar *calendar );
     void deleteCalendar( const QList<Calendar*>& );
     
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -165,10 +165,10 @@ protected:
     void updateActionsEnabled( bool on );
     void insertCalendar( Calendar *calendar, Calendar *parent, int pos = -1 );
     
-protected slots:
+protected Q_SLOTS:
     void slotIntervalEditDialogFinished( int result );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
     void slotContextMenuDay( const QModelIndex& index, const QPoint& pos );
     void slotContextMenuDate( KMenu*, const QDate& );

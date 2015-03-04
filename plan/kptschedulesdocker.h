@@ -44,14 +44,14 @@ public:
 
     ScheduleManager *selectedSchedule() const;
 
-signals:
+Q_SIGNALS:
     void selectionChanged( ScheduleManager *sm );
 
-public slots:
+public Q_SLOTS:
     void setProject( Project *project );
     void setSelectedSchedule( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged();
 
 private:

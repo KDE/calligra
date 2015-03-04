@@ -172,7 +172,7 @@ public:
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
 
-public slots:
+public Q_SLOTS:
     // Connected to the WordsTextHandler only when parsing the body
     void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
 
