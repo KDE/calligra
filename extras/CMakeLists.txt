@@ -1,31 +1,31 @@
 if(SHOULD_BUILD_APP_CALLIGRA)
   add_subdirectory( calligra )
-endif(SHOULD_BUILD_APP_CALLIGRA)
+endif()
 
 if (SHOULD_BUILD_APP_CONVERTER)
     add_subdirectory( converter )
-endif(SHOULD_BUILD_APP_CONVERTER)
+endif()
 
 if (SHOULD_BUILD_FILEMANAGER_PROPERTIES)
     add_subdirectory( properties )
-endif(SHOULD_BUILD_FILEMANAGER_PROPERTIES)
+endif()
 
 if (SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     add_subdirectory( thumbnail )
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
 if (SHOULD_BUILD_FILEMANAGER_QUICKPRINT)
     add_subdirectory( quickprint )
-endif(SHOULD_BUILD_FILEMANAGER_QUICKPRINT)
+endif()
 
 if(SHOULD_BUILD_FILEMANAGER_TEMPLATES)
     add_subdirectory( filemanagertemplates )
-endif(SHOULD_BUILD_FILEMANAGER_TEMPLATES)
+endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_ODP)
     add_subdirectory( okularodpgenerator )
-endif(SHOULD_BUILD_OKULAR_GENERATOR_ODP)
+endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_ODT)
     add_subdirectory( okularodtgenerator )
-endif(SHOULD_BUILD_OKULAR_GENERATOR_ODT)
+endif()

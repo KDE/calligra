@@ -18,7 +18,7 @@ install(TARGETS calligra_filter_karbon2svg DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_karbon2svg.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_KARBON_TO_SVG)
+endif()
 
 
 
@@ -36,4 +36,4 @@ install(TARGETS calligra_filter_svg2karbon  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_svg2karbon.desktop calligra_filter_svgz2karbon.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_SVG_TO_KARBON)
+endif()

@@ -14,7 +14,7 @@ install(TARGETS calligra_filter_sheets2gnumeric  DESTINATION ${PLUGIN_INSTALL_DI
 
 install( FILES  calligra_filter_sheets2gnumeric.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_SHEETS_TO_GNUMERIC)
+endif()
 
 
 if(SHOULD_BUILD_FILTER_GNUMERIC_TO_SHEETS)
@@ -26,4 +26,4 @@ install(TARGETS calligra_filter_gnumeric2sheets  DESTINATION ${PLUGIN_INSTALL_DI
 
 install( FILES  calligra_filter_gnumeric2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_GNUMERIC_TO_SHEETS)
+endif()

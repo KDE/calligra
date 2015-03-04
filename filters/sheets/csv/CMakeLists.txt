@@ -15,7 +15,7 @@ install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_csv2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
+endif()
 
 
 if(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
@@ -32,4 +32,4 @@ install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_sheets2csv.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
+endif()

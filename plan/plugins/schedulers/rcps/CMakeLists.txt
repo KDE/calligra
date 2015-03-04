@@ -5,7 +5,7 @@ include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR
 add_subdirectory( libs )
 add_subdirectory( tests )
 
-SET ( RCPSScheduler_SRCS
+set ( RCPSScheduler_SRCS
     KPlatoRCPSPlugin.cpp
     KPlatoRCPSScheduler.cpp
 )

@@ -16,7 +16,7 @@ if (Q_WS_MAC)
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.stage")
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Stage 2")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_calligrastage komain )
 

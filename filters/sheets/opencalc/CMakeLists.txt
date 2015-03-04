@@ -16,7 +16,7 @@ install(TARGETS calligra_filter_opencalc2sheets  DESTINATION ${PLUGIN_INSTALL_DI
 
 install( FILES  calligra_filter_opencalc2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_OPENCALC_TO_SHEETS)
+endif()
 
 
 if(SHOULD_BUILD_FILTER_SHEETS_TO_OPENCALC)
@@ -31,4 +31,4 @@ install(TARGETS calligra_filter_sheets2opencalc  DESTINATION ${PLUGIN_INSTALL_DI
 
 install( FILES  calligra_filter_sheets2opencalc.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_SHEETS_TO_OPENCALC)
+endif()

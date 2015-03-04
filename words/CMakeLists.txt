@@ -6,7 +6,7 @@ include_directories(
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 if (SHOULD_BUILD_PART_WORDS)
     add_subdirectory( templates )
@@ -14,8 +14,8 @@ if (SHOULD_BUILD_PART_WORDS)
     add_subdirectory( part )
     add_subdirectory( plugins )
     add_subdirectory( styles )
-endif (SHOULD_BUILD_PART_WORDS)
+endif ()
 
 if (SHOULD_BUILD_APP_WORDS)
     add_subdirectory( app )
-endif (SHOULD_BUILD_APP_WORDS)
+endif ()

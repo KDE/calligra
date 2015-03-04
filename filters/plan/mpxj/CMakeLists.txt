@@ -8,6 +8,6 @@ if(SHOULD_BUILD_FILTER_MPXJ_IMPORT)
 # cmp. "NOTE:" in mpxjimport.cpp
     add_subdirectory( planconvert )
     add_subdirectory( import )
-# endif(JNI_FOUND)
+# endif()
 
-endif(SHOULD_BUILD_FILTER_MPXJ_IMPORT)
+endif()

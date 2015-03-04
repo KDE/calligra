@@ -19,4 +19,4 @@ target_link_libraries(visualimagecompare ${POPPLER_LIBRARY} ${QT_QTCORE_LIBRARY}
 
 install(TARGETS visualimagecompare ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-endif (POPPLER_FOUND)
+endif ()

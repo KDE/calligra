@@ -64,7 +64,7 @@ target_link_libraries(calligraactive
 
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligraactive kordf)
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 
 install(TARGETS calligraactive RUNTIME DESTINATION bin)
