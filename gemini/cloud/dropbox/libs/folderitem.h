@@ -122,7 +122,7 @@ public:
     Q_INVOKABLE void setMime_type(const QString &v);
     Q_INVOKABLE void setSize(const QString &v);
 
-signals:
+Q_SIGNALS:
     void checkedChanged();
     void revisionChanged();
     void thumb_existsChanged();

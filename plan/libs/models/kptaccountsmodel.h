@@ -90,7 +90,7 @@ public:
     QModelIndex insertAccount( Account *account, Account *parent = 0, int index = -1 );
     void removeAccounts( QList<Account*> lst );
     
-protected slots:
+protected Q_SLOTS:
     void slotAccountChanged( Account* );
     void slotAccountToBeInserted( const Account *parent, int row );
     void slotAccountInserted( const Account *account );
@@ -163,7 +163,7 @@ protected:
     
     QVariant cost( const Account *a, int offset, int role ) const;
 
-protected slots:
+protected Q_SLOTS:
     void slotAccountChanged( Account* );
     void slotAccountToBeInserted( const Account *parent, int row );
     void slotAccountInserted( const Account *account );

@@ -127,7 +127,7 @@ public:
      */
     void ensureVisible(const QString& tab);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Replaces all tabs with the list of strings.
@@ -216,7 +216,7 @@ public slots:
 
     QSize sizeHint() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted if the active tab changed.
@@ -246,7 +246,7 @@ signals:
      */
     void doubleClicked();
 
-protected slots:
+protected Q_SLOTS:
     void autoScrollBack();
     void autoScrollForward();
 

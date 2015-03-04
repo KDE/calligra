@@ -33,7 +33,7 @@ namespace KPlato
 class FlatProxyModelTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void emptyModel();
     void test();
     void testInsertRemoveTop();

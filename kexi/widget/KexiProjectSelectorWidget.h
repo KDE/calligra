@@ -70,11 +70,11 @@ public:
 
     QTreeWidget* list() const;
     
-signals:
+Q_SIGNALS:
     void projectExecuted(KexiProjectData*);
     void selectionChanged(KexiProjectData*);
 
-protected slots:
+protected Q_SLOTS:
     void slotItemExecuted(QTreeWidgetItem*);
     void slotItemExecuted();
     void slotItemSelected();
@@ -112,7 +112,7 @@ public:
 
     virtual void showEvent(QShowEvent * event);
 
-protected slots:
+protected Q_SLOTS:
     void slotProjectExecuted(KexiProjectData*);
     void slotProjectSelectionChanged(KexiProjectData*);
 

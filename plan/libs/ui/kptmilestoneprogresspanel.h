@@ -38,10 +38,10 @@ public:
     
     void enableWidgets();
 
-signals:
+Q_SIGNALS:
     void changed();
     
-public slots:
+public Q_SLOTS:
     void slotChanged();
     void slotFinishedChanged(bool state);
 };

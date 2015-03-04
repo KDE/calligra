@@ -36,7 +36,7 @@ public:
     explicit CAPADocumentModel(QObject* parent = 0, KoPADocument* document = 0);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
-signals:
+Q_SIGNALS:
     void documentControllerChanged();
 
 private:

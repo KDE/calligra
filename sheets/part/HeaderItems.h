@@ -46,7 +46,7 @@ public:
     void updateColumns(int from, int to);
     virtual void update() { QGraphicsWidget::update(); }
 
-private slots:
+private Q_SLOTS:
     //void slotAutoScroll(const QPoint& distance);
 
 protected:
@@ -85,7 +85,7 @@ public:
     void updateRows(int from, int to);
     virtual void update() { QGraphicsWidget::update(); }
 
-private slots:
+private Q_SLOTS:
     //void slotAutoScroll(const QPoint& distance);
 
 protected:

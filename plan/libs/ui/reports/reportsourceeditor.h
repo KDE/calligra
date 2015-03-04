@@ -44,10 +44,10 @@ public:
     /// Return the tag of the selected model
     QString selectFromTag() const;
 
-signals:
+Q_SIGNALS:
     void selectFromChanged( const QString &tag );
 
-private slots:
+private Q_SLOTS:
     void slotCurrentIndexChanged();
 };
 

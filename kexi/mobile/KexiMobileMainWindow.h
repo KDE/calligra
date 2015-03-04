@@ -36,7 +36,7 @@ public:
     KexiMobileMainWindow();
     virtual ~KexiMobileMainWindow();
 
-public slots:
+public Q_SLOTS:
     
     KexiWindow* openObject(KexiPart::Item* item);
     
@@ -77,7 +77,7 @@ public slots:
     virtual bool userMode() const;
     
     
-public slots:
+public Q_SLOTS:
     void slotOpenDatabase();
     
 private:

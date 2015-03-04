@@ -68,11 +68,11 @@ public:
     int tickInterval() const;
     bool showEditor() const;
 
-signals:
+Q_SIGNALS:
     void valueChanged(int);
     void sliderPressed();
     void sliderReleased();
-public slots:
+public Q_SLOTS:
     void setValue(int value);
     void setOrientation(Qt::Orientation o);
 private:

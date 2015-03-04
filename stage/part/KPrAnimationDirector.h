@@ -149,7 +149,7 @@ protected:
     void updatePageAnimation();
     void updateStepAnimation();
 
-protected slots:
+protected Q_SLOTS:
     // update the zoom value
     void updateZoom( const QSize & size );
     // acts on the time line event

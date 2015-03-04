@@ -153,10 +153,10 @@ public:
      */
     KPrDeclarations * declarations() const;
 
-public slots:
+public Q_SLOTS:
     virtual void initEmpty();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the active custom slide show changes.
      * This is to allow for signalling dbus interfaces.

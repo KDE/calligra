@@ -67,7 +67,7 @@ public:
     /*! \return width of \a value. Reimplemented  after KexiTableEdit. */
     virtual int widthForValue(const QVariant &val, const QFontMetrics &fm);
 
-protected slots:
+protected Q_SLOTS:
 
 protected:
     //! initializes this editor with \a add value
@@ -78,7 +78,7 @@ protected:
     //! We've no editor widget that would store current value, so we do this here
     QVariant m_currentValue;
 
-signals:
+Q_SIGNALS:
     void hintClicked();
 };
 

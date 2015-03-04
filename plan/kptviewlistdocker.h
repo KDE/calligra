@@ -40,7 +40,7 @@ public:
     void setView(View *view);
     ViewListWidget *viewList() const { return m_viewlist; }
 
-public slots:
+public Q_SLOTS:
     void slotModified();
     void updateWindowTitle( bool modified );
 

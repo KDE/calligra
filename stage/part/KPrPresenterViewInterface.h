@@ -43,7 +43,7 @@ public:
 
     void setPreviewSize( const QSize &size );
 
-public slots:
+public Q_SLOTS:
     /// reimplemented
     virtual void setActivePage( int pageIndex );
 

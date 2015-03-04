@@ -592,7 +592,7 @@ public:
     /// Copy intervals from parent schedule in the range @p start, @p end
     void copyAppointments( const DateTime &start, const DateTime &end = DateTime() );
 
-signals:
+Q_SIGNALS:
     void workPackageToBeAdded( Node *node, int row );
     void workPackageAdded( Node *node );
     void workPackageToBeRemoved( Node *node, int row );

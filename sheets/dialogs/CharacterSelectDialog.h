@@ -55,7 +55,7 @@ public:
      */
     static bool selectChar(QString &font, QChar &character, QWidget* parent = 0, const char* name = 0);
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the user presses the 'insert' button.
      * @param character the character that the user selected
@@ -69,7 +69,7 @@ private:
     QString font() const;
     void closeDialog();
 
-private slots:
+private Q_SLOTS:
     void slotUser1();
     void slotDoubleClicked();
 

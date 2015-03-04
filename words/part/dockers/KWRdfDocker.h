@@ -51,7 +51,7 @@ public:
     
     KoCanvasBase *canvas();
 
-private slots:
+private Q_SLOTS:
     void updateDataForced();
     void updateData();
     void showSemanticViewContextMenu(const QPoint &);

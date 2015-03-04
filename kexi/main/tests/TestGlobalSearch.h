@@ -20,7 +20,7 @@
 #ifndef GLOBALSEARCHTEST_H
 #define GLOBALSEARCHTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestGlobalSearch : public QObject
 {

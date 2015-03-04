@@ -275,7 +275,7 @@ public:
     void emitRequestFocusEditor();
 
     void scrollToCursor();
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the Selection was changed.
      * @param region the changed part of the Selection

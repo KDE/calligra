@@ -275,7 +275,7 @@ public:
     QList<Account*> allAccounts() const { return m_idDict.values(); }
     QList<Node*> allNodes() const;
     
-signals:
+Q_SIGNALS:
     void accountAdded( const Account * );
     void accountToBeAdded( const Account *, int );
     void accountRemoved( const Account * );

@@ -86,15 +86,15 @@ private:
 
     void updateTasks();
 
-protected slots:
+protected Q_SLOTS:
     void resSelectionChanged();
     void resSelectionChanged( QTreeWidgetItem *item );
 
-private slots:
+private Q_SLOTS:
     void slotRequestPopupMenu( const QPoint &p );
 void slotUpdate();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 

@@ -42,7 +42,7 @@ private:
     qreal math(const QString &, const QString &);
 
     QString m_where;
-public slots:
+public Q_SLOTS:
     void setWhere(const QString&);
     
     qreal sum(const QString &);

@@ -36,7 +36,7 @@ public:
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
 
-private slots:
+private Q_SLOTS:
     void radiusXChanged(double x);
     void radiusYChanged(double y);
     void operatorChanged(int op);

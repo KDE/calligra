@@ -50,7 +50,7 @@ public:
     virtual QSize sizeHint() const;
     QAction* action() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotActionChanged();
     void slotButtonToggled(bool checked);
     void slotActionToggled(bool checked);
@@ -75,7 +75,7 @@ public:
 
     QSize sizeHint() const;
     Qt::Orientation orientation() const;
-public slots:
+public Q_SLOTS:
     void setOrientation(Qt::Orientation o);
 protected:
     virtual void paintEvent(QPaintEvent *e);

@@ -26,14 +26,14 @@
 #include <QThreadPool>
 #include <QTimer>
 
-#include <KDE/KGlobal>
-#include <KDE/KLocale>
-#include <KDE/KSharedConfig>
-#include <KDE/KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
-/*#include <QtSparql/QSparqlConnection>
-#include <QtSparql/QSparqlResult>
-#include <QtSparql/QSparqlError>*/
+/*#include <QSparqlConnection>
+#include <QSparqlResult>
+#include <QSparqlError>*/
 #include <kfileitem.h>
 
 

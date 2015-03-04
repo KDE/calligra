@@ -49,13 +49,13 @@ public:
     QAction *m_showNavigatorAction;
     QAction *m_showPropertyEditorAction;
 
-public slots:
+public Q_SLOTS:
     virtual void setStatus(const QString &str);
     virtual void setReadOnlyFlag(bool readOnly);
 
-signals:
+Q_SIGNALS:
 
-protected slots:
+protected Q_SLOTS:
     void cursorPositionChanged();
 #if 0
     void setCursorPosition(int line, int col);

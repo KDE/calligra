@@ -55,10 +55,10 @@ public:
 
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void navigationClicked(QModelIndex idx);
 
-public slots:
+public Q_SLOTS:
     void updateData();
 
 private:

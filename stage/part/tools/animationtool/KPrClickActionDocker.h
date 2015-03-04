@@ -42,10 +42,10 @@ public:
 
     void setView( KoPAViewBase* view );
 
-public slots:
+public Q_SLOTS:
     void addCommand( KUndo2Command * command );
 
-private slots:
+private Q_SLOTS:
     /// selection has changed
     void selectionChanged();
 

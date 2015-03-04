@@ -91,7 +91,7 @@ public:
 //! @todo add option for not selecting the field
     virtual void selectAllOnFocusIfNeeded();
 
-public slots:
+public Q_SLOTS:
     void setDataSource(const QString &ds);
 
     void setDataSourcePartClass(const QString &partClass);
@@ -111,7 +111,7 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
-protected slots:
+protected Q_SLOTS:
     void slotTextChanged();
 
 protected:

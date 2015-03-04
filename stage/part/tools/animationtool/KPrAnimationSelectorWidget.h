@@ -50,7 +50,7 @@ public:
      */
     void init();
 
-signals:
+Q_SIGNALS:
     /// this signal is emitted when an animation is hovered
     void requestPreviewAnimation(KPrShapeAnimation *animation);
     /// this signal is emitted when an animation is selected
@@ -58,7 +58,7 @@ signals:
     /// signal emitted if automatic preview checkbox state is changed
     void previousStateChanged(bool state);
 
-private slots:
+private Q_SLOTS:
     /**
      * @brief Request animation preview for the animation on index
      *

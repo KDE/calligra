@@ -53,7 +53,7 @@ public:
     void setZoom(qreal _zoom);
 private:
     void updateCache();
-private slots:
+private Q_SLOTS:
     void loadFinished(bool);
 private:
     KUrl m_url;

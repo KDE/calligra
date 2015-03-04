@@ -40,7 +40,7 @@ public:
 
     void initDescription();
 
-public slots:
+public Q_SLOTS:
     virtual void changeLeader();
     void startDateTimeChanged( const QDateTime& );
     void endDateTimeChanged( const QDateTime& );

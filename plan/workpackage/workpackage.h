@@ -126,14 +126,14 @@ public:
     QMap<const Document*, KUrl> newDocuments() const { return m_newdocs; }
     void removeNewDocument( const Document *doc ) { m_newdocs.remove( doc ); }
 
-signals:
+Q_SIGNALS:
     void modified( bool );
     void saveWorkPackage( WorkPackage* );
 
-public slots:
+public Q_SLOTS:
     void setModified( bool on ) { m_modified = on; }
 
-protected slots:
+protected Q_SLOTS:
     void projectChanged();
     void slotChildModified( bool mod );
 

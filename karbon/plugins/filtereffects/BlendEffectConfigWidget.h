@@ -35,7 +35,7 @@ public:
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
 
-private slots:
+private Q_SLOTS:
     void modeChanged(int index);
 private:
     KComboBox * m_mode;

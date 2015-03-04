@@ -52,7 +52,7 @@ public:
         return true;
     }
 
-private slots:
+private Q_SLOTS:
     void enoughRunAroundToggled(bool checked);
 
 private:

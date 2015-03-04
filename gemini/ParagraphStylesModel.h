@@ -64,7 +64,7 @@ public:
 
     qreal zoomLevel() const;
     void setZoomLevel(const qreal& newZoom);
-signals:
+Q_SIGNALS:
     void documentChanged();
     void textEditorChanged();
     void cursorFontChanged();

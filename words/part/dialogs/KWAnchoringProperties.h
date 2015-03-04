@@ -56,7 +56,7 @@ public:
         return true;
     }
 
-private slots:
+private Q_SLOTS:
     void anchorTypeChanged(int anchorType);
     void vertPosChanged(int verticalAlign, QPointF offset = QPointF());
     void vertRelChanged(int index);

@@ -53,13 +53,13 @@ public:
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
 
-signals:
+Q_SIGNALS:
     void sigCalculationStarted( Project*, ScheduleManager* );
     void sigCalculationFinished( Project*, ScheduleManager* );
     void maxProgress( int, ScheduleManager* );
     void sigProgress( int, ScheduleManager* );
 
-protected slots:
+protected Q_SLOTS:
     void slotStarted( SchedulerThread *job );
     void slotFinished( SchedulerThread *job );
 };
@@ -75,7 +75,7 @@ public:
 
     KLocale *locale() const;
 
-public slots:
+public Q_SLOTS:
     /// Stop scheduling.
     virtual void stopScheduling();
     /// Halt scheduling

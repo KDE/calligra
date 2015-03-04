@@ -48,7 +48,7 @@ class AccountsviewConfigDialog : public KPageDialog {
 public:
     AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *parent );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     
 private:
@@ -64,10 +64,10 @@ class AccountsviewConfigPanel : public AccountsviewConfigurePanelBase {
 public:
     explicit AccountsviewConfigPanel(QWidget *parent);
     
-public slots:
+public Q_SLOTS:
     void slotChanged();
 
-signals:
+Q_SIGNALS:
     void changed(bool);
 };
 

@@ -54,11 +54,11 @@ public:
     virtual ~KarbonLayerDocker();
     QString observerName() { return "KarbonLayerDocker"; }
 
-public slots:
+public Q_SLOTS:
     void updateView();
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
-private slots:
+private Q_SLOTS:
     void slotButtonClicked(int buttonId);
     void addLayer();
     void deleteItem();

@@ -87,7 +87,7 @@ public:
         return m_toolproxy ? m_toolproxy->actions() : QHash<QString, KAction*>();
     }
 
-public slots:
+public Q_SLOTS:
 
     /** Return true if there is actualy a selection. */
     bool hasSelection() const {
@@ -144,7 +144,7 @@ public slots:
         if (a) a->trigger();
     }
 
-signals:
+Q_SIGNALS:
 
     /** This signal got emitted if an action was triggered. */
     void actionTriggered(const QString& actionname);

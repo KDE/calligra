@@ -93,7 +93,7 @@ public:
     */
     void setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id);
 
-public slots:
+public Q_SLOTS:
     /*! Inserts autofields onto the form at \a pos position.
      \a sourcePartClass can be "org.kexi-project.table" or "org.kexi-project.query",
      \a sourceName is a name of a table or query, \a fields is a list of fields to insert (one or more)
@@ -112,7 +112,7 @@ public slots:
                           const QStringList& fields, KFormDesigner::Container* targetContainerWidget,
                           const QPoint& pos = QPoint(-1, -1));
 
-protected slots:
+protected Q_SLOTS:
     void slotPropertySetSwitched();
     void setFormModified();
     void slotFocus(bool in);

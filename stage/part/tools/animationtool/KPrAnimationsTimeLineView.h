@@ -87,7 +87,7 @@ public:
     friend class KPrTimeLineView;
     friend class KPrTimeLineHeader;
 
-signals:
+Q_SIGNALS:
     /// emitted if an item is clicked (return index of the item clicked)
     void clicked(const QModelIndex&);
 
@@ -100,7 +100,7 @@ signals:
     /// emitted if the context menu is called
     void customContextMenuRequested(const QPoint &pos);
 
-public slots:
+public Q_SLOTS:
     /// updates all widget
     void update();
 

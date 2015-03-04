@@ -64,7 +64,7 @@ private:
     bool isEmf(QByteArray &content);
     bool isWmf(QByteArray &content);
 #endif
-public slots:
+public Q_SLOTS:
 
 
 private:

@@ -124,10 +124,10 @@ public:
     void viewMouseMoveEvent(QMouseEvent *e);
 
 
-signals:
+Q_SIGNALS:
     void shownPagesChanged();
 
-public slots:
+public Q_SLOTS:
     void offsetInDocumentMoved(int yOffset);
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -162,7 +162,7 @@ private:
     QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;
 
-private slots:
+private Q_SLOTS:
     /// create a template from document
     void createTemplate();
     /// displays the KWFrameDialog that allows to alter the frameset properties

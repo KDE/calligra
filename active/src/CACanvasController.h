@@ -91,7 +91,7 @@ public:
     void setZoomHandler (KoZoomHandler* zoomHandler);
     void setDocumentHandler (CAAbstractDocumentHandler *documentHandler);
 
-public slots:
+public Q_SLOTS:
     void zoomToFit();
     void updateCanvas();
     void updateZoomValue(KoZoomMode::Mode mode, qreal zoom);
@@ -109,7 +109,7 @@ private:
 protected:
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
 
-signals:
+Q_SIGNALS:
     void cameraXChanged();
     void cameraYChanged();
     void needCanvasUpdate();

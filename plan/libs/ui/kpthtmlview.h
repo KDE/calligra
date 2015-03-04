@@ -53,10 +53,10 @@ public:
     KHTMLPart &htmlPart() { return *m_htmlPart; }
     const KHTMLPart &htmlPart() const { return *m_htmlPart; }
 
-signals:
+Q_SIGNALS:
     void openUrlRequest( HtmlView*, const KUrl& );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -65,7 +65,7 @@ public slots:
 protected:
     void updateActionsEnabled(  bool on = true );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     
     void slotEnableActions( bool on );

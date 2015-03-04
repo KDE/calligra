@@ -132,7 +132,7 @@ public:
     void createNewProject();
 
     using KoDocument::setModified;
-public slots:
+public Q_SLOTS:
     void setModified( bool mod );
 
     /// Inserts an item into all other views than @p view
@@ -147,7 +147,7 @@ public slots:
 
     void setLoadingTemplate( bool );
 
-signals:
+Q_SIGNALS:
     void changed();
     void workPackageLoaded();
     void viewlistModified( bool );
@@ -170,7 +170,7 @@ protected:
     } m_insertFileInfo;
 
 
-protected slots:
+protected Q_SLOTS:
     void slotViewDestroyed();
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 

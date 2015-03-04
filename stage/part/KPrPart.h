@@ -51,7 +51,7 @@ public:
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);
     /// reimplemented
     virtual KoMainWindow *createMainWindow();
-protected slots:
+protected Q_SLOTS:
     /// Quits Stage with error message from m_errorMessage.
     void showErrorAndDie();
 

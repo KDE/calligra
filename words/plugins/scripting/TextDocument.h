@@ -66,7 +66,7 @@ public:
         return objmanager ? objmanager->variableManager() : 0;
     }
 
-public slots:
+public Q_SLOTS:
 
     /** Return the width of the document in pt. */
     virtual qreal width() const {
@@ -213,7 +213,7 @@ public slots:
         if (manager) manager->remove(variablename);
     }
 
-signals:
+Q_SIGNALS:
 
     /** This signal is emitted if content changed. */
     void contentsChanged(int position, int charsRemoved, int charsAdded);

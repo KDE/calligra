@@ -89,11 +89,11 @@ public:
     bool renameItem(KexiPart::Item *item, const QString& newName);
     bool setItemCaption(KexiPart::Item *item, const QString& newCaption);
 
-public slots:
+public Q_SLOTS:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
 
-signals:
+Q_SIGNALS:
     void renameItem(KexiPart::Item *item, const QString& newName, bool &succes);
     void changeItemCaption(KexiPart::Item *item, const QString& newCaption, bool &succes);
     void highlightSearchedItem(const QModelIndex &index);

@@ -20,8 +20,8 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariantMap>
+#include <QObject>
+#include <QVariantMap>
 
 class Theme : public QObject
 {

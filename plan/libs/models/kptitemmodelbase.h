@@ -138,7 +138,7 @@ class Slider : public QSlider {
     Q_OBJECT
 public:
     explicit Slider( QWidget *parent );
-private slots:
+private Q_SLOTS:
     void updateTip( int value );
 };
 
@@ -298,18 +298,18 @@ public:
     /// Return the sortorder to be used for @p column
     virtual int sortRole( int /*column*/ ) const { return Qt::DisplayRole; }
 
-signals:
+Q_SIGNALS:
     /// Connect to this signal if your model modifies data using undo commands.
     void executeCommand( KUndo2Command* );
     
-public slots:
+public Q_SLOTS:
     virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
     virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     /// Reimplement if your model can be refreshed
     virtual void refresh() {}
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotLayoutToBeChanged();
     virtual void slotLayoutChanged();
 

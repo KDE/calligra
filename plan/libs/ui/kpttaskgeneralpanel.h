@@ -57,7 +57,7 @@ public:
     virtual int risktype() const;
     virtual Calendar *calendar() const;
     
-public slots:
+public Q_SLOTS:
     virtual void setSchedulingType( int type );
     virtual void changeLeader();
     virtual void setEstimationType( int type );
@@ -83,7 +83,7 @@ public slots:
     virtual void setRisktype( int r );
     virtual void calendarChanged( int /*index*/ );
 
-signals:
+Q_SIGNALS:
     void obligatedFieldsFilled( bool );
     void schedulingTypeChanged( int );
     void changed();
@@ -106,7 +106,7 @@ public:
 
     void hideWbs() { wbsfield->hide(); wbslabel->hide(); }
 
-public slots:
+public Q_SLOTS:
     virtual void estimationTypeChanged(int type);
     virtual void scheduleTypeChanged(int value);
     

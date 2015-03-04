@@ -33,7 +33,7 @@ public:
     explicit KPrPdfPrintJob(KPrView *view);
     virtual ~KPrPdfPrintJob();
 
-public slots:
+public Q_SLOTS:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 };
 

@@ -83,7 +83,7 @@ public:
      */
     PartInfoList* infoList();
 
-signals:
+Q_SIGNALS:
     void partLoaded(KexiPart::Part*);
     void newObjectRequested(KexiPart::Info *info);
 

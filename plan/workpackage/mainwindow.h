@@ -66,16 +66,16 @@ public:
 //     bool isEditing() const { return m_editing; }
 //     bool isModified() const;
 
-signals:
+Q_SIGNALS:
     void undo();
     void redo();
 
-public slots:
+public Q_SLOTS:
     virtual void slotFileClose();
     virtual void setCaption( const QString &text );
     virtual void setCaption( const QString &text, bool modified );
 
-protected slots:
+protected Q_SLOTS:
     virtual bool queryClose();
 
     virtual void slotFileOpen();

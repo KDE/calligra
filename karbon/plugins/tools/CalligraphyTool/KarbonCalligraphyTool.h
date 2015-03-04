@@ -45,10 +45,10 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
-signals:
+Q_SIGNALS:
     void pathSelectedChanged(bool selection);
 
-private slots:
+private Q_SLOTS:
     void setUsePath(bool usePath);
     void setUsePressure(bool usePressure);
     void setUseAngle(bool useAngle);

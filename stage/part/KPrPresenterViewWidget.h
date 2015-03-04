@@ -44,7 +44,7 @@ public:
     void setActivePage( int pageIndex );
     void updateWidget( const QSize &widgetSize, const QSize &canvasSize );
 
-private slots:
+private Q_SLOTS:
     void showSlideThumbnails( bool show );
     void requestPreviousSlide();
     void requestNextSlide();

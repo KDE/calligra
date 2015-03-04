@@ -513,7 +513,7 @@ public:
     bool loadCacheVersion( KoXmlElement &element, XMLLoaderObject &status );
     void saveCacheVersion( QDomElement &element ) const;
 
-signals:
+Q_SIGNALS:
     void changed( Calendar* );
     void changed( CalendarDay* );
     void changed( TimeInterval* );

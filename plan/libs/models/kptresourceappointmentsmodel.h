@@ -95,14 +95,14 @@ public:
     void setShowExternalAppointments( bool show );
     bool showExternalAppointments() const { return m_showExternal; }
 
-signals:
+Q_SIGNALS:
     void refreshed();
     void appointmentInserted( Resource*, Appointment* );
     
-public slots:
+public Q_SLOTS:
     virtual void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
     void slotResourceGroupToBeInserted( const ResourceGroup *group, int row );
@@ -209,10 +209,10 @@ public:
 
     class Private;
 
-public slots:
+public Q_SLOTS:
     virtual void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     void slotResourceToBeInserted( const ResourceGroup *group, int row );
     void slotResourceInserted( const Resource *r );
     void slotResourceToBeRemoved( const Resource *r );

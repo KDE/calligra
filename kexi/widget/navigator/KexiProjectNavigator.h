@@ -117,7 +117,7 @@ public:
 
     KexiProjectModel* model() const;
 
-public slots:
+public Q_SLOTS:
     virtual void setFocus();
     void updateItemName(KexiPart::Item& item, bool dirty);
     void selectItem(KexiPart::Item& item);
@@ -130,7 +130,7 @@ public slots:
 
     bool isReadOnly() const;
 
-signals:
+Q_SIGNALS:
     void openItem(KexiPart::Item*, Kexi::ViewMode viewMode);
 
     /*! this signal is emitted when user double clicked (or single -depending on settings)
@@ -155,7 +155,7 @@ signals:
 
     void pageSetupForItem(KexiPart::Item*);
 
-protected slots:
+protected Q_SLOTS:
     void slotExecuteItem(const QModelIndex &item);
     void slotSelectionChanged(const QModelIndex& i);
     void slotSettingsChanged(int);

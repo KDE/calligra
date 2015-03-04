@@ -36,7 +36,7 @@ public:
     explicit KPrViewAdaptor( KPrView* view );
     virtual ~KPrViewAdaptor();
 
-public slots:
+public Q_SLOTS:
 
     // custom slideshows
 
@@ -132,7 +132,7 @@ public slots:
     int numStepsInPresentationPage() const;
     int numPresentationPages() const;
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the active custom slide show changes.
      *
@@ -172,7 +172,7 @@ signals:
      */
     void presentationStepChanged( int step );
 
-private slots:
+private Q_SLOTS:
     /**
      * Fired when the presentation is activated.
      */

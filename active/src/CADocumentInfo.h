@@ -56,7 +56,7 @@ private:
     static DocumentType documentTypeFromString (QString type);
     static QHash<DocumentType, QString> typeNameHash();
 
-signals:
+Q_SIGNALS:
     void typeChanged();
     void nameChanged();
     void pathChanged();

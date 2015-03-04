@@ -56,7 +56,7 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
     /// reimplemented from KoToolBase
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
-private slots:
+private Q_SLOTS:
     void editFilter();
     void clearFilter();
     void filterChanged();

@@ -787,7 +787,7 @@ public:
 
 //     bool generateXMLReport() const;
 
-signals:
+Q_SIGNALS:
     void updateProgressInfo(const QString& i);
     void updateProgressBar(int i, int of);
 

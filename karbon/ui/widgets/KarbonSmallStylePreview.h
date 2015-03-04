@@ -36,11 +36,11 @@ public:
     explicit KarbonSmallStylePreview(QWidget* parent = 0L);
     virtual ~KarbonSmallStylePreview();
 
-signals:
+Q_SIGNALS:
     void fillApplied();
     void strokeApplied();
 
-private slots:
+private Q_SLOTS:
     void selectionChanged();
     void canvasChanged(const KoCanvasBase *canvas);
 

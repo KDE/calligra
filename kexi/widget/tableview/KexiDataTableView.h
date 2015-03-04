@@ -65,14 +65,14 @@ public:
     //! @return true on success
     bool loadTableViewSettings(KexiDB::TableViewData* data);
 
-public slots:
+public Q_SLOTS:
     /*! Sets data. Only works for db-aware table. */
     void setData(KexiDB::Cursor *cursor);
 
     /*! Saves settings for the view. Implemented for KexiView. */
     virtual bool saveSettings();
 
-protected slots:
+protected Q_SLOTS:
 //! @todo
     void filter();
 

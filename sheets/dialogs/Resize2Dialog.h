@@ -48,7 +48,7 @@ public:
     explicit ResizeRow(QWidget* parent, Selection* selection);
     double rowHeight;
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
     virtual void slotDefault();
 
@@ -69,7 +69,7 @@ public:
     explicit ResizeColumn(QWidget* parent, Selection* selection);
     double columnWidth;
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
     virtual void slotDefault();
 

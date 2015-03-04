@@ -44,7 +44,7 @@ protected:
     virtual void resizeEvent(QResizeEvent * event);
     /// reimplemented from QWidget
     virtual void showEvent(QShowEvent * event);
-private slots:
+private Q_SLOTS:
     void addSelectedEffect();
     void removeSelectedItem();
     void connectionCreated(ConnectionSource source, ConnectionTarget target);

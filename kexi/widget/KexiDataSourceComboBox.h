@@ -59,7 +59,7 @@ public:
      Returs -1 of no such item exists. */
     int findItem(const QString& partClass, const QString& name);
 
-public slots:
+public Q_SLOTS:
     //! Sets global project that is used to retrieve schema informationm for this combo box.
     //! Tables visibility can be set using \a showTables queries visibility using \a showQueries.
     void setProject(KexiProject *prj, bool showTables = true, bool showQueries = true);
@@ -68,12 +68,12 @@ public slots:
      If \a partClass is empty, either "org.kexi-project.table" and "org.kexi-project.query" are tried. */
     void setDataSource(const QString& partClass, const QString& name);
 
-signals:
+Q_SIGNALS:
     //! Emitted whenever data source changes.
     //! Even setting invalid data source or clearing it will emit this signal.
     void dataSourceChanged();
 
-protected slots:
+protected Q_SLOTS:
     void slotNewItemStored(KexiPart::Item& item);
     void slotItemRemoved(const KexiPart::Item& item);
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);

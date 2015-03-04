@@ -45,10 +45,10 @@ public:
 
     bool autoTabStops() const;
 
-public slots:
+public Q_SLOTS:
     int exec(KFormDesigner::Form *form);
 
-protected slots:
+protected Q_SLOTS:
     void moveItemUp();
     void moveItemDown();
     void updateButtons(QTreeWidgetItem *item);

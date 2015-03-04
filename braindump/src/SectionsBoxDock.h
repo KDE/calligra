@@ -39,7 +39,7 @@ public:
     virtual ~SectionsBoxDock();
     void setup(RootSection* document, View* m_view);
     void updateGUI();
-private slots:
+private Q_SLOTS:
     void slotSectionActivated(const QModelIndex &);
     void slotSectionActivated(Section*);
 

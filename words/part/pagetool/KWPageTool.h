@@ -35,7 +35,7 @@ public:
 public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
 public: // Events
@@ -47,7 +47,7 @@ public: // Events
 
 //  virtual void keyPressEvent(QKeyEvent *event);
 
-private slots:
+private Q_SLOTS:
     ///Force the remaining content on the page to next page.
     void insertPageBreak();
 
