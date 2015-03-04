@@ -72,12 +72,11 @@ OdtReader::~OdtReader()
 {
 }
 
-
 #if 0
 // This is a template function for the reader library.
 // Copy this one and change the name and fill in the code.
 void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
-{ 
+{
    DEBUGSTART();
 
     // <namespace:tagname> has the following children in ODF 1.2:
@@ -88,7 +87,7 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
     //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:automatic-styles") {
             // FIXME: NYI
         }
@@ -105,7 +104,6 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 #endif
-
 
 // Reimplemented from OdfReader
 void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
@@ -140,7 +138,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     // FIXME: For now, none of these are handled
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-        
+
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:forms") {
             // FIXME: NYI
